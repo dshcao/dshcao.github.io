@@ -17,11 +17,29 @@
     
       
       <item>
-        <title>Handler机制</title>
+        <title>Android源码解析-Handler</title>
         <link>https://dshcao.github.io/zh/posts/android-handler%E8%A7%A3%E6%9E%90/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-handler%E8%A7%A3%E6%9E%90/</guid>
+        <description>&lt;p&gt;This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;</description>
+      </item>
+      
+      <item>
+        <title>Android源码解析-NestedScrolling</title>
+        <link>https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/</guid>
+        <description>&lt;p&gt;This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;</description>
+      </item>
+      
+      <item>
+        <title>Android源码解析-Scroller</title>
+        <link>https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/</guid>
         <description>&lt;p&gt;This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;</description>
       </item>
       

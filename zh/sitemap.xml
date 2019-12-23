@@ -18,12 +18,27 @@
   </url>
   
   <url>
+    <loc>https://dshcao.github.io/zh/categories/android/</loc>
+    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://dshcao.github.io/zh/tags/android/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/android/</loc>
+    <loc>https://dshcao.github.io/zh/posts/android-handler%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
@@ -44,11 +59,6 @@
   
   <url>
     <loc>https://dshcao.github.io/zh/tags/handler/</loc>
-    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://dshcao.github.io/zh/posts/android-handler%E8%A7%A3%E6%9E%90/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
@@ -89,6 +99,11 @@
   
   <url>
     <loc>https://dshcao.github.io/zh/series/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/tags/%E8%A7%A6%E6%91%B8%E6%BB%91%E5%8A%A8/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
@@ -283,6 +298,11 @@
   </url>
   
   <url>
+    <loc>https://dshcao.github.io/zh/notes/android/%E8%87%AA%E5%AE%9A%E4%B9%89view/scroller/</loc>
+    <lastmod>2017-10-11T10:33:41+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://dshcao.github.io/zh/notes/android/handler/</loc>
     <lastmod>2017-10-11T10:33:41+09:00</lastmod>
   </url>
@@ -299,11 +319,6 @@
   
   <url>
     <loc>https://dshcao.github.io/zh/notes/android/activityfragment%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/</loc>
-    <lastmod>2017-10-11T10:33:41+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://dshcao.github.io/zh/notes/android/%E8%87%AA%E5%AE%9A%E4%B9%89view/scroller/</loc>
     <lastmod>2017-10-11T10:33:41+09:00</lastmod>
   </url>
   
