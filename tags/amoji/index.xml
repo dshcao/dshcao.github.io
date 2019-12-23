@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>amoji on dshcao blog</title>
+    <link>https://dshcao.github.io/tags/amoji/</link>
+    <description>Recent content in amoji on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <managingEditor>dshcao@gmail.com (dshcao)</managingEditor>
+    <webMaster>dshcao@gmail.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Mon, 16 Dec 2019 12:00:06 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/tags/amoji/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>Emoji Support</title>
+        <link>https://dshcao.github.io/posts/emoji-support/</link>
+        <pubDate>Mon, 16 Dec 2019 12:00:06 +0900</pubDate>
+        <author>dshcao@gmail.com (dshcao)</author>
+        <guid>https://dshcao.github.io/posts/emoji-support/</guid>
+        <description>&lt;p&gt;Emoji can be enabled in a Hugo project in a number of ways.&lt;/p&gt;</description>
+      </item>
+      
+    
+  </channel>
+</rss>
