@@ -93,12 +93,32 @@
   </url>
   
   <url>
+    <loc>https://dshcao.github.io/zh/posts/%E5%86%99%E5%9C%A8%E5%BC%80%E5%A7%8B/</loc>
+    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://dshcao.github.io/zh/posts/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://dshcao.github.io/zh/series/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/tags/%E7%94%9F%E6%B4%BB/</loc>
+    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/series/%E7%94%9F%E6%B4%BB/</loc>
+    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
@@ -133,12 +153,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/themes/</loc>
+    <loc>https://dshcao.github.io/zh/categories/themes/</loc>
     <lastmod>2019-12-20T12:00:06+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/themes/</loc>
+    <loc>https://dshcao.github.io/zh/tags/themes/</loc>
     <lastmod>2019-12-20T12:00:06+09:00</lastmod>
   </url>
   
@@ -308,12 +328,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/hugo/</loc>
+    <loc>https://dshcao.github.io/zh/categories/hugo/</loc>
     <lastmod>2017-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/hugo/</loc>
+    <loc>https://dshcao.github.io/zh/tags/hugo/</loc>
     <lastmod>2017-10-11T10:33:41+09:00</lastmod>
   </url>
   

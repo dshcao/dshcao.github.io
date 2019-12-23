@@ -90,6 +90,15 @@
 	"content": ""
 },
 {
+	"uri": "https://dshcao.github.io/zh/posts/%E5%86%99%E5%9C%A8%E5%BC%80%E5%A7%8B/",
+	"title": "写在开始",
+	"tags": ["生活"],
+	"categories": [],
+	"series": ["生活"],
+	"description": "写在开始写博客的开始",
+	"content": "工作已经很多年，但基本没写过博客。为什么？！！！当然是懒了！！！\n难道工作这么多年就没有想记录或者没有想写的内容吗？当然有！平时把记录的内容都放在了txt文件中。CSDN？当然早就注册了，但总觉得CSDN网站有些潦草。后来，至少是四年前在博客园申请过开博客，当时申请的理由大概是记录生活和学习内容，转载和保存别人的精品文章，结果，emmm\u0026hellip;很明显，被拒绝了，加上懒散，然后很久没有在写文章上花心思了。一晃不知道多久过去了，无意发现简书，支持当时很流行很火的markdown，自己也很想尝试，然后申请了一个账号，才发现写文章真的不是一件很轻松的事\u0026hellip;至少对于我这种先天性缺陷不会组织语言有追求完美的人。然而工作中又有很多东西需要记录，怎么办?于是我把简书当作了草稿箱，只有自己看的明白的杂乱排版，一篇一篇下来也不少了。\n最近准备找工作，写博客当然是加分项，加上自己这个年纪，很多小年轻在上学的时候就开始写了，当然有些唏嘘和忐忑！\n开始就不会晚！好吧，我承认自己都感觉这话有点虚了，但开始总比不开始好。\n"
+},
+{
 	"uri": "https://dshcao.github.io/zh/posts/",
 	"title": "文章",
 	"tags": ["index"],
@@ -101,6 +110,33 @@
 {
 	"uri": "https://dshcao.github.io/zh/series/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/",
 	"title": "源码解析",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/tags/%E7%94%9F%E6%B4%BB/",
+	"title": "生活",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/series/%E7%94%9F%E6%B4%BB/",
+	"title": "生活",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/",
+	"title": "生活",
 	"tags": [],
 	"categories": [],
 	"series": [],
@@ -162,7 +198,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/themes/",
+	"uri": "https://dshcao.github.io/zh/categories/themes/",
 	"title": "themes",
 	"tags": [],
 	"categories": [],
@@ -171,7 +207,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/themes/",
+	"uri": "https://dshcao.github.io/zh/tags/themes/",
 	"title": "themes",
 	"tags": [],
 	"categories": [],
@@ -477,7 +513,7 @@
 	"content": "Dolore in consectetur irure qui laborum. Adipisicing cillum ad laboris dolor. Quis consectetur ullamco esse ad mollit anim sint nostrud esse. Irure voluptate ex fugiat voluptate ea fugiat laboris.\n This is a blockqute.\n line\nline\nHandler详解 Verify the following code blocks render as code blocks and highlight properly.\nDiff 1 2 3 4 5 6 7 8 9 10  *** /path/to/original\t\u0026#39;\u0026#39;timestamp\u0026#39;\u0026#39; --- /path/to/new\t\u0026#39;\u0026#39;timestamp\u0026#39;\u0026#39; *************** *** 1 **** ! This is a line. --- 1 --- ! This is a replacement line. It is important to spell -removed line +new line   Makefile 1 2 3 4 5  CC=gcc CFLAGS=-I. hellomake: hellomake.o hellofunc.o $(CC) -o hellomake hellomake.o hellofunc.o -I.   JSON 1 2 3  {\u0026#34;employees\u0026#34;:[ {\u0026#34;firstName\u0026#34;:\u0026#34;John\u0026#34;, \u0026#34;lastName\u0026#34;:\u0026#34;Doe\u0026#34;}, ]}   Markdown 1 2 3  **bold** *italics* [link](www.example.com)   JavaScript 1  document.write(\u0026#39;Hello, world!\u0026#39;);   CSS 1 2 3  body { background-color: red; }   Objective C 1 2 3 4 5 6  #import \u0026lt;stdio.h\u0026gt; int main (void) { printf (\u0026#34;Hello world!\\n\u0026#34;); }   Python 1  print \u0026#34;Hello, world!\u0026#34;   XML 1 2 3 4 5  \u0026lt;employees\u0026gt; \u0026lt;employee\u0026gt; \u0026lt;firstName\u0026gt;John\u0026lt;/firstName\u0026gt; \u0026lt;lastName\u0026gt;Doe\u0026lt;/lastName\u0026gt; \u0026lt;/employee\u0026gt; \u0026lt;/employees\u0026gt;   Perl 1  print \u0026#34;Hello, World!\\n\u0026#34;;   Bash 1  echo \u0026#34;Hello World\u0026#34;   PHP 1  \u0026lt;?php echo \u0026#39;\u0026lt;p\u0026gt;Hello World\u0026lt;/p\u0026gt;\u0026#39;; ?\u0026gt;   CoffeeScript 1  console.log(“Hello world!”);   C# 1 2 3 4 5 6 7 8  using System; class Program { public static void Main(string[] args) { Console.WriteLine(\u0026#34;Hello, world!\u0026#34;); } }   C++ 1 2 3 4 5 6 7  #include \u0026lt;iostream.h\u0026gt; main() { cout \u0026lt;\u0026lt; \u0026#34;Hello World!\u0026#34;; return 0; }   SQL 1 2  SELECT column_name,column_name FROM table_name;   Go 1 2 3 4 5  package main import \u0026#34;fmt\u0026#34; func main() { fmt.Println(\u0026#34;Hello, 世界\u0026#34;) }   Ruby 1  puts \u0026#34;Hello, world!\u0026#34;   Java 1 2 3 4 5 6 7 8 9 10 11 12  import javax.swing.JFrame; //Importing class JFrame import javax.swing.JLabel; //Importing class JLabel public class HelloWorld { public static void main(String[] args) { JFrame frame = new JFrame(); //Creating frame  frame.setTitle(\u0026#34;Hi!\u0026#34;); //Setting title frame  frame.add(new JLabel(\u0026#34;Hello, world!\u0026#34;));//Adding text to frame  frame.pack(); //Setting size to smallest  frame.setLocationRelativeTo(null); //Centering frame  frame.setVisible(true); //Showing frame  } }   Latex Equation 1  \\frac{d}{dx}\\left( \\int_{0}^{x} f(u)\\,du\\right)=f(x).   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38  import {x, y} as p from \u0026#39;point\u0026#39;; const ANSWER = 42; class Car extends Vehicle { constructor(speed, cost) { super(speed); var c = Symbol(\u0026#39;cost\u0026#39;); this[c] = cost; this.intro = `This is a car runs at ${speed}.`; } } for (let num of [1, 2, 3]) { console.log(num + 0b111110111); } function $initHighlight(block, flags) { try { if (block.className.search(/\\bno\\-highlight\\b/) != -1) return processBlock(block.function, true, 0x0F) + \u0026#39; class=\u0026#34;\u0026#34;\u0026#39;; } catch (e) { /* handle exception */ var e4x = \u0026lt;div\u0026gt;Example \u0026lt;p\u0026gt;1234\u0026lt;/p\u0026gt;\u0026lt;/div\u0026gt;; } for (var i = 0 / 2; i \u0026lt; classes.length; i++) { // \u0026#34;0 / 2\u0026#34; should not be parsed as regexp  if (checkCondition(classes[i]) === undefined) return /\\d+[\\s/]/g; } console.log(Array.every(classes, Boolean)); } export $initHighlight;   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  \u0026lt;!DOCTYPE html\u0026gt; \u0026lt;html lang=\u0026#34;en\u0026#34;\u0026gt; \u0026lt;head\u0026gt; \u0026lt;meta charset=\u0026#34;utf-8\u0026#34;\u0026gt; \u0026lt;title\u0026gt;Hello world\u0026lt;/title\u0026gt; \u0026lt;link href=\u0026#39;http://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic\u0026#39; rel=\u0026#39;stylesheet\u0026#39; type=\u0026#39;text/css\u0026#39;\u0026gt; \u0026lt;link rel=\u0026#34;stylesheet\u0026#34; href=\u0026#34;index.css\u0026#34; /\u0026gt; \u0026lt;/head\u0026gt; \u0026lt;body\u0026gt; \u0026lt;div id=\u0026#34;app\u0026#34;\u0026gt;\u0026lt;/div\u0026gt; \u0026lt;script src=\u0026#34;//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;script src=\u0026#34;vendor/prism.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;script src=\u0026#34;examples.bundle.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;/body\u0026gt; \u0026lt;/html\u0026gt;   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41  /********************************************************* * General */ pre[class*=\u0026#34;language-\u0026#34;], code { color: #5c6e74; font-size: 13px; text-shadow: none; font-family: Consolas, Monaco, \u0026#39;Andale Mono\u0026#39;, \u0026#39;Ubuntu Mono\u0026#39;, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none; } pre[class*=\u0026#34;language-\u0026#34;]::selection, code::selection { text-shadow: none; background: #b3d4fc; } @media print { pre[class*=\u0026#34;language-\u0026#34;], code { text-shadow: none; } } pre[class*=\u0026#34;language-\u0026#34;] { padding: 1em; margin: .5em 0; overflow: auto; background: #f8f5ec; } :not(pre) \u0026gt; code { padding: .1em .3em; border-radius: .3em; color: #db4c69; background: #f9f2f4; }   "
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/hugo/",
+	"uri": "https://dshcao.github.io/zh/categories/hugo/",
 	"title": "hugo",
 	"tags": [],
 	"categories": [],
@@ -486,7 +522,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/hugo/",
+	"uri": "https://dshcao.github.io/zh/tags/hugo/",
 	"title": "hugo",
 	"tags": [],
 	"categories": [],
