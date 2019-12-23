@@ -4,6 +4,11 @@
 	<sitemap>
 	   	<loc>https://dshcao.github.io/en/sitemap.xml</loc>
 		
+	</sitemap>
+	
+	<sitemap>
+	   	<loc>https://dshcao.github.io/zh/sitemap.xml</loc>
+		
 	   	<lastmod>2019-12-20T12:00:06+09:00</lastmod>
 		
 	</sitemap>

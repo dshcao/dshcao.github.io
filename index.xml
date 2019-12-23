@@ -5,7 +5,7 @@
     <link>https://dshcao.github.io/</link>
     <description>Recent content on dshcao blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
+    <language>zh</language>
     <managingEditor>513996717@qq.com (dshcao)</managingEditor>
     <webMaster>513996717@qq.com (dshcao)</webMaster>
     <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
@@ -186,27 +186,7 @@ pectora summo.&lt;/p&gt;</description>
         <pubDate>Thu, 28 Feb 2019 00:00:00 +0000</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/about/</guid>
-        <description>Written in Go, Hugo is an open source static site generator available under the Apache Licence 2.0. Hugo supports TOML, YAML and JSON data file types, Markdown and HTML content files and uses shortcodes to add rich content. Other notable features are taxonomies, multilingual mode, image processing, custom output formats, HTML/CSS/JS minification and support for Sass SCSS workflows.
-Hugo makes use of a variety of open source projects including:
- https://github.</description>
-      </item>
-      
-      <item>
-        <title>Photo</title>
-        <link>https://dshcao.github.io/gallery/photo/</link>
-        <pubDate>Fri, 12 Oct 2018 10:20:16 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/gallery/photo/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>Cartoon</title>
-        <link>https://dshcao.github.io/gallery/cartoon/</link>
-        <pubDate>Thu, 11 Oct 2018 10:20:16 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/gallery/cartoon/</guid>
-        <description></description>
+        <description>GitHub. 掘金. 微博.</description>
       </item>
       
       <item>

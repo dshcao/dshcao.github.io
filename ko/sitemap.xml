@@ -7,7 +7,7 @@
     <lastmod>2019-10-19T11:44:14+09:00</lastmod>
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
+                hreflang="zh"
                 href="https://dshcao.github.io/archive/"
                 />
     <xhtml:link
@@ -22,7 +22,7 @@
     <lastmod>2019-10-09T11:44:14+09:00</lastmod>
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
+                hreflang="zh"
                 href="https://dshcao.github.io/about/"
                 />
     <xhtml:link
@@ -38,6 +38,11 @@
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
+                href="https://dshcao.github.io/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
                 href="https://dshcao.github.io/"
                 />
     <xhtml:link
@@ -48,55 +53,15 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/ko/gallery/</loc>
-    <lastmod>2018-10-12T10:20:16+09:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://dshcao.github.io/gallery/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ko"
-                href="https://dshcao.github.io/ko/gallery/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://dshcao.github.io/ko/gallery/photo/</loc>
-    <lastmod>2018-10-12T10:20:16+09:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://dshcao.github.io/gallery/photo/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ko"
-                href="https://dshcao.github.io/ko/gallery/photo/"
-                />
-  </url>
-  
-  <url>
-    <loc>https://dshcao.github.io/ko/gallery/cartoon/</loc>
-    <lastmod>2018-10-11T10:20:16+09:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://dshcao.github.io/gallery/cartoon/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="ko"
-                href="https://dshcao.github.io/ko/gallery/cartoon/"
-                />
-  </url>
-  
-  <url>
     <loc>https://dshcao.github.io/ko/categories/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
+                href="https://dshcao.github.io/en/categories/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
                 href="https://dshcao.github.io/categories/"
                 />
     <xhtml:link
@@ -110,7 +75,7 @@
     <loc>https://dshcao.github.io/ko/posts/</loc>
     <xhtml:link
                 rel="alternate"
-                hreflang="en"
+                hreflang="zh"
                 href="https://dshcao.github.io/posts/"
                 />
     <xhtml:link
@@ -125,6 +90,11 @@
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
+                href="https://dshcao.github.io/en/series/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
                 href="https://dshcao.github.io/series/"
                 />
     <xhtml:link
@@ -139,6 +109,11 @@
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
+                href="https://dshcao.github.io/en/tags/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
                 href="https://dshcao.github.io/tags/"
                 />
     <xhtml:link
