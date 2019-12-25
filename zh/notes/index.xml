@@ -62,6 +62,15 @@
       </item>
       
       <item>
+        <title>随记</title>
+        <link>https://dshcao.github.io/zh/notes/android/%E9%9A%8F%E8%AE%B0/</link>
+        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/notes/android/%E9%9A%8F%E8%AE%B0/</guid>
+        <description>一、Manifest配置 allowBackup fullBackupContent https://developer.android.com/guide/topics/data/autobackup allowBackup配置用来开启停用自动备份 fullBackupContent用来配置配分规则，如：andr</description>
+      </item>
+      
+      <item>
         <title>Java</title>
         <link>https://dshcao.github.io/zh/notes/java/</link>
         <pubDate>Tue, 09 Oct 2012 11:44:14 +0900</pubDate>

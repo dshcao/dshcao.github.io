@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>编程基础 on dshcao blog</title>
+    <link>https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</link>
+    <description>Recent content in 编程基础 on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <managingEditor>513996717@qq.com (dshcao)</managingEditor>
+    <webMaster>513996717@qq.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Mon, 23 Dec 2019 12:00:06 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>字符编码</title>
+        <link>https://dshcao.github.io/zh/posts/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/</guid>
+        <description>首先明白字符和字符集两个概念，从名字就很清晰了。 字符集为每个字符分配一个唯一ID，又叫码位/码点，英文code point UTF是 Unicode Tranformation Format，即</description>
+      </item>
+      
+    
+  </channel>
+</rss>
