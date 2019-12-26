@@ -216,15 +216,6 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/",
-	"title": "生活",
-	"tags": [],
-	"categories": [],
-	"series": [],
-	"description": "",
-	"content": ""
-},
-{
 	"uri": "https://dshcao.github.io/zh/series/%E7%94%9F%E6%B4%BB/",
 	"title": "生活",
 	"tags": [],
@@ -234,8 +225,8 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/",
-	"title": "编程基础",
+	"uri": "https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/",
+	"title": "生活",
 	"tags": [],
 	"categories": [],
 	"series": [],
@@ -244,6 +235,15 @@
 },
 {
 	"uri": "https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/",
+	"title": "编程基础",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/series/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/",
 	"title": "编程基础",
 	"tags": [],
 	"categories": [],
@@ -315,7 +315,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/themes/",
+	"uri": "https://dshcao.github.io/zh/categories/themes/",
 	"title": "themes",
 	"tags": [],
 	"categories": [],
@@ -324,7 +324,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/themes/",
+	"uri": "https://dshcao.github.io/zh/tags/themes/",
 	"title": "themes",
 	"tags": [],
 	"categories": [],
@@ -621,6 +621,24 @@
 	"content": "Dolore in consectetur irure qui laborum. Adipisicing cillum ad laboris dolor. Quis consectetur ullamco esse ad mollit anim sint nostrud esse. Irure voluptate ex fugiat voluptate ea fugiat laboris.\n This is a blockqute.\n line\nline\nCode Syntax Highlighting Verify the following code blocks render as code blocks and highlight properly.\nDiff 1 2 3 4 5 6 7 8 9 10  *** /path/to/original\t\u0026#39;\u0026#39;timestamp\u0026#39;\u0026#39; --- /path/to/new\t\u0026#39;\u0026#39;timestamp\u0026#39;\u0026#39; *************** *** 1 **** ! This is a line. --- 1 --- ! This is a replacement line. It is important to spell -removed line +new line   Makefile 1 2 3 4 5  CC=gcc CFLAGS=-I. hellomake: hellomake.o hellofunc.o $(CC) -o hellomake hellomake.o hellofunc.o -I.   JSON 1 2 3  {\u0026#34;employees\u0026#34;:[ {\u0026#34;firstName\u0026#34;:\u0026#34;John\u0026#34;, \u0026#34;lastName\u0026#34;:\u0026#34;Doe\u0026#34;}, ]}   Markdown 1 2 3  **bold** *italics* [link](www.example.com)   JavaScript 1  document.write(\u0026#39;Hello, world!\u0026#39;);   CSS 1 2 3  body { background-color: red; }   Objective C 1 2 3 4 5 6  #import \u0026lt;stdio.h\u0026gt; int main (void) { printf (\u0026#34;Hello world!\\n\u0026#34;); }   Python 1  print \u0026#34;Hello, world!\u0026#34;   XML 1 2 3 4 5  \u0026lt;employees\u0026gt; \u0026lt;employee\u0026gt; \u0026lt;firstName\u0026gt;John\u0026lt;/firstName\u0026gt; \u0026lt;lastName\u0026gt;Doe\u0026lt;/lastName\u0026gt; \u0026lt;/employee\u0026gt; \u0026lt;/employees\u0026gt;   Perl 1  print \u0026#34;Hello, World!\\n\u0026#34;;   Bash 1  echo \u0026#34;Hello World\u0026#34;   PHP 1  \u0026lt;?php echo \u0026#39;\u0026lt;p\u0026gt;Hello World\u0026lt;/p\u0026gt;\u0026#39;; ?\u0026gt;   CoffeeScript 1  console.log(“Hello world!”);   C# 1 2 3 4 5 6 7 8  using System; class Program { public static void Main(string[] args) { Console.WriteLine(\u0026#34;Hello, world!\u0026#34;); } }   C++ 1 2 3 4 5 6 7  #include \u0026lt;iostream.h\u0026gt; main() { cout \u0026lt;\u0026lt; \u0026#34;Hello World!\u0026#34;; return 0; }   SQL 1 2  SELECT column_name,column_name FROM table_name;   Go 1 2 3 4 5  package main import \u0026#34;fmt\u0026#34; func main() { fmt.Println(\u0026#34;Hello, 世界\u0026#34;) }   Ruby 1  puts \u0026#34;Hello, world!\u0026#34;   Java 1 2 3 4 5 6 7 8 9 10 11 12  import javax.swing.JFrame; //Importing class JFrame import javax.swing.JLabel; //Importing class JLabel public class HelloWorld { public static void main(String[] args) { JFrame frame = new JFrame(); //Creating frame  frame.setTitle(\u0026#34;Hi!\u0026#34;); //Setting title frame  frame.add(new JLabel(\u0026#34;Hello, world!\u0026#34;));//Adding text to frame  frame.pack(); //Setting size to smallest  frame.setLocationRelativeTo(null); //Centering frame  frame.setVisible(true); //Showing frame  } }   Latex Equation 1  \\frac{d}{dx}\\left( \\int_{0}^{x} f(u)\\,du\\right)=f(x).   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38  import {x, y} as p from \u0026#39;point\u0026#39;; const ANSWER = 42; class Car extends Vehicle { constructor(speed, cost) { super(speed); var c = Symbol(\u0026#39;cost\u0026#39;); this[c] = cost; this.intro = `This is a car runs at ${speed}.`; } } for (let num of [1, 2, 3]) { console.log(num + 0b111110111); } function $initHighlight(block, flags) { try { if (block.className.search(/\\bno\\-highlight\\b/) != -1) return processBlock(block.function, true, 0x0F) + \u0026#39; class=\u0026#34;\u0026#34;\u0026#39;; } catch (e) { /* handle exception */ var e4x = \u0026lt;div\u0026gt;Example \u0026lt;p\u0026gt;1234\u0026lt;/p\u0026gt;\u0026lt;/div\u0026gt;; } for (var i = 0 / 2; i \u0026lt; classes.length; i++) { // \u0026#34;0 / 2\u0026#34; should not be parsed as regexp  if (checkCondition(classes[i]) === undefined) return /\\d+[\\s/]/g; } console.log(Array.every(classes, Boolean)); } export $initHighlight;   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  \u0026lt;!DOCTYPE html\u0026gt; \u0026lt;html lang=\u0026#34;en\u0026#34;\u0026gt; \u0026lt;head\u0026gt; \u0026lt;meta charset=\u0026#34;utf-8\u0026#34;\u0026gt; \u0026lt;title\u0026gt;Hello world\u0026lt;/title\u0026gt; \u0026lt;link href=\u0026#39;http://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic\u0026#39; rel=\u0026#39;stylesheet\u0026#39; type=\u0026#39;text/css\u0026#39;\u0026gt; \u0026lt;link rel=\u0026#34;stylesheet\u0026#34; href=\u0026#34;index.css\u0026#34; /\u0026gt; \u0026lt;/head\u0026gt; \u0026lt;body\u0026gt; \u0026lt;div id=\u0026#34;app\u0026#34;\u0026gt;\u0026lt;/div\u0026gt; \u0026lt;script src=\u0026#34;//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;script src=\u0026#34;vendor/prism.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;script src=\u0026#34;examples.bundle.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;/body\u0026gt; \u0026lt;/html\u0026gt;   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41  /********************************************************* * General */ pre[class*=\u0026#34;language-\u0026#34;], code { color: #5c6e74; font-size: 13px; text-shadow: none; font-family: Consolas, Monaco, \u0026#39;Andale Mono\u0026#39;, \u0026#39;Ubuntu Mono\u0026#39;, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none; } pre[class*=\u0026#34;language-\u0026#34;]::selection, code::selection { text-shadow: none; background: #b3d4fc; } @media print { pre[class*=\u0026#34;language-\u0026#34;], code { text-shadow: none; } } pre[class*=\u0026#34;language-\u0026#34;] { padding: 1em; margin: .5em 0; overflow: auto; background: #f8f5ec; } :not(pre) \u0026gt; code { padding: .1em .3em; border-radius: .3em; color: #db4c69; background: #f9f2f4; }   "
 },
 {
+	"uri": "https://dshcao.github.io/zh/posts/%E7%9B%B4%E6%92%AD-%E5%BD%95%E5%88%B6%E5%B1%8F%E5%B9%95/",
+	"title": "Android直播-录制屏幕",
+	"tags": ["android", "直播", "音视频"],
+	"categories": [],
+	"series": ["直播"],
+	"description": "Syntax highlighting test",
+	"content": "录屏的根本是怎么获取屏幕的显示数据\n屏幕录制的几种实现方式：  Linux+framebuffer+root权限 利用View.getDrawingCache() Android shell命令screencap/screenrecord+root权限 SurfaceFlinger+framebuffer VirtualDisplay+MediaProjection  一、Linux+framebuffer+root权限 Android 基于 Linux，所以可以通过读取 /dev/graphics/fb0 设备节点，即 framebuffer 中的帧数据来实现屏幕的录制。但是读取这个设备节点需要 root 权限\n二、View.getDrawingCache() 通过 View 的 cache 内容获取到 Bitmap 对象来达到录屏的效果。但是很多手机上面该方式会存在性能问题，另外该方式并不是一个真正意义上的录屏方式，另外部分 View 组件的内容并不能获取到，比如webview\n三、Android shell命令screencap/screenrecord+root权限 screencap/screenrecord 是 Android shell 的命令，需要root 权限\n creencap -p xxx.png/screenshot xxx.png adb shell screenrecord \u0026ndash;size 1280*720 \u0026ndash;bit-rate 6000000 \u0026ndash;time-limit 30 /sdcard/demo.mp4\n\u0026ndash;size 指定视频分辨率；\n\u0026ndash;bit-rate 指定视频比特率，默认为4M，该值越小，保存的视频文件越小；\n\u0026ndash;time-limit 指定录制时长，若设定大于180，命令不会被执行；  四、SurfaceFlinger + framebuffer 见参考 从surfaceflinger历史变更谈截屏\n五、VirtualDisplay + MediaProjection 在我的华为荣耀8 android8.0 手机上下载虎牙直播测试发现他们使用的是该方案\n代码实现：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121  class ScreenCaptureActivity : AbsActivity() { lateinit var surface: Surface private lateinit var surfaceView: SurfaceView lateinit var projectionManager: MediaProjectionManager private var display: VirtualDisplay? = null private var projection: MediaProjection? = null // private var _resultCode: Int? = null  private var _resultData: Intent? = null private lateinit var capture: TextView companion object { const val REQUEST_PROJECTION = 2 const val STATE_RESULT_CODE = \u0026#34;result_code\u0026#34; const val STATE_RESULT_DATA = \u0026#34;result_data\u0026#34; } override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) setContentView(R.layout.activity_screen_capture) // _resultCode = savedInstanceState?.getInt(STATE_RESULT_CODE)  _resultData = savedInstanceState?.getParcelable(STATE_RESULT_DATA) surfaceView = findViewById(R.id.surface) surface = surfaceView.holder.surface projectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager capture = findViewById(R.id.capture) capture.setOnClickListener { if (display == null) { startCapture() capture.text = \u0026#34;停止\u0026#34; } else { stopCapture() capture.text = \u0026#34;开始\u0026#34; } } } override fun onSaveInstanceState(outState: Bundle) { super.onSaveInstanceState(outState) // if (_resultCode != null) { // outState.putInt(STATE_RESULT_CODE, _resultCode!!) // }  if (_resultData != null) { outState.putParcelable(STATE_RESULT_DATA, _resultData) } } override fun onPause() { super.onPause() stopCapture() } override fun onDestroy() { super.onDestroy() projection?.stop() projection = null } private fun startCapture() { if (/*_resultCode == null \u0026amp;\u0026amp;*/ _resultData == null) { startActivityForResult( projectionManager.createScreenCaptureIntent(), REQUEST_PROJECTION ) } else { setup() } } private fun stopCapture() { display?.release() display = null } private fun setup() { if (projection == null) { projection = projectionManager.getMediaProjection( /*_resultCode!!*/Activity.RESULT_OK, _resultData!! ) } if (projection != null) { display = projection!!.createVirtualDisplay( \u0026#34;ScreenCapture\u0026#34;, surfaceView.width, surfaceView.height, Getter.metrics().densityDpi, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, surface, null, null ) } } override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) { super.onActivityResult(requestCode, resultCode, data) when (requestCode) { REQUEST_PROJECTION -\u0026gt; { if (resultCode != Activity.RESULT_OK) { Toast.makeText(this, \u0026#34;User denied screen sharing permission\u0026#34;, Toast.LENGTH_LONG) .show() return } // _resultCode = resultCode  _resultData = data setup() } } } }   参考：\n 手机游戏直播中的录屏怎么实现 从surfaceflinger历史变更谈截屏  "
+},
+{
+	"uri": "https://dshcao.github.io/zh/posts/%E7%9B%B4%E6%92%AD-%E9%87%87%E5%BD%95%E6%91%84%E5%83%8F%E5%A4%B4/",
+	"title": "Android直播-采录摄像头",
+	"tags": ["android", "直播", "音视频"],
+	"categories": [],
+	"series": ["直播"],
+	"description": "Syntax highlighting test",
+	"content": ""
+},
+{
 	"uri": "https://dshcao.github.io/zh/notes/android/handler/",
 	"title": "Handler详解",
 	"tags": ["hugo"],
@@ -658,6 +676,15 @@
 },
 {
 	"uri": "https://dshcao.github.io/zh/posts/app%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/",
+	"title": "Handler详解",
+	"tags": ["hugo"],
+	"categories": [],
+	"series": [""],
+	"description": "Syntax highlighting test",
+	"content": "Dolore in consectetur irure qui laborum. Adipisicing cillum ad laboris dolor. Quis consectetur ullamco esse ad mollit anim sint nostrud esse. Irure voluptate ex fugiat voluptate ea fugiat laboris.\n This is a blockqute.\n line\nline\nHandler详解 Verify the following code blocks render as code blocks and highlight properly.\nDiff 1 2 3 4 5 6 7 8 9 10  *** /path/to/original\t\u0026#39;\u0026#39;timestamp\u0026#39;\u0026#39; --- /path/to/new\t\u0026#39;\u0026#39;timestamp\u0026#39;\u0026#39; *************** *** 1 **** ! This is a line. --- 1 --- ! This is a replacement line. It is important to spell -removed line +new line   Makefile 1 2 3 4 5  CC=gcc CFLAGS=-I. hellomake: hellomake.o hellofunc.o $(CC) -o hellomake hellomake.o hellofunc.o -I.   JSON 1 2 3  {\u0026#34;employees\u0026#34;:[ {\u0026#34;firstName\u0026#34;:\u0026#34;John\u0026#34;, \u0026#34;lastName\u0026#34;:\u0026#34;Doe\u0026#34;}, ]}   Markdown 1 2 3  **bold** *italics* [link](www.example.com)   JavaScript 1  document.write(\u0026#39;Hello, world!\u0026#39;);   CSS 1 2 3  body { background-color: red; }   Objective C 1 2 3 4 5 6  #import \u0026lt;stdio.h\u0026gt; int main (void) { printf (\u0026#34;Hello world!\\n\u0026#34;); }   Python 1  print \u0026#34;Hello, world!\u0026#34;   XML 1 2 3 4 5  \u0026lt;employees\u0026gt; \u0026lt;employee\u0026gt; \u0026lt;firstName\u0026gt;John\u0026lt;/firstName\u0026gt; \u0026lt;lastName\u0026gt;Doe\u0026lt;/lastName\u0026gt; \u0026lt;/employee\u0026gt; \u0026lt;/employees\u0026gt;   Perl 1  print \u0026#34;Hello, World!\\n\u0026#34;;   Bash 1  echo \u0026#34;Hello World\u0026#34;   PHP 1  \u0026lt;?php echo \u0026#39;\u0026lt;p\u0026gt;Hello World\u0026lt;/p\u0026gt;\u0026#39;; ?\u0026gt;   CoffeeScript 1  console.log(“Hello world!”);   C# 1 2 3 4 5 6 7 8  using System; class Program { public static void Main(string[] args) { Console.WriteLine(\u0026#34;Hello, world!\u0026#34;); } }   C++ 1 2 3 4 5 6 7  #include \u0026lt;iostream.h\u0026gt; main() { cout \u0026lt;\u0026lt; \u0026#34;Hello World!\u0026#34;; return 0; }   SQL 1 2  SELECT column_name,column_name FROM table_name;   Go 1 2 3 4 5  package main import \u0026#34;fmt\u0026#34; func main() { fmt.Println(\u0026#34;Hello, 世界\u0026#34;) }   Ruby 1  puts \u0026#34;Hello, world!\u0026#34;   Java 1 2 3 4 5 6 7 8 9 10 11 12  import javax.swing.JFrame; //Importing class JFrame import javax.swing.JLabel; //Importing class JLabel public class HelloWorld { public static void main(String[] args) { JFrame frame = new JFrame(); //Creating frame  frame.setTitle(\u0026#34;Hi!\u0026#34;); //Setting title frame  frame.add(new JLabel(\u0026#34;Hello, world!\u0026#34;));//Adding text to frame  frame.pack(); //Setting size to smallest  frame.setLocationRelativeTo(null); //Centering frame  frame.setVisible(true); //Showing frame  } }   Latex Equation 1  \\frac{d}{dx}\\left( \\int_{0}^{x} f(u)\\,du\\right)=f(x).   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38  import {x, y} as p from \u0026#39;point\u0026#39;; const ANSWER = 42; class Car extends Vehicle { constructor(speed, cost) { super(speed); var c = Symbol(\u0026#39;cost\u0026#39;); this[c] = cost; this.intro = `This is a car runs at ${speed}.`; } } for (let num of [1, 2, 3]) { console.log(num + 0b111110111); } function $initHighlight(block, flags) { try { if (block.className.search(/\\bno\\-highlight\\b/) != -1) return processBlock(block.function, true, 0x0F) + \u0026#39; class=\u0026#34;\u0026#34;\u0026#39;; } catch (e) { /* handle exception */ var e4x = \u0026lt;div\u0026gt;Example \u0026lt;p\u0026gt;1234\u0026lt;/p\u0026gt;\u0026lt;/div\u0026gt;; } for (var i = 0 / 2; i \u0026lt; classes.length; i++) { // \u0026#34;0 / 2\u0026#34; should not be parsed as regexp  if (checkCondition(classes[i]) === undefined) return /\\d+[\\s/]/g; } console.log(Array.every(classes, Boolean)); } export $initHighlight;   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  \u0026lt;!DOCTYPE html\u0026gt; \u0026lt;html lang=\u0026#34;en\u0026#34;\u0026gt; \u0026lt;head\u0026gt; \u0026lt;meta charset=\u0026#34;utf-8\u0026#34;\u0026gt; \u0026lt;title\u0026gt;Hello world\u0026lt;/title\u0026gt; \u0026lt;link href=\u0026#39;http://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic\u0026#39; rel=\u0026#39;stylesheet\u0026#39; type=\u0026#39;text/css\u0026#39;\u0026gt; \u0026lt;link rel=\u0026#34;stylesheet\u0026#34; href=\u0026#34;index.css\u0026#34; /\u0026gt; \u0026lt;/head\u0026gt; \u0026lt;body\u0026gt; \u0026lt;div id=\u0026#34;app\u0026#34;\u0026gt;\u0026lt;/div\u0026gt; \u0026lt;script src=\u0026#34;//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;script src=\u0026#34;vendor/prism.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;script src=\u0026#34;examples.bundle.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;/body\u0026gt; \u0026lt;/html\u0026gt;   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41  /********************************************************* * General */ pre[class*=\u0026#34;language-\u0026#34;], code { color: #5c6e74; font-size: 13px; text-shadow: none; font-family: Consolas, Monaco, \u0026#39;Andale Mono\u0026#39;, \u0026#39;Ubuntu Mono\u0026#39;, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none; } pre[class*=\u0026#34;language-\u0026#34;]::selection, code::selection { text-shadow: none; background: #b3d4fc; } @media print { pre[class*=\u0026#34;language-\u0026#34;], code { text-shadow: none; } } pre[class*=\u0026#34;language-\u0026#34;] { padding: 1em; margin: .5em 0; overflow: auto; background: #f8f5ec; } :not(pre) \u0026gt; code { padding: .1em .3em; border-radius: .3em; color: #db4c69; background: #f9f2f4; }   "
+},
+{
+	"uri": "https://dshcao.github.io/zh/posts/pictureinpicture/",
 	"title": "Handler详解",
 	"tags": ["hugo"],
 	"categories": [],
@@ -711,7 +738,7 @@
 	"content": "Dolore in consectetur irure qui laborum. Adipisicing cillum ad laboris dolor. Quis consectetur ullamco esse ad mollit anim sint nostrud esse. Irure voluptate ex fugiat voluptate ea fugiat laboris.\n This is a blockqute.\n line\nline\nHandler详解 Verify the following code blocks render as code blocks and highlight properly.\nDiff 1 2 3 4 5 6 7 8 9 10  *** /path/to/original\t\u0026#39;\u0026#39;timestamp\u0026#39;\u0026#39; --- /path/to/new\t\u0026#39;\u0026#39;timestamp\u0026#39;\u0026#39; *************** *** 1 **** ! This is a line. --- 1 --- ! This is a replacement line. It is important to spell -removed line +new line   Makefile 1 2 3 4 5  CC=gcc CFLAGS=-I. hellomake: hellomake.o hellofunc.o $(CC) -o hellomake hellomake.o hellofunc.o -I.   JSON 1 2 3  {\u0026#34;employees\u0026#34;:[ {\u0026#34;firstName\u0026#34;:\u0026#34;John\u0026#34;, \u0026#34;lastName\u0026#34;:\u0026#34;Doe\u0026#34;}, ]}   Markdown 1 2 3  **bold** *italics* [link](www.example.com)   JavaScript 1  document.write(\u0026#39;Hello, world!\u0026#39;);   CSS 1 2 3  body { background-color: red; }   Objective C 1 2 3 4 5 6  #import \u0026lt;stdio.h\u0026gt; int main (void) { printf (\u0026#34;Hello world!\\n\u0026#34;); }   Python 1  print \u0026#34;Hello, world!\u0026#34;   XML 1 2 3 4 5  \u0026lt;employees\u0026gt; \u0026lt;employee\u0026gt; \u0026lt;firstName\u0026gt;John\u0026lt;/firstName\u0026gt; \u0026lt;lastName\u0026gt;Doe\u0026lt;/lastName\u0026gt; \u0026lt;/employee\u0026gt; \u0026lt;/employees\u0026gt;   Perl 1  print \u0026#34;Hello, World!\\n\u0026#34;;   Bash 1  echo \u0026#34;Hello World\u0026#34;   PHP 1  \u0026lt;?php echo \u0026#39;\u0026lt;p\u0026gt;Hello World\u0026lt;/p\u0026gt;\u0026#39;; ?\u0026gt;   CoffeeScript 1  console.log(“Hello world!”);   C# 1 2 3 4 5 6 7 8  using System; class Program { public static void Main(string[] args) { Console.WriteLine(\u0026#34;Hello, world!\u0026#34;); } }   C++ 1 2 3 4 5 6 7  #include \u0026lt;iostream.h\u0026gt; main() { cout \u0026lt;\u0026lt; \u0026#34;Hello World!\u0026#34;; return 0; }   SQL 1 2  SELECT column_name,column_name FROM table_name;   Go 1 2 3 4 5  package main import \u0026#34;fmt\u0026#34; func main() { fmt.Println(\u0026#34;Hello, 世界\u0026#34;) }   Ruby 1  puts \u0026#34;Hello, world!\u0026#34;   Java 1 2 3 4 5 6 7 8 9 10 11 12  import javax.swing.JFrame; //Importing class JFrame import javax.swing.JLabel; //Importing class JLabel public class HelloWorld { public static void main(String[] args) { JFrame frame = new JFrame(); //Creating frame  frame.setTitle(\u0026#34;Hi!\u0026#34;); //Setting title frame  frame.add(new JLabel(\u0026#34;Hello, world!\u0026#34;));//Adding text to frame  frame.pack(); //Setting size to smallest  frame.setLocationRelativeTo(null); //Centering frame  frame.setVisible(true); //Showing frame  } }   Latex Equation 1  \\frac{d}{dx}\\left( \\int_{0}^{x} f(u)\\,du\\right)=f(x).   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38  import {x, y} as p from \u0026#39;point\u0026#39;; const ANSWER = 42; class Car extends Vehicle { constructor(speed, cost) { super(speed); var c = Symbol(\u0026#39;cost\u0026#39;); this[c] = cost; this.intro = `This is a car runs at ${speed}.`; } } for (let num of [1, 2, 3]) { console.log(num + 0b111110111); } function $initHighlight(block, flags) { try { if (block.className.search(/\\bno\\-highlight\\b/) != -1) return processBlock(block.function, true, 0x0F) + \u0026#39; class=\u0026#34;\u0026#34;\u0026#39;; } catch (e) { /* handle exception */ var e4x = \u0026lt;div\u0026gt;Example \u0026lt;p\u0026gt;1234\u0026lt;/p\u0026gt;\u0026lt;/div\u0026gt;; } for (var i = 0 / 2; i \u0026lt; classes.length; i++) { // \u0026#34;0 / 2\u0026#34; should not be parsed as regexp  if (checkCondition(classes[i]) === undefined) return /\\d+[\\s/]/g; } console.log(Array.every(classes, Boolean)); } export $initHighlight;   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  \u0026lt;!DOCTYPE html\u0026gt; \u0026lt;html lang=\u0026#34;en\u0026#34;\u0026gt; \u0026lt;head\u0026gt; \u0026lt;meta charset=\u0026#34;utf-8\u0026#34;\u0026gt; \u0026lt;title\u0026gt;Hello world\u0026lt;/title\u0026gt; \u0026lt;link href=\u0026#39;http://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic\u0026#39; rel=\u0026#39;stylesheet\u0026#39; type=\u0026#39;text/css\u0026#39;\u0026gt; \u0026lt;link rel=\u0026#34;stylesheet\u0026#34; href=\u0026#34;index.css\u0026#34; /\u0026gt; \u0026lt;/head\u0026gt; \u0026lt;body\u0026gt; \u0026lt;div id=\u0026#34;app\u0026#34;\u0026gt;\u0026lt;/div\u0026gt; \u0026lt;script src=\u0026#34;//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.1/less.min.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;script src=\u0026#34;vendor/prism.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;script src=\u0026#34;examples.bundle.js\u0026#34;\u0026gt;\u0026lt;/script\u0026gt; \u0026lt;/body\u0026gt; \u0026lt;/html\u0026gt;   1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41  /********************************************************* * General */ pre[class*=\u0026#34;language-\u0026#34;], code { color: #5c6e74; font-size: 13px; text-shadow: none; font-family: Consolas, Monaco, \u0026#39;Andale Mono\u0026#39;, \u0026#39;Ubuntu Mono\u0026#39;, monospace; direction: ltr; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; line-height: 1.5; tab-size: 4; hyphens: none; } pre[class*=\u0026#34;language-\u0026#34;]::selection, code::selection { text-shadow: none; background: #b3d4fc; } @media print { pre[class*=\u0026#34;language-\u0026#34;], code { text-shadow: none; } } pre[class*=\u0026#34;language-\u0026#34;] { padding: 1em; margin: .5em 0; overflow: auto; background: #f8f5ec; } :not(pre) \u0026gt; code { padding: .1em .3em; border-radius: .3em; color: #db4c69; background: #f9f2f4; }   "
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/hugo/",
+	"uri": "https://dshcao.github.io/zh/categories/hugo/",
 	"title": "hugo",
 	"tags": [],
 	"categories": [],
@@ -720,7 +747,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/hugo/",
+	"uri": "https://dshcao.github.io/zh/tags/hugo/",
 	"title": "hugo",
 	"tags": [],
 	"categories": [],
@@ -783,6 +810,33 @@
 	"content": ""
 },
 {
+	"uri": "https://dshcao.github.io/zh/tags/%E7%9B%B4%E6%92%AD/",
+	"title": "直播",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/series/%E7%9B%B4%E6%92%AD/",
+	"title": "直播",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/categories/%E7%9B%B4%E6%92%AD/",
+	"title": "直播",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
 	"uri": "https://dshcao.github.io/zh/categories/%E9%9A%8F%E7%AC%94/",
 	"title": "随笔",
 	"tags": [],
@@ -817,6 +871,15 @@
 	"series": [""],
 	"description": "小知识点",
 	"content": "一、Manifest配置 allowBackup fullBackupContent https://developer.android.com/guide/topics/data/autobackup\nallowBackup配置用来开启停用自动备份\nfullBackupContent用来配置配分规则，如：android:fullBackupContent=\u0026rdquo;@xml/backup_rules\u0026rdquo;\n1 2 3 4 5 6 7 8 9  \u0026lt;!--backup_rules --\u0026gt; \u0026lt;?xml version=\u0026#34;1.0\u0026#34; encoding=\u0026#34;utf-8\u0026#34;?\u0026gt; \u0026lt;full-backup-content\u0026gt; \u0026lt;include domain=[\u0026#34;file\u0026#34; | \u0026#34;database\u0026#34; | \u0026#34;sharedpref\u0026#34; |\u0026#34;external\u0026#34; | \u0026#34;root\u0026#34;] path=\u0026#34;string\u0026#34; requiredFlags=[\u0026#34;clientSideEncryption\u0026#34; | \u0026#34;deviceToDeviceTransfer\u0026#34;] /\u0026gt; \u0026lt;exclude domain=[\u0026#34;file\u0026#34; | \u0026#34;database\u0026#34; | \u0026#34;sharedpref\u0026#34; |\u0026#34;external\u0026#34; | \u0026#34;root\u0026#34;] path=\u0026#34;string\u0026#34; /\u0026gt; \u0026lt;/full-backup-content\u0026gt;   另外还可实现BackupAgent应用于你的备份逻辑\n"
+},
+{
+	"uri": "https://dshcao.github.io/zh/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/",
+	"title": "音视频",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
 },
 {
 	"uri": "https://dshcao.github.io/zh/tags/blogging/",

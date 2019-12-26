@@ -163,22 +163,22 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/</loc>
-    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://dshcao.github.io/zh/series/%E7%94%9F%E6%B4%BB/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/series/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</loc>
+    <loc>https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</loc>
+    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/series/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
@@ -218,12 +218,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/themes/</loc>
+    <loc>https://dshcao.github.io/zh/categories/themes/</loc>
     <lastmod>2019-12-20T12:00:06+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/themes/</loc>
+    <loc>https://dshcao.github.io/zh/tags/themes/</loc>
     <lastmod>2019-12-20T12:00:06+09:00</lastmod>
   </url>
   
@@ -388,6 +388,16 @@
   </url>
   
   <url>
+    <loc>https://dshcao.github.io/zh/posts/%E7%9B%B4%E6%92%AD-%E5%BD%95%E5%88%B6%E5%B1%8F%E5%B9%95/</loc>
+    <lastmod>2017-10-11T10:33:41+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/posts/%E7%9B%B4%E6%92%AD-%E9%87%87%E5%BD%95%E6%91%84%E5%83%8F%E5%A4%B4/</loc>
+    <lastmod>2017-10-11T10:33:41+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://dshcao.github.io/zh/notes/android/handler/</loc>
     <lastmod>2017-10-11T10:33:41+09:00</lastmod>
   </url>
@@ -409,6 +419,11 @@
   
   <url>
     <loc>https://dshcao.github.io/zh/posts/app%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</loc>
+    <lastmod>2017-10-11T10:33:41+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/posts/pictureinpicture/</loc>
     <lastmod>2017-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -438,12 +453,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/hugo/</loc>
+    <loc>https://dshcao.github.io/zh/categories/hugo/</loc>
     <lastmod>2017-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/hugo/</loc>
+    <loc>https://dshcao.github.io/zh/tags/hugo/</loc>
     <lastmod>2017-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -478,6 +493,21 @@
   </url>
   
   <url>
+    <loc>https://dshcao.github.io/zh/tags/%E7%9B%B4%E6%92%AD/</loc>
+    <lastmod>2017-10-11T10:33:41+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/series/%E7%9B%B4%E6%92%AD/</loc>
+    <lastmod>2017-10-11T10:33:41+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/categories/%E7%9B%B4%E6%92%AD/</loc>
+    <lastmod>2017-10-11T10:33:41+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://dshcao.github.io/zh/categories/%E9%9A%8F%E7%AC%94/</loc>
     <lastmod>2017-10-11T10:33:41+09:00</lastmod>
   </url>
@@ -494,6 +524,11 @@
   
   <url>
     <loc>https://dshcao.github.io/zh/notes/android/%E9%9A%8F%E8%AE%B0/</loc>
+    <lastmod>2017-10-11T10:33:41+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/</loc>
     <lastmod>2017-10-11T10:33:41+09:00</lastmod>
   </url>
   
