@@ -488,7 +488,7 @@
 <p>代码讲究 高内聚 低耦合 可重用<br />
 最终目的方便维护</p>
 <p>首先分析如何实现：<br />
-重写onDraw添加自己的逻辑代码，画一层蒙板，蒙板要覆盖整个imageview,周围是半透明，中间是方形或者圆形透明区域，可以用Path实现，还需要手势支持，所以还要用到<code>GestureDetector</code> <code>ScaleGestureDetector</code>，另外图片大小不一，第一次加载到imageview中肯定不是原尺寸，要经过缩放，那我们缩放到什么程度呢？因为我们截图不能使图像缩放小于中间透明区域，所以我们规定初次加载图像最短边缩放到中间透明区域，这里图片说明，这里还用到Matrix从来缩放图像,不太了解的可谷歌一下</p>
+重写onDraw添加自己的逻辑代码，画一层蒙板，蒙板要覆盖整个imageview,周围是半透明，中间是方形或者圆形透明区域，可以用Path实现，还需要手势支持，所以还要用到<code>GestureDetector</code> <code>ScaleGestureDetector</code>，另外图片大小不一，第一次加载到imageview中肯定不是原尺寸，要经过缩放，那我们缩放到什么程度呢？因为我们截图不能使图像缩放小于中间透明区域，所以我们规定初次加载图像最短边缩放到中间透明区域，这里图片说明，这里还用到<code>Matrix</code>从来缩放图像,不太了解的可先看下文档谷歌一下</p>
 <p>首先为了使用方便自定义属性：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -758,8 +758,8 @@
                 <span class="k">val</span> <span class="py">dx</span><span class="p">:</span> <span class="n">Float</span>
                 <span class="k">val</span> <span class="py">dy</span><span class="p">:</span> <span class="n">Float</span>
                 <span class="k">val</span> <span class="py">matrixRectF</span><span class="p">:</span> <span class="n">RectF</span> <span class="p">=</span> <span class="n">getMatrixRectF</span><span class="p">(</span><span class="p">)</span>
-                <span class="err">滑</span><span class="err">动</span><span class="err">时</span><span class="err">判</span><span class="err">断</span><span class="err">滑</span><span class="err">动</span><span class="err">的</span><span class="err">距</span><span class="err">离</span><span class="err">是</span><span class="err">否</span><span class="err">超</span><span class="err">出</span><span class="err">中</span><span class="err">间</span><span class="err">透</span><span class="err">明</span><span class="err">区</span><span class="err">域</span><span class="err">，</span><span class="err">取</span><span class="err">两</span><span class="err">者</span><span class="err">最</span><span class="err">小</span><span class="err">值</span><span class="err">，</span><span class="err">即</span><span class="err">最</span><span class="err">多</span><span class="err">只</span><span class="err">能</span><span class="err">滑</span><span class="err">动</span><span class="err">到</span><span class="err">透</span><span class="err">明</span><span class="err">区</span><span class="err">域</span><span class="err">边</span><span class="err">缘</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">distanceX</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">//滑动时判断滑动的距离是否超出中间透明区域，取两者最小值，即最多只能滑动到透明区域边缘
+</span><span class="c1"></span>                <span class="k">if</span> <span class="p">(</span><span class="n">distanceX</span> <span class="p">&lt;</span> <span class="m">0</span><span class="p">)</span> <span class="p">{</span>
                     <span class="n">dx</span> <span class="p">=</span> <span class="n">distanceX</span><span class="p">.</span><span class="n">coerceAtLeast</span><span class="p">(</span><span class="n">matrixRectF</span><span class="p">.</span><span class="n">left</span> <span class="p">-</span> <span class="n">overViewOffset</span><span class="p">.</span><span class="n">left</span><span class="p">)</span>
                 <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                     <span class="n">dx</span> <span class="p">=</span> <span class="n">distanceX</span><span class="p">.</span><span class="n">coerceAtMost</span><span class="p">(</span><span class="n">matrixRectF</span><span class="p">.</span><span class="n">right</span> <span class="p">-</span> <span class="n">overViewOffset</span><span class="p">.</span><span class="n">right</span><span class="p">)</span>
@@ -777,7 +777,7 @@
         <span class="n">gestureDetector</span> <span class="p">=</span> <span class="n">GestureDetector</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">gestureListener</span><span class="p">)</span>
         <span class="n">scaleGestureDetector</span> <span class="p">=</span> <span class="n">ScaleGestureDetector</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
     <span class="p">}</span>
-    <span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="err">省</span><span class="err">略</span>
+    <span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="p">.</span><span class="err">暂</span><span class="err">时</span><span class="err">省</span><span class="err">略</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -853,7 +853,6 @@
 </span><span class="lnt">67
 </span><span class="lnt">68
 </span><span class="lnt">69
-</span><span class="lnt">70
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">override</span> <span class="k">fun</span> <span class="nf">onAttachedToWindow</span><span class="p">(</span><span class="p">)</span> <span class="p">{</span>
@@ -907,7 +906,6 @@
     <span class="n">overViewOffset</span><span class="p">.</span><span class="k">set</span><span class="p">(</span><span class="n">overView</span><span class="p">)</span>
     <span class="n">overViewOffset</span><span class="p">.</span><span class="n">inset</span><span class="p">(</span><span class="p">-</span><span class="n">imageSpace</span><span class="p">.</span><span class="n">toFloat</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="p">-</span><span class="n">imageSpace</span><span class="p">.</span><span class="n">toFloat</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
     <span class="c1">//calculate the scale
-</span><span class="c1"></span>    <span class="c1">//calculate the scale
 </span><span class="c1"></span>    <span class="n">scale</span> <span class="p">=</span> <span class="p">(</span><span class="n">overViewSize</span> <span class="p">+</span> <span class="n">imageSpace</span> <span class="p">*</span> <span class="m">2</span><span class="p">)</span> <span class="p">*</span> <span class="m">1f</span> <span class="p">/</span> <span class="n">Math</span><span class="p">.</span><span class="n">min</span><span class="p">(</span>
         <span class="n">drawableWidth</span><span class="p">,</span>
         <span class="n">drawableHeight</span>
@@ -1097,7 +1095,7 @@
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>本来实现是java，写文章的时候重写改成kotlin，继承<code>OnScaleGestureListener</code> ,<code>onScaleEnd</code>这里原不需要逻辑，结果kotlin自动生成<code>TODO(&quot;not implemented&quot;) </code>，这个标志必须删除，不然缩放的时候会崩溃。。。<br />
+</div><p>最开始写这个控件的时候是java，写文章的时候重写改成kotlin，继承<code>OnScaleGestureListener</code> ,<code>onScaleEnd</code>这里原不需要逻辑，结果kotlin自动生成<code>TODO(&quot;not implemented&quot;) </code>，这个标志必须删除，不然缩放的时候会崩溃。。。<br />
 override fun onScaleEnd(detector: ScaleGestureDetector?) {<br />
 TODO(&ldquo;not implemented&rdquo;) //To change body of created functions use File | Settings | File Templates.<br />
 }</p>
@@ -1196,11 +1194,7 @@ TODO(&ldquo;not implemented&rdquo;) //To change body of created functions use Fi
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/jetpack-jobservice/" class="related__link">写在开始</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/" class="related__link">Android源码解析-Scroller</a>
+          <a href="/zh/posts/httphttps/" class="related__link">写在开始</a>
         </li>
         
         <li>
@@ -1208,11 +1202,15 @@ TODO(&ldquo;not implemented&rdquo;) //To change body of created functions use Fi
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-lifecycles/" class="related__link">写在开始</a>
+          <a href="/zh/posts/android-handler%E8%A7%A3%E6%9E%90/" class="related__link">Android源码解析-Handler</a>
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-workmanager/" class="related__link">写在开始</a>
+          <a href="/zh/posts/jetpack-jobservice/" class="related__link">写在开始</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/" class="related__link">Android源码解析-Scroller</a>
         </li>
         
     </ul>
