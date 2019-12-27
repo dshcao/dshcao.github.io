@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>自定义view on dshcao blog</title>
+    <link>https://dshcao.github.io/zh/series/%E8%87%AA%E5%AE%9A%E4%B9%89view/</link>
+    <description>Recent content in 自定义view on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <managingEditor>513996717@qq.com (dshcao)</managingEditor>
+    <webMaster>513996717@qq.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Fri, 27 Dec 2019 10:33:41 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/zh/series/%E8%87%AA%E5%AE%9A%E4%B9%89view/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>自定义view-ImageCropView</title>
+        <link>https://dshcao.github.io/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-imagecropview/</link>
+        <pubDate>Fri, 27 Dec 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-imagecropview/</guid>
+        <description>项目中需要为用户截取头像，刚开始调用系统自带功能，代码如下： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 Intent intent = new Intent(&amp;#34;com.android.camera.action.CROP&amp;#34;); intent.setDataAndType(Uri.fromFile(new File(itemData.getPath())), &amp;#34;image/*&amp;#34;); intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION); // crop=tr</description>
+      </item>
+      
+    
+  </channel>
+</rss>
