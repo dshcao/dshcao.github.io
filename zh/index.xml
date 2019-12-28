@@ -107,7 +107,7 @@
       </item>
       
       <item>
-        <title>写在开始</title>
+        <title>Kotlin语法</title>
         <link>https://dshcao.github.io/zh/posts/kotlin-%E8%AF%AD%E6%B3%95/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
@@ -188,6 +188,15 @@
       </item>
       
       <item>
+        <title>Android-FFmpeg</title>
+        <link>https://dshcao.github.io/zh/posts/android-ffmpeg/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg/</guid>
+        <description></description>
+      </item>
+      
+      <item>
         <title>Android-Flutter</title>
         <link>https://dshcao.github.io/zh/posts/android-flutter/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -211,6 +220,15 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-vrar/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>Android-事件分发机制</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</guid>
         <description></description>
       </item>
       
@@ -465,24 +483,6 @@ Inline math: $$ \varphi = \dfrac{1+\sqrt5}{2}= 1.</description>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/test-flowchart/</guid>
         <description>st=&amp;gt;start: Start|past:&amp;gt;http://www.google.com[blank] e=&amp;gt;end: End|future:&amp;gt;http://www.google.com op1=&amp;gt;operation: My Operation|past op2=&amp;gt;operation: Stuff|current sub1=&amp;gt;subroutine: My Subroutine|invalid cond=&amp;gt;condition: Yes or No?|approved:&amp;gt;http://www.google.com c2=&amp;gt;condition: Good idea|rejected io=&amp;gt;inputoutput: catch something...|future st-&amp;gt;op1(right)-&amp;gt;cond cond(yes, right)-&amp;gt;c2 cond(no)-&amp;gt;sub1(left)-&amp;gt;op1 c2(yes)-&amp;gt;io-&amp;gt;e c2(no)-&amp;gt;op2-&amp;gt;e </description>
-      </item>
-      
-      <item>
-        <title>Android-FFmpeg</title>
-        <link>https://dshcao.github.io/zh/posts/ffmpeg/</link>
-        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/ffmpeg/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>Android-事件分发机制</title>
-        <link>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</link>
-        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</guid>
-        <description></description>
       </item>
       
       <item>

@@ -98,7 +98,7 @@
       </item>
       
       <item>
-        <title>写在开始</title>
+        <title>Kotlin语法</title>
         <link>https://dshcao.github.io/zh/posts/kotlin-%E8%AF%AD%E6%B3%95/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
@@ -112,6 +112,15 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-scroller/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>Android-FFmpeg</title>
+        <link>https://dshcao.github.io/zh/posts/android-ffmpeg/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg/</guid>
         <description></description>
       </item>
       
@@ -175,15 +184,6 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-pulllayout/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>Android-FFmpeg</title>
-        <link>https://dshcao.github.io/zh/posts/ffmpeg/</link>
-        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/ffmpeg/</guid>
         <description></description>
       </item>
       
