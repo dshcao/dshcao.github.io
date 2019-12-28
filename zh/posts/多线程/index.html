@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Handler详解 – dshcao blog</title>
+    <title>多线程详解 – dshcao blog</title>
     
 
 
@@ -181,7 +181,7 @@
 
 
 <meta property="og:site_name" content="dshcao blog">
-<meta property="og:title" content="Handler详解">
+<meta property="og:title" content="多线程详解">
 <meta property="og:url" content="https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
 <meta property="og:type" content="article">
 
@@ -200,7 +200,7 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "headline": "Handler详解",
+    "headline": "多线程详解",
     "datePublished": "2017-10-11T10:33:41+09:00",
     "dateModified": "2017-10-11T10:33:41+09:00",
     "url" : "https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/",
@@ -393,7 +393,7 @@
   
   <li  class="is-active" >    
     
-      <a href="https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">Handler详解</a>
+      <a href="https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程详解</a>
         
   </li>
   
@@ -402,10 +402,10 @@
 </nav>
   
   <div class="single">
-    <h2 class="single__title">Handler详解</h2>
+    <h2 class="single__title">多线程详解</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2017年 10月 11日 · ☕0 min read
+  🕓 2017年 10月 11日 · ☕11 min read
   
 </div>
       <div class="single__tags caption">
@@ -424,7 +424,223 @@
 </div>
     </div>    
     <article class="single__contents">
-      
+      <h2 id="heading">前置知识</h2>
+<p>线程状态：</p>
+<ul>
+<li>初始态（NEW）</li>
+<li>运行态（RUNNABLE）
+<ul>
+<li>就绪态（READY）</li>
+<li>运行态（RUNNNIN）</li>
+</ul>
+</li>
+<li>阻塞态（BLOCKED）</li>
+<li>等待态（WAITING）</li>
+<li>超时等待态（TIMED_WAITING）</li>
+<li>终止态（TERMINATED）</li>
+</ul>
+<h2 id="heading-1">此处应有图。。。</h2>
+<p>cpu指令分为特权指令和非特权指令</p>
+<ul>
+<li>特权指令 对内存空间的访问范围不受限制，即：既可以访问用户存储空间也可以访问系统存储空间，一般只给操作系统使用，特权指令：时钟操作 I/O操作 内存清零 关机等</li>
+<li>非特权指令 一般程序使用，只能访问用户存储空间完成一般性的操作和任务</li>
+</ul>
+<p>用户态和内核态</p>
+<ul>
+<li>用户态 只能运行非特权指令</li>
+<li>内核态 可运行特权指令</li>
+</ul>
+<p>用户态切换到内核态的三种方式：</p>
+<ul>
+<li>系统调用,在CPU中的实现称之为陷阱指令(Trap Instruction) 如：文件操作和网络数据发送</li>
+<li>未预知的异常(注意不等同于java中的异常),如：缺页异常</li>
+<li>外围设备中断</li>
+</ul>
+<p>Intel x86cpu 有Ring0~Ring3四个级别，Linux将Ring0作为内核态，Ring3作为用户态。Linux进程有4G地址空间 1~3G用户态地址空间 3~4G是内核态地址空间</p>
+<p>java线程和操作系统线程是一一对应的关系，每一个java/c++线程都映射到操作系统上的一个线程.Java中对线程的操作，如：创建/阻塞/切换等都要切换到内核态，这种切换消耗大量系统资源，因为用户态与内核态都有各自专用的内存空间，专用的寄存器等，用户态切换至内核态需要传递给许多变量、参数给内核，内核也需要保护好用户态在切换时的一些寄存器值、变量等，以便内核态调用结束后切换回用户态继续工作。Java中synchronized会导致未获得锁的线程进入阻塞状态，引起用户态与内核态的切换</p>
+<h2 id="heading-2">多线程的意义</h2>
+<p>首先明确一个cpu核心同时只能执行一个系统线程，这也是为什么一般线程池是和cpu核心关联,通常维护线程alive数量最小设置为CPU_COUNT+1，最大设置为CPU_COUNT*2+1<br />
+<br>多线程的出现是解决并发和性能问题，那么是不是多线程比但线程性能更好呢？那么要看你对性能的理解，对于整个计算机来说并不一定，这要分情况。影响线程性能的主要是线程的状态切换和线程间切换以及为了线程安全引入的线程锁带来的性能消耗</p>
+<ol>
+<li>单核cpu</li>
+</ol>
+<ul>
+<li>计算密集型操作 本身大量占用cpu，多线程的创建和上下文切换反而加重了cpu的负担，影响这个计算机的性能，但程序本身有更多机会竞争cpu时间片</li>
+<li>I/O密集型操作 由于操作过程较少占用cpu，多线程有助于提高性能。我们平时大多是这种操作</li>
+</ul>
+<ol start="2">
+<li>多核cpu 由于是多核可以同时执行多个线程，此时多线程是有助于极高整个计算机的利用率，提升性能</li>
+</ol>
+<p>每个线程维护一个自己的栈<br />
+java内存模型直接保证的原子性包括：read load use assign store write这6个，另外synchronized之间的操作也具备原子性<br />
+LockSupport.park()</p>
+<h2 id="javaapi">Java线程的API</h2>
+<ul>
+<li>thread.start()当前线程进入RUNNABLE</li>
+<li>Thread.yield()不释放锁,当前运行态线程让出cpu时间片给同等优先级的线程执行并进入就绪态</li>
+<li>thread.interrupt() 设置thread中断标志位为true,Java中的输入输出流并没有类似于Interrupt的机制，但是Java的InterruptableChanel接口提供了这样的机制，任何实现了InterruptableChanel接口的类的IO阻塞都是可中断的，中断时抛出ClosedByInterruptedException，也是由Thread对象调用Interrupt方法完成中断调用。IO中断后将关闭通道。实现InterruptableChanel接口的类包括FileChannel,ServerSocketChannel, SocketChannel, Pipe.SinkChannel andPipe.SourceChannel，也就是说，原则上可以实现文件、Socket、管道的可中断IO阻塞操作。虽然解除IO阻塞的方法还可以直接调用IO对象的Close方法，这也会抛出IO异常。但是InterruptableChanel机制能够使处于IO阻塞的线程能够有一个和处于中断等待的线程一致的线程停止方案</li>
+<li>thread.isInterrupted() 返回thread中断标志位状态</li>
+<li>Thread.interrupted() 返回当前thread中断标志位状态并清除中断标志位,另外抛出中断异常被捕获时也会清除中断标志位，如：
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="k">try</span><span class="o">{</span>
+    <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="n">2000</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span><span class="k">catch</span><span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span><span class="o">{</span>
+    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="c1">//进入中断异常的catch代码块时会清除中断标志位
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>wait() 释放锁,以便其他等待此锁的线程执行，当前线程进入等待态，必须在synchronized同步代码块中调用</li>
+<li>wait(1000) 释放锁,以便其他等待此锁的线程执行，当前线程进入超时等待态，必须在synchronized同步代码块中调</li>
+<li>notify()/notifyAll() 当前线程进入RUNNABLE，此时调用当前monitor.wait()的线程重新竞争锁。必须在synchronized同步代码块中调<br />
+notify是依附于锁(监视器)monitor的，故必须是monitor.wait()/monitor.notifyAll()，如：
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Object</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+
+<span class="kd">private</span> <span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">xxx</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">synchronized</span> <span class="o">(</span><span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">name</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">obj</span><span class="o">.</span><span class="na">wait</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">yyy</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">synchronized</span> <span class="o">(</span><span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s">&#34;name&#34;</span><span class="o">;</span>
+        <span class="n">obj</span><span class="o">.</span><span class="na">notify</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>thread.join() 当前线程进入等待态,注意不是thread，但thread必须是alive状态否则join无效，join是通过wait实现的</li>
+<li>thread.join(1000) 当前线程进入超时等待态，其他同join()</li>
+<li>thread.isAlive() 当前显示是否alive,A thread is alive if it has been started and has not yet died</li>
+<li>thread.setDaemon(true) 设置线程为守护线程，必须在调用线程的start()方法之前设置，否则会跑出IllegalThreadStateException异常，Java线程分为两种：用户线程和守护线程。当一个程序中所有用户进程结束，程序也就终止了，守护线程也会随即终止，且不保证守护线程执行完毕,即守护线程拥有自动结束自己生命周期的特性，而非守护线程不具备这个特点，这也是利用守护线程的原因。守护线程是用来在后台做通用服务的，如垃圾回收线程即时一个守护线程。不要在守护线程中执行业务逻辑操作(比如对数据的读写等).<br />
+java还有一类特殊线程：Hook (钩子) 线程
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">(</span><span class="o">)</span><span class="o">.</span><span class="na">addShutdownHook</span><span class="o">(</span><span class="n">hook</span><span class="o">)</span><span class="o">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在程序即将退出的时候，也就是 JVM 程序即将退出的时候，Hook 线程就会被启动执行,Hook (钩子) 线程的应用场景：</p>
+<ul>
+<li>防止程序重复执行，具体实现可以在程序启动时，校验是否已经生成 lock 文件，如果已经生成，则退出程序，如果未生成，则生成 lock 文件，程序正常执行，最后再注入 Hook 线程，这样在 JVM 退出的时候，线程中再将 lock 文件删除掉</li>
+<li>Hook 线程中也可以执行一些资源释放的操作，比如关闭数据库连接，Socket 连接等</li>
+</ul>
+</li>
+<li>Thread.sleep(1000) 不释放锁，当前线程进入超时等待态,Thread.sleep(0)的作用，就是“触发操作系统立刻重新进行一次CPU竞争”</li>
+</ul>
+<p>thread.interrupt()和Thread.interrupted()会唤醒Thread.sleep和thread.wait()导致Thread.sleep和thread.wait()抛出中断异常</p>
+<p>thread.stop, thread.suspend and thread.resume为什么被deprecated，详见参考<a href="#2">Java Thread Primitive Deprecation</a></p>
+<p>thread.stop deprecated原因总的说就是太暴力，会引发不可预期问题。因为thread.stop会抛出ThreadDeath异常，而The monitors are unlocked as the ThreadDeath exception propagates up the stack。一般通过代码控制，或者可以通过thread.interrupt()设置锚点配合代码控制<br />
+thread.suspend and thread.resume deprecated原因是容易引起死锁，可以用obj.wait()/obj.notifyAll()替代</p>
+<h2 id="heading-3">锁分类</h2>
+<ul>
+<li>公平锁/非公平锁 公平锁非公平锁的区别是是否是按照申请锁的顺序获取锁。其中非公平锁可能会造成优先级反转和饥饿现象。非公平锁的优点是吞吐量比公平锁大，因为维持公平有一定消耗
+<ul>
+<li>优先级反转
+<ul>
+<li>T0 thread3(低优先级)获得锁SYNC1</li>
+<li>T1 thread2(中优先级)与thread3竞争抢占了cpu时间片，thread3仍持有锁</li>
+<li>T2 thread1(高优先级)与thread2竞争抢占了cpu时间片</li>
+<li>T3 thread1需要获取锁，但锁被thread3持有，thread1挂起</li>
+<li>T4 thread2和thread3都处于可运行态，但由于thread2的优先级高于thread3，thread2优先抢占cpu时间片</li>
+<li>总结：这导致了一个现象：低优先级thread2比高优先级thread1先执行</li>
+<li>解决：优先继承，即高优先级线程需要低优先级线程持有的锁时，临时提升低优先级线程的优先级，如上面将thread3优先级临时提升到thread1的优先级别，当锁被释放的时候thread3恢复到原来的优先级,这一过程一般有操作系统完成</li>
+</ul>
+</li>
+<li>饥饿 高优先级线程不断进入导致低优先级线程一直无法得到执行</li>
+</ul>
+</li>
+<li>独享锁/共享锁 独享锁：只能被一个线程同时持有，共享锁：可被多个线程同时持有</li>
+<li>互斥锁/读写锁</li>
+<li>自旋锁 在Java中，自旋锁是指尝试获取锁的线程不会立即阻塞，而是采用循环的方式去尝试获取锁，这样的好处是减少线程上下文切换的消耗，缺点是循环会消耗CPU</li>
+<li>可重入锁 又名递归锁，是指已持有该锁再次调用需要该锁的其他代码块自动获取锁。可重入锁有效避险死锁现象</li>
+<li>分段锁 分段锁其实是一种锁的设计，并不是具体的一种锁,目的是细化锁的粒度 java中<code>ConcurrentHashMap</code>就是分段锁，当需要put元素的时候，并不是对整个hashmap进行加锁，而是先通过hashcode来知道他要放在那一个分段中，然后对这个分段进行加锁，所以当多线程put的时候，只要不是放在一个分段中，就实现了真正的并行的插入，但在统计size的时候，需要获取hashmap全局信息的时候，就需要获取所有的分段锁才能统计</li>
+<li>向锁/轻量级锁/重量级锁 这三种锁是指锁的状态，并且是针对Synchronized。在Java 5通过引入锁升级的机制来实现高效Synchronized。这三种锁的状态是通过对象监视器在对象头中的字段来表明的。<br />
+<br>偏向锁是指一段同步代码一直被一个线程所访问，那么该线程会自动获取锁。降低获取锁的代价。<br />
+<br>轻量级锁是指当锁是偏向锁的时候，被另一个线程所访问，偏向锁就会升级为轻量级锁，其他线程会通过自旋的形式尝试获取锁，不会阻塞，<br>重量级锁是指当锁为轻量级锁的时候，另一个线程虽然是自旋，但自旋不会一直持续下去，当自旋一定次数的时候，还没有获取到锁，就会进入阻塞，该锁膨胀为重量级锁。重量级锁会让其他申请的线程进入阻塞，性能降低</li>
+<li>乐观锁/悲观锁 乐观锁与悲观锁不是指具体的什么类型的锁，而是指看待并发同步的角度。<br />
+<br>悲观锁认为对于同一个数据的并发操作，一定是会发生修改的，哪怕没有修改，也会认为修改。因此对于同一个数据的并发操作，悲观锁采取加锁的形式。悲观的认为，不加锁的并发操作一定会出问题。<br />
+<br>乐观锁则认为对于同一个数据的并发操作，是不会发生修改的。在更新数据的时候，会采用尝试更新，不断重新的方式更新数据。乐观的认为，不加锁的并发操作是没有事情的。从上面的描述我们可以看出，悲观锁适合写操作非常多的场景，乐观锁适合读操作非常多的场景，不加锁会带来大量的性能提升。<br />
+<br>悲观锁在Java中的使用，就是利用各种锁。<br />
+<br>乐观锁在Java中的使用，是无锁编程，常常采用的是CAS算法，典型的例子就是原子类，通过CAS自旋实现原子操作的更新</li>
+</ul>
+<h2 id="java">Java中的锁实现</h2>
+<ul>
+<li>Synchronized 公平锁 独享锁 可重入锁 synchronized不包含在方法签名，不能继承</li>
+<li>Lock Java1.5 通过AQS的来实现线程调度，是代码层面实现的锁，比Synchronized轻量，lock的代码块程序抛出异常也不会释放锁，需要手动释放，故使用Lock必须在try{}catch{}块中进行，并且将释放锁的操s作放在finally代码块<br />
+<br>lock()  获取锁，未获取则等待<br />
+<br>tryLock() 获取锁，未获取则等待，有返回值，表示获取锁是否成功<br />
+<br>tryLock(long time, TimeUnit unit)获取锁，未获取则等待，有返回值表示设定时间内获取锁是否成功<br />
+<br>ockInterruptibly() 如果线程正在等待获取锁，则这个线程能够响应中断，通过thread.interrupt()中断线程的等待状态<br />
+<br>注：thread.interrupt()只能中断阻塞的线程，故线程获取锁之后不能响应interrupt()中断
+<ul>
+<li>ReentrantLock 可重入锁，独享锁，默认非公平锁，可以通过构造函数指定是否是公平，</li>
+<li>ReadWriteLock 读写锁 读锁是共享锁，写锁是独享锁，即可以共读读，不能共写读，读写，写写
+<ul>
+<li>ReentrantReadWriteLock 可重入读写锁，继承ReadWriteLock，并支持ReentrantLock可重入锁的特性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><span id="2">参考：</span></p>
+<ul>
+<li><a href="http://ifeve.com/java-memory-model-0/">深入理解java内存模型系列文章</a></li>
+<li><a href="https://www.tuicool.com/articles/zuiy6rb">synchronized原理和锁优化</a></li>
+<li><a href="https://www.exception.site/java-concurrency/java-concurrency-hook-thread">Java 多线程之 Hook (钩子) 线程</a></li>
+<li><a href="https://docs.oracle.com/javase/8/docs/technotes/guides/concurrency/threadPrimitiveDeprecation.html">Java Thread Primitive Deprecation</a></li>
+<li><a href="https://www.zhihu.com/question/27654579">Java线程中wait状态和block状态的区别?</a></li>
+<li><a href="https://blog.csdn.net/qq_39823627/article/details/78736650">用户态和内核态的理解和区别</a></li>
+<li><a href="https://www.cnblogs.com/qifengshi/p/6831055.html">Java中的锁分类</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/java-concurrent/">Java 并发性和多线程</a></li>
+</ul>
+
     </article>
     
     
@@ -516,15 +732,15 @@
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/anr%E5%88%86%E6%9E%90/" class="related__link">Handler详解</a>
-        </li>
-        
-        <li>
           <a href="/zh/posts/android-vrar/" class="related__link">Handler详解</a>
         </li>
         
         <li>
           <a href="/zh/posts/ffmpeg/" class="related__link">Handler详解</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/anr%E5%88%86%E6%9E%90/" class="related__link">Handler详解</a>
         </li>
         
     </ul>
@@ -533,17 +749,17 @@
     <div class="grow"></div>
 <nav class="pagination-single">
   
-    <a href="https://dshcao.github.io/zh/posts/%E5%B1%9E%E6%80%A7%E5%8A%A8%E7%94%BB/" class="pagination-single__left">
+    <a href="https://dshcao.github.io/zh/notes/android/%E9%9A%8F%E8%AE%B0/" class="pagination-single__left">
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
       </div>
-      <div class="pagination-single__left-title">Handler详解</div>      
+      <div class="pagination-single__left-title">随记</div>      
     </a>
   
   <div class="grow"></div>
   
-    <a href="https://dshcao.github.io/zh/posts/pictureinpicture/" class="pagination-single__right">      
-      <div class="pagination-single__right-title">Handler详解</div>
+    <a href="https://dshcao.github.io/zh/notes/android/%E8%87%AA%E5%AE%9A%E4%B9%89view/%E8%87%AA%E5%AE%9A%E4%B9%89view-%E6%BB%91%E5%8A%A8%E5%B5%8C%E5%A5%97/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">Syntax highlighting</div>
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
       </div>

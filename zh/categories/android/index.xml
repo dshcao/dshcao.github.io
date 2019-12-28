@@ -107,6 +107,24 @@
       </item>
       
       <item>
+        <title>多线程详解补充</title>
+        <link>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</guid>
+        <description>Java内存模型 Java内存模型主要目标：定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的</description>
+      </item>
+      
+      <item>
+        <title>插件化和热更新</title>
+        <link>https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/</guid>
+        <description>插件化在几年前火的一塌糊涂，由插件化延续到后来的热更新，近几年似乎没了当初的狂热 插件化和热更新的意义在于动态化升级。不同于web只要后台发布</description>
+      </item>
+      
+      <item>
         <title>Android Scroller解析及应用</title>
         <link>https://dshcao.github.io/zh/notes/android/%E8%87%AA%E5%AE%9A%E4%B9%89view/scroller/</link>
         <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
@@ -161,21 +179,21 @@
       </item>
       
       <item>
-        <title>Handler详解</title>
-        <link>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
-        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
-        <description></description>
-      </item>
-      
-      <item>
         <title>Jetpack-CameraX</title>
         <link>https://dshcao.github.io/zh/posts/jetpack-camerax/</link>
         <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jetpack-camerax/</guid>
         <description>一、camera2 CameraX是Jetpack对camera2功能的封装，并可向后兼容至 Android 5.0（API 级别 21）</description>
+      </item>
+      
+      <item>
+        <title>多线程详解</title>
+        <link>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
+        <description>前置知识 线程状态： 初始态（NEW） 运行态（RUNNABLE） 就绪态（READY） 运行态（RUNNNIN） 阻塞态（BLOCKED） 等待态（WA</description>
       </item>
       
     

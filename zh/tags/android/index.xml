@@ -107,6 +107,15 @@
       </item>
       
       <item>
+        <title>插件化和热更新</title>
+        <link>https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/</guid>
+        <description>插件化在几年前火的一塌糊涂，由插件化延续到后来的热更新，近几年似乎没了当初的狂热 插件化和热更新的意义在于动态化升级。不同于web只要后台发布</description>
+      </item>
+      
+      <item>
         <title>Android Scroller解析及应用</title>
         <link>https://dshcao.github.io/zh/notes/android/%E8%87%AA%E5%AE%9A%E4%B9%89view/scroller/</link>
         <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>

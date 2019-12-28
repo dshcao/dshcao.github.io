@@ -53,15 +53,6 @@
       </item>
       
       <item>
-        <title>编程基础</title>
-        <link>https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</link>
-        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</guid>
-        <description></description>
-      </item>
-      
-      <item>
         <title>触摸滑动</title>
         <link>https://dshcao.github.io/zh/tags/%E8%A7%A6%E6%91%B8%E6%BB%91%E5%8A%A8/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
@@ -188,11 +179,56 @@
       </item>
       
       <item>
+        <title>kotlin</title>
+        <link>https://dshcao.github.io/zh/tags/kotlin/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/kotlin/</guid>
+        <description></description>
+      </item>
+      
+      <item>
         <title>rxjava</title>
         <link>https://dshcao.github.io/zh/tags/rxjava/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/rxjava/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>协程</title>
+        <link>https://dshcao.github.io/zh/tags/%E5%8D%8F%E7%A8%8B/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/%E5%8D%8F%E7%A8%8B/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>多线程</title>
+        <link>https://dshcao.github.io/zh/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>插件化</title>
+        <link>https://dshcao.github.io/zh/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>热更新</title>
+        <link>https://dshcao.github.io/zh/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/</guid>
         <description></description>
       </item>
       
@@ -211,15 +247,6 @@
         <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/hugo/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>多线程</title>
-        <link>https://dshcao.github.io/zh/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
-        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
         <description></description>
       </item>
       

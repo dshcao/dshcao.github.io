@@ -455,7 +455,62 @@ fullBackupContent用来配置配分规则，如：android:fullBackupContent=&rdq
 </code></pre></td></tr></table>
 </div>
 </div><p>另外还可实现<code>BackupAgent</code>应用于你的备份逻辑</p>
-
+<p>如何保证序列化和反序列化仍然是同一个对象？比如单例模式从而实现线程安全<br />
+protected Object readResolve() throws ObjectStreamException {<br />
+return mInstance;<br />
+}<br />
+原因，看<code>ObjectInputStream</code>注释文档</p>
+<pre><code class="language-doc" data-lang="doc">customized: any class-specific readObject, readObjectNoData, and readResolve methods defined by enum types are ignored during deserialization. Similarly, any serialPersistentFields or serialVersionUID field declarations are also ignored--all enum types have a fixed serialVersionUID of 0L.
+</code></pre><p><code>ObjectInputStream</code>反序列化源码检测是否定义了<code>readResolve()</code>方法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="k">if</span> <span class="o">(</span><span class="n">obj</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">handles</span><span class="o">.</span><span class="na">lookupException</span><span class="o">(</span><span class="n">passHandle</span><span class="o">)</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span> <span class="o">&amp;</span><span class="o">&amp;</span>
+            <span class="n">desc</span><span class="o">.</span><span class="na">hasReadResolveMethod</span><span class="o">(</span><span class="o">)</span><span class="o">)</span><span class="o">{</span>
+    <span class="n">Object</span> <span class="n">rep</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="na">invokeReadResolve</span><span class="o">(</span><span class="n">obj</span><span class="o">)</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">unshared</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">rep</span><span class="o">.</span><span class="na">getClass</span><span class="o">(</span><span class="o">)</span><span class="o">.</span><span class="na">isArray</span><span class="o">(</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">rep</span> <span class="o">=</span> <span class="n">cloneArray</span><span class="o">(</span><span class="n">rep</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">rep</span> <span class="o">!</span><span class="o">=</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Android-removed: ObjectInputFilter logic, to be reconsidered. http://b/110252929
+</span><span class="c1"></span>        <span class="cm">/*
+</span><span class="cm">        // Filter the replacement object
+</span><span class="cm">        if (rep != null) {
+</span><span class="cm">            if (rep.getClass().isArray()) {
+</span><span class="cm">                filterCheck(rep.getClass(), Array.getLength(rep));
+</span><span class="cm">            } else {
+</span><span class="cm">                filterCheck(rep.getClass(), -1);
+</span><span class="cm">            }
+</span><span class="cm">        }
+</span><span class="cm">        */</span>
+        <span class="n">handles</span><span class="o">.</span><span class="na">setObject</span><span class="o">(</span><span class="n">passHandle</span><span class="o">,</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">rep</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
     </article>
     
     
@@ -550,8 +605,8 @@ fullBackupContent用来配置配分规则，如：android:fullBackupContent=&rdq
   
   <div class="grow"></div>
   
-    <a href="https://dshcao.github.io/zh/notes/android/%E8%87%AA%E5%AE%9A%E4%B9%89view/%E8%87%AA%E5%AE%9A%E4%B9%89view-%E6%BB%91%E5%8A%A8%E5%B5%8C%E5%A5%97/" class="pagination-single__right">      
-      <div class="pagination-single__right-title">Syntax highlighting</div>
+    <a href="https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">多线程详解</div>
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
       </div>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>热更新 on dshcao blog</title>
+    <link>https://dshcao.github.io/zh/series/%E7%83%AD%E6%9B%B4%E6%96%B0/</link>
+    <description>Recent content in 热更新 on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <managingEditor>513996717@qq.com (dshcao)</managingEditor>
+    <webMaster>513996717@qq.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Fri, 11 Oct 2019 10:33:41 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/zh/series/%E7%83%AD%E6%9B%B4%E6%96%B0/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>插件化和热更新</title>
+        <link>https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/</guid>
+        <description>插件化在几年前火的一塌糊涂，由插件化延续到后来的热更新，近几年似乎没了当初的狂热 插件化和热更新的意义在于动态化升级。不同于web只要后台发布</description>
+      </item>
+      
+    
+  </channel>
+</rss>
