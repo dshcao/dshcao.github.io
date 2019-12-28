@@ -17,12 +17,12 @@
     
       
       <item>
-        <title>字符编码</title>
-        <link>https://dshcao.github.io/zh/posts/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/</link>
+        <title>Http/Https详解</title>
+        <link>https://dshcao.github.io/zh/posts/httphttps/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/</guid>
-        <description>首先明白字符和字符集两个概念，从名字就很清晰了。 字符集为每个字符分配一个唯一ID，又叫码位/码点，英文code point UTF是 Unicode Tranformation Format，即</description>
+        <guid>https://dshcao.github.io/zh/posts/httphttps/</guid>
+        <description></description>
       </item>
       
     

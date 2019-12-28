@@ -9,7 +9,7 @@
     <managingEditor>513996717@qq.com (dshcao)</managingEditor>
     <webMaster>513996717@qq.com (dshcao)</webMaster>
     <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
-    <lastBuildDate>Sat, 16 Nov 2019 12:00:06 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 16 Nov 2017 12:00:06 +0900</lastBuildDate>
     
         <atom:link href="https://dshcao.github.io/zh/categories/math/index.xml" rel="self" type="application/rss+xml" />
     
@@ -19,7 +19,7 @@
       <item>
         <title>MathJax support</title>
         <link>https://dshcao.github.io/zh/posts/test-mathjax/</link>
-        <pubDate>Sat, 16 Nov 2019 12:00:06 +0900</pubDate>
+        <pubDate>Thu, 16 Nov 2017 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/test-mathjax/</guid>
         <description>When \(a \ne 0\), there are two solutions to \((ax^2 + bx + c = 0)\) and they are
@@ -29,7 +29,7 @@
       <item>
         <title>Katex support</title>
         <link>https://dshcao.github.io/zh/posts/test-katext/</link>
-        <pubDate>Fri, 15 Nov 2019 12:00:06 +0900</pubDate>
+        <pubDate>Wed, 15 Nov 2017 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/test-katext/</guid>
         <description>The following

@@ -17,16 +17,7 @@
     
       
       <item>
-        <title>写在开始</title>
-        <link>https://dshcao.github.io/zh/posts/httphttps/</link>
-        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/httphttps/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>写在开始</title>
+        <title>Jetpack-JobService详解</title>
         <link>https://dshcao.github.io/zh/posts/jetpack-jobservice/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
@@ -35,7 +26,7 @@
       </item>
       
       <item>
-        <title>写在开始</title>
+        <title>Jetpack-Lifecycles</title>
         <link>https://dshcao.github.io/zh/posts/jetpack-lifecycles/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
@@ -44,7 +35,7 @@
       </item>
       
       <item>
-        <title>写在开始</title>
+        <title>Jetpack-Navigation详解</title>
         <link>https://dshcao.github.io/zh/posts/jetpack-navigation/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
@@ -53,20 +44,11 @@
       </item>
       
       <item>
-        <title>写在开始</title>
+        <title>Jetpack-WorkManager详解</title>
         <link>https://dshcao.github.io/zh/posts/jetpack-workmanager/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jetpack-workmanager/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>写在开始</title>
-        <link>https://dshcao.github.io/zh/posts/renderscript%E4%BD%BF%E7%94%A8/</link>
-        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/renderscript%E4%BD%BF%E7%94%A8/</guid>
         <description></description>
       </item>
       

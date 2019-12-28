@@ -35,6 +35,24 @@
       </item>
       
       <item>
+        <title>kotlin</title>
+        <link>https://dshcao.github.io/zh/series/kotlin/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/series/kotlin/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>renderscript</title>
+        <link>https://dshcao.github.io/zh/series/renderscript/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/series/renderscript/</guid>
+        <description></description>
+      </item>
+      
+      <item>
         <title>源码解析</title>
         <link>https://dshcao.github.io/zh/series/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
@@ -53,11 +71,29 @@
       </item>
       
       <item>
-        <title>Themes Guide</title>
-        <link>https://dshcao.github.io/zh/series/themes-guide/</link>
-        <pubDate>Fri, 20 Dec 2019 12:00:06 +0900</pubDate>
+        <title>编程基础</title>
+        <link>https://dshcao.github.io/zh/series/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/series/themes-guide/</guid>
+        <guid>https://dshcao.github.io/zh/series/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>rxjava</title>
+        <link>https://dshcao.github.io/zh/series/rxjava/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/series/rxjava/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>四大组件</title>
+        <link>https://dshcao.github.io/zh/series/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/series/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/</guid>
         <description></description>
       </item>
       
@@ -76,6 +112,15 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/series/%E7%83%AD%E6%9B%B4%E6%96%B0/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>Themes Guide</title>
+        <link>https://dshcao.github.io/zh/series/themes-guide/</link>
+        <pubDate>Wed, 20 Dec 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/series/themes-guide/</guid>
         <description></description>
       </item>
       

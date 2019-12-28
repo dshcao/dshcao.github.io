@@ -25,6 +25,15 @@
         <description>项目中需要为用户截取头像，刚开始调用系统自带功能，代码如下： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 Intent intent = new Intent(&amp;#34;com.android.camera.action.CROP&amp;#34;); intent.setDataAndType(Uri.fromFile(new File(itemData.getPath())), &amp;#34;image/*&amp;#34;); intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION); // crop=tr</description>
       </item>
       
+      <item>
+        <title>自定义View-PullView</title>
+        <link>https://dshcao.github.io/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-pullview/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-pullview/</guid>
+        <description></description>
+      </item>
+      
     
   </channel>
 </rss>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>jetpack on dshcao blog</title>
+    <link>https://dshcao.github.io/zh/tags/jetpack/</link>
+    <description>Recent content in jetpack on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <managingEditor>513996717@qq.com (dshcao)</managingEditor>
+    <webMaster>513996717@qq.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Mon, 23 Dec 2019 12:00:06 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/zh/tags/jetpack/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>Jetpack-JobService详解</title>
+        <link>https://dshcao.github.io/zh/posts/jetpack-jobservice/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/jetpack-jobservice/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>Jetpack-Lifecycles</title>
+        <link>https://dshcao.github.io/zh/posts/jetpack-lifecycles/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/jetpack-lifecycles/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>Jetpack-Navigation详解</title>
+        <link>https://dshcao.github.io/zh/posts/jetpack-navigation/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/jetpack-navigation/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>Jetpack-WorkManager详解</title>
+        <link>https://dshcao.github.io/zh/posts/jetpack-workmanager/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/jetpack-workmanager/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>Jetpack-CameraX</title>
+        <link>https://dshcao.github.io/zh/posts/jetpack-camerax/</link>
+        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/jetpack-camerax/</guid>
+        <description>一、camera2 CameraX是Jetpack对camera2功能的封装，并可向后兼容至 Android 5.0（API 级别 21）</description>
+      </item>
+      
+    
+  </channel>
+</rss>

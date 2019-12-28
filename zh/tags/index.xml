@@ -44,6 +44,42 @@
       </item>
       
       <item>
+        <title>http</title>
+        <link>https://dshcao.github.io/zh/tags/http/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/http/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>https</title>
+        <link>https://dshcao.github.io/zh/tags/https/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/https/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>jetpack</title>
+        <link>https://dshcao.github.io/zh/tags/jetpack/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/jetpack/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>kotlin</title>
+        <link>https://dshcao.github.io/zh/tags/kotlin/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/kotlin/</guid>
+        <description></description>
+      </item>
+      
+      <item>
         <title>生活</title>
         <link>https://dshcao.github.io/zh/tags/%E7%94%9F%E6%B4%BB/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
@@ -62,110 +98,11 @@
       </item>
       
       <item>
-        <title>css</title>
-        <link>https://dshcao.github.io/zh/tags/css/</link>
-        <pubDate>Fri, 20 Dec 2019 12:00:06 +0900</pubDate>
+        <title>anr</title>
+        <link>https://dshcao.github.io/zh/tags/anr/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/css/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>html</title>
-        <link>https://dshcao.github.io/zh/tags/html/</link>
-        <pubDate>Fri, 20 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/html/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>markdown</title>
-        <link>https://dshcao.github.io/zh/tags/markdown/</link>
-        <pubDate>Fri, 20 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/markdown/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>themes</title>
-        <link>https://dshcao.github.io/zh/tags/themes/</link>
-        <pubDate>Fri, 20 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/themes/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>privacy</title>
-        <link>https://dshcao.github.io/zh/tags/privacy/</link>
-        <pubDate>Thu, 19 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/privacy/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>shortcodes</title>
-        <link>https://dshcao.github.io/zh/tags/shortcodes/</link>
-        <pubDate>Thu, 19 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/shortcodes/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>amoji</title>
-        <link>https://dshcao.github.io/zh/tags/amoji/</link>
-        <pubDate>Mon, 16 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/amoji/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>bamoji</title>
-        <link>https://dshcao.github.io/zh/tags/bamoji/</link>
-        <pubDate>Mon, 16 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/bamoji/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>emoji</title>
-        <link>https://dshcao.github.io/zh/tags/emoji/</link>
-        <pubDate>Mon, 16 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/emoji/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>gamoji</title>
-        <link>https://dshcao.github.io/zh/tags/gamoji/</link>
-        <pubDate>Mon, 16 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/gamoji/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>namoji</title>
-        <link>https://dshcao.github.io/zh/tags/namoji/</link>
-        <pubDate>Mon, 16 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/namoji/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>diagram</title>
-        <link>https://dshcao.github.io/zh/tags/diagram/</link>
-        <pubDate>Sun, 17 Nov 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/diagram/</guid>
+        <guid>https://dshcao.github.io/zh/tags/anr/</guid>
         <description></description>
       </item>
       
@@ -175,15 +112,6 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/java/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>kotlin</title>
-        <link>https://dshcao.github.io/zh/tags/kotlin/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/kotlin/</guid>
         <description></description>
       </item>
       
@@ -202,6 +130,15 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/%E5%8D%8F%E7%A8%8B/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>四大组件</title>
+        <link>https://dshcao.github.io/zh/tags/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/</guid>
         <description></description>
       </item>
       
@@ -233,11 +170,137 @@
       </item>
       
       <item>
-        <title>text</title>
-        <link>https://dshcao.github.io/zh/tags/text/</link>
-        <pubDate>Sat, 09 Mar 2019 12:00:06 +0900</pubDate>
+        <title>css</title>
+        <link>https://dshcao.github.io/zh/tags/css/</link>
+        <pubDate>Wed, 20 Dec 2017 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/text/</guid>
+        <guid>https://dshcao.github.io/zh/tags/css/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>html</title>
+        <link>https://dshcao.github.io/zh/tags/html/</link>
+        <pubDate>Wed, 20 Dec 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/html/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>markdown</title>
+        <link>https://dshcao.github.io/zh/tags/markdown/</link>
+        <pubDate>Wed, 20 Dec 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/markdown/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>themes</title>
+        <link>https://dshcao.github.io/zh/tags/themes/</link>
+        <pubDate>Wed, 20 Dec 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/themes/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>privacy</title>
+        <link>https://dshcao.github.io/zh/tags/privacy/</link>
+        <pubDate>Tue, 19 Dec 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/privacy/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>shortcodes</title>
+        <link>https://dshcao.github.io/zh/tags/shortcodes/</link>
+        <pubDate>Tue, 19 Dec 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/shortcodes/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>amoji</title>
+        <link>https://dshcao.github.io/zh/tags/amoji/</link>
+        <pubDate>Sat, 16 Dec 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/amoji/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>bamoji</title>
+        <link>https://dshcao.github.io/zh/tags/bamoji/</link>
+        <pubDate>Sat, 16 Dec 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/bamoji/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>emoji</title>
+        <link>https://dshcao.github.io/zh/tags/emoji/</link>
+        <pubDate>Sat, 16 Dec 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/emoji/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>gamoji</title>
+        <link>https://dshcao.github.io/zh/tags/gamoji/</link>
+        <pubDate>Sat, 16 Dec 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/gamoji/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>namoji</title>
+        <link>https://dshcao.github.io/zh/tags/namoji/</link>
+        <pubDate>Sat, 16 Dec 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/namoji/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>diagram</title>
+        <link>https://dshcao.github.io/zh/tags/diagram/</link>
+        <pubDate>Fri, 17 Nov 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/diagram/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>ar</title>
+        <link>https://dshcao.github.io/zh/tags/ar/</link>
+        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/ar/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>camera</title>
+        <link>https://dshcao.github.io/zh/tags/camera/</link>
+        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/camera/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>ffmpeg</title>
+        <link>https://dshcao.github.io/zh/tags/ffmpeg/</link>
+        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/ffmpeg/</guid>
         <description></description>
       </item>
       
@@ -247,6 +310,42 @@
         <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/hugo/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>media</title>
+        <link>https://dshcao.github.io/zh/tags/media/</link>
+        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/media/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>scroller</title>
+        <link>https://dshcao.github.io/zh/tags/scroller/</link>
+        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/scroller/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>vr</title>
+        <link>https://dshcao.github.io/zh/tags/vr/</link>
+        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/vr/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>源码解析</title>
+        <link>https://dshcao.github.io/zh/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
         <description></description>
       </item>
       
@@ -274,6 +373,15 @@
         <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>text</title>
+        <link>https://dshcao.github.io/zh/tags/text/</link>
+        <pubDate>Thu, 09 Mar 2017 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/text/</guid>
         <description></description>
       </item>
       

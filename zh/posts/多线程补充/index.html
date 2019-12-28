@@ -405,7 +405,7 @@
     <h2 class="single__title">多线程详解补充</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 10月 11日 · ☕7 min read
+  🕓 2019年 10月 11日 · ☕8 min read
   
 </div>
       <div class="single__tags caption">
@@ -486,9 +486,17 @@
 </div>
 </div></li>
 <li>
-<p><code>Future</code> 保存异步计算的结果,可以在我们执行任务时去做其他工作,Future有一下方法 <br>1. boolean cancel(boolean mayInterruptIfRunning);<br>2.boolean isCancelled();<br>3.boolean isDone();<br>4.V get() throws InterruptedException, ExecutionException;<br>5.V get(long timeout, TimeUnit unit)<br />
-throws InterruptedException, ExecutionException, TimeoutException;<br />
-<br>使用Future的好处：<br>1.获取任务的结果，判断任务是否完成，中断任务<br>2.Future的get方法很好的替代的了Thread.join或Thread,join(long millis)<br>3.Future的get方法可以判断程序代码(任务)的执行是否超时，如：</p>
+<p><code>Future</code> 保存异步计算的结果,可以在我们执行任务时去做其他工作,Future有一下方法<br />
+<br>1. boolean cancel(boolean mayInterruptIfRunning);用来取消任务，成功返回true，失败则返回false<br />
+<br>2.boolean isCancelled();任务是否已经取消<br />
+<br>3.boolean isDone();任务是否已经完成<br />
+<br>4.V get() throws InterruptedException, ExecutionException;用来获取执行结果，这个方法会产生阻塞会一直等到任务执行完毕才返回<br />
+<br>5.V get(long timeout, TimeUnit unit)<br />
+throws InterruptedException, ExecutionException, TimeoutException;用来获取执行结果，如果在指定时间内，还没获取到结果，直接返回null<br />
+<br>使用Future的好处：<br />
+<br>1.获取任务的结果，判断任务是否完成，中断任务<br />
+<br>2.Future的get方法很好的替代的了Thread.join或Thread,join(long millis)<br />
+<br>3.Future的get方法可以判断程序代码(任务)的执行是否超时，如：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -750,19 +758,7 @@ throws InterruptedException, ExecutionException, TimeoutException;<br />
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="related__link">多线程详解</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/ffmpeg/" class="related__link">Handler详解</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/anr%E5%88%86%E6%9E%90/" class="related__link">Handler详解</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/android-vrar/" class="related__link">Handler详解</a>
+          <a href="/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="related__link">多线程详解</a>
         </li>
         
     </ul>
@@ -780,8 +776,8 @@ throws InterruptedException, ExecutionException, TimeoutException;<br />
   
   <div class="grow"></div>
   
-    <a href="https://dshcao.github.io/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/" class="pagination-single__right">      
-      <div class="pagination-single__right-title">RxJava2源码及使用</div>
+    <a href="https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">多线程详解</div>
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
       </div>
