@@ -234,6 +234,15 @@
 	"content": ""
 },
 {
+	"uri": "https://dshcao.github.io/zh/series/kotlin/",
+	"title": "kotlin",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
 	"uri": "https://dshcao.github.io/zh/categories/kotlin/",
 	"title": "kotlin",
 	"tags": [],
@@ -244,15 +253,6 @@
 },
 {
 	"uri": "https://dshcao.github.io/zh/tags/kotlin/",
-	"title": "kotlin",
-	"tags": [],
-	"categories": [],
-	"series": [],
-	"description": "",
-	"content": ""
-},
-{
-	"uri": "https://dshcao.github.io/zh/series/kotlin/",
 	"title": "kotlin",
 	"tags": [],
 	"categories": [],
@@ -306,7 +306,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/",
+	"uri": "https://dshcao.github.io/zh/series/%E7%94%9F%E6%B4%BB/",
 	"title": "生活",
 	"tags": [],
 	"categories": [],
@@ -315,7 +315,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/%E7%94%9F%E6%B4%BB/",
+	"uri": "https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/",
 	"title": "生活",
 	"tags": [],
 	"categories": [],
@@ -729,7 +729,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E6%8F%92%E4%BB%B6%E5%8C%96/",
+	"uri": "https://dshcao.github.io/zh/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/",
 	"title": "插件化",
 	"tags": [],
 	"categories": [],
@@ -738,7 +738,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/",
+	"uri": "https://dshcao.github.io/zh/categories/%E6%8F%92%E4%BB%B6%E5%8C%96/",
 	"title": "插件化",
 	"tags": [],
 	"categories": [],
@@ -756,7 +756,7 @@
 	"content": "插件化在几年前火的一塌糊涂，由插件化延续到后来的热更新，近几年似乎没了当初的狂热\n插件化和热更新的意义在于动态化升级。不同于web只要后台发布用户前端的下次请求页面和逻辑都会改变，Android的UI及逻辑代码在手机上，发布需要经过各大市场，由审核时间，且就算发布到各大市场用户也不一定更新，强制用户更新的结果可能是被用户强制卸载。但是发布新功能/紧急修复bug的需求是巨大的。于是先有了\n 将web那一套搬到移动端的做法，但是web在移动端的性能让其体验很差，虽然出现了很多框架增强了许多，但还是有差距 原生的插件化和热更新 RectNative 热更新  RectNative用脚本语言js控制逻辑，使用c++桥接的形式控制原生控件显示，由于脚本语言不用编译，可以动态发布从而实现热更新\n由于官方不支持插件化和热更新（理由是安全问题）导致原生插件化和热更新只能另辟蹊径\n热更新分两种，一种是重启生效，一种是即时生效\n即时生效的原理是：这个过程相当复杂不易控制\n这里主要讲喜爱重启生效热更新模式的原理：\nClassLoader,java的ClassLoader双亲委托机制\n干预Android加载，既然要干预那就要首先了解其原加载过程\n"
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/",
+	"uri": "https://dshcao.github.io/zh/categories/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/",
 	"title": "源码解析",
 	"tags": [],
 	"categories": [],
@@ -765,7 +765,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/",
+	"uri": "https://dshcao.github.io/zh/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/",
 	"title": "源码解析",
 	"tags": [],
 	"categories": [],
