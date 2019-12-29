@@ -323,6 +323,15 @@
       </item>
       
       <item>
+        <title>贝塞尔曲线</title>
+        <link>https://dshcao.github.io/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/</guid>
+        <description>前置知识 Bezier曲线是用一系列点控制曲线状态的，主要分为： 数据点 确定曲线的起始和结束位置 控制点 确定曲线的弯曲程度 其中数据点又叫锚点，只有</description>
+      </item>
+      
+      <item>
         <title>Markdown Syntax Guide</title>
         <link>https://dshcao.github.io/zh/posts/markdown-syntax/</link>
         <pubDate>Wed, 20 Dec 2017 12:00:06 +0900</pubDate>
