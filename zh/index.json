@@ -9,7 +9,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/android/",
+	"uri": "https://dshcao.github.io/zh/categories/android/",
 	"title": "android",
 	"tags": [],
 	"categories": [],
@@ -18,7 +18,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/android/",
+	"uri": "https://dshcao.github.io/zh/tags/android/",
 	"title": "android",
 	"tags": [],
 	"categories": [],
@@ -72,7 +72,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
+	"uri": "https://dshcao.github.io/zh/series/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
 	"title": "自定义view",
 	"tags": [],
 	"categories": [],
@@ -81,7 +81,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
+	"uri": "https://dshcao.github.io/zh/tags/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
 	"title": "自定义view",
 	"tags": [],
 	"categories": [],
@@ -243,7 +243,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/kotlin/",
+	"uri": "https://dshcao.github.io/zh/tags/kotlin/",
 	"title": "kotlin",
 	"tags": [],
 	"categories": [],
@@ -252,7 +252,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/kotlin/",
+	"uri": "https://dshcao.github.io/zh/categories/kotlin/",
 	"title": "kotlin",
 	"tags": [],
 	"categories": [],
@@ -297,7 +297,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E7%94%9F%E6%B4%BB/",
+	"uri": "https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/",
 	"title": "生活",
 	"tags": [],
 	"categories": [],
@@ -315,7 +315,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/",
+	"uri": "https://dshcao.github.io/zh/tags/%E7%94%9F%E6%B4%BB/",
 	"title": "生活",
 	"tags": [],
 	"categories": [],
@@ -567,7 +567,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/java/",
+	"uri": "https://dshcao.github.io/zh/tags/java/",
 	"title": "java",
 	"tags": [],
 	"categories": [],
@@ -576,7 +576,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/java/",
+	"uri": "https://dshcao.github.io/zh/categories/java/",
 	"title": "java",
 	"tags": [],
 	"categories": [],
@@ -675,7 +675,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/",
+	"uri": "https://dshcao.github.io/zh/series/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/",
 	"title": "四大组件",
 	"tags": [],
 	"categories": [],
@@ -684,7 +684,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/",
+	"uri": "https://dshcao.github.io/zh/tags/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/",
 	"title": "四大组件",
 	"tags": [],
 	"categories": [],
@@ -729,7 +729,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/",
+	"uri": "https://dshcao.github.io/zh/categories/%E6%8F%92%E4%BB%B6%E5%8C%96/",
 	"title": "插件化",
 	"tags": [],
 	"categories": [],
@@ -738,7 +738,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E6%8F%92%E4%BB%B6%E5%8C%96/",
+	"uri": "https://dshcao.github.io/zh/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/",
 	"title": "插件化",
 	"tags": [],
 	"categories": [],
@@ -756,15 +756,6 @@
 	"content": "插件化在几年前火的一塌糊涂，由插件化延续到后来的热更新，近几年似乎没了当初的狂热\n插件化和热更新的意义在于动态化升级。不同于web只要后台发布用户前端的下次请求页面和逻辑都会改变，Android的UI及逻辑代码在手机上，发布需要经过各大市场，由审核时间，且就算发布到各大市场用户也不一定更新，强制用户更新的结果可能是被用户强制卸载。但是发布新功能/紧急修复bug的需求是巨大的。于是先有了\n 将web那一套搬到移动端的做法，但是web在移动端的性能让其体验很差，虽然出现了很多框架增强了许多，但还是有差距 原生的插件化和热更新 RectNative 热更新  RectNative用脚本语言js控制逻辑，使用c++桥接的形式控制原生控件显示，由于脚本语言不用编译，可以动态发布从而实现热更新\n由于官方不支持插件化和热更新（理由是安全问题）导致原生插件化和热更新只能另辟蹊径\n热更新分两种，一种是重启生效，一种是即时生效\n即时生效的原理是：这个过程相当复杂不易控制\n这里主要讲喜爱重启生效热更新模式的原理：\nClassLoader,java的ClassLoader双亲委托机制\n干预Android加载，既然要干预那就要首先了解其原加载过程\n"
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/",
-	"title": "源码解析",
-	"tags": [],
-	"categories": [],
-	"series": [],
-	"description": "",
-	"content": ""
-},
-{
 	"uri": "https://dshcao.github.io/zh/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/",
 	"title": "源码解析",
 	"tags": [],
@@ -774,8 +765,8 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/",
-	"title": "热更新",
+	"uri": "https://dshcao.github.io/zh/categories/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/",
+	"title": "源码解析",
 	"tags": [],
 	"categories": [],
 	"series": [],
@@ -793,6 +784,15 @@
 },
 {
 	"uri": "https://dshcao.github.io/zh/categories/%E7%83%AD%E6%9B%B4%E6%96%B0/",
+	"title": "热更新",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/",
 	"title": "热更新",
 	"tags": [],
 	"categories": [],
@@ -852,7 +852,7 @@
 	"categories": [],
 	"series": [],
 	"description": "贝塞尔曲线详解",
-	"content": "前置知识 Bezier曲线是用一系列点控制曲线状态的，主要分为：\n 数据点 确定曲线的起始和结束位置 控制点 确定曲线的弯曲程度  其中数据点又叫锚点，只有起始和结束两个点，控制点有0～n个，按控制点个数可分为一阶贝塞尔曲线，二阶贝塞尔曲线，三阶贝塞尔曲线，\u0026hellip;，N阶贝塞尔曲线\n一阶贝塞尔曲线 0个控制点 即为一条直线\n给定点P0，P1，其中初始点P0，结束点P1，t为比率，在P0，P1上取一点D，D即为曲线上的点，使得：\n$$ \\frac{P_0D}{P_0P_1}=t $$\n一阶比较简单我们作为例子演算出公式，上面的表达式可改写为：\n$$\n\\frac{D-P_0}{P_1-P_0}=t\n$$\n再进一步演算为：\n$$\nD=t*({P_1-P_0})+P_0\n$$\nD记为B(t)，推出公式：\nB(t)=(1-t)P0+tP1,t${\\in}$[0,1]\n二阶贝塞尔曲线 1个控制点\n给定点P0，P1，P2，其中初始点P0，结束点P2，控制点P1，t为比率，在P0P1上取一点D，P1P2取一点E，在DE上取一点F，F即为曲线上的点，使得：\n$$\n\\frac{P_0D}{P_0P_1}=\\frac{P_1E}{P_1P_2}=\\frac{DF}{DE}=t\n$$\n推出公式：\nB(t)=(1-t)2P0+2t(1-t)P1+t2p2,t${\\in}$[0,1]\n三阶贝塞尔曲线 2个控制点\n给定点P0，P1，P2，P3，其中初始点P0，结束点P3，控制点P1，P2，t为比率，在P0P1上取一点D，P1P2取一点E，P2P3取一点F，在DE上取一点G，在EF上取一点H，在GH上取一点I，I即为曲线上的点，使得：\n$$\n\\frac{P_0D}{P_0P_1}=\\frac{P_1E}{P_1P_2}=\\frac{P_2F}{P_2P_3}=\\frac{DG}{DE}=\\frac{EH}{EF}=\\frac{GI}{GH}=t\n$$\n推出公式：\nB(t)=(1-t)3P0+3P1t(1-t)2+3P2t2(1-t)+P3t3,t${\\in}$[0,1]\n参考：\ncubic-bezier\n"
+	"content": "前置知识 Bezier曲线是用一系列点控制曲线状态的，主要分为：\n 数据点 确定曲线的起始和结束位置 控制点 确定曲线的弯曲程度  其中数据点又叫锚点，只有起始和结束两个点，控制点有0～n个，按控制点个数可分为一阶贝塞尔曲线，二阶贝塞尔曲线，三阶贝塞尔曲线，\u0026hellip;，N阶贝塞尔曲线\n一阶贝塞尔曲线 0个控制点 即为一条直线\n给定点P0，P1，其中初始点P0，结束点P1，t为比率，在P0，P1上取一点D，D即为曲线上的点，使得：\n$$ \\frac{P_0D}{P_0P_1}=t $$\nInline math: $$ \\varphi = \\dfrac{1+\\sqrt5}{2}= 1.6180339887… $$\n一阶比较简单我们作为例子演算出公式，上面的表达式可改写为：\n$$\n\\frac{D-P_0}{P_1-P_0}=t\n$$\n再进一步演算为：\n$$\nD=t*({P_1-P_0})+P_0\n$$\nD记为B(t)，推出公式：\nB(t)=(1-t)P0+tP1,t${\\in}$[0,1]\n二阶贝塞尔曲线 1个控制点\n给定点P0，P1，P2，其中初始点P0，结束点P2，控制点P1，t为比率，在P0P1上取一点D，P1P2取一点E，在DE上取一点F，F即为曲线上的点，使得：\n$$\n\\frac{P_0D}{P_0P_1}=\\frac{P_1E}{P_1P_2}=\\frac{DF}{DE}=t\n$$\n推出公式：\nB(t)=(1-t)2P0+2t(1-t)P1+t2p2,t${\\in}$[0,1]\n三阶贝塞尔曲线 2个控制点\n给定点P0，P1，P2，P3，其中初始点P0，结束点P3，控制点P1，P2，t为比率，在P0P1上取一点D，P1P2取一点E，P2P3取一点F，在DE上取一点G，在EF上取一点H，在GH上取一点I，I即为曲线上的点，使得：\n$$\n\\frac{P_0D}{P_0P_1}=\\frac{P_1E}{P_1P_2}=\\frac{P_2F}{P_2P_3}=\\frac{DG}{DE}=\\frac{EH}{EF}=\\frac{GI}{GH}=t\n$$\n推出公式：\nB(t)=(1-t)3P0+3P1t(1-t)2+3P2t2(1-t)+P3t3,t${\\in}$[0,1]\n参考：\ncubic-bezier\n"
 },
 {
 	"uri": "https://dshcao.github.io/zh/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/",
@@ -987,7 +987,7 @@
 	"categories": [],
 	"series": [],
 	"description": "A brief guide to setup KaTeX",
-	"content": "Mathematical notation in a Hugo project can be enabled by using third party JavaScript libraries.\nIn this example we will be using KaTeX\n Create a partial under /layouts/partials/math.html Within this partial reference the Auto-render Extension or host these scripts locally. Include the partial in your templates like so:  {{ if or .Params.math .Site.Params.math }} {{ partial \u0026quot;math.html\u0026quot; . }} {{ end }}  To enable KaTex globally set the parameter math to true in a project's configuration To enable KaTex on a per page basis include the parameter math: true in content files.  Note: Use the online reference of Supported TeX Functions\nExamples Inline math: $$ \\varphi = \\dfrac{1+\\sqrt5}{2}= 1.6180339887… $$\nBlock math:\n$$\n\\varphi = 1+\\frac{1} {1+\\frac{1} {1+\\frac{1} {1+\\cdots} } }\n$$\n"
+	"content": "Mathematical notation in a Hugo project can be enabled by using third party JavaScript libraries.\nIn this example we will be using KaTeX\n Create a partial under /layouts/partials/math.html Within this partial reference the Auto-render Extension or host these scripts locally. Include the partial in your templates like so:  {{ if or .Params.math .Site.Params.math }} {{ partial \u0026quot;math.html\u0026quot; . }} {{ end }}  To enable KaTex globally set the parameter math to true in a project's configuration To enable KaTex on a per page basis include the parameter math: true in content files.  Note: Use the online reference of Supported TeX Functions\nInline math: $$ \\varphi = \\dfrac{1+\\sqrt5}{2}= 1.6180339887… $$\nExamples Inline math: $$ \\varphi = \\dfrac{1+\\sqrt5}{2}= 1.6180339887… $$\nBlock math:\n$$\n\\varphi = 1+\\frac{1} {1+\\frac{1} {1+\\frac{1} {1+\\cdots} } }\n$$\n"
 },
 {
 	"uri": "https://dshcao.github.io/zh/tags/amoji/",
