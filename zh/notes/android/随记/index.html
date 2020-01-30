@@ -405,7 +405,7 @@
     <h2 class="single__title">随记</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2017年 10月 11日 · ☕1 min read
+  🕓 2017年 10月 11日 · ☕2 min read
   
 </div>
       <div class="single__tags caption">
@@ -510,7 +510,51 @@ return mInstance;<br />
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
+</div><h2 id="suppresslayout">suppressLayout</h2>
+<p><code>suppressLayout(true)</code>会将<code>mSuppressLayout</code>标志置为<code>true</code>时所有触发<code>layout()</code>操作不会执行真正的<code>layout()</code>，而是在<code>layout()</code>中将<code>mLayoutCalledWhileSuppressed</code>标志置为<code>true</code>，直到<code>suppressLayout(false)</code>重置<code>mSuppressLayout</code>标志时会触发执行一次<code>requestLayout()</code>，并将<code>mLayoutCalledWhileSuppressed</code>置为<code>false</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * Tells this ViewGroup to suppress all layout() calls until layout
+</span><span class="cm"> * suppression is disabled with a later call to suppressLayout(false).
+</span><span class="cm"> * When layout suppression is disabled, a requestLayout() call is sent
+</span><span class="cm"> * if layout() was attempted while layout was being suppressed.
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">suppressLayout</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">suppress</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mSuppressLayout</span> <span class="o">=</span> <span class="n">suppress</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="o">!</span><span class="n">suppress</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mLayoutCalledWhileSuppressed</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">requestLayout</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">mLayoutCalledWhileSuppressed</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
 </div>
+</div><h2 id="getlocationonscreen-clipbounds">getLocationOnScreen clipBounds</h2>
+<h2 id="finishactivity">finishActivity</h2>
+<p>public void finishActivity(int requestCode)</p>
+<h2 id="androidwindowistranslucenttrue-">android:windowIsTranslucent=true 适配</h2>
+<h2 id="activity-androidpersistablemodepersistacrossreboots">Activity android:persistableMode=&quot;persistAcrossReboots&rdquo;</h2>
+<p>PersistableBundle</p>
+
     </article>
     
     
@@ -1330,7 +1374,7 @@ return mInstance;<br />
 
                 
             <p class="caption">
-                ©2019, All Rights Reserved
+                ©2020, All Rights Reserved
             </p>
         
         <p class="caption">Powered by <a href="https://gohugo.io/" rel="noreferrer">Hugo</a> and the <a href="https://github.com/zzossig/hugo-theme-zzo" rel="noreferrer">Zzo theme</a></p>

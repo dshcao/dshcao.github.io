@@ -9,7 +9,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/android/",
+	"uri": "https://dshcao.github.io/zh/tags/android/",
 	"title": "android",
 	"tags": [],
 	"categories": [],
@@ -18,7 +18,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/android/",
+	"uri": "https://dshcao.github.io/zh/categories/android/",
 	"title": "android",
 	"tags": [],
 	"categories": [],
@@ -63,7 +63,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
+	"uri": "https://dshcao.github.io/zh/series/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
 	"title": "自定义view",
 	"tags": [],
 	"categories": [],
@@ -81,7 +81,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
+	"uri": "https://dshcao.github.io/zh/categories/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
 	"title": "自定义view",
 	"tags": [],
 	"categories": [],
@@ -99,6 +99,15 @@
 	"content": "项目中需要为用户截取头像，刚开始调用系统自带功能，代码如下：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22  Intent intent = new Intent(\u0026#34;com.android.camera.action.CROP\u0026#34;); intent.setDataAndType(Uri.fromFile(new File(itemData.getPath())), \u0026#34;image/*\u0026#34;); intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION); // crop=true是设置在开启的Intent中设置显示的VIEW可裁剪 intent.putExtra(\u0026#34;crop\u0026#34;, \u0026#34;true\u0026#34;); // aspectX aspectY 是宽高的比例 intent.putExtra(\u0026#34;aspectX\u0026#34;, 1); intent.putExtra(\u0026#34;aspectY\u0026#34;, 1); // outputX outputY 是裁剪图片宽高 intent.putExtra(\u0026#34;outputX\u0026#34;, 350); intent.putExtra(\u0026#34;outputY\u0026#34;, 350); intent.putExtra(\u0026#34;scale\u0026#34;, true); intent.putExtra(\u0026#34;noFaceDetection\u0026#34;, false);//取消人脸识别功能 intent.putExtra(\u0026#34;outputFormat\u0026#34;, Bitmap.CompressFormat.PNG.toString()); //true则图片在intent中返回，如果图片过大，会导致oom，这里设置为false intent.putExtra(\u0026#34;return-data\u0026#34;, false); File avatar = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), AppConfig.Path.AVATAR); // FileProvider.getUriForFile(AvatarPickerActivity.this, getPackageName() + \u0026#34;.provider\u0026#34;, new File(itemData.getPath())); Uri outputUri = Uri.fromFile(avatar);//裁剪后输出位置 intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri); startActivityForResult(intent, REQUEST_CROP);   但使用过程中发现各手机ui不一致，更严重的是发现锤子手机有问题，锤子手机缩放图片后截取的图像仍是未缩放时的区域，然后就一顿搜索发现github上有不少这个项目，但效果不满意，且实现复杂，就这一个功能拆成N个文件。\n代码讲究 高内聚 低耦合 可重用\n最终目的方便维护\n首先分析如何实现：\n重写onDraw添加自己的逻辑代码，画一层蒙板，蒙板要覆盖整个imageview,周围是半透明，中间是方形或者圆形透明区域，可以用Path实现，还需要手势支持，所以还要用到GestureDetector ScaleGestureDetector，另外图片大小不一，第一次加载到imageview中肯定不是原尺寸，要经过缩放，那我们缩放到什么程度呢？因为我们截图不能使图像缩放小于中间透明区域，所以我们规定初次加载图像最短边缩放到中间透明区域，这里图片说明，这里还用到Matrix从来缩放图像,不太了解的可先看下文档谷歌一下\n首先为了使用方便自定义属性：\n1 2 3 4 5 6 7 8 9 10  \u0026lt;declare-styleable name=\u0026#34;ImageCropView\u0026#34;\u0026gt; \u0026lt;attr name=\u0026#34;aspectX\u0026#34; format=\u0026#34;integer\u0026#34; /\u0026gt; \u0026lt;attr name=\u0026#34;aspectY\u0026#34; format=\u0026#34;integer\u0026#34; /\u0026gt; \u0026lt;attr name=\u0026#34;viewStrokeColor\u0026#34; format=\u0026#34;color|reference\u0026#34; /\u0026gt; \u0026lt;attr name=\u0026#34;viewStrokeWidth\u0026#34; format=\u0026#34;dimension\u0026#34; /\u0026gt; \u0026lt;attr name=\u0026#34;viewShape\u0026#34; format=\u0026#34;enum\u0026#34;\u0026gt; \u0026lt;enum name=\u0026#34;square\u0026#34; value=\u0026#34;1\u0026#34; /\u0026gt; \u0026lt;enum name=\u0026#34;circle\u0026#34; value=\u0026#34;2\u0026#34; /\u0026gt; \u0026lt;/attr\u0026gt; \u0026lt;/declare-styleable\u0026gt;   自定义注解取代枚举\nViewShape\n1 2 3 4 5 6 7 8  @Retention(AnnotationRetention.SOURCE) @IntDef(SQUARE, CIRCLE) annotation class ViewShape(val value: Int = CIRCLE) { companion object { const val SQUARE = 1 const val CIRCLE = 1 shl 1 } }   ImageCropView\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117  class ImageCropView @JvmOverloads constructor( context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0 ) : AppCompatImageView(context, attrs, defStyleAttr), ViewTreeObserver.OnGlobalLayoutListener, ScaleGestureDetector.OnScaleGestureListener { @ViewShape var viewShape = ViewShape.CIRCLE//透明区域形状  private var viewStrokeWidth: Float = 1f//透明区域Stroke宽度  private var viewStrokeColor: Int = Color.WHITE//透明区域Stroke颜色  private var viewMaskColor: Int = Color.parseColor(\u0026#34;#77000000\u0026#34;)//半透明区域颜色  var aspectX: Int = 1//宽高比  var aspectY: Int = 1//宽高比  private val touchSlop: Int var overViewOffset = RectF() private var overViewSpace: Int = 0//透明区域与控件边缘的space  private var imageSpace: Int = 0//  private val paint: Paint//半透明区域  private val paintS: Paint//stroke  private var gestureDetector: GestureDetector private var scaleGestureDetector: ScaleGestureDetector var mValues = FloatArray(9) var mMatrix = Matrix() var initScale: Float = 0f var minScale: Float = 0f var maxScale: Float = 0f var max = 6 var overViewPath = Path() var overView = RectF() init { if (attrs != null) { val a = context.obtainStyledAttributes(attrs, R.styleable.ImageCropView) viewStrokeWidth = a.getDimension(R.styleable.ImageCropView_viewStrokeWidth, viewStrokeWidth) viewStrokeColor = a.getColor(R.styleable.ImageCropView_viewStrokeColor, viewStrokeColor) viewMaskColor = a.getColor(R.styleable.ImageCropView_viewStrokeColor, viewMaskColor) aspectX = a.getInt(R.styleable.ImageCropView_aspectX, aspectX) aspectY = a.getInt(R.styleable.ImageCropView_aspectY, aspectY) viewShape = if (aspectX != aspectY) ViewShape.SQUARE else viewShape a.recycle() } touchSlop = ViewConfiguration.get(context).scaledTouchSlop setLayerType(View.LAYER_TYPE_SOFTWARE, null) scaleType = ScaleType.MATRIX paint = Paint(Paint.ANTI_ALIAS_FLAG) paint.color = viewMaskColor paintS = Paint(Paint.ANTI_ALIAS_FLAG) paintS.color = viewStrokeColor paintS.style = Paint.Style.STROKE paintS.strokeWidth = viewStrokeWidth if (overViewSpace == 0) overViewSpace = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 42f, resources.displayMetrics) .toInt() imageSpace = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, resources.displayMetrics) .toInt() val gestureListener: SimpleOnGestureListener = object :SimpleOnGestureListener() { override fun onDoubleTap(e: MotionEvent): Boolean { //双击时若当前缩放小于最大缩放的一半时就缩放到最大，反之回到到初始加载的缩放  val currScale: Float = getCurrentScale() val midScale: Float = maxScale / (max / 2f) if (currScale \u0026lt; midScale) { val rScale = midScale / currScale scale(rScale, rScale, e.x, e.y) } else { val rScale: Float = initScale / currScale scale(rScale, rScale, e.x, e.y) } return true } override fun onScroll( e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float ): Boolean { val dx: Float val dy: Float val matrixRectF: RectF = getMatrixRectF() //滑动时判断滑动的距离是否超出中间透明区域，取两者最小值，即最多只能滑动到透明区域边缘  if (distanceX \u0026lt; 0) { dx = distanceX.coerceAtLeast(matrixRectF.left - overViewOffset.left) } else { dx = distanceX.coerceAtMost(matrixRectF.right - overViewOffset.right) } if (distanceY \u0026lt; 0) { dy = distanceY.coerceAtLeast(matrixRectF.top - overViewOffset.top) } else { dy = distanceY.coerceAtMost(matrixRectF.bottom - overViewOffset.bottom) } translate(-dx, -dy) return true } } gestureDetector = GestureDetector(context, gestureListener) scaleGestureDetector = ScaleGestureDetector(context, this) } ....暂时省略 }   onGlobalLayout中确定初始值\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69  override fun onAttachedToWindow() { super.onAttachedToWindow() viewTreeObserver.addOnGlobalLayoutListener(this) } //onGlobalLayout作用是获取构造函数中获取不到的尺寸以便确定初始缩放大小 //最大最小缩放根据初始缩放决定 override fun onGlobalLayout() { val drawable = drawable ?: return val scale: Float val viewWidth = width val viewHeight = height val overViewSize: Int = Math.min(viewWidth, viewHeight) - overViewSpace * 2 val drawableWidth = drawable.intrinsicWidth val drawableHeight = drawable.intrinsicHeight //build overview path  overViewPath.addRect( 0f, 0f, viewWidth.toFloat(), viewHeight.toFloat(), Path.Direction.CCW ) val circlePath = Path() val radius = overViewSize / 2.toFloat() if (viewShape == ViewShape.CIRCLE) { circlePath.addCircle( viewWidth / 2.toFloat(), viewHeight / 2.toFloat(), radius, Path.Direction.CCW ) } else { circlePath.addRect( viewWidth / 2f - radius, viewHeight / 2f - radius, viewWidth / 2f + radius, viewHeight / 2f + radius, Path.Direction.CCW ) } overViewPath.op(circlePath, Path.Op.XOR) overView.set( viewWidth / 2f - radius, viewHeight / 2f - radius, viewWidth / 2f + radius, viewHeight / 2f + radius ) overViewOffset.set(overView) overViewOffset.inset(-imageSpace.toFloat(), -imageSpace.toFloat()) //calculate the scale  scale = (overViewSize + imageSpace * 2) * 1f / Math.min( drawableWidth, drawableHeight ) initScale = scale minScale = initScale maxScale = minScale * max //calculate the delta move to center  val dx = viewWidth / 2 - drawableWidth / 2 val dy = viewHeight / 2 - drawableHeight / 2 mMatrix.postTranslate(dx.toFloat(), dy.toFloat()) mMatrix.postScale(initScale, initScale, viewWidth / 2.toFloat(), viewHeight / 2.toFloat()) imageMatrix = mMatrix //初始测量一次就够了  viewTreeObserver.removeOnGlobalLayoutListener(this) }   onDraw\n1 2 3 4 5 6 7 8 9 10 11 12  override fun onDraw(canvas: Canvas?) { super.onDraw(canvas) //画蒙层  canvas!!.drawPath(overViewPath, paint) //画stroke  if (viewStrokeWidth \u0026gt; 0) { canvas.drawCircle( overView.centerX(), overView.centerY() , (overView.width() + viewStrokeWidth) / 2, paintS ) } }   缩放处理逻辑\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16  override fun onScale(detector: ScaleGestureDetector?): Boolean { val currScale = getCurrentScale() var scaleFactor = detector!!.scaleFactor //主要是判断不能小于最小缩放值，不能大于最大缩放值  scaleFactor = if (scaleFactor \u0026lt; 1 \u0026amp;\u0026amp; currScale \u0026gt; minScale) { Math.max(scaleFactor, minScale / currScale) } else if (scaleFactor \u0026gt; 1 \u0026amp;\u0026amp; currScale \u0026lt; maxScale) { Math.min(scaleFactor, maxScale / currScale) } else { 1f } if (scaleFactor != 1f) { scale(scaleFactor, scaleFactor, detector.focusX, detector.focusY) } return true }   裁剪图片,这里可以替换其他方式，提高效率,这里使用中够用，暂时这样处理\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46  fun crop(file: File, outputX: Int, outputY: Int): Boolean { val bitmap = cropImage(outputX, outputY) ?: return false try { if (!file.exists()) { if (!file.parentFile.mkdirs() || !file.createNewFile()) { return false } } val fos = FileOutputStream(file) //java 中可以直接bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)  //kotlin中报错，必须work线程中处理  val thread = Thread(Runnable { bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos) }) thread.join() fos.flush() fos.close() bitmap.recycle() return true } catch (e: Exception) { e.printStackTrace() } return false } fun cropImage(outputX: Int, outputY: Int): Bitmap? { val drawable = (drawable ?: return null) as? BitmapDrawable ?: return null val scale = getCurrentScale() val mRectF = getMatrixRectF() val w: Float = overView.width() / scale val h: Float = overView.height() / scale val left: Float = (overView.left - mRectF.left) / scale val top: Float = (overView.top - mRectF.top) / scale val srcBmp = drawable.bitmap val cropBmp = Bitmap.createBitmap( srcBmp, left.toInt(), top.toInt(), w.toInt(), h.toInt() ) val bmp = Bitmap.createScaledBitmap(cropBmp, outputX, outputY, false) cropBmp.recycle() return bmp }   最开始写这个控件的时候是java，写文章的时候重写改成kotlin，继承OnScaleGestureListener ,onScaleEnd这里原不需要逻辑，结果kotlin自动生成TODO(\u0026quot;not implemented\u0026quot;) ，这个标志必须删除，不然缩放的时候会崩溃。。。\noverride fun onScaleEnd(detector: ScaleGestureDetector?) {\nTODO(\u0026ldquo;not implemented\u0026rdquo;) //To change body of created functions use File | Settings | File Templates.\n}\n 源码\n "
 },
 {
+	"uri": "https://dshcao.github.io/zh/series/android/",
+	"title": "android",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
 	"uri": "https://dshcao.github.io/zh/posts/renderscript%E4%BD%BF%E7%94%A8/",
 	"title": "Android RenderScript使用",
 	"tags": ["android"],
@@ -106,6 +115,15 @@
 	"series": ["renderscript"],
 	"description": "Android RenderScript详解",
 	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/posts/android-transition/",
+	"title": "Android-Transition",
+	"tags": ["android", "animation"],
+	"categories": [],
+	"series": ["android"],
+	"description": "android Transition详解.",
+	"content": "Transition Android中Transition是两个场景(Scene)之间的一个过渡转场动画效果，\nTransition有两个构造函数\n1 2 3 4 5 6  //代码创建 public Transition() {} //从res/transition资源文件加载创建 public Transition(Context context, AttributeSet attrs) { ... }   如：\n1 2 3 4 5 6 7 8  \u0026lt;transitionSet xmlns:android=\u0026#34;http://schemas.android.com/apk/res/android\u0026#34;\u0026gt; \u0026lt;changeBounds/\u0026gt; \u0026lt;fade android:fadingMode=\u0026#34;fade_in\u0026#34; android:duration=\u0026#34;200\u0026#34;\u0026gt; \u0026lt;targets\u0026gt; \u0026lt;target android:targetId=\u0026#34;@id/transition_title\u0026#34; /\u0026gt; \u0026lt;/targets\u0026gt; \u0026lt;/fade\u0026gt; \u0026lt;/transitionSet\u0026gt;   TransitionManager.changeScene/TransitionManager.beginDelayedTransition-\u0026gt;\nsceneChangeRunTransition\nsceneChangeRunTransition中为sceneRoot设置监听器监听onPreDraw，在onPreDraw调用transition.playTransition-\u0026gt;runAnimators\nPathMotion 1 2 3 4 5  public abstract class PathMotion { public PathMotion() {} public PathMotion(Context context, AttributeSet attrs) {} public abstract Path getPath(float startX, float startY, float endX, float endY); }   Scene和TransitionInflater/TransitionManager Scene 场景，即UI状态\nTransitionInflater 初始化Scene或TransitionManager\nTransitionManager 控制Scene使用某个Transition动画效果转换\n new Scene() Scene.getSceneForLayout scene.enter() scene.exit() TransitionInflater.from(context).inflateTransition() TransitionInflater.from(context).inflateTransitionManager() TransitionManager.go() 默认transition效果是AutoTransition，也可以指定其他Transition实现 transitionManager.transitionTo()  Transition 的实现  TransitionSet 多个transition(TransitionSet也是transition)的集合，TransitionSet是集合子transition的parent，通过ORDERING_TOGETHER和ORDERING_SEQUENTIAL两种play方式实现复杂的转场效果。TransitionSet对子transitions管理  AutoTransition 继承自TransitionSet并使用初始化的指定效果 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  public class AutoTransition extends TransitionSet { public AutoTransition() { init(); } public AutoTransition(Context context, AttributeSet attrs) { super(context, attrs); init(); } private void init() { setOrdering(ORDERING_SEQUENTIAL); addTransition(new Fade(Fade.OUT)). addTransition(new ChangeBounds()). addTransition(new Fade(Fade.IN)); } }      ChangeBounds Scene改变前后布局边界转场动画 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16  /** * Setting this flag tells ChangeBounds to track the before/after parent * of every view using this transition. The flag is not enabled by * default because it requires the parent instances to be the same * in the two scenes or else all parents must use ids to allow * the transition to determine which parents are the same. * * @param reparent true if the transition should track the parent * container of target views and animate parent changes. * @deprecated Use {@link android.transition.ChangeTransform} to handle * transitions between different parents. */ @Deprecated public void setReparent(boolean reparent) { mReparent = reparent; }    ChangeTransform Scene改变前后视图缩放和旋转动画 ChangeClipBounds Scene改变前后视图clipBounds边界转场动画 ChangeImageTransform Scene改变前后imageView matrix变换动画 ChangeScroll Scene改变前后view x/y上滚动变换动画 Visibility Scene改变前后view visibility变换动画  Slide Scene改变前后根据视图可见性，操作视图translationX/translationY将视图从场景某个边缘移入或移出 Explode Scene改变前后根据视图可见性，操作视图translationX/translationY将视图从场景边缘移入或移出,其中移入动画源码： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  public Animator onAppear(ViewGroup sceneRoot, View view, TransitionValues startValues, TransitionValues endValues) { if (endValues == null) { return null; } Rect bounds = (Rect) endValues.values.get(PROPNAME_SCREEN_BOUNDS); float endX = view.getTranslationX(); float endY = view.getTranslationY(); calculateOut(sceneRoot, bounds, mTempLoc); float startX = endX + mTempLoc[0]; float startY = endY + mTempLoc[1]; return TranslationAnimationCreator.createAnimation(view, endValues, bounds.left, bounds.top, startX, startY, endX, endY, sDecelerate, this); }    Fade Scene改变前后视图transitionAlpha变换动画 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20  private Animator createAnimation(final View view, float startAlpha, final float endAlpha) { if (startAlpha == endAlpha) { return null; } view.setTransitionAlpha(startAlpha); final ObjectAnimator anim = ObjectAnimator.ofFloat(view, \u0026#34;transitionAlpha\u0026#34;, endAlpha); if (DBG) { Log.d(LOG_TAG, \u0026#34;Created animator \u0026#34; + anim); } final FadeAnimatorListener listener = new FadeAnimatorListener(view); anim.addListener(listener); addListener(new TransitionListenerAdapter() { @Override public void onTransitionEnd(Transition transition) { view.setTransitionAlpha(1); transition.removeListener(this); } }); return anim; }       自定义Transition 过渡动画Transition需要捕获两个Sence之间的差异并使用属性动画实现过渡。属性动画是更改指定时间段内的起始值和结束值之间的视图属性，因此Transition框架需要同时具有属性的起始值和结束值才能构建动画，可参考官方文档创建自定义过渡动画\n 捕获初始值 override fun captureStartValues(transitionValues: TransitionValues)  Transition有两个抽象方法，一个空方法需要实现\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27  class CustomTransition : Transition() { // package_name:transition_name:property_name  private val PROPNAME_BACKGROUND = \u0026#34;com.example.android.customtransition:CustomTransition:background\u0026#34; override fun captureStartValues(transitionValues: TransitionValues) { captureValues(transitionValues) } override fun captureEndValues(transitionValues: TransitionValues) { captureValues(transitionValues) } private fun captureValues(transitionValues: TransitionValues) { transitionValues.values[PROPNAME_BACKGROUND] = view.background } override fun createAnimator( sceneRoot: ViewGroup, startValues: TransitionValues?, endValues: TransitionValues? ): Animator? { return super.createAnimator(sceneRoot, startValues, endValues) } ... }   ActivityOptions \u0026amp; Activity的过渡动画 Activity的过渡动画是建立在Transition的基础上的。进入动画/退出动画/共享元素动画都是一个transition。Activity的过渡动画主要包含：\n 进入动画/退出动画 必须是继承Visibility的Transition，Android中的实现有Slide Explode Fade 共享元素动画 activity视图中的过渡元素，Android中的实现有ChangeBounds ChangeClipBounds ChangeTransform ChangeImageTransform ChangeScroll等 API分析    window.enterTransition A-\u0026gt;B B中View的动画\n  window.exitTransition A-\u0026gt;B A中View的动画\n  window.returnTransition A-\u0026gt;B 再从B退到A，B中View的动画\n  window.reenterTransition A-\u0026gt;B 再从B退到A，A中View的动画\n  window.sharedElementEnterTransition 针对共享元素的，时机同window.enterTransition\n  window.sharedElementExitTransition 针对共享元素的，时机同window.exitTransition\n  window.sharedElementReturnTransition 针对共享元素的，时机同window.returnTransition\n  window.sharedElementReenterTransition 针对共享元素的，时机同window.reenterTransition\n  ActivityOptions.makeSceneTransitionAnimation() 设置共享元素，此处传递的A中的view和transitionName会与B中有相同transitionName的View做动画，即以A中的某个transitionName的view状态作为初始Sence，以B中该transitionName的view状态作为最终Sence做动画\n  activity.postponeEnterTransition() 延迟EnterTransition，使用场景：图片选择activity进入图片查看activity,图片查看activity的共享元素ImageView需要下载大图资源，显示大图前无法确定ImageView大小，此时可以用postponeEnterTransition()延迟动画，下载完成后调用startPostponedEnterTransition()开启动画。但这也会造成一个问题：如果下载时间较长，下载完成前EnterTransition动画会卡住一段时间，可以使用占位图片等方式配合解决\n  activity.supportPostponedEnterTransition() 支持库版本，会判定版本号是否执行activity.postponeEnterTransition()\n  activity.startPostponedEnterTransition() 配合activity.postponeEnterTransition()使用，开启EnterTransition\n  activity.supportStartPostponedEnterTransition() 支持库版本，会判定版本号是否执行activity.supportStartPostponedEnterTransition()\n  activity.finishAfterTransition()\n  window.transitionManager/activity.contentTransitionManager\n  window.contentScene/activity.contentScene windown content的Sence，activity需要设置window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)，否则window.contentScene为null\n  window.allowEnterTransitionOverlap true尽快执行过渡动画，false会等待A的exitTransition执行完执行完再执行B的enterTransition\n  window.allowReturnTransitionOverlap true尽快执行过渡动画，false会等待B的exitTransition执行完再执行A的reenterTransition\n  Activity方法onActivityReenter(resultCode: Int, data: Intent?)\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20  /** * Called when an activity you launched with an activity transition exposes this * Activity through a returning activity transition, giving you the resultCode * and any additional data from it. This method will only be called if the activity * set a result code other than {@link #RESULT_CANCELED} and it supports activity * transitions with {@link Window#FEATURE_ACTIVITY_TRANSITIONS}. * * \u0026lt;p\u0026gt;The purpose of this function is to let the called Activity send a hint about * its state so that this underlying Activity can prepare to be exposed. A call to * this method does not guarantee that the called Activity has or will be exiting soon. * It only indicates that it will expose this Activity\u0026#39;s Window and it has * some data to pass to prepare it.\u0026lt;/p\u0026gt; * * @param resultCode The integer result code returned by the child activity * through its setResult(). * @param data An Intent, which can return result data to the caller * (various data can be attached to Intent \u0026#34;extras\u0026#34;). */ public void onActivityReenter(int resultCode, Intent data) { }     Window.FEATURE_CONTENT_TRANSITIONS\n1 2 3 4 5 6 7 8 9 10 11  /** * Flag for requesting that window content changes should be animated using a * TransitionManager. * * \u0026lt;p\u0026gt;The TransitionManager is set using * {@link #setTransitionManager(android.transition.TransitionManager)}. If none is set, * a default TransitionManager will be used.\u0026lt;/p\u0026gt; * * @see #setContentView */ public static final int FEATURE_CONTENT_TRANSITIONS = 12;     Window.FEATURE_ACTIVITY_TRANSITIONS\n1 2 3 4 5 6 7 8  /** * Enables Activities to run Activity Transitions either through sending or receiving * ActivityOptions bundle created with * {@link android.app.ActivityOptions#makeSceneTransitionAnimation(android.app.Activity, * android.util.Pair[])} or {@link android.app.ActivityOptions#makeSceneTransitionAnimation( * android.app.Activity, View, String)}. */ public static final int FEATURE_ACTIVITY_TRANSITIONS = 13;     Fragment的过渡动画 Fragment中有类似Activity的方法，区别是：\nvar transaction: FragmentTransaction = supportFragmentManager.beginTransaction()\ntransaction.addSharedElement()//添加共享元素\ntransaction在added, removed, attached, detached, shown,hidden等触发transition过渡动画\n 源码\n 参考：\n 创建自定义过渡动画 用开源项目ActivityOptionsICS让ActivityOptions的动画实现兼容  "
 },
 {
 	"uri": "https://dshcao.github.io/zh/posts/android-handler%E8%A7%A3%E6%9E%90/",
@@ -135,6 +153,24 @@
 	"content": ""
 },
 {
+	"uri": "https://dshcao.github.io/zh/categories/animation/",
+	"title": "animation",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/tags/animation/",
+	"title": "animation",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
 	"uri": "https://dshcao.github.io/zh/tags/handler/",
 	"title": "handler",
 	"tags": [],
@@ -144,7 +180,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/http/",
+	"uri": "https://dshcao.github.io/zh/tags/http/",
 	"title": "http",
 	"tags": [],
 	"categories": [],
@@ -153,7 +189,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/http/",
+	"uri": "https://dshcao.github.io/zh/categories/http/",
 	"title": "http",
 	"tags": [],
 	"categories": [],
@@ -180,7 +216,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/jetpack/",
+	"uri": "https://dshcao.github.io/zh/tags/jetpack/",
 	"title": "jetpack",
 	"tags": [],
 	"categories": [],
@@ -189,7 +225,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/jetpack/",
+	"uri": "https://dshcao.github.io/zh/series/jetpack/",
 	"title": "jetpack",
 	"tags": [],
 	"categories": [],
@@ -243,7 +279,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/kotlin/",
+	"uri": "https://dshcao.github.io/zh/series/kotlin/",
 	"title": "kotlin",
 	"tags": [],
 	"categories": [],
@@ -252,7 +288,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/kotlin/",
+	"uri": "https://dshcao.github.io/zh/categories/kotlin/",
 	"title": "kotlin",
 	"tags": [],
 	"categories": [],
@@ -297,15 +333,6 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E7%94%9F%E6%B4%BB/",
-	"title": "生活",
-	"tags": [],
-	"categories": [],
-	"series": [],
-	"description": "",
-	"content": ""
-},
-{
 	"uri": "https://dshcao.github.io/zh/series/%E7%94%9F%E6%B4%BB/",
 	"title": "生活",
 	"tags": [],
@@ -316,6 +343,15 @@
 },
 {
 	"uri": "https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/",
+	"title": "生活",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/tags/%E7%94%9F%E6%B4%BB/",
 	"title": "生活",
 	"tags": [],
 	"categories": [],
@@ -474,7 +510,7 @@
 	"categories": [],
 	"series": ["四大组件"],
 	"description": "Android四大组件-Activity/Fragment使用",
-	"content": ""
+	"content": "  ActivityOptions.makeSceneTransitionAnimation()\n  ActivityOptions.makeCustomAnimation()\n  ActivityOptions.makeScaleUpAnimation()\n  ActivityOptions.makeTaskLaunchBehind()\n  ActivityOptions.makeThumbnailScaleUpAnimation()\n  ActivityOptions.makeBasic()\n  ActivityOptions.makeClipRevealAnimation()\n  activity.overridePendingTransition(0, 0)\n  "
 },
 {
 	"uri": "https://dshcao.github.io/zh/posts/%E5%B1%9E%E6%80%A7%E5%8A%A8%E7%94%BB/",
@@ -483,7 +519,7 @@
 	"categories": [],
 	"series": [],
 	"description": "Android属性动画",
-	"content": ""
+	"content": "RecyclerView 不支持android:animateLayoutChanges=\u0026quot;true\u0026rdquo;\nCaused by: java.lang.IllegalArgumentException: Providing a LayoutTransition into RecyclerView is not supported. Please use setItemAnimator() instead for animating changes to the items in this RecyclerView\n"
 },
 {
 	"uri": "https://dshcao.github.io/zh/posts/android%E7%94%BB%E4%B8%AD%E7%94%BB-pictureinpicture/",
@@ -567,7 +603,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/java/",
+	"uri": "https://dshcao.github.io/zh/tags/java/",
 	"title": "java",
 	"tags": [],
 	"categories": [],
@@ -576,7 +612,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/java/",
+	"uri": "https://dshcao.github.io/zh/categories/java/",
 	"title": "java",
 	"tags": [],
 	"categories": [],
@@ -592,6 +628,15 @@
 	"series": ["jetpack"],
 	"description": "Jetpack-CameraX",
 	"content": "一、camera2 CameraX是Jetpack对camera2功能的封装，并可向后兼容至 Android 5.0（API 级别 21）\n"
+},
+{
+	"uri": "https://dshcao.github.io/zh/posts/jvmdalvikart/",
+	"title": "JVM/Dalvik/ART",
+	"tags": ["android", "java"],
+	"categories": [],
+	"series": ["编程基础"],
+	"description": "SJVM/Dalvik/ART理解",
+	"content": "前置知识 Android中每个应用都对应一个单独的虚拟机，独立运行\nJIT\u0026amp;AOT  JIT，Just-in-time，即时编译，运行时动态编译。 AOT，Ahead Of Time，提前编译，运行前编译成机器码。应用在安装的时候会启动 dex2oat 把dex预编译成 ELF 文件，以后运行程序的时候不用重新编译，因此应用启动更快、运行更快、体验更流畅、触感反馈更及时  JIT缺点：\n由于JIT是运行时动态编译，虽然可以对执行次数频繁的dex代码进行一定优化，但运行时编译成机器码仍然更消耗cpu，更耗电\nAOT缺点：\n应用安装和系统升级之后的应用优化比较耗时（重新编译，把程序代码转换成机器语言）优化后的文件会占用额外的存储空间\n寄存器和栈 寄存器是cpu上的一块高速缓存，寄存器的速度要比栈快很多\nclass\u0026amp;dex class和dex都是8位字节的二进制流文件，但相比class，dex(Dalvik executable)去掉了class文件中很多冗余信息，数据排列也紧密，并将很多class文件整合到dex文件中，减少了IO操作，提高了类的查找速度，dex把所有class文件的header头(包含JDK)写成了一个,所有的常量放在一个池里, dex文件只维护了一个索引\n其他 odex(Optimized dex) 是Dalvik环境中使用dexopt对dex文件根据当前ROM特性优化后的dex文件，生成odex文件 最终存在手机的data/dalvik-cache目录下\noat(Optimized Android file Type) ART环境下dex2oat工具处理过dex后的文件data/app 安装目录 安装时会把apk文件copy到这里\ndata/dalvik-cache 如上述描述中的存放.dex(.odex 无论davilk的dex 还是art的oat格式)\ndata/data/pkg/ 存放应用程序的数据\nJVM\u0026amp;Dalvik\u0026amp;ART JVM  基于栈的的虚拟机 将java源文件编译成class字节码文件，多class文件运行在虚拟机上  java-\u0026gt;class-\u0026gt;虚拟机运行\nJVM在运行的时候为每一个类装载字节码\nDalvik  基于寄存器的虚拟机,相对于堆栈模式加载速度更快 将java源文件编译成class字节码文件，再由dex.bat编译成一个dex文件(后来因为65535问题有了MultiDex方案，将原来的一个dex拆分为多个dex文件)运行在虚拟机上 Dalvik采用JIT 相比JVM，Dalvik更适合低内存低cpu运行  ART Android4.4发布ART，此时Dalvik和ART共存，用户可以手动选择，Android5.0废弃DVM，只使用ART，ART和Dalvik的主要区别是ART采用了AOT技术，运行前将dex编译成机器码，另外ART还对GC过程的也进行了改进，GC 保持暂停状态期间并行处理，在清理最近分配的短时对象这种特殊情况中，回收器的总 GC 时间更短，Android7.0以前只使用AOT方式，但Android7.0及后AOT和JIT共存，安装时dex不会再被编译成机器码，App运行时,dex文件先通过解析器被直接执行，热点函数会被识别并被JIT编译后存储在 jit code cache 中并生成profile文件以记录热点函数的信息，手机进入 IDLE（空闲） 或者 Charging（充电） 状态的时候，系统会扫描 App 目录下的 profile 文件并执行 AOT 过程进行编译\n参考\n Dalvik和Art,JIT ,AOT, oat, dex, odex Dalvik,ART与ODEX相爱相生  "
 },
 {
 	"uri": "https://dshcao.github.io/zh/posts/kotlin-%E5%8D%8F%E7%A8%8B/",
@@ -675,7 +720,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/",
+	"uri": "https://dshcao.github.io/zh/tags/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/",
 	"title": "四大组件",
 	"tags": [],
 	"categories": [],
@@ -684,7 +729,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/",
+	"uri": "https://dshcao.github.io/zh/series/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/",
 	"title": "四大组件",
 	"tags": [],
 	"categories": [],
@@ -720,7 +765,7 @@
 	"content": "Java内存模型 Java内存模型主要目标：定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的变量（Variable）与Java编程中的变量略有区别，它包括实例变量/静态字段和构成数组对象的元素，不包括局部变量和方法参数（线程私有）。为获得较好的执行效能，Java内存模型并没有限制执行引擎使用处理器的特定寄存器或缓存来和主内存进行交换，也没有限制即时编译器调整代码执行顺序这类权利。\nJava内存模型规定所有变量都存储在主存（Main Memory）中（虚拟机内存的一部分）。每条线程还有自己的工作内存（Working Memory），线程的工作内存保存了被线程使用到的变量的主内存副本拷贝，线程对变量的所有操作（读取/赋值等）都必须在工作内存中进行，而不能直接读写主内存中的变量。不同线程之间也无法直接访问对方工作内存中的变量，线程间变量值的传递均需要通过主存来完成。\n这里的主内存/工作内存与Java内存区域中的Java栈/堆/方法区并不是同一个层次的内存划分。如果两者一定要勉强对应起来，那从变量/主内存/工作内存的定义来看，主内存主要对应于Java堆中对象的实例数据部分，而工作内存则对应于虚拟机栈中的部分区域。从更低的层次来说，主存就是硬件的内存，而为获取更好的运算速度，虚拟机及硬件系统可能会让工作内存优先存储于寄存器和高速缓存。\n主内存与工作内存之间具体的交互协议，即一个变量如何从主内存拷贝到工作内存、从工作内存同步回主内存之类的实现细节，Java内存模型中定义了以下8种操作来完成:lock unlock read load use assign store write\n对long和double型变量的特殊规则 允许虚拟机将没有被volatile修饰的64位数据类型（long和double）的读取操作划分为两次32位的操作来进行，即允许虚拟机实现选择可以不保证64位数据类型的load、store、read和write这4个操作的原子性，就点就是long和double的非原子协定（Nonatomic Treatment of double and long Variables）。\n如果多个线程共享一个为声明为volatile的long或double类型变量，并同时对他们进行读取和修改操作，那么有些线程可能会读取到一个即非原值，也不是其他线程修改值得代表了“半个变量”的数值。\n不过这种读取带“半个变量”的情况非常罕见（在目前商用虚拟机中不会出现），因为Java内存模型虽然允许虚拟机不把long和double变量的读写实现成原子操作，但允许虚拟机选择把这些操作实现为具有原子性的操作，而且还“强烈建议”虚拟机这样实现。\n原子性、可见性和有序性  原子性（Atomicity）：由Java内存模型来直接保证的原子性变量操作包括read、load、assign、use、store和write，我们大致可以认为基本数据类型的访问具备原子性（long和double例外）。如果应用场景需要一个更大范围的原子性保证，Java内存模型还提供了lock和unlock操作来满足需求，尽管虚拟机未把lock和unlock操作直接开放给用户，但是却提供了更高层次的字节码指令monitorenter和monitorexit来隐式地使用这两个操作，这两个字节码指令反应到Java代码中就是同步块——synchronized关键字，因此在synchronized块之间的操作也具备原子性。 可见性（Visibility）：指当一个线程修改了共享变量的值，其他线程能够立即得知这个修改。 有序性（Ordering）：Java程序中天然的有序性可以总结为一句话：如果在本线程内观察，所有的操作都是有序的；如果在一个线程中观察另外一个线程，所有的操作都是无序的。前半句是指“线程内表现为串行的语义”（Within-Thread As-if-Serial Semantics），后半句是指“指令重排序”现象和“工作内存与主内存同步延迟”现象。Java语言提供了volatile和synchronized两个关键字来保证线程之间操作的有序性，volatile关键字本身就包含了禁止指令重排序的语义，而synchronized则是由“一个变量在同一时刻只允许一条线程对其进行lock操作”这条规则获得的，这个规则决定了持有同一个锁的两个同步块只能串行地进入  多线程安全 多线程安全问题根本原因是内存copy和时间片分配导致的，要做到线程安全就是要做到“局部串行”或者原子性，比如两个线程同时访问一个临界资源（一个对象，对象中的属性，一个文件，一个数据库等）可能引发线程安全问题，这时就要做到两个线程访问临界资源这一局部顺序是串行执行\n高优先级线程并不一定比低优先级线程先抢占cpu资源，高级优先抢占资源的权重大，但有随机性\nvolatile/Semaphore/AtomicXXX 两者本质上不是同一类东西\n volatile Java关键字 声明某个变量值的一致性(内存同步)，但不保证原子操作，对赋值操作可以保证原子性。如：a=10，不能保证a++操作的原子性，因为a++其实是a=a+1的语法糖，a=a+1在内存中其实是分两步的：temp=a+1 a=temp。对于复杂对象的赋值操作原子性，如：User user=user1;User user=new User;,但不能保证对user.name属性操作的原子性.即可以看作只能赋值操作原子性。volatile 声明某个变量值的一致性(内存同步)，但不保证原子操作 Semaphore 控制同时访问某个特定资源或者某个操作的操作数量 AtomicXXX Java库实现 可以保证a++操作的原子性  CountDownLatch与join 比如有三个线程 thread1,thread2,thread3\n当thread3需要thread1,thread2都执行完毕后执行，则两者皆可实现，但当thread3只需要thread1,thread2其中一个执行完毕就可执行的场景CountDownLatch很容易实现，使用join则并不容易实现\n详见参考：CountDownLatch理解一：与join的区别\nRunable Future Callable   Runable 1.没有返回值 2.无法抛异常\n1 2 3  public interface Runnable { public abstract void run(); }     Callable 1.有返回结果，可以抛异常，但不像Runnable那样通过Thread的start方法就能启动实现类的run方法，通常利用ExecutorService的submit方法去启动call方法自执行任务，而ExecutorService的submit又返回一个Future类型的结果，因此Callable通常也与Future一起使用\n1 2 3  public interface Callable\u0026lt;V\u0026gt; { V call() throws Exception; }     Future 保存异步计算的结果,可以在我们执行任务时去做其他工作,Future有一下方法\n1. boolean cancel(boolean mayInterruptIfRunning);用来取消任务，成功返回true，失败则返回false\n2.boolean isCancelled();任务是否已经取消\n3.boolean isDone();任务是否已经完成\n4.V get() throws InterruptedException, ExecutionException;用来获取执行结果，这个方法会产生阻塞会一直等到任务执行完毕才返回\n5.V get(long timeout, TimeUnit unit)\nthrows InterruptedException, ExecutionException, TimeoutException;用来获取执行结果，如果在指定时间内，还没获取到结果，直接返回null\n使用Future的好处：\n1.获取任务的结果，判断任务是否完成，中断任务\n2.Future的get方法很好的替代的了Thread.join或Thread,join(long millis)\n3.Future的get方法可以判断程序代码(任务)的执行是否超时，如：\n1 2 3 4 5 6  try { future.get(60,TimeUtil.SECOND); } catch(TimeoutException timeout){ og4j.log(\u0026#34;异常，将被取消！！\u0026#34;); future.cancel(); }    FutureTask CompletableFuture 提供了函数式编程的能力，可以通过回调的方式处理计算结果，并且提供了转换和组合CompletableFuture的方法,帮助我们简化异步编程的复杂性,有点类似于rxjava的模式，当然没有提供这么丰富的功能    多线程间的通信  内存共享  共享volatile变量 synchronized+notify+wait lock+condition semaphere+flag   管道  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50  public class CommunicateWhitPiping { public static void main(String[] args) { PipedOutputStream pos = new PipedOutputStream(); PipedInputStream pis = new PipedInputStream(); try { //将管道输入流与输出流连接 此过程也可通过重载的构造函数来实现  pos.connect(pis); } catch (IOException e) { e.printStackTrace(); } //创建生产者线程  Producer p = new Producer(pos); //创建消费者线程  Consumer c = new Consumer(pis); //启动线程  p.start(); c.start(); } } //生产者线程(与一个管道输入流相关联) class Producer extends Thread { private PipedOutputStream pos; public Producer(PipedOutputStream pos) { this.pos = pos; } public void run() { int i = 8; try { pos.write(i); } catch (IOException e) { e.printStackTrace(); } } } //消费者线程(与一个管道输入流相关联) class Consumer extends Thread { private PipedInputStream pis; public Consumer(PipedInputStream pis) { this.pis = pis; } public void run() { try { System.out.println(pis.read()); } catch (IOException e) { e.printStackTrace(); } } }    公共接口 消息通信 如：Actor模型  BlockingDeque  BlockingDeque LinkedBlockingQueue LinkedBlockingDeque ConcurrentHashMap ConcurrentLinkedQueue DelayQueue SynchronousQueue LinkedTransferQueue  多线程的经典场景-生产者消费者模式实现  阻塞队列实现 synchronized关键字实现 lock实现  参考：\n 深入理解JVM - Java内存模型与线程 - 第十二章 Java CompletableFuture 详解 CountDownLatch理解一：与join的区别  "
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/",
+	"uri": "https://dshcao.github.io/zh/categories/%E6%8F%92%E4%BB%B6%E5%8C%96/",
 	"title": "插件化",
 	"tags": [],
 	"categories": [],
@@ -729,7 +774,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E6%8F%92%E4%BB%B6%E5%8C%96/",
+	"uri": "https://dshcao.github.io/zh/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/",
 	"title": "插件化",
 	"tags": [],
 	"categories": [],
@@ -748,12 +793,12 @@
 },
 {
 	"uri": "https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/",
-	"title": "插件化和热更新",
+	"title": "插件化和热更新&amp;App Bundle",
 	"tags": ["android", "插件化", "热更新"],
 	"categories": [],
 	"series": ["插件化", "热更新"],
 	"description": "Syntax highlighting test",
-	"content": "插件化在几年前火的一塌糊涂，由插件化延续到后来的热更新，近几年似乎没了当初的狂热\n插件化和热更新的意义在于动态化升级。不同于web只要后台发布用户前端的下次请求页面和逻辑都会改变，Android的UI及逻辑代码在手机上，发布需要经过各大市场，由审核时间，且就算发布到各大市场用户也不一定更新，强制用户更新的结果可能是被用户强制卸载。但是发布新功能/紧急修复bug的需求是巨大的。于是先有了\n 将web那一套搬到移动端的做法，但是web在移动端的性能让其体验很差，虽然出现了很多框架增强了许多，但还是有差距 原生的插件化和热更新 RectNative 热更新  RectNative用脚本语言js控制逻辑，使用c++桥接的形式控制原生控件显示，由于脚本语言不用编译，可以动态发布从而实现热更新\n由于官方不支持插件化和热更新（理由是安全问题）导致原生插件化和热更新只能另辟蹊径\n热更新分两种，一种是重启生效，一种是即时生效\n即时生效的原理是：这个过程相当复杂不易控制\n这里主要讲喜爱重启生效热更新模式的原理：\nClassLoader,java的ClassLoader双亲委托机制\n干预Android加载，既然要干预那就要首先了解其原加载过程\n"
+	"content": "PathClassLoader和DexClassLoader 要做热更新就要用ClassLoader加载hotfix dex中的类,用哪个ClassLoader呢？我们在Activity中打印classLoader::class.java.name可以看到是dalvik.system.PathClassLoader\nAndroid中使用DexClassLoader加载apk dex类文件\n查看PathClassLoader\n1 2 3 4 5 6  public PathClassLoader(String dexPath, ClassLoader parent) { super(dexPath, null, null, parent); } public PathClassLoader(String dexPath, String librarySearchPath, ClassLoader parent) { super(dexPath, null, librarySearchPath, parent); }   只有几个构造方法，但PathClassLoader继承自BaseDexClassLoader，继续进入BaseDexClassLoader查看\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19  protected Class\u0026lt;?\u0026gt; loadClass(String name, boolean resolve) throws ClassNotFoundException { // 首先检查是否已经加载过  Class\u0026lt;?\u0026gt; c = findLoadedClass(name); if (c == null) { try { if (parent != null) { c = parent.loadClass(name, false); } else { c = findBootstrapClassOrNull(name); } } catch (ClassNotFoundException e) { //parent.loadClass可鞥在此抛出异常  } if (c == null) { c = findClass(name); } } return c; }   loadClass首先检查是不是已加载过这个类，若没有，调用父ClassLoader的loadClass，以此上推检查父ClassLoader是否加载过此类，若都没有加载则调用findClass\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25  @Override protected Class\u0026lt;?\u0026gt; findClass(String name) throws ClassNotFoundException { // First, check whether the class is present in our shared libraries.  if (sharedLibraryLoaders != null) { for (ClassLoader loader : sharedLibraryLoaders) { try { return loader.loadClass(name); } catch (ClassNotFoundException ignored) { } } } // Check whether the class in question is present in the dexPath that  // this classloader operates on.  List\u0026lt;Throwable\u0026gt; suppressedExceptions = new ArrayList\u0026lt;Throwable\u0026gt;(); Class c = pathList.findClass(name, suppressedExceptions); if (c == null) { ClassNotFoundException cnfe = new ClassNotFoundException( \u0026#34;Didn\u0026#39;t find class \\\u0026#34;\u0026#34; + name + \u0026#34;\\\u0026#34; on path: \u0026#34; + pathList); for (Throwable t : suppressedExceptions) { cnfe.addSuppressed(t); } throw cnfe; } return c; }   最终执行到Class c = pathList.findClass(name, suppressedExceptions);，再继续查看DexPathList的findClass方法\n1 2 3 4 5 6 7 8 9 10 11 12 13  public Class\u0026lt;?\u0026gt; findClass(String name, List\u0026lt;Throwable\u0026gt; suppressed) { for (Element element : dexElements) { Class\u0026lt;?\u0026gt; clazz = element.findClass(name, definingContext, suppressed); if (clazz != null) { return clazz; } } if (dexElementsSuppressedExceptions != null) { suppressed.addAll(Arrays.asList(dexElementsSuppressedExceptions)); } return null; }   再继续进入Element的findClass方法\n1 2 3  public Class\u0026lt;?\u0026gt; findClass(String name, ClassLoader definingContext,List\u0026lt;Throwable\u0026gt; suppressed) { return dexFile != null ? dexFile.loadClassBinaryName(name, definingContext, suppressed): null; }   我们只需要获取热更新补丁的dexElements与原dexElements合并，app再次重新启动就会完成修复\nClassLoader本身也是一个类，它是怎么被加载的呢？在jvm启动的时候就有一个根ClassLoader,即：bootstrapclassloader\n有个根classloader\n插件化在几年前火的一塌糊涂，由插件化延续到后来的热更新，近几年似乎没了当初的狂热\n插件化和热更新的意义在于动态化升级。不同于web只要后台发布用户前端的下次请求页面和逻辑都会改变，Android的UI及逻辑代码在手机上，发布需要经过各大市场，由审核时间，且就算发布到各大市场用户也不一定更新，强制用户更新的结果可能是被用户强制卸载。但是发布新功能/紧急修复bug的需求是巨大的。于是先有了\n 将web那一套搬到移动端的做法，但是web在移动端的性能让其体验很差，虽然出现了很多框架增强了许多，但还是有差距 原生的插件化和热更新 RectNative 热更新  RectNative用脚本语言js控制逻辑，使用c++桥接的形式控制原生控件显示，由于脚本语言不用编译，可以动态发布从而实现热更新\n由于官方不支持插件化和热更新（理由是安全问题）导致原生插件化和热更新只能另辟蹊径\n热更新分两种，一种是重启生效，一种是即时生效\n即时生效的原理是：这个过程相当复杂不易控制\n这里主要讲喜爱重启生效热更新模式的原理：\nClassLoader,java的ClassLoader双亲委托机制\n干预Android加载，既然要干预那就要首先了解其原加载过程\n1.利用代理activity启动插件化中的activity\n2.模仿系统加载启动activity\n"
 },
 {
 	"uri": "https://dshcao.github.io/zh/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/",
@@ -810,7 +855,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E7%9B%B4%E6%92%AD/",
+	"uri": "https://dshcao.github.io/zh/categories/%E7%9B%B4%E6%92%AD/",
 	"title": "直播",
 	"tags": [],
 	"categories": [],
@@ -819,7 +864,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E7%9B%B4%E6%92%AD/",
+	"uri": "https://dshcao.github.io/zh/tags/%E7%9B%B4%E6%92%AD/",
 	"title": "直播",
 	"tags": [],
 	"categories": [],
@@ -847,12 +892,12 @@
 },
 {
 	"uri": "https://dshcao.github.io/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/",
-	"title": "贝塞尔曲线",
+	"title": "贝塞尔曲线(Bezier curve)",
 	"tags": ["编程基础", "android"],
 	"categories": [],
 	"series": [],
 	"description": "贝塞尔曲线详解",
-	"content": "前置知识 Bezier曲线是用一系列点控制曲线状态的，主要分为：\n 数据点 确定曲线的起始和结束位置 控制点 确定曲线的弯曲程度  其中数据点又叫锚点，只有起始和结束两个点，控制点有0～n个，按控制点个数可分为一阶贝塞尔曲线，二阶贝塞尔曲线，三阶贝塞尔曲线，\u0026hellip;，N阶贝塞尔曲线\n一阶贝塞尔曲线 0个控制点 即为一条直线\n给定点P0，P1，其中初始点P0，结束点P1，t为比率，在P0，P1上取一点D，D即为曲线上的点，使得：\n$$ \\frac{P_0D}{P_0P_1}=t $$\n一阶比较简单我们作为例子演算出公式，上面的表达式可改写为：\n$$ \\frac{D-P_0}{P_1-P_0}=t $$\n再进一步演算为：\n$$ D=t*({P_1-P_0})+P_0 $$\nD记为B(t)，推出公式：\n$$ B(t)=(1-t)P_0+tP_1,t{\\in}[0,1] $$\n二阶贝塞尔曲线 1个控制点\n给定点P0，P1，P2，其中初始点P0，结束点P2，控制点P1，t为比率，在P0P1上取一点D，P1P2取一点E，在DE上取一点F，F即为曲线上的点，使得：\n$$ \\frac{P_0D}{P_0P_1}=\\frac{P_1E}{P_1P_2}=\\frac{DF}{DE}=t $$\n推出公式：\n$$ B(t)=(1-t)^2P_0+2t(1-t)P_1+t^2P_2,t{\\in}[0,1] $$\n三阶贝塞尔曲线 2个控制点\n给定点P0，P1，P2，P3，其中初始点P0，结束点P3，控制点P1，P2，t为比率，在P0P1上取一点D，P1P2取一点E，P2P3取一点F，在DE上取一点G，在EF上取一点H，在GH上取一点I，I即为曲线上的点，使得：\n$$ \\frac{P_0D}{P_0P_1}=\\frac{P_1E}{P_1P_2}=\\frac{P_2F}{P_2P_3}=\\frac{DG}{DE}=\\frac{EH}{EF}=\\frac{GI}{GH}=t $$\n推出公式：\n$$ B(t)=(1-t)^3P_0+3P_1t(1-t)^2+3P_2t^2(1-t)+P_3t^3,t {\\in}[0,1] $$\n参考：\ncubic-bezier\n"
+	"content": "前置知识 Bezier曲线是用一系列点控制曲线状态的，主要分为：\n 数据点 确定曲线的起始和结束位置 控制点 确定曲线的弯曲程度  其中数据点又叫锚点，只有起始和结束两个点，控制点有0～n个，按控制点个数可分为一阶贝塞尔曲线，二阶贝塞尔曲线，三阶贝塞尔曲线，\u0026hellip;，N阶贝塞尔曲线\n一阶贝塞尔曲线 0个控制点 即为一条直线\n给定点P0，P1，其中初始点P0，结束点P1，t为比率，在P0，P1上取一点D，D即为曲线上的点，使得：\n$$ \\frac{P_0D}{P_0P_1}=t $$\n一阶比较简单我们作为例子演算出公式，上面的表达式可改写为：\n$$ \\frac{D-P_0}{P_1-P_0}=t $$\n再进一步演算为：\n$$ D=t*({P_1-P_0})+P_0 $$\nD记为B(t)，推出公式：\n$$ B(t)=(1-t)P_0+tP_1,t{\\in}[0,1] $$\n二阶贝塞尔曲线(quadratic Bezier curve) 1个控制点\n给定点P0，P1，P2，其中初始点P0，结束点P2，控制点P1，t为比率，在P0P1上取一点D，P1P2取一点E，在DE上取一点F，F即为曲线上的点，使得：\n$$ \\frac{P_0D}{P_0P_1}=\\frac{P_1E}{P_1P_2}=\\frac{DF}{DE}=t $$\n推出公式：\n$$ B(t)=(1-t)^2P_0+2t(1-t)P_1+t^2P_2,t{\\in}[0,1] $$\n三阶贝塞尔曲线(cubic Bezier curve) 2个控制点\n给定点P0，P1，P2，P3，其中初始点P0，结束点P3，控制点P1，P2，t为比率，在P0P1上取一点D，P1P2取一点E，P2P3取一点F，在DE上取一点G，在EF上取一点H，在GH上取一点I，I即为曲线上的点，使得：\n$$ \\frac{P_0D}{P_0P_1}=\\frac{P_1E}{P_1P_2}=\\frac{P_2F}{P_2P_3}=\\frac{DG}{DE}=\\frac{EH}{EF}=\\frac{GI}{GH}=t $$\n推出公式：\n$$ B(t)=(1-t)^3P_0+3P_1t(1-t)^2+3P_2t^2(1-t)+P_3t^3,t{\\in}[0,1] $$\n贝塞尔曲线的意义 确定初始点和结束点，很容易利用控制点得到一条曲线，控制简单。因此贝塞尔曲线在Android动画中有很多应用,比如Android中的PathInterpolator,PathInterpolator初始点是(0,0)，结束点是(1,1)，构造方法中传入控制点\n参考：\n cubic-bezier  "
 },
 {
 	"uri": "https://dshcao.github.io/zh/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/",
@@ -1143,7 +1188,7 @@
 	"content": "st=\u0026gt;start: Start|past:\u0026gt;http://www.google.com[blank] e=\u0026gt;end: End|future:\u0026gt;http://www.google.com op1=\u0026gt;operation: My Operation|past op2=\u0026gt;operation: Stuff|current sub1=\u0026gt;subroutine: My Subroutine|invalid cond=\u0026gt;condition: Yes or No?|approved:\u0026gt;http://www.google.com c2=\u0026gt;condition: Good idea|rejected io=\u0026gt;inputoutput: catch something...|future st-\u0026gt;op1(right)-\u0026gt;cond cond(yes, right)-\u0026gt;c2 cond(no)-\u0026gt;sub1(left)-\u0026gt;op1 c2(yes)-\u0026gt;io-\u0026gt;e c2(no)-\u0026gt;op2-\u0026gt;e "
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E9%9A%8F%E7%AC%94/",
+	"uri": "https://dshcao.github.io/zh/categories/%E9%9A%8F%E7%AC%94/",
 	"title": "随笔",
 	"tags": [],
 	"categories": [],
@@ -1152,7 +1197,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E9%9A%8F%E7%AC%94/",
+	"uri": "https://dshcao.github.io/zh/tags/%E9%9A%8F%E7%AC%94/",
 	"title": "随笔",
 	"tags": [],
 	"categories": [],
@@ -1176,7 +1221,7 @@
 	"categories": [],
 	"series": [""],
 	"description": "小知识点",
-	"content": "一、Manifest配置 allowBackup fullBackupContent https://developer.android.com/guide/topics/data/autobackup\nallowBackup配置用来开启停用自动备份\nfullBackupContent用来配置配分规则，如：android:fullBackupContent=\u0026rdquo;@xml/backup_rules\u0026rdquo;\n1 2 3 4 5 6 7 8 9  \u0026lt;!--backup_rules --\u0026gt; \u0026lt;?xml version=\u0026#34;1.0\u0026#34; encoding=\u0026#34;utf-8\u0026#34;?\u0026gt; \u0026lt;full-backup-content\u0026gt; \u0026lt;include domain=[\u0026#34;file\u0026#34; | \u0026#34;database\u0026#34; | \u0026#34;sharedpref\u0026#34; |\u0026#34;external\u0026#34; | \u0026#34;root\u0026#34;] path=\u0026#34;string\u0026#34; requiredFlags=[\u0026#34;clientSideEncryption\u0026#34; | \u0026#34;deviceToDeviceTransfer\u0026#34;] /\u0026gt; \u0026lt;exclude domain=[\u0026#34;file\u0026#34; | \u0026#34;database\u0026#34; | \u0026#34;sharedpref\u0026#34; |\u0026#34;external\u0026#34; | \u0026#34;root\u0026#34;] path=\u0026#34;string\u0026#34; /\u0026gt; \u0026lt;/full-backup-content\u0026gt;   另外还可实现BackupAgent应用于你的备份逻辑\n如何保证序列化和反序列化仍然是同一个对象？比如单例模式从而实现线程安全\nprotected Object readResolve() throws ObjectStreamException {\nreturn mInstance;\n}\n原因，看ObjectInputStream注释文档\ncustomized: any class-specific readObject, readObjectNoData, and readResolve methods defined by enum types are ignored during deserialization. Similarly, any serialPersistentFields or serialVersionUID field declarations are also ignored--all enum types have a fixed serialVersionUID of 0L. ObjectInputStream反序列化源码检测是否定义了readResolve()方法：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21  if (obj != null \u0026amp;\u0026amp; handles.lookupException(passHandle) == null \u0026amp;\u0026amp; desc.hasReadResolveMethod()){ Object rep = desc.invokeReadResolve(obj); if (unshared \u0026amp;\u0026amp; rep.getClass().isArray()) { rep = cloneArray(rep); } if (rep != obj) { // Android-removed: ObjectInputFilter logic, to be reconsidered. http://b/110252929  /* // Filter the replacement object if (rep != null) { if (rep.getClass().isArray()) { filterCheck(rep.getClass(), Array.getLength(rep)); } else { filterCheck(rep.getClass(), -1); } } */ handles.setObject(passHandle, obj = rep); } }   "
+	"content": "一、Manifest配置 allowBackup fullBackupContent https://developer.android.com/guide/topics/data/autobackup\nallowBackup配置用来开启停用自动备份\nfullBackupContent用来配置配分规则，如：android:fullBackupContent=\u0026rdquo;@xml/backup_rules\u0026rdquo;\n1 2 3 4 5 6 7 8 9  \u0026lt;!--backup_rules --\u0026gt; \u0026lt;?xml version=\u0026#34;1.0\u0026#34; encoding=\u0026#34;utf-8\u0026#34;?\u0026gt; \u0026lt;full-backup-content\u0026gt; \u0026lt;include domain=[\u0026#34;file\u0026#34; | \u0026#34;database\u0026#34; | \u0026#34;sharedpref\u0026#34; |\u0026#34;external\u0026#34; | \u0026#34;root\u0026#34;] path=\u0026#34;string\u0026#34; requiredFlags=[\u0026#34;clientSideEncryption\u0026#34; | \u0026#34;deviceToDeviceTransfer\u0026#34;] /\u0026gt; \u0026lt;exclude domain=[\u0026#34;file\u0026#34; | \u0026#34;database\u0026#34; | \u0026#34;sharedpref\u0026#34; |\u0026#34;external\u0026#34; | \u0026#34;root\u0026#34;] path=\u0026#34;string\u0026#34; /\u0026gt; \u0026lt;/full-backup-content\u0026gt;   另外还可实现BackupAgent应用于你的备份逻辑\n如何保证序列化和反序列化仍然是同一个对象？比如单例模式从而实现线程安全\nprotected Object readResolve() throws ObjectStreamException {\nreturn mInstance;\n}\n原因，看ObjectInputStream注释文档\ncustomized: any class-specific readObject, readObjectNoData, and readResolve methods defined by enum types are ignored during deserialization. Similarly, any serialPersistentFields or serialVersionUID field declarations are also ignored--all enum types have a fixed serialVersionUID of 0L. ObjectInputStream反序列化源码检测是否定义了readResolve()方法：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21  if (obj != null \u0026amp;\u0026amp; handles.lookupException(passHandle) == null \u0026amp;\u0026amp; desc.hasReadResolveMethod()){ Object rep = desc.invokeReadResolve(obj); if (unshared \u0026amp;\u0026amp; rep.getClass().isArray()) { rep = cloneArray(rep); } if (rep != obj) { // Android-removed: ObjectInputFilter logic, to be reconsidered. http://b/110252929  /* // Filter the replacement object if (rep != null) { if (rep.getClass().isArray()) { filterCheck(rep.getClass(), Array.getLength(rep)); } else { filterCheck(rep.getClass(), -1); } } */ handles.setObject(passHandle, obj = rep); } }   suppressLayout suppressLayout(true)会将mSuppressLayout标志置为true时所有触发layout()操作不会执行真正的layout()，而是在layout()中将mLayoutCalledWhileSuppressed标志置为true，直到suppressLayout(false)重置mSuppressLayout标志时会触发执行一次requestLayout()，并将mLayoutCalledWhileSuppressed置为false\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15  /** * Tells this ViewGroup to suppress all layout() calls until layout * suppression is disabled with a later call to suppressLayout(false). * When layout suppression is disabled, a requestLayout() call is sent * if layout() was attempted while layout was being suppressed. */ public void suppressLayout(boolean suppress) { mSuppressLayout = suppress; if (!suppress) { if (mLayoutCalledWhileSuppressed) { requestLayout(); mLayoutCalledWhileSuppressed = false; } } }   getLocationOnScreen clipBounds finishActivity public void finishActivity(int requestCode)\nandroid:windowIsTranslucent=true 适配 Activity android:persistableMode=\u0026quot;persistAcrossReboots\u0026rdquo; PersistableBundle\n"
 },
 {
 	"uri": "https://dshcao.github.io/zh/posts/placeholder-text/",

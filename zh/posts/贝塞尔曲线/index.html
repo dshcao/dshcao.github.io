@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>贝塞尔曲线 – dshcao blog</title>
+    <title>贝塞尔曲线(Bezier curve) – dshcao blog</title>
     
 
 
@@ -181,7 +181,7 @@
 
 
 <meta property="og:site_name" content="dshcao blog">
-<meta property="og:title" content="贝塞尔曲线">
+<meta property="og:title" content="贝塞尔曲线(Bezier curve)">
 <meta property="og:url" content="https://dshcao.github.io/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/">
 <meta property="og:type" content="article">
 
@@ -200,7 +200,7 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "headline": "贝塞尔曲线",
+    "headline": "贝塞尔曲线(Bezier curve)",
     "datePublished": "2019-10-11T10:33:41+09:00",
     "dateModified": "2019-10-11T10:33:41+09:00",
     "url" : "https://dshcao.github.io/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/",
@@ -393,7 +393,7 @@
   
   <li  class="is-active" >    
     
-      <a href="https://dshcao.github.io/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/">贝塞尔曲线</a>
+      <a href="https://dshcao.github.io/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/">贝塞尔曲线(Bezier curve)</a>
         
   </li>
   
@@ -402,7 +402,7 @@
 </nav>
   
   <div class="single">
-    <h2 class="single__title">贝塞尔曲线</h2>
+    <h2 class="single__title">贝塞尔曲线(Bezier curve)</h2>
     <div class="single__meta">
       <div class="single__infos">
   🕓 2019年 10月 11日 · ☕2 min read
@@ -450,20 +450,24 @@ $$ \frac{D-P_0}{P_1-P_0}=t $$<br />
 $$ D=t*({P_1-P_0})+P_0 $$<br />
 D记为B(t)，推出公式：</p>
 <p>$$ B(t)=(1-t)P_0+tP_1,t{\in}[0,1] $$</p>
-<h2 id="heading-2">二阶贝塞尔曲线</h2>
+<h2 id="quadratic-bezier-curve">二阶贝塞尔曲线(quadratic Bezier curve)</h2>
 <p>1个控制点</p>
 <p>给定点P<sub>0</sub>，P<sub>1</sub>，P<sub>2</sub>，其中初始点P<sub>0</sub>，结束点P<sub>2</sub>，控制点P<sub>1</sub>，t为比率，在P<sub>0</sub>P<sub>1</sub>上取一点D，P<sub>1</sub>P<sub>2</sub>取一点E，在DE上取一点F，F即为曲线上的点，使得：<br />
 $$ \frac{P_0D}{P_0P_1}=\frac{P_1E}{P_1P_2}=\frac{DF}{DE}=t $$<br />
 推出公式：</p>
 <p>$$ B(t)=(1-t)^2P_0+2t(1-t)P_1+t^2P_2,t{\in}[0,1] $$</p>
-<h2 id="heading-3">三阶贝塞尔曲线</h2>
+<h2 id="cubic-bezier-curve">三阶贝塞尔曲线(cubic Bezier curve)</h2>
 <p>2个控制点</p>
 <p>给定点P<sub>0</sub>，P<sub>1</sub>，P<sub>2</sub>，P<sub>3</sub>，其中初始点P<sub>0</sub>，结束点P<sub>3</sub>，控制点P<sub>1</sub>，P<sub>2</sub>，t为比率，在P<sub>0</sub>P<sub>1</sub>上取一点D，P<sub>1</sub>P<sub>2</sub>取一点E，P<sub>2</sub>P<sub>3</sub>取一点F，在DE上取一点G，在EF上取一点H，在GH上取一点I，I即为曲线上的点，使得：<br />
 $$ \frac{P_0D}{P_0P_1}=\frac{P_1E}{P_1P_2}=\frac{P_2F}{P_2P_3}=\frac{DG}{DE}=\frac{EH}{EF}=\frac{GI}{GH}=t $$<br />
 推出公式：</p>
-<p>$$ B(t)=(1-t)^3P_0+3P_1t(1-t)^2+3P_2t^2(1-t)+P_3t^3,t {\in}[0,1] $$</p>
+<p>$$ B(t)=(1-t)^3P_0+3P_1t(1-t)^2+3P_2t^2(1-t)+P_3t^3,t{\in}[0,1] $$</p>
+<h2 id="heading-2">贝塞尔曲线的意义</h2>
+<p>确定初始点和结束点，很容易利用控制点得到一条曲线，控制简单。因此贝塞尔曲线在Android动画中有很多应用,比如Android中的PathInterpolator,PathInterpolator初始点是(0,0)，结束点是(1,1)，构造方法中传入控制点</p>
 <p><span id="2">参考：</span></p>
-<p><a href="https://cubic-bezier.com/">cubic-bezier</a></p>
+<ul>
+<li><a href="https://cubic-bezier.com/">cubic-bezier</a></li>
+</ul>
 
     </article>
     
@@ -556,23 +560,23 @@ $$ \frac{P_0D}{P_0P_1}=\frac{P_1E}{P_1P_2}=\frac{P_2F}{P_2P_3}=\frac{DG}{DE}=\fr
     <ul class="related-ul">
         
         <li>
+          <a href="/zh/posts/jetpack-camerax/" class="related__link">Jetpack-CameraX</a>
+        </li>
+        
+        <li>
           <a href="/zh/posts/android-scroller/" class="related__link">Android Scroller解析及应用</a>
         </li>
         
         <li>
-          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-pulllayout/" class="related__link">自定义View-PullLayout</a>
+          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E5%BD%95%E5%88%B6%E5%B1%8F%E5%B9%95/" class="related__link">Android直播-录制屏幕</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/jvmdalvikart/" class="related__link">JVM/Dalvik/ART</a>
         </li>
         
         <li>
           <a href="/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/" class="related__link">RxJava2源码及使用</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/" class="related__link">Android四大组件-Activity/Fragment</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/" class="related__link">插件化和热更新</a>
         </li>
         
     </ul>
@@ -1319,7 +1323,7 @@ $$ \frac{P_0D}{P_0P_1}=\frac{P_1E}{P_1P_2}=\frac{P_2F}{P_2P_3}=\frac{DG}{DE}=\fr
 
                 
             <p class="caption">
-                ©2019, All Rights Reserved
+                ©2020, All Rights Reserved
             </p>
         
         <p class="caption">Powered by <a href="https://gohugo.io/" rel="noreferrer">Hugo</a> and the <a href="https://github.com/zzossig/hugo-theme-zzo" rel="noreferrer">Zzo theme</a></p>

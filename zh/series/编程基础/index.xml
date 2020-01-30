@@ -25,6 +25,15 @@
         <description></description>
       </item>
       
+      <item>
+        <title>JVM/Dalvik/ART</title>
+        <link>https://dshcao.github.io/zh/posts/jvmdalvikart/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/jvmdalvikart/</guid>
+        <description>前置知识 Android中每个应用都对应一个单独的虚拟机，独立运行 JIT&amp;amp;AOT JIT，Just-in-time，即时编译，运行时动态编译。 AOT，Ahe</description>
+      </item>
+      
     
   </channel>
 </rss>

@@ -22,7 +22,7 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</guid>
-        <description></description>
+        <description>ActivityOptions.makeSceneTransitionAnimation() ActivityOptions.makeCustomAnimation() ActivityOptions.makeScaleUpAnimation() ActivityOptions.makeTaskLaunchBehind() ActivityOptions.makeThumbnailScaleUpAnimation() ActivityOptions.makeBasic() ActivityOptions.makeClipRevealAnimation() activity.overridePendingTransition(0, 0)</description>
       </item>
       
     

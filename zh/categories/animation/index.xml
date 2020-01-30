@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>animation on dshcao blog</title>
+    <link>https://dshcao.github.io/zh/categories/animation/</link>
+    <description>Recent content in animation on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <managingEditor>513996717@qq.com (dshcao)</managingEditor>
+    <webMaster>513996717@qq.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Mon, 23 Dec 2019 12:00:06 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/zh/categories/animation/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>Android-Transition</title>
+        <link>https://dshcao.github.io/zh/posts/android-transition/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-transition/</guid>
+        <description>Transition Android中Transition是两个场景(Scene)之间的一个过渡转场动画效果， Transition有两个构造函数 1 2 3 4 5 6 //</description>
+      </item>
+      
+    
+  </channel>
+</rss>

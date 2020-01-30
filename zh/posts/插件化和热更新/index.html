@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>插件化和热更新 – dshcao blog</title>
+    <title>插件化和热更新&amp;App Bundle – dshcao blog</title>
     
 
 
@@ -181,7 +181,7 @@
 
 
 <meta property="og:site_name" content="dshcao blog">
-<meta property="og:title" content="插件化和热更新">
+<meta property="og:title" content="插件化和热更新&amp;App Bundle">
 <meta property="og:url" content="https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/">
 <meta property="og:type" content="article">
 
@@ -200,7 +200,7 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "headline": "插件化和热更新",
+    "headline": "插件化和热更新\u0026App Bundle",
     "datePublished": "2019-10-11T10:33:41+09:00",
     "dateModified": "2019-10-11T10:33:41+09:00",
     "url" : "https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/",
@@ -393,7 +393,7 @@
   
   <li  class="is-active" >    
     
-      <a href="https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/">插件化和热更新</a>
+      <a href="https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/">插件化和热更新&amp;App Bundle</a>
         
   </li>
   
@@ -402,10 +402,10 @@
 </nav>
   
   <div class="single">
-    <h2 class="single__title">插件化和热更新</h2>
+    <h2 class="single__title">插件化和热更新&amp;App Bundle</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 10月 11日 · ☕1 min read
+  🕓 2019年 10月 11日 · ☕3 min read
   
 </div>
       <div class="single__tags caption">
@@ -442,7 +442,183 @@
 </div>
     </div>    
     <article class="single__contents">
-      <p>插件化在几年前火的一塌糊涂，由插件化延续到后来的热更新，近几年似乎没了当初的狂热<br />
+      <h2 id="pathclassloaderdexclassloader">PathClassLoader和DexClassLoader</h2>
+<p>要做热更新就要用<code>ClassLoader</code>加载hotfix dex中的类,用哪个<code>ClassLoader</code>呢？我们在Activity中打印<code>classLoader::class.java.name</code>可以看到是<code>dalvik.system.PathClassLoader</code></p>
+<p>Android中使用DexClassLoader加载apk dex类文件<br />
+查看<code>PathClassLoader</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="nf">PathClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">parent</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="nf">PathClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">String</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">parent</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>只有几个构造方法，但<code>PathClassLoader</code>继承自<code>BaseDexClassLoader</code>，继续进入<code>BaseDexClassLoader</code>查看</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">protected</span> <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">loadClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">resolve</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ClassNotFoundException</span> <span class="o">{</span>
+        <span class="c1">// 首先检查是否已经加载过
+</span><span class="c1"></span>        <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">findLoadedClass</span><span class="o">(</span><span class="n">name</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">parent</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="na">loadClass</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="kc">false</span><span class="o">)</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="n">findBootstrapClassOrNull</span><span class="o">(</span><span class="n">name</span><span class="o">)</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">//parent.loadClass可鞥在此抛出异常
+</span><span class="c1"></span>            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">findClass</span><span class="o">(</span><span class="n">name</span><span class="o">)</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">c</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>loadClass</code>首先检查是不是已加载过这个类，若没有，调用父ClassLoader的<code>loadClass</code>，以此上推检查父ClassLoader是否加载过此类，若都没有加载则调用<code>findClass</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">protected</span> <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">findClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ClassNotFoundException</span> <span class="o">{</span>
+    <span class="c1">// First, check whether the class is present in our shared libraries.
+</span><span class="c1"></span>    <span class="k">if</span> <span class="o">(</span><span class="n">sharedLibraryLoaders</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">ClassLoader</span> <span class="n">loader</span> <span class="o">:</span> <span class="n">sharedLibraryLoaders</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">loader</span><span class="o">.</span><span class="na">loadClass</span><span class="o">(</span><span class="n">name</span><span class="o">)</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">ignored</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="c1">// Check whether the class in question is present in the dexPath that
+</span><span class="c1"></span>    <span class="c1">// this classloader operates on.
+</span><span class="c1"></span>    <span class="n">List</span><span class="o">&lt;</span><span class="n">Throwable</span><span class="o">&gt;</span> <span class="n">suppressedExceptions</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Throwable</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="n">Class</span> <span class="n">c</span> <span class="o">=</span> <span class="n">pathList</span><span class="o">.</span><span class="na">findClass</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">suppressedExceptions</span><span class="o">)</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ClassNotFoundException</span> <span class="n">cnfe</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassNotFoundException</span><span class="o">(</span>
+                <span class="s">&#34;Didn&#39;t find class \&#34;&#34;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#34;\&#34; on path: &#34;</span> <span class="o">+</span> <span class="n">pathList</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">t</span> <span class="o">:</span> <span class="n">suppressedExceptions</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">cnfe</span><span class="o">.</span><span class="na">addSuppressed</span><span class="o">(</span><span class="n">t</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">throw</span> <span class="n">cnfe</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">c</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>最终执行到<code>Class c = pathList.findClass(name, suppressedExceptions);</code>，再继续查看<code>DexPathList</code>的<code>findClass</code>方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">findClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Throwable</span><span class="o">&gt;</span> <span class="n">suppressed</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="n">Element</span> <span class="n">element</span> <span class="o">:</span> <span class="n">dexElements</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="na">findClass</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">definingContext</span><span class="o">,</span> <span class="n">suppressed</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">clazz</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">clazz</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">dexElementsSuppressedExceptions</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">suppressed</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">dexElementsSuppressedExceptions</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>再继续进入<code>Element</code>的<code>findClass</code>方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">findClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">definingContext</span><span class="o">,</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Throwable</span><span class="o">&gt;</span> <span class="n">suppressed</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">dexFile</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">dexFile</span><span class="o">.</span><span class="na">loadClassBinaryName</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">definingContext</span><span class="o">,</span> <span class="n">suppressed</span><span class="o">)</span><span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><!-- 
+DexFile即是dex文件的包装,我们只要在`dexElements`中用组件的dex文件构造出`Element`插入到`dexElements`即可，为了达到热更新的目的必须先加载自己的dex文件才能达到覆盖旧class文件的目的
+ -->
+<p>我们只需要获取热更新补丁的<code>dexElements</code>与原<code>dexElements</code>合并，app再次重新启动就会完成修复</p>
+<p>ClassLoader本身也是一个类，它是怎么被加载的呢？在jvm启动的时候就有一个根ClassLoader,即：bootstrapclassloader<br />
+有个根classloader</p>
+<p>插件化在几年前火的一塌糊涂，由插件化延续到后来的热更新，近几年似乎没了当初的狂热<br />
 插件化和热更新的意义在于动态化升级。不同于web只要后台发布用户前端的下次请求页面和逻辑都会改变，Android的UI及逻辑代码在手机上，发布需要经过各大市场，由审核时间，且就算发布到各大市场用户也不一定更新，强制用户更新的结果可能是被用户强制卸载。但是发布新功能/紧急修复bug的需求是巨大的。于是先有了</p>
 <ul>
 <li>将web那一套搬到移动端的做法，但是web在移动端的性能让其体验很差，虽然出现了很多框架增强了许多，但还是有差距</li>
@@ -456,6 +632,8 @@
 这里主要讲喜爱重启生效热更新模式的原理：<br />
 <mark>ClassLoader</mark>,java的ClassLoader双亲委托机制<br />
 干预Android加载，既然要干预那就要首先了解其原加载过程</p>
+<p>1.利用代理activity启动插件化中的activity<br />
+2.模仿系统加载启动activity</p>
 
     </article>
     
@@ -548,11 +726,7 @@
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-pulllayout/" class="related__link">自定义View-PullLayout</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/" class="related__link">Android四大组件-Activity/Fragment</a>
+          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E5%BD%95%E5%88%B6%E5%B1%8F%E5%B9%95/" class="related__link">Android直播-录制屏幕</a>
         </li>
         
         <li>
@@ -560,11 +734,15 @@
         </li>
         
         <li>
-          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E5%BD%95%E5%88%B6%E5%B1%8F%E5%B9%95/" class="related__link">Android直播-录制屏幕</a>
+          <a href="/zh/posts/jvmdalvikart/" class="related__link">JVM/Dalvik/ART</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-ffmpeg/" class="related__link">Android-FFmpeg</a>
+          <a href="/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/" class="related__link">Android四大组件-Activity/Fragment</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/" class="related__link">贝塞尔曲线(Bezier curve)</a>
         </li>
         
     </ul>
@@ -1307,7 +1485,7 @@
 
                 
             <p class="caption">
-                ©2019, All Rights Reserved
+                ©2020, All Rights Reserved
             </p>
         
         <p class="caption">Powered by <a href="https://gohugo.io/" rel="noreferrer">Hugo</a> and the <a href="https://github.com/zzossig/hugo-theme-zzo" rel="noreferrer">Zzo theme</a></p>
