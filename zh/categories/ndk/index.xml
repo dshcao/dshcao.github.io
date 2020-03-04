@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ndk on dshcao blog</title>
+    <link>https://dshcao.github.io/zh/categories/ndk/</link>
+    <description>Recent content in ndk on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <managingEditor>513996717@qq.com (dshcao)</managingEditor>
+    <webMaster>513996717@qq.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Fri, 11 Oct 2019 10:33:41 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/zh/categories/ndk/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>Android-NDK</title>
+        <link>https://dshcao.github.io/zh/posts/android-ndk/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ndk/</guid>
+        <description>android内部是怎么实现发送延时消息 怎么减小so包的体积 怎么给一个应用加固 怎么从trace.log中找到ANR的原因及出现的地方 什么是N</description>
+      </item>
+      
+    
+  </channel>
+</rss>

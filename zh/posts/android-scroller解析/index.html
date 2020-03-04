@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Android源码解析-Scroller – dshcao blog</title>
+    <title>Android Scroller解析及应用 – dshcao blog</title>
     
 
 
@@ -174,14 +174,14 @@
 <link rel="stylesheet" href="/css/main.min.css">
 
 
-    <meta name="description" content="Android Scroller滑动详解." />
+    <meta name="description" content="Scroller 源码解析" />
 <meta name="keywords" content="">
-<meta name="created" content="2019-12-23T12:00:06&#43;0900">
-<meta name="modified" content="2019-12-23T12:00:06&#43;0900">
-<meta name="author" content="dshcao">
+<meta name="created" content="2019-12-11T10:33:41&#43;0900">
+<meta name="modified" content="2019-12-11T10:33:41&#43;0900">
+
 
 <meta property="og:site_name" content="dshcao blog">
-<meta property="og:title" content="Android源码解析-Scroller">
+<meta property="og:title" content="Android Scroller解析及应用">
 <meta property="og:url" content="https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/">
 <meta property="og:type" content="article">
 
@@ -200,16 +200,12 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "headline": "Android源码解析-Scroller",
-    "datePublished": "2019-12-23T12:00:06+09:00",
-    "dateModified": "2019-12-23T12:00:06+09:00",
+    "headline": "Android Scroller解析及应用",
+    "datePublished": "2019-12-11T10:33:41+09:00",
+    "dateModified": "2019-12-11T10:33:41+09:00",
     "url" : "https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/",
-    "description": "Android Scroller滑动详解.",
-    "keywords": ["android","触摸滑动"],
-    "author": {
-      "@type": "Person",
-      "name": "dshcao"
-    },
+    "description": "Scroller 源码解析",
+    "keywords": ["android","scroller","源码解析","滑动"],
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://dshcao.github.io/"
@@ -397,7 +393,7 @@
   
   <li  class="is-active" >    
     
-      <a href="https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/">Android源码解析-Scroller</a>
+      <a href="https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/">Android Scroller解析及应用</a>
         
   </li>
   
@@ -406,10 +402,10 @@
 </nav>
   
   <div class="single">
-    <h2 class="single__title">Android源码解析-Scroller</h2>
+    <h2 class="single__title">Android Scroller解析及应用</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 12月 23日 · ☕0 min read
+  🕓 2019年 12月 11日 · ☕5 min read
   
 </div>
       <div class="single__tags caption">
@@ -428,8 +424,26 @@
   
   
   <li>
-    <a href="/zh/tags/%E8%A7%A6%E6%91%B8%E6%BB%91%E5%8A%A8" class="single__tag">
-      #触摸滑动
+    <a href="/zh/tags/scroller" class="single__tag">
+      #scroller
+    </a>
+  </li>
+    
+
+  
+  
+  <li>
+    <a href="/zh/tags/%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90" class="single__tag">
+      #源码解析
+    </a>
+  </li>
+    
+
+  
+  
+  <li>
+    <a href="/zh/tags/%E6%BB%91%E5%8A%A8" class="single__tag">
+      #滑动
     </a>
   </li>
     
@@ -437,7 +451,538 @@
 </div>
     </div>    
     <article class="single__contents">
-      
+      <h2 id="overscroller">OverScroller简介</h2>
+<p>OverScroller中两个重要属性：</p>
+<ul>
+<li><code>mMode</code>有两个滚动模式：<code>SCROLL_MODE</code> <code>FLING_MODE</code></li>
+<li>SplineOverScroller<br />
+<br><code>mState</code>有三个滚动状态：<code>SPLINE</code> <code>CUBIC</code> <code>BALLISTIC</code>，查看源码可知：
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">fling</span><span class="o">(</span><span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">velocity</span><span class="o">,</span> <span class="kt">int</span> <span class="n">min</span><span class="o">,</span> <span class="kt">int</span> <span class="n">max</span><span class="o">,</span> <span class="kt">int</span> <span class="n">over</span><span class="o">)</span> <span class="o">{</span>
+  <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">start</span> <span class="o">&gt;</span> <span class="n">max</span> <span class="o">|</span><span class="o">|</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">min</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">startAfterEdge</span><span class="o">(</span><span class="n">start</span><span class="o">,</span> <span class="n">min</span><span class="o">,</span> <span class="n">max</span><span class="o">,</span> <span class="n">velocity</span><span class="o">)</span><span class="o">;</span>
+      <span class="k">return</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="n">mState</span> <span class="o">=</span> <span class="n">SPLINE</span><span class="o">;</span>
+  <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+<span class="o">}</span>
+
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">onEdgeReached</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+  <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+  <span class="n">mState</span> <span class="o">=</span> <span class="n">BALLISTIC</span><span class="o">;</span>
+  <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+<span class="o">}</span>
+
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">startSpringback</span><span class="o">(</span><span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">,</span> <span class="kt">int</span> <span class="n">velocity</span><span class="o">)</span> <span class="o">{</span>
+  <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+  <span class="n">mState</span> <span class="o">=</span> <span class="n">CUBIC</span><span class="o">;</span>
+  <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h2 id="overscroller-api">OverScroller API解析</h2>
+<ul>
+<li>
+<p>overScroller.setFriction()<br />
+<br>friction是fling或者scroll时的摩擦系数标量值</p>
+</li>
+<li>
+<p>overScroller.startScroll()<br />
+<br>开始滚动指定的距离，需要调用<code>invalidate()</code>触发重绘</p>
+</li>
+<li>
+<p>overScroller.computeScrollOffset()<br />
+<br>先判断滚动是否结束，结束返回false，否则返回true，并计算出下一次的新位置</p>
+</li>
+<li>
+<p>overScroller.currVelocity<br />
+<br>当前速度</p>
+</li>
+<li>
+<p>overScroller.fling()<br />
+<br>以初始速度velocity滚动，滚动的距离取决于初始速度velocity，当滚动到minX/maxX和minY/maxY范围内时若velocity不为0会根据当前velocity计算滚动的距离和时间，并确保在minX/maxX和minY/maxY范围内为前提再滚动一定距离，源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">fling</span><span class="o">(</span><span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">velocity</span><span class="o">,</span> <span class="kt">int</span> <span class="n">min</span><span class="o">,</span> <span class="kt">int</span> <span class="n">max</span><span class="o">,</span> <span class="kt">int</span> <span class="n">over</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mOver</span> <span class="o">=</span> <span class="n">over</span><span class="o">;</span>
+    <span class="n">mFinished</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="n">mCurrVelocity</span> <span class="o">=</span> <span class="n">mVelocity</span> <span class="o">=</span> <span class="n">velocity</span><span class="o">;</span>
+    <span class="n">mDuration</span> <span class="o">=</span> <span class="n">mSplineDuration</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+    <span class="n">mStartTime</span> <span class="o">=</span> <span class="n">AnimationUtils</span><span class="o">.</span><span class="na">currentAnimationTimeMillis</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="n">mCurrentPosition</span> <span class="o">=</span> <span class="n">mStart</span> <span class="o">=</span> <span class="n">start</span><span class="o">;</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">start</span> <span class="o">&gt;</span> <span class="n">max</span> <span class="o">|</span><span class="o">|</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="n">min</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">startAfterEdge</span><span class="o">(</span><span class="n">start</span><span class="o">,</span> <span class="n">min</span><span class="o">,</span> <span class="n">max</span><span class="o">,</span> <span class="n">velocity</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">mState</span> <span class="o">=</span> <span class="n">SPLINE</span><span class="o">;</span>
+    <span class="kt">double</span> <span class="n">totalDistance</span> <span class="o">=</span> <span class="n">0</span><span class="o">.</span><span class="na">0</span><span class="o">;</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">velocity</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mDuration</span> <span class="o">=</span> <span class="n">mSplineDuration</span> <span class="o">=</span> <span class="n">getSplineFlingDuration</span><span class="o">(</span><span class="n">velocity</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">totalDistance</span> <span class="o">=</span> <span class="n">getSplineFlingDistance</span><span class="o">(</span><span class="n">velocity</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">mSplineDistance</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">totalDistance</span> <span class="o">*</span> <span class="n">Math</span><span class="o">.</span><span class="na">signum</span><span class="o">(</span><span class="n">velocity</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
+    <span class="n">mFinal</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">mSplineDistance</span><span class="o">;</span>
+
+    <span class="c1">// Clamp to a valid final position
+</span><span class="c1"></span>    <span class="k">if</span> <span class="o">(</span><span class="n">mFinal</span> <span class="o">&lt;</span> <span class="n">min</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">adjustDuration</span><span class="o">(</span><span class="n">mStart</span><span class="o">,</span> <span class="n">mFinal</span><span class="o">,</span> <span class="n">min</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">mFinal</span> <span class="o">=</span> <span class="n">min</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">mFinal</span> <span class="o">&gt;</span> <span class="n">max</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">adjustDuration</span><span class="o">(</span><span class="n">mStart</span><span class="o">,</span> <span class="n">mFinal</span><span class="o">,</span> <span class="n">max</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">mFinal</span> <span class="o">=</span> <span class="n">max</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>overScroller.abortAnimation()<br />
+<br>停止滚动动画直接将当前位置置为finalX/finalY</p>
+</li>
+<li>
+<p>overScroller.forceFinished()<br />
+<br>停止滚动，停留在当前滚动位置，只是简单将滚动结束标志置为true</p>
+</li>
+<li>
+<p>overScroller.isFinished<br />
+<br>是否结束</p>
+</li>
+<li>
+<p>overScroller.isOverScrolled</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * Returns whether the current Scroller is currently returning to a valid position.
+</span><span class="cm"> * Valid bounds were provided by the
+</span><span class="cm"> * {@link #fling(int, int, int, int, int, int, int, int, int, int)} method.
+</span><span class="cm"> *
+</span><span class="cm"> * One should check this value before calling
+</span><span class="cm"> * {@link #startScroll(int, int, int, int)} as the interpolation currently in progress
+</span><span class="cm"> * to restore a valid position will then be stopped. The caller has to take into account
+</span><span class="cm"> * the fact that the started scroll will start from an overscrolled position.
+</span><span class="cm"> *
+</span><span class="cm"> * @return true when the current position is overscrolled and in the process of
+</span><span class="cm"> *         interpolating back to a valid value.
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isOverScrolled</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">(</span><span class="o">(</span><span class="o">!</span><span class="n">mScrollerX</span><span class="o">.</span><span class="na">mFinished</span> <span class="o">&amp;</span><span class="o">&amp;</span>
+            <span class="n">mScrollerX</span><span class="o">.</span><span class="na">mState</span> <span class="o">!</span><span class="o">=</span> <span class="n">SplineOverScroller</span><span class="o">.</span><span class="na">SPLINE</span><span class="o">)</span> <span class="o">|</span><span class="o">|</span>
+            <span class="o">(</span><span class="o">!</span><span class="n">mScrollerY</span><span class="o">.</span><span class="na">mFinished</span> <span class="o">&amp;</span><span class="o">&amp;</span>
+                    <span class="n">mScrollerY</span><span class="o">.</span><span class="na">mState</span> <span class="o">!</span><span class="o">=</span> <span class="n">SplineOverScroller</span><span class="o">.</span><span class="na">SPLINE</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>overScroller.notifyHorizontalEdgeReached()</p>
+</li>
+<li>
+<p>overScroller.notifyVerticalEdgeReached()</p>
+</li>
+<li>
+<p>overScroller.springBack()  <br>源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">springBack</span><span class="o">(</span><span class="kt">int</span> <span class="n">startX</span><span class="o">,</span> <span class="kt">int</span> <span class="n">startY</span><span class="o">,</span> <span class="kt">int</span> <span class="n">minX</span><span class="o">,</span> <span class="kt">int</span> <span class="n">maxX</span><span class="o">,</span> <span class="kt">int</span> <span class="n">minY</span><span class="o">,</span> <span class="kt">int</span> <span class="n">maxY</span><span class="o">)</span><span class="o">{</span>
+    <span class="n">mMode</span> <span class="o">=</span> <span class="n">FLING_MODE</span><span class="o">;</span>
+    <span class="c1">// Make sure both methods are called.
+</span><span class="c1"></span>    <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">spingbackX</span> <span class="o">=</span> <span class="n">mScrollerX</span><span class="o">.</span><span class="na">springback</span><span class="o">(</span><span class="n">startX</span><span class="o">,</span> <span class="n">minX</span><span class="o">,</span> <span class="n">maxX</span><span class="o">)</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">spingbackY</span> <span class="o">=</span> <span class="n">mScrollerY</span><span class="o">.</span><span class="na">springback</span><span class="o">(</span><span class="n">startY</span><span class="o">,</span> <span class="n">minY</span><span class="o">,</span> <span class="n">maxY</span><span class="o">)</span><span class="o">;</span>
+    <span class="k">return</span> <span class="n">spingbackX</span> <span class="o">|</span><span class="o">|</span> <span class="n">spingbackY</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kt">boolean</span> <span class="nf">springback</span><span class="o">(</span><span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">min</span><span class="o">,</span> <span class="kt">int</span> <span class="n">max</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mFinished</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">start</span> <span class="o">&lt;</span> <span class="n">min</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">startSpringback</span><span class="o">(</span><span class="n">start</span><span class="o">,</span> <span class="n">min</span><span class="o">,</span> <span class="n">0</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">start</span> <span class="o">&gt;</span> <span class="n">max</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">startSpringback</span><span class="o">(</span><span class="n">start</span><span class="o">,</span> <span class="n">max</span><span class="o">,</span> <span class="n">0</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="o">!</span><span class="n">mFinished</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">startSpringback</span><span class="o">(</span><span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">,</span> <span class="kt">int</span> <span class="n">velocity</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// mStartTime has been set
+</span><span class="c1"></span>    <span class="n">mFinished</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看出，当(minX &lt;= startX &lt;= maxX) || (minY &lt;= startY &lt;= maxY)时返回false，否则返回true。当调用<code>springBack(int startX, int startY, int minX, int maxX, int minY, int maxY)</code>返回true时，调用<code>invalidate()</code>，然后在<code>computeScroll()</code>中调用<code>OverScroller.computeScrollOffset()</code>计算是否结束，而<code>computeScrollOffset()</code>会调用<code>continueWhenFinished()</code>，<code>continueWhenFinished()</code>再次调用<code>startSpringback</code>实现不断刷新</p>
+</li>
+</ul>
+<h2 id="overscroller-">OverScroller 使用</h2>
+<p>通常自定义view中，在构造函数中初始化<code>OverScroller</code>，然后在<code>onTouchEvent()</code>的<code>ACTION_UP</code>中调用<code>OverScroller</code>的<code>startScroll()</code>或<code>fling()</code> 方法并调用<code>invalidate()</code>，然后在view的<code>computeScroll()</code>方法中调用<code>OverScroller</code>的<code>computeScrollOffset()</code>，若返回true，则做相应处理并再次调用<code>invalidate()</code>实现循环处理</p>
+<h2 id="scroll-api">Scroll 相关API</h2>
+<h3 id="viewviewscrollbyviewscrolltoviewoverscrollby">View方法view.scrollBy()/view.scrollTo()/view.overScrollBy()</h3>
+<ul>
+<li>view.scrollBy()<br />
+<br>增量滚动，相对当前滚动位置再滚动x/y距离，最终调用scrollTo()
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">scrollBy</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">scrollTo</span><span class="o">(</span><span class="n">mScrollX</span> <span class="o">+</span> <span class="n">x</span><span class="o">,</span> <span class="n">mScrollY</span> <span class="o">+</span> <span class="n">y</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>view.scrollTo()<br />
+<br> 滚动到指定的x/y位置
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">scrollTo</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">mScrollX</span> <span class="o">!</span><span class="o">=</span> <span class="n">x</span> <span class="o">|</span><span class="o">|</span> <span class="n">mScrollY</span> <span class="o">!</span><span class="o">=</span> <span class="n">y</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">oldX</span> <span class="o">=</span> <span class="n">mScrollX</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">oldY</span> <span class="o">=</span> <span class="n">mScrollY</span><span class="o">;</span>
+        <span class="n">mScrollX</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+        <span class="n">mScrollY</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+        <span class="n">invalidateParentCaches</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">onScrollChanged</span><span class="o">(</span><span class="n">mScrollX</span><span class="o">,</span> <span class="n">mScrollY</span><span class="o">,</span> <span class="n">oldX</span><span class="o">,</span> <span class="n">oldY</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="o">!</span><span class="n">awakenScrollBars</span><span class="o">(</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">postInvalidateOnAnimation</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>view.overScrollBy()<br />
+<br></li>
+</ul>
+<h3 id="computeverticalscrolloffsetcomputeverticalscrollrangecomputeverticalscrollextentcanscrollvertically">computeVerticalScrollOffset/computeVerticalScrollRange/computeVerticalScrollExtent/canScrollVertically</h3>
+<p>一般来说:computeVerticalScrollRange()=computeVerticalScrollOffset()+computeVerticalScrollExtent()+未显示部分的高度。canScrollVertically利用该算式实现的API</p>
+<ul>
+<li>
+<p>computeVerticalScrollOffset<br />
+<br>view垂直方向已滚动的距离，源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">protected</span> <span class="kt">int</span> <span class="nf">computeVerticalScrollOffset</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">mScrollY</span><span class="o">;</span>
+  <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>computeVerticalScrollExtent<br />
+<br>当前view垂直方向上滑块在整个滚动范围代表的长度，其实就是滚动控件显示出来的这部分内容的高度，一般来说整个滚动控件都会用来显示内容，，即默认实现是滚动控件的高度</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">protected</span> <span class="kt">int</span> <span class="nf">computeVerticalScrollExtent</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">getHeight</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>computeVerticalScrollRange<br />
+<br>垂直滚动条代表的整个滚动范围。如果是View一般代表的是整个内容的高度，非滚动控件则是控件本身的高度。在ViewGroup(如：NestedScrollView)中即其所有子控件的总高度。<br>NestedScrollView的实现：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">int</span> <span class="nf">computeVerticalScrollRange</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">getChildCount</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">parentSpace</span> <span class="o">=</span> <span class="n">getHeight</span><span class="o">(</span><span class="o">)</span> <span class="o">-</span> <span class="n">getPaddingBottom</span><span class="o">(</span><span class="o">)</span> <span class="o">-</span> <span class="n">getPaddingTop</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">count</span> <span class="o">=</span><span class="o">=</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">parentSpace</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="n">View</span> <span class="n">child</span> <span class="o">=</span> <span class="n">getChildAt</span><span class="o">(</span><span class="n">0</span><span class="o">)</span><span class="o">;</span>
+    <span class="n">NestedScrollView</span><span class="o">.</span><span class="na">LayoutParams</span> <span class="n">lp</span> <span class="o">=</span> <span class="o">(</span><span class="n">LayoutParams</span><span class="o">)</span> <span class="n">child</span><span class="o">.</span><span class="na">getLayoutParams</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">scrollRange</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="na">getBottom</span><span class="o">(</span><span class="o">)</span> <span class="o">+</span> <span class="n">lp</span><span class="o">.</span><span class="na">bottomMargin</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">scrollY</span> <span class="o">=</span> <span class="n">getScrollY</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">overscrollBottom</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">0</span><span class="o">,</span> <span class="n">scrollRange</span> <span class="o">-</span> <span class="n">parentSpace</span><span class="o">)</span><span class="o">;</span>
+    <span class="c1">//如果是overscroll算上overscroll的距离
+</span><span class="c1"></span>    <span class="k">if</span> <span class="o">(</span><span class="n">scrollY</span> <span class="o">&lt;</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">scrollRange</span> <span class="o">-</span><span class="o">=</span> <span class="n">scrollY</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">scrollY</span> <span class="o">&gt;</span> <span class="n">overscrollBottom</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">scrollRange</span> <span class="o">+</span><span class="o">=</span> <span class="n">scrollY</span> <span class="o">-</span> <span class="n">overscrollBottom</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="k">return</span> <span class="n">scrollRange</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>canScrollVertically<br />
+是否可以垂直某个方向上滚动，下面源码可以看出是利用上面三个API实现的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">canScrollVertically</span><span class="o">(</span><span class="kt">int</span> <span class="n">direction</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">computeVerticalScrollOffset</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">int</span> <span class="n">range</span> <span class="o">=</span> <span class="n">computeVerticalScrollRange</span><span class="o">(</span><span class="o">)</span> <span class="o">-</span> <span class="n">computeVerticalScrollExtent</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">range</span> <span class="o">=</span><span class="o">=</span> <span class="n">0</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">direction</span> <span class="o">&lt;</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">offset</span> <span class="o">&gt;</span> <span class="n">0</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">offset</span> <span class="o">&lt;</span> <span class="n">range</span> <span class="o">-</span> <span class="n">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="velocitytracker">VelocityTracker</h3>
+<ul>
+<li>VelocityTracker<br />
+<br>跟踪触摸事件的速度，实现fling和类似手势的助手类。通常的使用如下：
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onTouchEvent</span><span class="o">(</span><span class="n">MotionEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">action</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="na">getActionMasked</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="k">switch</span> <span class="o">(</span><span class="n">action</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="n">MotionEvent</span><span class="o">.</span><span class="na">ACTION_DOWN</span><span class="o">:</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">velocityTracker</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">velocityTracker</span> <span class="o">=</span> <span class="n">VelocityTracker</span><span class="o">.</span><span class="na">obtain</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">velocityTracker</span><span class="o">.</span><span class="na">clear</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">MotionEvent</span><span class="o">.</span><span class="na">ACTION_MOVE</span><span class="o">:</span>
+            <span class="n">velocityTracker</span><span class="o">.</span><span class="na">addMovement</span><span class="o">(</span><span class="n">event</span><span class="o">)</span><span class="o">;</span>
+            <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">MotionEvent</span><span class="o">.</span><span class="na">ACTION_UP</span><span class="o">:</span>
+        <span class="k">case</span> <span class="n">MotionEvent</span><span class="o">.</span><span class="na">ACTION_CANCEL</span><span class="o">:</span>
+            <span class="n">velocityTracker</span><span class="o">.</span><span class="na">computeCurrentVelocity</span><span class="o">(</span><span class="n">1000</span><span class="o">)</span><span class="o">;</span>
+            <span class="kt">float</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">velocityTracker</span><span class="o">.</span><span class="na">getYVelocity</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="c1">//todo
+</span><span class="c1"></span>            <span class="k">if</span> <span class="o">(</span><span class="n">velocityTracker</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">velocityTracker</span><span class="o">.</span><span class="na">recycle</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+                <span class="n">velocityTracker</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">break</span><span class="o">;</span>
+
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">onTouchEvent</span><span class="o">(</span><span class="n">event</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>computeCurrentVelocity<br />
+<br> 基于addMovement收集的触摸点计算当前速度，调用getYVelocity/getYVelocity获取速度前必须先调用这个方法</li>
+</ul>
+</li>
+</ul>
+<h3 id="viewoffsetleftandrightviewoffsettopandbottom">view.offsetLeftAndRight()/view.offsetTopAndBottom()</h3>
+<h2 id="heading">自定义</h2>
+<p><span id="2">参考：</span></p>
+<ul>
+<li><a href="https://developer.android.com/guide/topics/graphics/fling-animation">使用Fling动画移动视图</a></li>
+<li><a href="https://developer.android.com/training/gestures/scroll">以动画方式显示滚动手势</a></li>
+</ul>
+
     </article>
     
     
@@ -529,23 +1074,23 @@
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/" class="related__link">Android源码解析-NestedScrolling</a>
+          <a href="/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/" class="related__link">Android四大组件-Activity/Fragment</a>
         </li>
         
         <li>
-          <a href="/zh/posts/renderscript%E4%BD%BF%E7%94%A8/" class="related__link">Android RenderScript使用</a>
+          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
         </li>
         
         <li>
-          <a href="/zh/posts/kotlin-%E8%AF%AD%E6%B3%95/" class="related__link">Kotlin语法</a>
+          <a href="/zh/posts/jvmdalvikart/" class="related__link">JVM/Dalvik/ART</a>
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-navigation/" class="related__link">Jetpack-Navigation详解</a>
+          <a href="/zh/posts/android-ffmpeg/" class="related__link">Android-FFmpeg</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-handler%E8%A7%A3%E6%9E%90/" class="related__link">Android源码解析-Handler</a>
+          <a href="/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/" class="related__link">插件化和热更新&amp;App Bundle</a>
         </li>
         
     </ul>
@@ -554,11 +1099,11 @@
     <div class="grow"></div>
 <nav class="pagination-single">
   
-    <a href="https://dshcao.github.io/zh/posts/httphttps/" class="pagination-single__left">
+    <a href="https://dshcao.github.io/zh/pt/dir/fourth/" class="pagination-single__left">
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
       </div>
-      <div class="pagination-single__left-title">Http/Https详解</div>      
+      <div class="pagination-single__left-title">Fourth</div>      
     </a>
   
   <div class="grow"></div>

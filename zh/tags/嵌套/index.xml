@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>嵌套 on dshcao blog</title>
+    <link>https://dshcao.github.io/zh/tags/%E5%B5%8C%E5%A5%97/</link>
+    <description>Recent content in 嵌套 on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <managingEditor>513996717@qq.com (dshcao)</managingEditor>
+    <webMaster>513996717@qq.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Wed, 11 Dec 2019 12:00:06 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/zh/tags/%E5%B5%8C%E5%A5%97/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>Android源码解析-NestedScrolling</title>
+        <link>https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Wed, 11 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/</guid>
+        <description>嵌套滑动实现原理及执行过程 嵌套滑动其实就是一套嵌套滑动回调。难的是嵌套滑动是如何回调的。理解嵌套滑动应该试着从嵌套滑动API的设计者思考。如</description>
+      </item>
+      
+    
+  </channel>
+</rss>

@@ -28,19 +28,19 @@
       <item>
         <title>Android源码解析-NestedScrolling</title>
         <link>https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/</link>
-        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <pubDate>Wed, 11 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/</guid>
-        <description></description>
+        <description>嵌套滑动实现原理及执行过程 嵌套滑动其实就是一套嵌套滑动回调。难的是嵌套滑动是如何回调的。理解嵌套滑动应该试着从嵌套滑动API的设计者思考。如</description>
       </item>
       
       <item>
-        <title>Android源码解析-Scroller</title>
+        <title>Android Scroller解析及应用</title>
         <link>https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/</link>
-        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <pubDate>Wed, 11 Dec 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/</guid>
-        <description></description>
+        <description>OverScroller简介 OverScroller中两个重要属性： mMode有两个滚动模式：SCROLL_MODE FLING_MODE SplineOverScroller mState有三个滚</description>
       </item>
       
       <item>

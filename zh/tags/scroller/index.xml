@@ -9,7 +9,7 @@
     <managingEditor>513996717@qq.com (dshcao)</managingEditor>
     <webMaster>513996717@qq.com (dshcao)</webMaster>
     <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
-    <lastBuildDate>Fri, 11 Oct 2019 10:33:41 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 11 Dec 2019 10:33:41 +0900</lastBuildDate>
     
         <atom:link href="https://dshcao.github.io/zh/tags/scroller/index.xml" rel="self" type="application/rss+xml" />
     
@@ -18,11 +18,11 @@
       
       <item>
         <title>Android Scroller解析及应用</title>
-        <link>https://dshcao.github.io/zh/posts/android-scroller/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <link>https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Wed, 11 Dec 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-scroller/</guid>
-        <description></description>
+        <guid>https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/</guid>
+        <description>OverScroller简介 OverScroller中两个重要属性： mMode有两个滚动模式：SCROLL_MODE FLING_MODE SplineOverScroller mState有三个滚</description>
       </item>
       
     

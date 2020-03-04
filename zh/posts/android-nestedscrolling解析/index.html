@@ -176,8 +176,8 @@
 
     <meta name="description" content="android 嵌套发动NestedScrollingXXX." />
 <meta name="keywords" content="">
-<meta name="created" content="2019-12-23T12:00:06&#43;0900">
-<meta name="modified" content="2019-12-23T12:00:06&#43;0900">
+<meta name="created" content="2019-12-11T12:00:06&#43;0900">
+<meta name="modified" content="2019-12-11T12:00:06&#43;0900">
 <meta name="author" content="dshcao">
 
 <meta property="og:site_name" content="dshcao blog">
@@ -201,11 +201,11 @@
     "@context": "https://schema.org",
     "@type": "WebPage",
     "headline": "Android源码解析-NestedScrolling",
-    "datePublished": "2019-12-23T12:00:06+09:00",
-    "dateModified": "2019-12-23T12:00:06+09:00",
+    "datePublished": "2019-12-11T12:00:06+09:00",
+    "dateModified": "2019-12-11T12:00:06+09:00",
     "url" : "https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/",
     "description": "android 嵌套发动NestedScrollingXXX.",
-    "keywords": ["android","触摸滑动"],
+    "keywords": ["android","嵌套","滑动"],
     "author": {
       "@type": "Person",
       "name": "dshcao"
@@ -409,7 +409,7 @@
     <h2 class="single__title">Android源码解析-NestedScrolling</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 12月 23日 · ☕0 min read
+  🕓 2019年 12月 11日 · ☕10 min read
   
 </div>
       <div class="single__tags caption">
@@ -428,8 +428,17 @@
   
   
   <li>
-    <a href="/zh/tags/%E8%A7%A6%E6%91%B8%E6%BB%91%E5%8A%A8" class="single__tag">
-      #触摸滑动
+    <a href="/zh/tags/%E5%B5%8C%E5%A5%97" class="single__tag">
+      #嵌套
+    </a>
+  </li>
+    
+
+  
+  
+  <li>
+    <a href="/zh/tags/%E6%BB%91%E5%8A%A8" class="single__tag">
+      #滑动
     </a>
   </li>
     
@@ -437,7 +446,942 @@
 </div>
     </div>    
     <article class="single__contents">
-      
+      <h2 id="heading">嵌套滑动实现原理及执行过程</h2>
+<p>嵌套滑动其实就是一套嵌套滑动回调。难的是嵌套滑动是如何回调的。理解嵌套滑动应该试着从嵌套滑动API的设计者思考。如果你明白了设计思路就可以很简单的在嵌套滑动回调做相应的处理。</p>
+<h3 id="heading-1">嵌套原理</h3>
+<p>我们知道触摸事件被父控件拦截后子控件无法收到后续的事件。同样的如果子控件决定了消费触摸事件父控件的onTouchEvent也无法继续收到后续的触摸事件。嵌套滑动如何实现的呢？答案是通过requestDisallowInterceptTouchEvent(true)请求父控件不要拦截触摸事件，触摸事件传递到子控件并在子控件onTouchEvent中调用startNestedScroll开启整个嵌套滚动。startNestedScroll会检测支持嵌套滚动的父控件并持有该父控件。然后通过嵌套滚动API的回调方法实现子控件和父控件的通信</p>
+<h3 id="heading-2">执行过程</h3>
+<h2 id="nestedscrollingchildnestedscrollingchild2nestedscrollingchild3">NestedScrollingChild/NestedScrollingChild2/NestedScrollingChild3</h2>
+<p>NestedScrollingChild2继承自NestedScrollingChild并重载部分方法。为什么重载？增强实现。NestedScrollingChild3继承自NestedScrollingChild2并重载部分方法进一步增强实现。详情看下面源码解析注释。</p>
+<p>主要方法：</p>
+<ul>
+<li>
+<p>setNestedScrollingEnabled<br />
+设置是否配合父控件嵌套滚动，前提是该控件实现相应的嵌套滚动功能。View默认实现和NestedScrollingChildHelper默认实现类似，只是NestedScrollingChildHelper做了兼容处理</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">setNestedScrollingEnabled</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">enabled</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">enabled</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mPrivateFlags3</span> <span class="o">|</span><span class="o">=</span> <span class="n">PFLAG3_NESTED_SCROLLING_ENABLED</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="n">stopNestedScroll</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">mPrivateFlags3</span> <span class="o">&amp;</span><span class="o">=</span> <span class="o">~</span><span class="n">PFLAG3_NESTED_SCROLLING_ENABLED</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果是在嵌套滚动中调用setNestedScrollingEnabled禁用了嵌套滚动会主动调用stopNestedScroll()</p>
+</li>
+<li>
+<p>isNestedScrollingEnabled<br />
+返回的是setNestedScrollingEnabled设置的结果</p>
+</li>
+<li>
+<p>hasNestedScrollingParent<br />
+子控件是否有支持嵌套滑动父控件，由于ViewGroup继承了ViewParent，而新的ViewParent支持了嵌套滑动API，实际上就是判断是否有父控件。嵌套滑动父控件的设置是在startNestedScroll执行的时候设置的</p>
+</li>
+<li>
+<p>startNestedScroll</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">startNestedScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">axes</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">hasNestedScrollingParent</span><span class="o">(</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Already in progress
+</span><span class="c1"></span>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isNestedScrollingEnabled</span><span class="o">(</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ViewParent</span> <span class="n">p</span> <span class="o">=</span> <span class="n">getParent</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">View</span> <span class="n">child</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">p</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">onStartNestedScroll</span><span class="o">(</span><span class="n">child</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="n">axes</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">//设置嵌套滑动父控件，mNestedScrollingParent是hasNestedScrollingParent判断的依据    
+</span><span class="c1"></span>                    <span class="n">mNestedScrollingParent</span> <span class="o">=</span> <span class="n">p</span><span class="o">;</span>
+                    <span class="n">p</span><span class="o">.</span><span class="na">onNestedScrollAccepted</span><span class="o">(</span><span class="n">child</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="n">axes</span><span class="o">)</span><span class="o">;</span>
+                    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">AbstractMethodError</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">Log</span><span class="o">.</span><span class="na">e</span><span class="o">(</span><span class="n">VIEW_LOG_TAG</span><span class="o">,</span> <span class="s">&#34;ViewParent &#34;</span> <span class="o">+</span> <span class="n">p</span> <span class="o">+</span> <span class="s">&#34; does not implement interface &#34;</span> <span class="o">+</span>
+                        <span class="s">&#34;method onStartNestedScroll&#34;</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span><span class="o">;</span>
+                <span class="c1">// Allow the search upward to continue
+</span><span class="c1"></span>            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">p</span> <span class="k">instanceof</span> <span class="n">View</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">child</span> <span class="o">=</span> <span class="o">(</span><span class="n">View</span><span class="o">)</span> <span class="n">p</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">getParent</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>子控件发起嵌套滚动动作，触摸模式嵌套滑动通常应该在ACTION_DOWN时调用该方法触发嵌套滚动。如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onTouchEvent</span><span class="o">(</span><span class="n">MotionEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">switch</span> <span class="o">(</span><span class="n">action</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">case</span> <span class="n">MotionEvent</span><span class="o">.</span><span class="na">ACTION_DOWN</span><span class="o">:</span>
+          <span class="kt">int</span> <span class="n">nestedScrollAxis</span> <span class="o">=</span> <span class="n">ViewCompat</span><span class="o">.</span><span class="na">SCROLL_AXIS_NONE</span><span class="o">;</span>
+          <span class="k">if</span> <span class="o">(</span><span class="n">canScrollHorizontally</span><span class="o">)</span> <span class="o">{</span>
+              <span class="n">nestedScrollAxis</span> <span class="o">|</span><span class="o">=</span> <span class="n">ViewCompat</span><span class="o">.</span><span class="na">SCROLL_AXIS_HORIZONTAL</span><span class="o">;</span>
+          <span class="o">}</span>
+          <span class="k">if</span> <span class="o">(</span><span class="n">canScrollVertically</span><span class="o">)</span> <span class="o">{</span>
+              <span class="n">nestedScrollAxis</span> <span class="o">|</span><span class="o">=</span> <span class="n">ViewCompat</span><span class="o">.</span><span class="na">SCROLL_AXIS_VERTICAL</span><span class="o">;</span>
+          <span class="o">}</span>
+          <span class="n">startNestedScroll</span><span class="o">(</span><span class="n">nestedScrollAxis</span><span class="o">,</span> <span class="n">TYPE_TOUCH</span><span class="o">)</span><span class="o">;</span>
+          <span class="k">break</span><span class="o">;</span>
+          <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+    <span class="o">}</span>    
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>startNestedScroll源码可知返回true表示找到了支持嵌套滑动的父控件</p>
+</li>
+<li>
+<p>dispatchNestedPreScroll<br />
+分发嵌套滑动事件。在嵌套滑动子控件消费嵌套滑动前调用该方法。View默认实现源码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * 控件消费之前调用该方法
+</span><span class="cm"> *
+</span><span class="cm"> * @param dx 水平方向滚动的像素
+</span><span class="cm"> * @param dy 垂直方向滚动的像素
+</span><span class="cm"> * @param consumed 输出参数. 如果不为null, consumed[0] 表示消费的 dx consumed[1] 表示消费的 dy.默认实现这里是被父控件消费
+</span><span class="cm"> * @param offsetInWindow 可选项. 如果不是 null, 返回的是当前控件在该方法操作前后的视图坐标偏移。使用这个来调整预期的输入坐标跟踪
+</span><span class="cm"> * @return true 表示父控件消费了部分或全部
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">dispatchNestedPreScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">dx</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dy</span><span class="o">,</span>
+          <span class="nd">@Nullable</span> <span class="nd">@Size</span><span class="o">(</span><span class="n">2</span><span class="o">)</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="nd">@Size</span><span class="o">(</span><span class="n">2</span><span class="o">)</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">offsetInWindow</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isNestedScrollingEnabled</span><span class="o">(</span><span class="o">)</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">mNestedScrollingParent</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">dx</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span> <span class="o">|</span><span class="o">|</span> <span class="n">dy</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">startX</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">startY</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">offsetInWindow</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">getLocationInWindow</span><span class="o">(</span><span class="n">offsetInWindow</span><span class="o">)</span><span class="o">;</span>
+                <span class="n">startX</span> <span class="o">=</span> <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="o">;</span>
+                <span class="n">startY</span> <span class="o">=</span> <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">consumed</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">mTempNestedScrollConsumed</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">mTempNestedScrollConsumed</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">2</span><span class="o">]</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="n">consumed</span> <span class="o">=</span> <span class="n">mTempNestedScrollConsumed</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">consumed</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+            <span class="n">consumed</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+
+            <span class="c1">//调用嵌套父控件处理
+</span><span class="c1"></span>            <span class="n">mNestedScrollingParent</span><span class="o">.</span><span class="na">onNestedPreScroll</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">dx</span><span class="o">,</span> <span class="n">dy</span><span class="o">,</span> <span class="n">consumed</span><span class="o">)</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">offsetInWindow</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">getLocationInWindow</span><span class="o">(</span><span class="n">offsetInWindow</span><span class="o">)</span><span class="o">;</span>
+                <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">-</span><span class="o">=</span> <span class="n">startX</span><span class="o">;</span>
+                <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">-</span><span class="o">=</span> <span class="n">startY</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="n">consumed</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span> <span class="o">|</span><span class="o">|</span> <span class="n">consumed</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">offsetInWindow</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+            <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>从源码可以看出默认实现是让嵌套滑动父控件处理。综上即：在嵌套滑动子控件消费嵌套滑动前调用该方法让嵌套滑动父控件先处理。</p>
+</li>
+<li>
+<p>dispatchNestedScroll<br />
+分发嵌套滑动事件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * 支持嵌套滑动的控件应该调用该方法报告父控件的滑动信息。
+</span><span class="cm"> *
+</span><span class="cm"> * @param dxConsumed Horizontal distance in pixels consumed by this view during this scroll step
+</span><span class="cm"> * @param dyConsumed Vertical distance in pixels consumed by this view during this scroll step
+</span><span class="cm"> * @param dxUnconsumed Horizontal scroll distance in pixels not consumed by this view
+</span><span class="cm"> * @param dyUnconsumed Horizontal scroll distance in pixels not consumed by this view
+</span><span class="cm"> * @param offsetInWindow Optional. If not null, on return this will contain the offset
+</span><span class="cm"> *                       in local view coordinates of this view from before this operation
+</span><span class="cm"> *                       to after it completes. View implementations may use this to adjust
+</span><span class="cm"> *                       expected input coordinate tracking.
+</span><span class="cm"> * @return true if the event was dispatched, false if it could not be dispatched.
+</span><span class="cm"> * @see #dispatchNestedPreScroll(int, int, int[], int[])
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">dispatchNestedScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span>
+          <span class="kt">int</span> <span class="n">dxUnconsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyUnconsumed</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="nd">@Size</span><span class="o">(</span><span class="n">2</span><span class="o">)</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">offsetInWindow</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isNestedScrollingEnabled</span><span class="o">(</span><span class="o">)</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">mNestedScrollingParent</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">dxConsumed</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span> <span class="o">|</span><span class="o">|</span> <span class="n">dyConsumed</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span> <span class="o">|</span><span class="o">|</span> <span class="n">dxUnconsumed</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span> <span class="o">|</span><span class="o">|</span> <span class="n">dyUnconsumed</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">startX</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">startY</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">offsetInWindow</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">getLocationInWindow</span><span class="o">(</span><span class="n">offsetInWindow</span><span class="o">)</span><span class="o">;</span>
+                <span class="n">startX</span> <span class="o">=</span> <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="o">;</span>
+                <span class="n">startY</span> <span class="o">=</span> <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="n">mNestedScrollingParent</span><span class="o">.</span><span class="na">onNestedScroll</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="n">dyConsumed</span><span class="o">,</span>
+                    <span class="n">dxUnconsumed</span><span class="o">,</span> <span class="n">dyUnconsumed</span><span class="o">)</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">offsetInWindow</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">getLocationInWindow</span><span class="o">(</span><span class="n">offsetInWindow</span><span class="o">)</span><span class="o">;</span>
+                <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">-</span><span class="o">=</span> <span class="n">startX</span><span class="o">;</span>
+                <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">-</span><span class="o">=</span> <span class="n">startY</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">offsetInWindow</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// No motion, no dispatch. Keep offsetInWindow up to date.
+</span><span class="c1"></span>            <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+            <span class="n">offsetInWindow</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>dispatchNestedPreFling<br />
+分发fling事件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * 不同于scroll，如果父控件消费了fling，该控件不应再消费。即要么父控件要么该子控件消费fling。不应该两者都消费
+</span><span class="cm"> * 为了获得更好的用户体验，嵌套滑动链中一次应该只有一个view消费fling事件。自定义视图实现应该以两种方式考虑这一点：
+</span><span class="cm"> * 1.如果自定义视图是分页的，并且需要固定到一个固定的页面点，请不要调用dispatchNestedPreFling；使用fling并固定到一个有效的位置
+</span><span class="cm"> * 2.如果嵌套的父级确实消耗了fling，则该视图根本不应该滚动，甚至不应该回到有效的空闲位置
+</span><span class="cm"> *
+</span><span class="cm"> * 视图也不应该向当前不支持滚动的轴上的嵌套父视图提供滚动速度
+</span><span class="cm"> *
+</span><span class="cm"> * @param velocityX Horizontal fling velocity in pixels per second
+</span><span class="cm"> * @param velocityY Vertical fling velocity in pixels per second
+</span><span class="cm"> * @return true 嵌套滑动父控件消费了fling
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">dispatchNestedPreFling</span><span class="o">(</span><span class="kt">float</span> <span class="n">velocityX</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityY</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isNestedScrollingEnabled</span><span class="o">(</span><span class="o">)</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">mNestedScrollingParent</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">mNestedScrollingParent</span><span class="o">.</span><span class="na">onNestedPreFling</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">velocityX</span><span class="o">,</span> <span class="n">velocityY</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>从源码可以看出默认实现是让嵌套滑动父控件处理。综上即：在嵌套滑动子控件消费嵌套fling前调用该方法让嵌套滑动父控件先处理。</p>
+</li>
+<li>
+<p>dispatchNestedFling<br />
+分发fling事件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * 该方法表示达到了fling条件。如：fling速度大于ViewConfiguration#getScaledMinimumFlingVelocity()
+</span><span class="cm"> *
+</span><span class="cm"> * 如果嵌套滑动子控件fling并达到了内容边缘可以使用此方法将fling委托给嵌套滑动父控件消费或观察
+</span><span class="cm"> *
+</span><span class="cm"> * @param velocityX Horizontal fling velocity in pixels per second
+</span><span class="cm"> * @param velocityY Vertical fling velocity in pixels per second
+</span><span class="cm"> * @param consumed true if the child consumed the fling, false otherwise
+</span><span class="cm"> * @return true if the nested scrolling parent consumed or otherwise reacted to the fling
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">dispatchNestedFling</span><span class="o">(</span><span class="kt">float</span> <span class="n">velocityX</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityY</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">consumed</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isNestedScrollingEnabled</span><span class="o">(</span><span class="o">)</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">mNestedScrollingParent</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">mNestedScrollingParent</span><span class="o">.</span><span class="na">onNestedFling</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">velocityX</span><span class="o">,</span> <span class="n">velocityY</span><span class="o">,</span> <span class="n">consumed</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>从源码可以看出默认实现是让嵌套滑动父控件处理。</p>
+</li>
+<li>
+<p>stopNestedScroll<br />
+停止嵌套滚动</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * 嵌套滚动未开始时调用该方法是没有影响的
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">stopNestedScroll</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">mNestedScrollingParent</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mNestedScrollingParent</span><span class="o">.</span><span class="na">onStopNestedScroll</span><span class="o">(</span><span class="k">this</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">mNestedScrollingParent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="nestedscrollingchild">NestedScrollingChild</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">NestedScrollingChild</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">setNestedScrollingEnabled</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">enabled</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">isNestedScrollingEnabled</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">startNestedScroll</span><span class="o">(</span><span class="nd">@ScrollAxis</span> <span class="kt">int</span> <span class="n">axes</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">void</span> <span class="nf">stopNestedScroll</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">hasNestedScrollingParent</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">dispatchNestedScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">dxUnconsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyUnconsumed</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">offsetInWindow</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">dispatchNestedPreScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">dx</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dy</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">,</span>
+            <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">offsetInWindow</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">dispatchNestedFling</span><span class="o">(</span><span class="kt">float</span> <span class="n">velocityX</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityY</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">consumed</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">dispatchNestedPreFling</span><span class="o">(</span><span class="kt">float</span> <span class="n">velocityX</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityY</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="nestedscrollingchild2">NestedScrollingChild2</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">NestedScrollingChild2</span> <span class="kd">extends</span> <span class="n">NestedScrollingChild</span> <span class="o">{</span>
+
+    <span class="kt">boolean</span> <span class="nf">startNestedScroll</span><span class="o">(</span><span class="nd">@ScrollAxis</span> <span class="kt">int</span> <span class="n">axes</span><span class="o">,</span> <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">void</span> <span class="nf">stopNestedScroll</span><span class="o">(</span><span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">hasNestedScrollingParent</span><span class="o">(</span><span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">dispatchNestedScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">dxUnconsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyUnconsumed</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">offsetInWindow</span><span class="o">,</span>
+            <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">dispatchNestedPreScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">dx</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dy</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">,</span>
+            <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">offsetInWindow</span><span class="o">,</span> <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="nestedscrollingchild3">NestedScrollingChild3</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">NestedScrollingChild3</span> <span class="kd">extends</span> <span class="n">NestedScrollingChild2</span> <span class="o">{</span>
+
+    <span class="kt">void</span> <span class="nf">dispatchNestedScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dxUnconsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyUnconsumed</span><span class="o">,</span>
+            <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">offsetInWindow</span><span class="o">,</span> <span class="nd">@ViewCompat.NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">,</span>
+            <span class="nd">@NonNull</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="nestedscrollingparentnestedscrollingparent2nestedscrollingparent3">NestedScrollingParent/NestedScrollingParent2/NestedScrollingParent3</h2>
+<p>NestedScrollingParent2继承自NestedScrollingParent并重载部分方法。为什么重载？增强实现。NestedScrollingParent3继承自NestedScrollingParent2并重载部分方法进一步增强实现。详情看下面源码解析注释。</p>
+<p>主要方法：</p>
+<ul>
+<li>
+<p>onStartNestedScroll<br />
+该方法被子控件startNestedScroll(int)方法调用的。返回true表示该父控件将在嵌套滚动期间成为支持子控件嵌套滚动的父控件并接受嵌套滑动操作。当嵌套滚动结束后会收到onStopNestedScroll(View)的回调</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onStartNestedScroll</span><span class="o">(</span><span class="n">View</span> <span class="n">child</span><span class="o">,</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">nestedScrollAxes</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>由上面ViewGroup源码可知默认实现是不会成为嵌套滚动父控件，不接受子控件传递嵌套滑动操作的。一般如果需要支持作为嵌套滑动父控件需要重写此方法。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onStartNestedScroll</span><span class="o">(</span><span class="n">View</span> <span class="n">child</span><span class="o">,</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">nestedScrollAxes</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">(</span><span class="n">nestedScrollAxes</span> <span class="o">&amp;</span> <span class="n">View</span><span class="o">.</span><span class="na">SCROLL_AXIS_VERTICAL</span><span class="o">)</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>onNestedScrollAccepted<br />
+此方法将在onStartNestedScroll返回true后调用。它为视图及其超类提供了执行嵌套滚动的初始配置的机会。此方法的实现应始终调用其超类的此方法的实现（如果存在的话）。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNestedScrollAccepted</span><span class="o">(</span><span class="n">View</span> <span class="n">child</span><span class="o">,</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">axes</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">mNestedScrollAxes</span> <span class="o">=</span> <span class="n">axes</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>ViewGroup的默认实现是记录嵌套滚动的方向。</p>
+</li>
+<li>
+<p>getNestedScrollAxes</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">int</span> <span class="nf">getNestedScrollAxes</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">mNestedScrollAxes</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>onNestedPreScroll<br />
+目标视图嵌套滚动前调用该方法。因为嵌套滑动父控件可能想在子控件滚动前有机会消费滚动。onNestedPreScroll是在嵌套滑动子控件调用dispatchNestedPreScroll是被调用的。该方法应该报告消费了多少像素。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * @param target View that initiated the nested scroll
+</span><span class="cm"> * @param dx Horizontal scroll distance in pixels
+</span><span class="cm"> * @param dy Vertical scroll distance in pixels
+</span><span class="cm"> * @param consumed Output. The horizontal and vertical scroll distance consumed by this parent
+</span><span class="cm"> */</span>
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNestedPreScroll</span><span class="o">(</span><span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dx</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dy</span><span class="o">,</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Re-dispatch up the tree by default
+</span><span class="c1"></span>    <span class="n">dispatchNestedPreScroll</span><span class="o">(</span><span class="n">dx</span><span class="o">,</span> <span class="n">dy</span><span class="o">,</span> <span class="n">consumed</span><span class="o">,</span> <span class="kc">null</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>onNestedScroll</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> *
+</span><span class="cm"> * 嵌套滑动子控件分发滑动事件时调用此方法。要想调用到该方法之前的onStartNestedScroll必须返回true
+</span><span class="cm"> * 滚动的消费部分和未消费部分都应该通过此方法报告给父控件。如果有未消耗的部分可以在此方法让父控件继续消费
+</span><span class="cm"> * 
+</span><span class="cm"> * @param target The descendent view controlling the nested scroll
+</span><span class="cm"> * @param dxConsumed Horizontal scroll distance in pixels already consumed by target
+</span><span class="cm"> * @param dyConsumed Vertical scroll distance in pixels already consumed by target
+</span><span class="cm"> * @param dxUnconsumed Horizontal scroll distance in pixels not consumed by target
+</span><span class="cm"> * @param dyUnconsumed Vertical scroll distance in pixels not consumed by target
+</span><span class="cm"> */</span>
+<span class="n">Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNestedScroll</span><span class="o">(</span><span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span>
+        <span class="kt">int</span> <span class="n">dxUnconsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyUnconsumed</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Re-dispatch up the tree by default
+</span><span class="c1"></span>    <span class="n">dispatchNestedScroll</span><span class="o">(</span><span class="n">dxConsumed</span><span class="o">,</span> <span class="n">dyConsumed</span><span class="o">,</span> <span class="n">dxUnconsumed</span><span class="o">,</span> <span class="n">dyUnconsumed</span><span class="o">,</span> <span class="kc">null</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>onNestedPreFling</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * 目标视图消费fling之前父控件对嵌套滑动的相应
+</span><span class="cm"> * 该方法被调用表示子控件发起了一个fling事件，通常是滑动速度大于ViewConfiguration#getScaledMinimumFlingVelocity() 
+</span><span class="cm"> *
+</span><span class="cm"> * 如果父控件通过onNestedPreScroll消费了部分滑动，那么可能也需要通过onNestedPreFling完成通常的动作
+</span><span class="cm"> * 返回true表示父控件消费了fling，此时子控件不应滚动内容
+</span><span class="cm"> *
+</span><span class="cm"> * @param target View that initiated the nested scroll
+</span><span class="cm"> * @param velocityX Horizontal velocity in pixels per second
+</span><span class="cm"> * @param velocityY Vertical velocity in pixels per second
+</span><span class="cm"> * @return true if this parent consumed the fling ahead of the target view
+</span><span class="cm"> */</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onNestedPreFling</span><span class="o">(</span><span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityX</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityY</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Re-dispatch up the tree by default
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">dispatchNestedPreFling</span><span class="o">(</span><span class="n">velocityX</span><span class="o">,</span> <span class="n">velocityY</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>onNestedFling</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * 如果嵌套滑动子控件fling并达到了内容边缘可以使用此方法将fling委托给嵌套滑动父控件消费或观察
+</span><span class="cm"> *
+</span><span class="cm"> * @param target View that initiated the nested scroll
+</span><span class="cm"> * @param velocityX Horizontal velocity in pixels per second
+</span><span class="cm"> * @param velocityY Vertical velocity in pixels per second
+</span><span class="cm"> * @param consumed true if the child consumed the fling, false otherwise
+</span><span class="cm"> * @return true if this parent consumed or otherwise reacted to the fling
+</span><span class="cm"> */</span>
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onNestedFling</span><span class="o">(</span><span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityX</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityY</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">consumed</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Re-dispatch up the tree by default
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">dispatchNestedFling</span><span class="o">(</span><span class="n">velocityX</span><span class="o">,</span> <span class="n">velocityY</span><span class="o">,</span> <span class="n">consumed</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>onStopNestedScroll<br />
+对嵌套滚动结束的响应</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="cm">/**
+</span><span class="cm"> * 当嵌套滚动停止时，将调用此方法，在嵌套滚动操作之后执行清理。默认实现调用stopNestedScroll()来停止正在进行的任何递归嵌套滚动
+</span><span class="cm"> * 例如当嵌套触摸滚动以{@link MotionEvent{ACTION_UP}或{@link MotionEvent{ACTION_CANCEL}事件结束时。
+</span><span class="cm"> * 此方法的实现应始终调用其超类的此方法的实现（如果存在）。
+</span><span class="cm"> *
+</span><span class="cm"> */</span>
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onStopNestedScroll</span><span class="o">(</span><span class="n">View</span> <span class="n">child</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Stop any recursive nested scrolling.
+</span><span class="c1"></span>    <span class="n">stopNestedScroll</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="n">mNestedScrollAxes</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="nestedscrollingparentviewparent">NestedScrollingParent&amp;ViewParent</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">NestedScrollingParent</span> <span class="o">{</span>
+    <span class="kt">boolean</span> <span class="nf">onStartNestedScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">child</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="nd">@ScrollAxis</span> <span class="kt">int</span> <span class="n">axes</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">void</span> <span class="nf">onNestedScrollAccepted</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">child</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="nd">@ScrollAxis</span> <span class="kt">int</span> <span class="n">axes</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">void</span> <span class="nf">onStopNestedScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">void</span> <span class="nf">onNestedScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">dxUnconsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyUnconsumed</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">void</span> <span class="nf">onNestedPreScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dx</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dy</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">onNestedFling</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityX</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityY</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">consumed</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">boolean</span> <span class="nf">onNestedPreFling</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityX</span><span class="o">,</span> <span class="kt">float</span> <span class="n">velocityY</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="nd">@ScrollAxis</span>
+    <span class="kt">int</span> <span class="nf">getNestedScrollAxes</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="nestedscrollingparent2">NestedScrollingParent2</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">NestedScrollingParent2</span> <span class="kd">extends</span> <span class="n">NestedScrollingParent</span> <span class="o">{</span>
+    <span class="kt">boolean</span> <span class="nf">onStartNestedScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">child</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="nd">@ScrollAxis</span> <span class="kt">int</span> <span class="n">axes</span><span class="o">,</span>
+            <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">void</span> <span class="nf">onNestedScrollAccepted</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">child</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="nd">@ScrollAxis</span> <span class="kt">int</span> <span class="n">axes</span><span class="o">,</span>
+            <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">void</span> <span class="nf">onStopNestedScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">void</span> <span class="nf">onNestedScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">dxUnconsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyUnconsumed</span><span class="o">,</span> <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="kt">void</span> <span class="nf">onNestedPreScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dx</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dy</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">,</span>
+            <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="nestedscrollingparent3">NestedScrollingParent3</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">NestedScrollingParent3</span> <span class="kd">extends</span> <span class="n">NestedScrollingParent2</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">onNestedScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dxUnconsumed</span><span class="o">,</span>
+            <span class="kt">int</span> <span class="n">dyUnconsumed</span><span class="o">,</span> <span class="nd">@ViewCompat.NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">)</span><span class="o">;</span>
+
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="nestedscrollingchildhelpernestedscrollingparenthelper">NestedScrollingChildHelper&amp;NestedScrollingParentHelper</h2>
+
     </article>
     
     
@@ -529,23 +1473,23 @@
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/" class="related__link">Android源码解析-Scroller</a>
+          <a href="/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/" class="related__link">Android Scroller解析及应用</a>
         </li>
         
         <li>
-          <a href="/zh/posts/kotlin-%E8%AF%AD%E6%B3%95/" class="related__link">Kotlin语法</a>
+          <a href="/zh/posts/android-ffmpeg/" class="related__link">Android-FFmpeg</a>
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-jobservice/" class="related__link">Jetpack-JobService详解</a>
+          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E9%87%87%E5%BD%95%E6%91%84%E5%83%8F%E5%A4%B4/" class="related__link">Android直播-采录摄像头</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-transition/" class="related__link">Android-Transition</a>
+          <a href="/zh/posts/jvmdalvikart/" class="related__link">JVM/Dalvik/ART</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-handler%E8%A7%A3%E6%9E%90/" class="related__link">Android源码解析-Handler</a>
+          <a href="/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/" class="related__link">贝塞尔曲线(Bezier curve)</a>
         </li>
         
     </ul>
@@ -558,13 +1502,13 @@
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
       </div>
-      <div class="pagination-single__left-title">Android源码解析-Scroller</div>      
+      <div class="pagination-single__left-title">Android Scroller解析及应用</div>      
     </a>
   
   <div class="grow"></div>
   
-    <a href="https://dshcao.github.io/zh/posts/android-handler%E8%A7%A3%E6%9E%90/" class="pagination-single__right">      
-      <div class="pagination-single__right-title">Android源码解析-Handler</div>
+    <a href="https://dshcao.github.io/zh/posts/%E5%86%99%E5%9C%A8%E5%BC%80%E5%A7%8B/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">写在开始</div>
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
       </div>

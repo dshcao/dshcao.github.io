@@ -40,7 +40,7 @@
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-transition/</guid>
-        <description>Transition Android中Transition是两个场景(Scene)之间的一个过渡转场动画效果， Transition有两个构造函数 1 2 3 4 5 6 //</description>
+        <description>Transition Android中Transition是两个场景(Scene)之间的一个过渡转场动画效果。 Transition有两个构造函数 1 2 3 4 5 6 //</description>
       </item>
       
       <item>
@@ -49,24 +49,6 @@
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-handler%E8%A7%A3%E6%9E%90/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>Android源码解析-NestedScrolling</title>
-        <link>https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/</link>
-        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>Android源码解析-Scroller</title>
-        <link>https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/</link>
-        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/</guid>
         <description></description>
       </item>
       
@@ -134,12 +116,21 @@
       </item>
       
       <item>
-        <title>Android Scroller解析及应用</title>
-        <link>https://dshcao.github.io/zh/posts/android-scroller/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <title>Android源码解析-NestedScrolling</title>
+        <link>https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Wed, 11 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-scroller/</guid>
-        <description></description>
+        <guid>https://dshcao.github.io/zh/posts/android-nestedscrolling%E8%A7%A3%E6%9E%90/</guid>
+        <description>嵌套滑动实现原理及执行过程 嵌套滑动其实就是一套嵌套滑动回调。难的是嵌套滑动是如何回调的。理解嵌套滑动应该试着从嵌套滑动API的设计者思考。如</description>
+      </item>
+      
+      <item>
+        <title>Android Scroller解析及应用</title>
+        <link>https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Wed, 11 Dec 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-scroller%E8%A7%A3%E6%9E%90/</guid>
+        <description>OverScroller简介 OverScroller中两个重要属性： mMode有两个滚动模式：SCROLL_MODE FLING_MODE SplineOverScroller mState有三个滚</description>
       </item>
       
       <item>
@@ -188,6 +179,15 @@
       </item>
       
       <item>
+        <title>Android-NDK</title>
+        <link>https://dshcao.github.io/zh/posts/android-ndk/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ndk/</guid>
+        <description>android内部是怎么实现发送延时消息 怎么减小so包的体积 怎么给一个应用加固 怎么从trace.log中找到ANR的原因及出现的地方 什么是N</description>
+      </item>
+      
+      <item>
         <title>Android-VR&amp;AR</title>
         <link>https://dshcao.github.io/zh/posts/android-vrar/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -202,7 +202,7 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</guid>
-        <description></description>
+        <description>View mAttachInfo初始化 查看View源码可以知道mAttachInfo是在dispatchAttachedToWindow中赋值的 View#dispatchAttachedToWindow 1</description>
       </item>
       
       <item>
@@ -211,7 +211,7 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</guid>
-        <description>ActivityOptions.makeSceneTransitionAnimation() ActivityOptions.makeCustomAnimation() ActivityOptions.makeScaleUpAnimation() ActivityOptions.makeTaskLaunchBehind() ActivityOptions.makeThumbnailScaleUpAnimation() ActivityOptions.makeBasic() ActivityOptions.makeClipRevealAnimation() activity.overridePendingTransition(0, 0)</description>
+        <description>Activity、PhoneWindow、DecorView、ViewRootImpl、WindowManagerImpl、WindowMa</description>
       </item>
       
       <item>
@@ -265,6 +265,15 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/anr%E5%88%86%E6%9E%90/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>git 详解</title>
+        <link>https://dshcao.github.io/zh/posts/git-%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/git-%E8%AF%A6%E8%A7%A3/</guid>
         <description></description>
       </item>
       
@@ -329,6 +338,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/</guid>
         <description>PathClassLoader和DexClassLoader 要做热更新就要用ClassLoader加载hotfix dex中的类,用哪个Cla</description>
+      </item>
+      
+      <item>
+        <title>自定义View-measure&amp;layout</title>
+        <link>https://dshcao.github.io/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/</guid>
+        <description>View&amp;amp;ViewGroup的自定义 measure/onMeasure measure 是View测量自己所需空间的方法，通常是调用onMeasure方法完成子控件的测量并最终确定</description>
       </item>
       
       <item>
