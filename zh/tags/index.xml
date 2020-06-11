@@ -152,6 +152,15 @@
       </item>
       
       <item>
+        <title>apt</title>
+        <link>https://dshcao.github.io/zh/tags/apt/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/apt/</guid>
+        <description></description>
+      </item>
+      
+      <item>
         <title>ar</title>
         <link>https://dshcao.github.io/zh/tags/ar/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -202,6 +211,15 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/media/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>mr</title>
+        <link>https://dshcao.github.io/zh/tags/mr/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/mr/</guid>
         <description></description>
       </item>
       
@@ -269,6 +287,15 @@
       </item>
       
       <item>
+        <title>数据结构</title>
+        <link>https://dshcao.github.io/zh/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</guid>
+        <description></description>
+      </item>
+      
+      <item>
         <title>热更新</title>
         <link>https://dshcao.github.io/zh/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -287,6 +314,15 @@
       </item>
       
       <item>
+        <title>算法</title>
+        <link>https://dshcao.github.io/zh/tags/%E7%AE%97%E6%B3%95/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/%E7%AE%97%E6%B3%95/</guid>
+        <description></description>
+      </item>
+      
+      <item>
         <title>编程基础</title>
         <link>https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -301,60 +337,6 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>css</title>
-        <link>https://dshcao.github.io/zh/tags/css/</link>
-        <pubDate>Wed, 20 Dec 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/css/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>html</title>
-        <link>https://dshcao.github.io/zh/tags/html/</link>
-        <pubDate>Wed, 20 Dec 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/html/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>markdown</title>
-        <link>https://dshcao.github.io/zh/tags/markdown/</link>
-        <pubDate>Wed, 20 Dec 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/markdown/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>themes</title>
-        <link>https://dshcao.github.io/zh/tags/themes/</link>
-        <pubDate>Wed, 20 Dec 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/themes/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>privacy</title>
-        <link>https://dshcao.github.io/zh/tags/privacy/</link>
-        <pubDate>Tue, 19 Dec 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/privacy/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>shortcodes</title>
-        <link>https://dshcao.github.io/zh/tags/shortcodes/</link>
-        <pubDate>Tue, 19 Dec 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/shortcodes/</guid>
         <description></description>
       </item>
       
@@ -404,29 +386,11 @@
       </item>
       
       <item>
-        <title>diagram</title>
-        <link>https://dshcao.github.io/zh/tags/diagram/</link>
-        <pubDate>Fri, 17 Nov 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/diagram/</guid>
-        <description></description>
-      </item>
-      
-      <item>
         <title>随笔</title>
         <link>https://dshcao.github.io/zh/tags/%E9%9A%8F%E7%AC%94/</link>
         <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/%E9%9A%8F%E7%AC%94/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>text</title>
-        <link>https://dshcao.github.io/zh/tags/text/</link>
-        <pubDate>Thu, 09 Mar 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/text/</guid>
         <description></description>
       </item>
       

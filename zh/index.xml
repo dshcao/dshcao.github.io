@@ -35,11 +35,11 @@
       </item>
       
       <item>
-        <title>Android-Transition</title>
-        <link>https://dshcao.github.io/zh/posts/android-transition/</link>
+        <title>Android 转场动画Transition</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BBtransition/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-transition/</guid>
+        <guid>https://dshcao.github.io/zh/posts/android-%E8%BD%AC%E5%9C%BA%E5%8A%A8%E7%94%BBtransition/</guid>
         <description>Transition Android中Transition是两个场景(Scene)之间的一个过渡转场动画效果。 Transition有两个构造函数 1 2 3 4 5 6 //</description>
       </item>
       
@@ -49,7 +49,7 @@
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-handler%E8%A7%A3%E6%9E%90/</guid>
-        <description></description>
+        <description>前言 Handler使Android中非常重要的组成部门，很多地方包括系统服务也大量用到Handler这一机制。Handler让我们的开发难度</description>
       </item>
       
       <item>
@@ -58,7 +58,7 @@
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/httphttps/</guid>
-        <description></description>
+        <description>HTTP(HyperText Transfer Protocol) 超文本传输协议，虽然名字叫传输协议，但其其实是应用层的协议，是构建在传输层协议TCP之上的协议。 http版本 诞生年份 HTTP/0.9 1991 文本信息 HTTP/1.0 1996 文</description>
       </item>
       
       <item>
@@ -76,7 +76,7 @@
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jetpack-lifecycles/</guid>
-        <description></description>
+        <description>原理 ReportFragment ProcessLifecycleOwner ActivityInitializationListener LifecycleOwner&amp;amp;LifecycleObserver LifecycleRegistry&amp;amp;Lifecycle LiveData既是观察者也是被观察者 作为观察者可以观察Activity和Fragment的生命周期 通常将LiveData包在</description>
       </item>
       
       <item>
@@ -89,12 +89,21 @@
       </item>
       
       <item>
+        <title>Jetpack-Navigation详解</title>
+        <link>https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/</guid>
+        <description>Room升级 当数据表结构变化时如何直接修改version会导致数据库数据被清空 1 2 3 4 5 6 7 8 return Room.databaseBuilder(context, AppDatabase::class.java, &amp;#34;dsh&amp;#34;).allowMainThreadQueries().addMigrations(Migration1000To1001()).build() class Migration1000To1001 : Migration(1000, 1001) { override fun migrate(database: SupportSQLiteDatabase) { database.execSQL(&amp;#34;alter table user add column vip integer not</description>
+      </item>
+      
+      <item>
         <title>Jetpack-WorkManager详解</title>
         <link>https://dshcao.github.io/zh/posts/jetpack-workmanager/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jetpack-workmanager/</guid>
-        <description></description>
+        <description>谷歌使用Room数据库保存任务及Alarm来保证 WorkManager是一定会执行的，最小间隔是15min</description>
       </item>
       
       <item>
@@ -170,12 +179,21 @@
       </item>
       
       <item>
-        <title>Android-App启动流程</title>
-        <link>https://dshcao.github.io/zh/posts/app%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</link>
+        <title>Android AppBundle</title>
+        <link>https://dshcao.github.io/zh/posts/android-app-bundle/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/app%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</guid>
-        <description></description>
+        <guid>https://dshcao.github.io/zh/posts/android-app-bundle/</guid>
+        <description>热修复方案介绍 AndFix Native层函数指针替换，即时生效 QQ控件超级补丁 类加载/multidex，重启生效 Robust 字节码插桩/Instant Run 即时生效</description>
+      </item>
+      
+      <item>
+        <title>Android-App启动流程</title>
+        <link>https://dshcao.github.io/zh/posts/android-app%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-app%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</guid>
+        <description>Android启动流程 ROM/RAM ROM(Read-Only Memory) RAM(Random Access Memory) Boot ROM 它负责加载引导程序Boot Loader。 Boot Loader 固化在ROM中的引导程序，主要是检查RAM，初始化系统参数</description>
       </item>
       
       <item>
@@ -184,15 +202,24 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-apt/</guid>
-        <description></description>
+        <description>APT(Annotation Processor Tool) 注解处理器(APT)它是Java提供的帮我们处理注解的。要实现我们自己的处理注解的逻辑就需要继承Processor接口。 1 2 3 4 5 6 7</description>
       </item>
       
       <item>
-        <title>Android-FFmpeg</title>
-        <link>https://dshcao.github.io/zh/posts/android-ffmpeg/</link>
+        <title>Android-ARouter原理简析</title>
+        <link>https://dshcao.github.io/zh/posts/android-arouter%E5%8E%9F%E7%90%86%E7%AE%80%E6%9E%90/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg/</guid>
+        <guid>https://dshcao.github.io/zh/posts/android-arouter%E5%8E%9F%E7%90%86%E7%AE%80%E6%9E%90/</guid>
+        <description>前言 阿里ARouter是组件开发所需的路由框架。由于组件开发中的类(尤其是Activity)不能直接相互引用，无法使用通常的跳转方式。 隐式跳</description>
+      </item>
+      
+      <item>
+        <title>Android-FFmpeg使用</title>
+        <link>https://dshcao.github.io/zh/posts/android-ffmpeg%E4%BD%BF%E7%94%A8/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg%E4%BD%BF%E7%94%A8/</guid>
         <description></description>
       </item>
       
@@ -206,6 +233,15 @@
       </item>
       
       <item>
+        <title>Android-JNI&amp;NDK</title>
+        <link>https://dshcao.github.io/zh/posts/android-jnindk/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-jnindk/</guid>
+        <description>前言 Linux系统Native动态库(.so)、静态库(.a)及目标文件(.o)。 Windows系统Native动态库(.dll)、静态库(</description>
+      </item>
+      
+      <item>
         <title>Android-lottie</title>
         <link>https://dshcao.github.io/zh/posts/android-lottie/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -215,20 +251,20 @@
       </item>
       
       <item>
-        <title>Android-NDK</title>
-        <link>https://dshcao.github.io/zh/posts/android-ndk/</link>
+        <title>Android-MVC、MVP及MVVM</title>
+        <link>https://dshcao.github.io/zh/posts/android-mvcmvp%E5%8F%8Amvvm/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-ndk/</guid>
-        <description>android内部是怎么实现发送延时消息 怎么减小so包的体积 怎么给一个应用加固 怎么从trace.log中找到ANR的原因及出现的地方 什么是N</description>
+        <guid>https://dshcao.github.io/zh/posts/android-mvcmvp%E5%8F%8Amvvm/</guid>
+        <description>MVC Model+View+Controller Model：Java bean View：视图层 Controller：控制器 MVC在Java Web开发中很常见，但并不适合Android中使用。因</description>
       </item>
       
       <item>
         <title>Android-VR&amp;AR</title>
-        <link>https://dshcao.github.io/zh/posts/android-vrar/</link>
+        <link>https://dshcao.github.io/zh/posts/android-vrarmr/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-vrar/</guid>
+        <guid>https://dshcao.github.io/zh/posts/android-vrarmr/</guid>
         <description></description>
       </item>
       
@@ -242,21 +278,66 @@
       </item>
       
       <item>
+        <title>Android-热更新</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E7%83%AD%E6%9B%B4%E6%96%B0/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E7%83%AD%E6%9B%B4%E6%96%B0/</guid>
+        <description>热修复方案介绍 AndFix Native层函数指针替换，即时生效 QQ控件超级补丁 类加载/multidex，重启生效 Robust 字节码插桩/Instant Run 即时生效</description>
+      </item>
+      
+      <item>
+        <title>Android-音视频基础知识(一)</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/</guid>
+        <description>RGB&amp;amp;YUV RGB 红色(R)、绿色(G)、蓝色(B)三原色编码颜色。一般显示器上采用的标准。其中每个原色用一个字节(8bit)表示，一个像素点占用3字节(</description>
+      </item>
+      
+      <item>
         <title>Android四大组件-Activity/Fragment</title>
         <link>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</guid>
-        <description>Activity、PhoneWindow、DecorView、ViewRootImpl、WindowManagerImpl、WindowMa</description>
+        <description>Activity 生命周期 当用户打开新的Activity的时候或者切换到桌面的时候回调onPause-onStop，但是如果此Activity是透明主题，那</description>
+      </item>
+      
+      <item>
+        <title>Android四大组件-Service</title>
+        <link>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</guid>
+        <description>前言 Service Service默认运行在主线程，并不运行在单独线程，因此在Service执行耗时操作容易引起ANR。 IntentService 可用于执行后台耗时的任务，任务执</description>
       </item>
       
       <item>
         <title>Android属性动画</title>
-        <link>https://dshcao.github.io/zh/posts/%E5%B1%9E%E6%80%A7%E5%8A%A8%E7%94%BB/</link>
+        <link>https://dshcao.github.io/zh/posts/android-%E5%8A%A8%E7%94%BB%E8%AF%A6%E8%A7%A3/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/%E5%B1%9E%E6%80%A7%E5%8A%A8%E7%94%BB/</guid>
-        <description>RecyclerView 不支持android:animateLayoutChanges=&amp;quot;true&amp;rdquo; Caused by: java.lang.IllegalArgumentException: Providing a LayoutTransition into RecyclerView is not supported. Please use setItemAnimator() instead for animating changes to the</description>
+        <guid>https://dshcao.github.io/zh/posts/android-%E5%8A%A8%E7%94%BB%E8%AF%A6%E8%A7%A3/</guid>
+        <description>帧动画 xml文件存放在res/drawable下面 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;animation-list xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; android:oneshot=&amp;#34;true&amp;#34; android:variablePadding=&amp;#34;false&amp;#34; android:visible=&amp;#34;true&amp;#34;&amp;gt; &amp;lt;item android:drawable=&amp;#34;@drawable/drawable0&amp;#34; android:duration=&amp;#34;200&amp;#34; /&amp;gt; &amp;lt;item android:drawable=&amp;#34;@drawable/drawable1&amp;#34; android:duration=&amp;#34;200&amp;#34; /&amp;gt; &amp;lt;item android:drawable=&amp;#34;@drawable/drawable2&amp;#34; android:duration=&amp;#34;200&amp;#34; /&amp;gt; &amp;lt;/animation-list&amp;gt; item是</description>
+      </item>
+      
+      <item>
+        <title>Android打包流程</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/</guid>
+        <description>前言 说打包流程前我们先了解几个名词和概念 AAPT(Android Asset Packing Tool) AAPT是一种编译工具，用于Android Studio和Android Gradle Plugin 编译打包应用资源A</description>
+      </item>
+      
+      <item>
+        <title>Android插件化</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E6%8F%92%E4%BB%B6%E5%8C%96/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E6%8F%92%E4%BB%B6%E5%8C%96/</guid>
+        <description>开源插件化框架 VirtualAPK、DroidPlugin、RePlugin Hook 实现Hook的技术：1.反射 2.动态代理 查找Hook点的原则 尽</description>
       </item>
       
       <item>
@@ -287,15 +368,6 @@
       </item>
       
       <item>
-        <title>Android组件化</title>
-        <link>https://dshcao.github.io/zh/posts/%E7%BB%84%E4%BB%B6%E5%8C%96/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/%E7%BB%84%E4%BB%B6%E5%8C%96/</guid>
-        <description></description>
-      </item>
-      
-      <item>
         <title>ANR分析</title>
         <link>https://dshcao.github.io/zh/posts/anr%E5%88%86%E6%9E%90/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -314,6 +386,33 @@
       </item>
       
       <item>
+        <title>HashMap源码分析</title>
+        <link>https://dshcao.github.io/zh/posts/java-hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+        <description>以JDK8源码分析 前言 HashMap是结合数组和链表，以Key-Value形式存储的集合。HashMap中有三个个概念：负载因子(loadF</description>
+      </item>
+      
+      <item>
+        <title>Java注解详解</title>
+        <link>https://dshcao.github.io/zh/posts/java-%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/</guid>
+        <description>前言 Java注解是JDK5提供的，用于为代码提供元数据。注解不直接影响代码执行。 注解也是接口类型。即反射时：annotationClass.</description>
+      </item>
+      
+      <item>
+        <title>Java范型与反射</title>
+        <link>https://dshcao.github.io/zh/posts/java-%E8%8C%83%E5%9E%8B%E4%B8%8E%E5%8F%8D%E5%B0%84/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-%E8%8C%83%E5%9E%8B%E4%B8%8E%E5%8F%8D%E5%B0%84/</guid>
+        <description>前言 泛型 ？ extends X 表示类型的上界，类型参数是X的子类 ？ super X 表示类型的下界，类型参数是X的超类 示例一： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 class</description>
+      </item>
+      
+      <item>
         <title>Jetpack-CameraX</title>
         <link>https://dshcao.github.io/zh/posts/jetpack-camerax/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -323,12 +422,27 @@
       </item>
       
       <item>
+        <title>Jetpack-CameraX</title>
+        <link>https://dshcao.github.io/zh/posts/jetpack-paging/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/jetpack-paging/</guid>
+        <description>DataSource
+DataSource.Factory
+PagedList
+PagedList.Builder
+LivePagedListBuilder
+PagedListAdapter
+https://github.com/android/architecture-components-samples</description>
+      </item>
+      
+      <item>
         <title>JVM/Dalvik/ART</title>
         <link>https://dshcao.github.io/zh/posts/jvmdalvikart/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jvmdalvikart/</guid>
-        <description>前置知识 Android中每个应用都对应一个单独的虚拟机，独立运行 JIT&amp;amp;AOT JIT，Just-in-time，即时编译，运行时动态编译。 AOT，Ahe</description>
+        <description>前置知识 Android中每个应用都对应一个单独的虚拟机，独立运行 JIT&amp;amp;AOT JIT，Just-in-time，即时编译，运行时动态编译。在运行时将频繁</description>
       </item>
       
       <item>
@@ -346,7 +460,16 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid>
-        <description></description>
+        <description>前言 RxJava是一个响应式的异步事件流编程库。 RxJava的优势： 函数式编程，代码逻辑清晰，优雅 避险回调地狱 方便的线程调度 RxJava中主</description>
+      </item>
+      
+      <item>
+        <title>SparseArray源码解析</title>
+        <link>https://dshcao.github.io/zh/posts/android-sparsearray%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-sparsearray%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
+        <description>前言 SparseArray是谷歌推荐使用的数据结构，可以取代部分HashMap功能。为什么是部分？因为SparseArray是以int为ke</description>
       </item>
       
       <item>
@@ -355,7 +478,7 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</guid>
-        <description>前置知识 线程状态： 初始态（NEW） 运行态（RUNNABLE） 就绪态（READY） 运行态（RUNNNIN） 阻塞态（BLOCKED） 等待态（WA</description>
+        <description>前置知识 线程是CPU调度的最小单位。 进程是系统进行程序资源分配的最小单位，线程之间共享所在进程的资源。 一个进程至少有一个线程，一个线程必须依</description>
       </item>
       
       <item>
@@ -368,12 +491,48 @@
       </item>
       
       <item>
-        <title>插件化和热更新&amp;App Bundle</title>
-        <link>https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/</link>
+        <title>数据结构与算法</title>
+        <link>https://dshcao.github.io/zh/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/</guid>
-        <description>PathClassLoader和DexClassLoader 要做热更新就要用ClassLoader加载hotfix dex中的类,用哪个Cla</description>
+        <guid>https://dshcao.github.io/zh/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</guid>
+        <description>前言 程序 = 数据结构 + 算法 似乎数据结构和算法是两码事，但实际有时候数据结构和算法联系非常亲密，可以说有了这种数据结构才有了这种算法或者说有了这</description>
+      </item>
+      
+      <item>
+        <title>模版</title>
+        <link>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</guid>
+        <description>如何实现 播放音频 SDL2 AudioTrack OpenSLES ijksdl 播放视频 SDL2 SurfaceView ANativeWindow ijksdl</description>
+      </item>
+      
+      <item>
+        <title>算法-快速排序算法</title>
+        <link>https://dshcao.github.io/zh/posts/%E7%AE%97%E6%B3%95-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E7%AE%97%E6%B3%95-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</guid>
+        <description>前言 快速排序算法(Quick Sort)是对冒泡排序算法的改进。 算法思想 任意取一数据(比如数组中一个元素)作为关键数据，称为基准数(Pivot</description>
+      </item>
+      
+      <item>
+        <title>缓存及LRU源码解析</title>
+        <link>https://dshcao.github.io/zh/posts/%E7%BC%93%E5%AD%98%E5%8F%8Alru%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E7%BC%93%E5%AD%98%E5%8F%8Alru%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
+        <description>占坑，敬请期待&amp;hellip; LRU实际上是对访问排序LinkedHashMap的封装</description>
+      </item>
+      
+      <item>
+        <title>编程基础</title>
+        <link>https://dshcao.github.io/zh/posts/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</guid>
+        <description>字长 字长是CPU的主要技术指标之一，指的是CPU一次最大能并行处理的二进制位数 现在主流的计算机字长是32位与64位 原码&amp;amp;反码&amp;amp</description>
       </item>
       
       <item>
@@ -395,6 +554,15 @@
       </item>
       
       <item>
+        <title>设计模式</title>
+        <link>https://dshcao.github.io/zh/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
+        <description>设计模式是解决问题的思想，是前辈总结的成熟的设计方案。 设计的总原则是：低耦合、高内聚，实现可复用，易维护。 设计模式原则 开闭原则 对扩展开放，对</description>
+      </item>
+      
+      <item>
         <title>贝塞尔曲线(Bezier curve)</title>
         <link>https://dshcao.github.io/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -413,33 +581,6 @@
       </item>
       
       <item>
-        <title>Markdown Syntax Guide</title>
-        <link>https://dshcao.github.io/zh/posts/markdown-syntax/</link>
-        <pubDate>Wed, 20 Dec 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/markdown-syntax/</guid>
-        <description>&lt;p&gt;This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p&gt;</description>
-      </item>
-      
-      <item>
-        <title>Rich Content</title>
-        <link>https://dshcao.github.io/zh/posts/rich-content/</link>
-        <pubDate>Tue, 19 Dec 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/rich-content/</guid>
-        <description></description>
-      </item>
-      
-      <item>
-        <title>Math Typesetting</title>
-        <link>https://dshcao.github.io/zh/posts/math-typesetting/</link>
-        <pubDate>Sun, 17 Dec 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/math-typesetting/</guid>
-        <description>&lt;p&gt;Mathematical notation in a Hugo project can be enabled by using third party JavaScript libraries.&lt;/p&gt;</description>
-      </item>
-      
-      <item>
         <title>Emoji Support</title>
         <link>https://dshcao.github.io/zh/posts/emoji-support/</link>
         <pubDate>Sat, 16 Dec 2017 12:00:06 +0900</pubDate>
@@ -449,104 +590,12 @@
       </item>
       
       <item>
-        <title>Viz support</title>
-        <link>https://dshcao.github.io/zh/posts/test-viz/</link>
-        <pubDate>Sat, 18 Nov 2017 21:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/test-viz/</guid>
-        <description>digraph G { subgraph cluster_0 { style=filled; color=lightgrey; node [style=filled,color=white]; a0 -&amp;gt; a1 -&amp;gt; a2 -&amp;gt; a3; label = &amp;quot;process #1&amp;quot;; } subgraph cluster_1 { node [style=filled]; b0 -&amp;gt; b1 -&amp;gt; b2 -&amp;gt; b3; label = &amp;quot;process #2&amp;quot;; color=blue } start -&amp;gt; a0; start -&amp;gt; b0; a1 -&amp;gt; b3; b2 -&amp;gt; a3; a3 -&amp;gt; a0; a3 -&amp;gt; end; b3 -&amp;gt; end; start [shape=Mdiamond]; end [shape=Msquare]; } </description>
-      </item>
-      
-      <item>
-        <title>Wavedrom support</title>
-        <link>https://dshcao.github.io/zh/posts/test-wavedrom/</link>
-        <pubDate>Sat, 18 Nov 2017 18:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/test-wavedrom/</guid>
-        <description>{ &amp;quot;signal&amp;quot;: [ {&amp;quot;name&amp;quot;: &amp;quot;CLK&amp;quot;, &amp;quot;wave&amp;quot;: &amp;quot;p.....|...&amp;quot;}, {&amp;quot;name&amp;quot;:&amp;quot;DAT&amp;quot;, &amp;quot;wave&amp;quot;:&amp;quot;x.345x|=.x&amp;quot;, &amp;quot;data&amp;quot;:[&amp;quot;A&amp;quot;,&amp;quot;B&amp;quot;,&amp;quot;C&amp;quot;,&amp;quot;D&amp;quot;]}, {&amp;quot;name&amp;quot;: &amp;quot;REQ&amp;quot;, &amp;quot;wave&amp;quot;: &amp;quot;0.1..0|1.0&amp;quot;}, {}, {&amp;quot;name&amp;quot;: &amp;quot;ACK&amp;quot;, &amp;quot;wave&amp;quot;: &amp;quot;1.....|01.&amp;quot;} ]} </description>
-      </item>
-      
-      <item>
-        <title>Chart support</title>
-        <link>https://dshcao.github.io/zh/posts/test-chartjs/</link>
-        <pubDate>Sat, 18 Nov 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/test-chartjs/</guid>
-        <description>{ &amp;quot;type&amp;quot;: &amp;quot;bar&amp;quot;, &amp;quot;data&amp;quot;: { &amp;quot;labels&amp;quot;: [&amp;quot;One&amp;quot;, &amp;quot;Two&amp;quot;, &amp;quot;Three&amp;quot;, &amp;quot;Four&amp;quot;, &amp;quot;Five&amp;quot;, &amp;quot;Six&amp;quot;], &amp;quot;datasets&amp;quot;: [{ &amp;quot;label&amp;quot;: &amp;quot;# of Votes&amp;quot;, &amp;quot;data&amp;quot;: [12, 19, 3, 5, 3, 8] }] } } { &amp;quot;type&amp;quot;: &amp;quot;line&amp;quot;, &amp;quot;data&amp;quot;: { &amp;quot;labels&amp;quot;: [&amp;quot;One&amp;quot;, &amp;quot;Two&amp;quot;, &amp;quot;Three&amp;quot;, &amp;quot;Four&amp;quot;, &amp;quot;Five&amp;quot;, &amp;quot;Six&amp;quot;], &amp;quot;datasets&amp;quot;: [ { &amp;quot;label&amp;quot;: &amp;quot;# of Votes&amp;quot;, &amp;quot;data&amp;quot;: [12, 19, 3, 5, 2, 3], &amp;quot;backgroundColor&amp;quot;:&amp;quot;transparent&amp;quot;, &amp;quot;borderColor&amp;quot;:&amp;quot;orange&amp;quot; }, { &amp;quot;label&amp;quot;: &amp;quot;Some other set&amp;quot;, &amp;quot;data&amp;quot;: [15, 8, 13, 5, 5, 9], &amp;quot;backgroundColor&amp;quot;:&amp;quot;transparent&amp;quot;, &amp;quot;borderColor&amp;quot;:&amp;quot;#44ccff&amp;quot; } ] } } </description>
-      </item>
-      
-      <item>
-        <title>JS Sequence Diagram support</title>
-        <link>https://dshcao.github.io/zh/posts/test-js-sequence-diagrams/</link>
-        <pubDate>Sat, 18 Nov 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/test-js-sequence-diagrams/</guid>
-        <description>Alice-&amp;gt;Bob: Hello Bob, how are you? Note right of Bob: Bob thinks Bob--&amp;gt;Alice: I am good thanks! Title: Here is a title A-&amp;gt;B: Normal line B--&amp;gt;C: Dashed line C-&amp;gt;&amp;gt;D: Open arrow D--&amp;gt;&amp;gt;A: Dashed open arrow </description>
-      </item>
-      
-      <item>
-        <title>Mermaid support</title>
-        <link>https://dshcao.github.io/zh/posts/test-mermaid/</link>
-        <pubDate>Fri, 17 Nov 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/test-mermaid/</guid>
-        <description>graph TD; A--&amp;gt;B; A--&amp;gt;C; B--&amp;gt;D; C--&amp;gt;D; graph TD; A--&amp;gt;B; A--&amp;gt;C; B--&amp;gt;D; C--&amp;gt;D; graph TD; A--&amp;gt;B; A--&amp;gt;C; B--&amp;gt;D; C--&amp;gt;D; sequenceDiagram participant Alice participant Bob Alice-&amp;gt;John: Hello John, how are you? loop Healthcheck John-&amp;gt;John: Fight against hypochondria end Note right of John: Rational thoughts &amp;lt;br/&amp;gt;prevail... John--&amp;gt;Alice: Great! John-&amp;gt;Bob: How about you? Bob--&amp;gt;John: Jolly good! graph TD A[Hard] --&amp;gt;|Text| B(Round) B --&amp;gt; C{Decision} C --&amp;gt;|One| D[Result 1] C --&amp;gt;|Two| E[Result 2] gantt section Section Completed :done, des1, 2014-01-06,2014-01-08 Active :active, des2, 2014-01-07, 3d Parallel 1 : des3, after des1, 1d Parallel 2 : des4, after des1, 1d Parallel 3 : des5, after des3, 1d Parallel 4 : des6, after des4, 1d classDiagram Class01 &amp;lt;|-- AveryLongClass : Cool &amp;lt;&amp;lt;interface&amp;gt;&amp;gt; Class01 Class09 --&amp;gt; C2 : Where am i?</description>
-      </item>
-      
-      <item>
-        <title>MathJax support</title>
-        <link>https://dshcao.github.io/zh/posts/test-mathjax/</link>
-        <pubDate>Thu, 16 Nov 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/test-mathjax/</guid>
-        <description>When \(a \ne 0\), there are two solutions to \((ax^2 + bx + c = 0)\) and they are
-\[x = {-b \pm \sqrt{b^2-4ac} \over 2a}.\]</description>
-      </item>
-      
-      <item>
-        <title>Katex support</title>
-        <link>https://dshcao.github.io/zh/posts/test-katext/</link>
-        <pubDate>Wed, 15 Nov 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/test-katext/</guid>
-        <description>The following
-$$ \int_{a}^{b} x^2 dx $$
-Is an integral
-$$
-\varphi = 1+\frac{1} {1+\frac{1} {1+\frac{1} {1+\cdots} } }
-$$
-Enable Katex in the config file by setting the katex param to true. This will import the necessary Katex CSS/JS.
-See the online reference of supported TeX functions.
-Note: For inline math to render correctly, your content file extension must be .mmark. See the official mmark site.
-Inline math: $$ \varphi = \dfrac{1+\sqrt5}{2}= 1.</description>
-      </item>
-      
-      <item>
-        <title>Flowchart support</title>
-        <link>https://dshcao.github.io/zh/posts/test-flowchart/</link>
-        <pubDate>Tue, 14 Nov 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/test-flowchart/</guid>
-        <description>st=&amp;gt;start: Start|past:&amp;gt;http://www.google.com[blank] e=&amp;gt;end: End|future:&amp;gt;http://www.google.com op1=&amp;gt;operation: My Operation|past op2=&amp;gt;operation: Stuff|current sub1=&amp;gt;subroutine: My Subroutine|invalid cond=&amp;gt;condition: Yes or No?|approved:&amp;gt;http://www.google.com c2=&amp;gt;condition: Good idea|rejected io=&amp;gt;inputoutput: catch something...|future st-&amp;gt;op1(right)-&amp;gt;cond cond(yes, right)-&amp;gt;c2 cond(no)-&amp;gt;sub1(left)-&amp;gt;op1 c2(yes)-&amp;gt;io-&amp;gt;e c2(no)-&amp;gt;op2-&amp;gt;e </description>
-      </item>
-      
-      <item>
         <title>随记</title>
         <link>https://dshcao.github.io/zh/notes/android/%E9%9A%8F%E8%AE%B0/</link>
         <pubDate>Wed, 11 Oct 2017 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/notes/android/%E9%9A%8F%E8%AE%B0/</guid>
         <description>一、Manifest配置 allowBackup fullBackupContent https://developer.android.com/guide/topics/data/autobackup allowBackup配置用来开启停用自动备份 fullBackupContent用来配置配分规则，如：andr</description>
-      </item>
-      
-      <item>
-        <title>Placeholder Text</title>
-        <link>https://dshcao.github.io/zh/posts/placeholder-text/</link>
-        <pubDate>Thu, 09 Mar 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/placeholder-text/</guid>
-        <description>&lt;p&gt;Lorem est tota propiore conpellat pectoribus de&lt;br /&gt;
-pectora summo.&lt;/p&gt;</description>
       </item>
       
       <item>

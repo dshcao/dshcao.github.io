@@ -22,7 +22,7 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid>
-        <description></description>
+        <description>前言 RxJava是一个响应式的异步事件流编程库。 RxJava的优势： 函数式编程，代码逻辑清晰，优雅 避险回调地狱 方便的线程调度 RxJava中主</description>
       </item>
       
     

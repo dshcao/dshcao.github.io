@@ -22,7 +22,7 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</guid>
-        <description>前置知识 线程状态： 初始态（NEW） 运行态（RUNNABLE） 就绪态（READY） 运行态（RUNNNIN） 阻塞态（BLOCKED） 等待态（WA</description>
+        <description>前置知识 线程是CPU调度的最小单位。 进程是系统进行程序资源分配的最小单位，线程之间共享所在进程的资源。 一个进程至少有一个线程，一个线程必须依</description>
       </item>
       
       <item>

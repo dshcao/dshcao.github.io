@@ -17,6 +17,15 @@
     
       
       <item>
+        <title>编程基础</title>
+        <link>https://dshcao.github.io/zh/posts/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</guid>
+        <description>字长 字长是CPU的主要技术指标之一，指的是CPU一次最大能并行处理的二进制位数 现在主流的计算机字长是32位与64位 原码&amp;amp;反码&amp;amp</description>
+      </item>
+      
+      <item>
         <title>贝塞尔曲线(Bezier curve)</title>
         <link>https://dshcao.github.io/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>

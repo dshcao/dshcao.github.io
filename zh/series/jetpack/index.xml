@@ -31,7 +31,7 @@
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jetpack-lifecycles/</guid>
-        <description></description>
+        <description>原理 ReportFragment ProcessLifecycleOwner ActivityInitializationListener LifecycleOwner&amp;amp;LifecycleObserver LifecycleRegistry&amp;amp;Lifecycle LiveData既是观察者也是被观察者 作为观察者可以观察Activity和Fragment的生命周期 通常将LiveData包在</description>
       </item>
       
       <item>
@@ -44,12 +44,21 @@
       </item>
       
       <item>
+        <title>Jetpack-Navigation详解</title>
+        <link>https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/</guid>
+        <description>Room升级 当数据表结构变化时如何直接修改version会导致数据库数据被清空 1 2 3 4 5 6 7 8 return Room.databaseBuilder(context, AppDatabase::class.java, &amp;#34;dsh&amp;#34;).allowMainThreadQueries().addMigrations(Migration1000To1001()).build() class Migration1000To1001 : Migration(1000, 1001) { override fun migrate(database: SupportSQLiteDatabase) { database.execSQL(&amp;#34;alter table user add column vip integer not</description>
+      </item>
+      
+      <item>
         <title>Jetpack-WorkManager详解</title>
         <link>https://dshcao.github.io/zh/posts/jetpack-workmanager/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jetpack-workmanager/</guid>
-        <description></description>
+        <description>谷歌使用Room数据库保存任务及Alarm来保证 WorkManager是一定会执行的，最小间隔是15min</description>
       </item>
       
       <item>
@@ -59,6 +68,21 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jetpack-camerax/</guid>
         <description>一、camera2 CameraX是Jetpack对camera2功能的封装，并可向后兼容至 Android 5.0（API 级别 21）</description>
+      </item>
+      
+      <item>
+        <title>Jetpack-CameraX</title>
+        <link>https://dshcao.github.io/zh/posts/jetpack-paging/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/jetpack-paging/</guid>
+        <description>DataSource
+DataSource.Factory
+PagedList
+PagedList.Builder
+LivePagedListBuilder
+PagedListAdapter
+https://github.com/android/architecture-components-samples</description>
       </item>
       
     

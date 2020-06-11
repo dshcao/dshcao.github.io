@@ -409,7 +409,7 @@
     <h2 class="single__title">Jetpack-Lifecycles</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 12月 23日 · ☕0 min read
+  🕓 2019年 12月 23日 · ☕1 min read
   
 </div>
       <div class="single__tags caption">
@@ -437,7 +437,40 @@
 </div>
     </div>    
     <article class="single__contents">
-      
+      <h2 id="heading">原理</h2>
+<p>ReportFragment</p>
+<p>ProcessLifecycleOwner ActivityInitializationListener</p>
+<h2 id="lifecycleownerlifecycleobserver">LifecycleOwner&amp;LifecycleObserver</h2>
+<h2 id="lifecycleregistrylifecycle">LifecycleRegistry&amp;Lifecycle</h2>
+<p>LiveData既是观察者也是被观察者<br />
+作为观察者可以观察Activity和Fragment的生命周期</p>
+<p>通常将LiveData包在ViewModel中使用<br />
+LiveData使用mVersion表示数据是否有变化，并判断Activity是否在前台，在前台则回调通知</p>
+<ul>
+<li>LiveData
+<ul>
+<li>
+<p>MutableLiveData</p>
+<ul>
+<li>MediatorLiveData</li>
+<li>SavingStateLiveData</li>
+<li>LoaderInfo</li>
+</ul>
+</li>
+<li>
+<p>SliceLiveDataImpl</p>
+</li>
+<li>
+<p>CachedLiveDataImpl</p>
+</li>
+<li>
+<p>PublisherLiveData</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>ComputableLiveData</p>
+
     </article>
     
     
@@ -529,7 +562,7 @@
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/jetpack-workmanager/" class="related__link">Jetpack-WorkManager详解</a>
+          <a href="/zh/posts/jetpack-jobservice/" class="related__link">Jetpack-JobService详解</a>
         </li>
         
         <li>
@@ -537,15 +570,15 @@
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-jobservice/" class="related__link">Jetpack-JobService详解</a>
+          <a href="/zh/posts/jetpack-workmanager/" class="related__link">Jetpack-WorkManager详解</a>
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-camerax/" class="related__link">Jetpack-CameraX</a>
+          <a href="/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/" class="related__link">Jetpack-Navigation详解</a>
         </li>
         
         <li>
-          <a href="/zh/posts/kotlin-%E8%AF%AD%E6%B3%95/" class="related__link">Kotlin语法</a>
+          <a href="/zh/posts/jetpack-paging/" class="related__link">Jetpack-CameraX</a>
         </li>
         
     </ul>

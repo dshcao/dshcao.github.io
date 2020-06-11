@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>apt on dshcao blog</title>
+    <link>https://dshcao.github.io/zh/tags/apt/</link>
+    <description>Recent content in apt on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <managingEditor>513996717@qq.com (dshcao)</managingEditor>
+    <webMaster>513996717@qq.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Fri, 11 Oct 2019 10:33:41 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/zh/tags/apt/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>Android-APT</title>
+        <link>https://dshcao.github.io/zh/posts/android-apt/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-apt/</guid>
+        <description>APT(Annotation Processor Tool) 注解处理器(APT)它是Java提供的帮我们处理注解的。要实现我们自己的处理注解的逻辑就需要继承Processor接口。 1 2 3 4 5 6 7</description>
+      </item>
+      
+    
+  </channel>
+</rss>

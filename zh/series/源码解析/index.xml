@@ -22,7 +22,7 @@
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-handler%E8%A7%A3%E6%9E%90/</guid>
-        <description></description>
+        <description>前言 Handler使Android中非常重要的组成部门，很多地方包括系统服务也大量用到Handler这一机制。Handler让我们的开发难度</description>
       </item>
       
       <item>
@@ -44,12 +44,30 @@
       </item>
       
       <item>
+        <title>HashMap源码分析</title>
+        <link>https://dshcao.github.io/zh/posts/java-hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+        <description>以JDK8源码分析 前言 HashMap是结合数组和链表，以Key-Value形式存储的集合。HashMap中有三个个概念：负载因子(loadF</description>
+      </item>
+      
+      <item>
         <title>RxJava2源码及使用</title>
         <link>https://dshcao.github.io/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid>
-        <description></description>
+        <description>前言 RxJava是一个响应式的异步事件流编程库。 RxJava的优势： 函数式编程，代码逻辑清晰，优雅 避险回调地狱 方便的线程调度 RxJava中主</description>
+      </item>
+      
+      <item>
+        <title>SparseArray源码解析</title>
+        <link>https://dshcao.github.io/zh/posts/android-sparsearray%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-sparsearray%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
+        <description>前言 SparseArray是谷歌推荐使用的数据结构，可以取代部分HashMap功能。为什么是部分？因为SparseArray是以int为ke</description>
       </item>
       
     

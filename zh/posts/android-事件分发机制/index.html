@@ -530,16 +530,16 @@
 <span class="o">}</span>
 
 <span class="kd">private</span> <span class="kt">void</span> <span class="nf">performTraversals</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
-<span class="o">.</span><span class="o">.</span><span class="o">.</span>
-<span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mUse32BitDrawingCache</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-<span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mWindowVisibility</span> <span class="o">=</span> <span class="n">viewVisibility</span><span class="o">;</span>
-<span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mRecomputeGlobalAttributes</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-<span class="o">.</span><span class="o">.</span><span class="o">.</span>
-<span class="c1">//这里的host即是DecorView
-</span><span class="c1"></span><span class="n">host</span><span class="o">.</span><span class="na">dispatchAttachedToWindow</span><span class="o">(</span><span class="n">mAttachInfo</span><span class="o">,</span> <span class="n">0</span><span class="o">)</span><span class="o">;</span>
-<span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mTreeObserver</span><span class="o">.</span><span class="na">dispatchOnWindowAttachedChange</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span><span class="o">;</span>
-<span class="n">dispatchApplyInsets</span><span class="o">(</span><span class="n">host</span><span class="o">)</span><span class="o">;</span>
-<span class="o">.</span><span class="o">.</span><span class="o">.</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+    <span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mUse32BitDrawingCache</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mWindowVisibility</span> <span class="o">=</span> <span class="n">viewVisibility</span><span class="o">;</span>
+    <span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mRecomputeGlobalAttributes</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+    <span class="c1">//这里的host即是DecorView
+</span><span class="c1"></span>    <span class="n">host</span><span class="o">.</span><span class="na">dispatchAttachedToWindow</span><span class="o">(</span><span class="n">mAttachInfo</span><span class="o">,</span> <span class="n">0</span><span class="o">)</span><span class="o">;</span>
+    <span class="n">mAttachInfo</span><span class="o">.</span><span class="na">mTreeObserver</span><span class="o">.</span><span class="na">dispatchOnWindowAttachedChange</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span><span class="o">;</span>
+    <span class="n">dispatchApplyInsets</span><span class="o">(</span><span class="n">host</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span>
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -560,7 +560,7 @@
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><!-- 补充一点：onAttachedToWindow是在Activity#resume是调用的，且一个View实例只会调用一次 -->
+</div><!-- 补充一点：onAttachedToWindow是在Activity#resume时调用的，且一个View实例只会调用一次 -->
 <h2 id="isintouchmodeisfocusableintouchmodesetfocusableintouchmodeboolean">isInTouchMode/isFocusableInTouchMode()/setFocusableInTouchMode(boolean)</h2>
 <p>是否是触摸模式。因为android不仅支持屏幕触摸操作还支持键盘等设备操作。当使用键盘操作时需要对当前操作的UI元素高亮(聚焦)让用户知道当前操作的是哪个UI元素。触摸操作时不需要一直高亮某个UI元素，用户操作的是哪个UI元素就去触摸哪个元素。触摸模式下只需要在按下时高亮(聚焦)即可，此时的高亮(聚焦)是由设置的pressed状态决定的。为了区别两种模式就有了touchmode，<code>isInTouchMode</code>即是当前是否是触摸模式。<br />
 <br>View#isInTouchMode</p>
@@ -584,7 +584,7 @@
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>上面说过触摸模式下不需要高亮(聚焦)，但某些特殊控件如：EditText需要在触摸模式下也能获取焦点。<code>iisFocusableInTouchMode()</code>/<code>setFocusableInTouchMode(boolean)</code>判断/设置View在触摸模式下是否可以获取焦点</p>
+</div><p>上面说过触摸模式下不需要高亮(聚焦)，但某些特殊控件如：EditText需要在触摸模式下也能获取焦点。<code>isFocusableInTouchMode()</code>/<code>setFocusableInTouchMode(boolean)</code>判断/设置View在触摸模式下是否可以获取焦点</p>
 <h2 id="onfiltertoucheventforsecurity">onFilterTouchEventForSecurity</h2>
 <p>过滤TouchEvent应对安全策略。可以在这里过滤TouchEvent，false则丢弃TouchEvent，true则不过滤继续分发这个TouchEvent</p>
 <div class="highlight"><div class="chroma">
@@ -823,7 +823,7 @@ ViewGroup#requestDisallowInterceptTouchEvent</p>
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="activitydispatchtouchevent">Activity#dispatchTouchEvent</h3>
-<p>Activity是继承Window.Callback的，由上面DecorView#dispatchTouchEvent源码可只Activity中DecorView#dispatchTouchEvent会走Window.Callback#dispatchTouchEvent。即Activity#dispatchTouchEvent。<br />
+<p>Activity是继承Window.Callback的，由上面DecorView#dispatchTouchEvent源码可知Activity中DecorView#dispatchTouchEvent会走Window.Callback#dispatchTouchEvent。即Activity#dispatchTouchEvent。<br />
 <br>从ViewRootImpl开始到Activity的调用链：ViewRootImpl#processPointerEvent -&gt; DecorView#dispatchPointerEvent -&gt; View#dispatchPointerEvent -&gt; DecorView#dispatchTouchEvent -&gt; Activity#dispatchTouchEvent</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1355,6 +1355,14 @@ ViewGroup#requestDisallowInterceptTouchEvent</p>
 </span><span class="lnt">337
 </span><span class="lnt">338
 </span><span class="lnt">339
+</span><span class="lnt">340
+</span><span class="lnt">341
+</span><span class="lnt">342
+</span><span class="lnt">343
+</span><span class="lnt">344
+</span><span class="lnt">345
+</span><span class="lnt">346
+</span><span class="lnt">347
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-java" data-lang="java"> <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">dispatchTouchEvent</span><span class="o">(</span><span class="n">MotionEvent</span> <span class="n">ev</span><span class="o">)</span> <span class="o">{</span>
@@ -1382,13 +1390,20 @@ ViewGroup#requestDisallowInterceptTouchEvent</p>
 </span><span class="c1"></span>            <span class="n">cancelAndClearTouchTargets</span><span class="o">(</span><span class="n">ev</span><span class="o">)</span><span class="o">;</span>
             <span class="c1">//清除相关flag
 </span><span class="c1"></span>            <span class="n">resetTouchState</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
-        <span class="o">}</span>
+            <span class="c1">// private void resetTouchState() {
+</span><span class="c1"></span>            <span class="c1">//     clearTouchTargets();
+</span><span class="c1"></span>            <span class="c1">//     resetCancelNextUpFlag(this);
+</span><span class="c1"></span>            <span class="c1">//     mGroupFlags &amp;= ~FLAG_DISALLOW_INTERCEPT;
+</span><span class="c1"></span>            <span class="c1">//     mNestedScrollAxes = SCROLL_AXIS_NONE;
+</span><span class="c1"></span>            <span class="c1">// }
+</span><span class="c1"></span>        <span class="o">}</span>
 
         <span class="c1">// Check for interception.
 </span><span class="c1"></span>        <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">intercepted</span><span class="o">;</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">actionMasked</span> <span class="o">=</span><span class="o">=</span> <span class="n">MotionEvent</span><span class="o">.</span><span class="na">ACTION_DOWN</span>
                 <span class="o">|</span><span class="o">|</span> <span class="n">mFirstTouchTarget</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c1">//检查子控件是否调用了requestDisallowInterceptTouchEvent通知父控件不要拦截        
+            <span class="c1">//检查子控件是否调用了requestDisallowInterceptTouchEvent通知父控件不要拦截  
+</span><span class="c1"></span>            <span class="c1">//由于ACTION_DOWN时前面的resetTouchState会被调用，而resetTouchState方法中有 mGroupFlags &amp;= ~FLAG_DISALLOW_INTERCEPT;，所以当ACTION_DOWN时此处的disallowIntercept肯定为false，即ACTION_DOWN时肯定会执行onInterceptTouchEvent，若在ACTION_DOWN时当前ViewGroup#onInterceptTouchEvent就返回true，那么子控件调用mParent.requestDisallowInterceptTouchEvent也是没用的。
 </span><span class="c1"></span>            <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">disallowIntercept</span> <span class="o">=</span> <span class="o">(</span><span class="n">mGroupFlags</span> <span class="o">&amp;</span> <span class="n">FLAG_DISALLOW_INTERCEPT</span><span class="o">)</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(</span><span class="o">!</span><span class="n">disallowIntercept</span><span class="o">)</span> <span class="o">{</span>
                 <span class="n">intercepted</span> <span class="o">=</span> <span class="n">onInterceptTouchEvent</span><span class="o">(</span><span class="n">ev</span><span class="o">)</span><span class="o">;</span>
@@ -1446,6 +1461,7 @@ ViewGroup#requestDisallowInterceptTouchEvent</p>
                     <span class="kd">final</span> <span class="kt">float</span> <span class="n">y</span> <span class="o">=</span> <span class="n">ev</span><span class="o">.</span><span class="na">getY</span><span class="o">(</span><span class="n">actionIndex</span><span class="o">)</span><span class="o">;</span>
                     <span class="c1">// Find a child that can receive the event.
 </span><span class="c1"></span>                    <span class="c1">// Scan children from front to back.
+</span><span class="c1"></span>                    <span class="c1">//buildTouchDispatchChildList是一个按View Z值排序的list。
 </span><span class="c1"></span>                    <span class="kd">final</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">View</span><span class="o">&gt;</span> <span class="n">preorderedList</span> <span class="o">=</span> <span class="n">buildTouchDispatchChildList</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
                     <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">customOrder</span> <span class="o">=</span> <span class="n">preorderedList</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span>
                             <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">isChildrenDrawingOrderEnabled</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
@@ -2225,7 +2241,7 @@ KeyEvent是对key event的封装</li>
 <li>ACTION_DOWN <br>多点触控第一个指针按下，如果当前触摸设备已经有存在pointer则</li>
 <li>ACTION_UP <br>多点触控最后指针抬起，不一定是ACTION_DOWN对应的指针，可能是ACTION_POINTER_DOWN对应的指针</li>
 <li>ACTION_MOVE <br>指针移动</li>
-<li>ACTION_CANCEL <br>触摸取消，可以视为ACTION_UP事件，但不要做ACTION_UP的任何操作。ACTION_CANCEL发生的时机通常有几种：1.主动发送 2.重新开始一个事件序列时可能被程序触发 3.当接收到ACTION_DOWN事件的view被父控件拦截时会触发ACTION_CANCEL事件，具体实现在ViewGroup#dispatchTouchEvent源码中：
+<li>ACTION_CANCEL <br>触摸取消，可以视为ACTION_UP事件，但不要做ACTION_UP的任何操作。ACTION_CANCEL发生的时机通常有几种：1.主动发送 2.重新开始一个事件序列时可能被程序触发 3.当接收过ACTION_DOWN事件的view在后面的ACTION_MOVE被父控件拦截时会触发ACTION_CANCEL事件，具体实现在ViewGroup#dispatchTouchEvent源码中：
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -2314,7 +2330,6 @@ KeyEvent是对key event的封装</li>
 <li>ACTION_POINTER_UP <br>多点触控使用，非最后一个指针抬起</li>
 </ul>
 <p>其余如：ACTION_SCROLL/ACTION_BUTTON_PRESS/ACTION_BUTTON_RELEASE/ACTION_HOVER_ENTER/ACTION_HOVER_MOVE/ACTION_HOVER_EXIT 非触摸事件action，这些事件传递到onGenericMotionEvent(MotionEvent)处理</p>
-<h3 id="viewlongclick">View如何实现longclick事件的</h3>
 <ul>
 <li>getDeviceId() 返回event来源设备的id，通常是触摸屏。可用于InputDevice.getDevice(deviceId)获取InputDevice后进一步获取相关信息</li>
 <li>getActionIndex() 获取当前event的pointerIndex</li>
@@ -2363,13 +2378,9 @@ KeyEvent是对key event的封装</li>
 </span><span class="lnt">14
 </span><span class="lnt">15
 </span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java">
-
-<span class="kd">public</span> <span class="kd">final</span> <span class="kt">int</span> <span class="nf">getAction</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">final</span> <span class="kt">int</span> <span class="nf">getAction</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">return</span> <span class="n">nativeGetAction</span><span class="o">(</span><span class="n">mNativePtr</span><span class="o">)</span><span class="o">;</span>
 <span class="o">}</span>
 
@@ -2387,7 +2398,8 @@ KeyEvent是对key event的封装</li>
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p><span id="2">参考：</span></p>
+</div><h3 id="viewlongclick">View如何实现longclick事件的</h3>
+<p><span id="2">参考：</span></p>
 <ul>
 <li><a href="https://www.jianshu.com/p/84b2e0038080">深入理解Android之Touch事件的分发</a></li>
 <li><a href="https://stackoverflow.com/questions/22167006/getedgeflags-always-returning-0">getEdgeFlags always returning 0?</a></li>
@@ -2485,23 +2497,23 @@ KeyEvent是对key event的封装</li>
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/jvmdalvikart/" class="related__link">JVM/Dalvik/ART</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E9%87%87%E5%BD%95%E6%91%84%E5%83%8F%E5%A4%B4/" class="related__link">Android直播-采录摄像头</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
-        </li>
-        
-        <li>
           <a href="/zh/posts/jetpack-camerax/" class="related__link">Jetpack-CameraX</a>
         </li>
         
         <li>
-          <a href="/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/" class="related__link">RxJava2源码及使用</a>
+          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-pulllayout/" class="related__link">自定义View-PullLayout</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/jvmdalvikart/" class="related__link">JVM/Dalvik/ART</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-app-bundle/" class="related__link">Android AppBundle</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/" class="related__link">Android四大组件-Service</a>
         </li>
         
     </ul>
@@ -2510,16 +2522,16 @@ KeyEvent是对key event的封装</li>
     <div class="grow"></div>
 <nav class="pagination-single">
   
-    <a href="https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/" class="pagination-single__left">
+    <a href="https://dshcao.github.io/zh/posts/android-%E7%83%AD%E6%9B%B4%E6%96%B0/" class="pagination-single__left">
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
       </div>
-      <div class="pagination-single__left-title">Android四大组件-Activity/Fragment</div>      
+      <div class="pagination-single__left-title">Android-热更新</div>      
     </a>
   
   <div class="grow"></div>
   
-    <a href="https://dshcao.github.io/zh/posts/android-vrar/" class="pagination-single__right">      
+    <a href="https://dshcao.github.io/zh/posts/android-vrarmr/" class="pagination-single__right">      
       <div class="pagination-single__right-title">Android-VR&amp;AR</div>
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>

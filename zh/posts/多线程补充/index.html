@@ -405,7 +405,7 @@
     <h2 class="single__title">多线程详解补充</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 10月 11日 · ☕8 min read
+  🕓 2019年 10月 11日 · ☕10 min read
   
 </div>
       <div class="single__tags caption">
@@ -454,6 +454,7 @@
 当thread3需要thread1,thread2都执行完毕后执行，则两者皆可实现，但当thread3只需要thread1,thread2其中一个执行完毕就可执行的场景<code>CountDownLatch</code>很容易实现，使用join则并不容易实现<br />
 详见参考：<a href="#2">CountDownLatch理解一：与join的区别</a></p>
 <h2 id="runable-future-callable">Runable Future Callable</h2>
+<p>Java中可以简单认为Thread是是对线程的抽象，而Runable和Callable是对线程任务的抽象，Future线程任务结果的容器。</p>
 <ul>
 <li>
 <p><code>Runable</code> 1.没有返回值 2.无法抛异常</p>
@@ -516,8 +517,61 @@ throws InterruptedException, ExecutionException, TimeoutException;用来获取�
 </code></pre></td></tr></table>
 </div>
 </div><ul>
-<li><code>FutureTask</code></li>
-<li><code>CompletableFuture</code>  提供了函数式编程的能力，可以通过回调的方式处理计算结果，并且提供了转换和组合CompletableFuture的方法,帮助我们简化异步编程的复杂性,有点类似于rxjava的模式，当然没有提供这么丰富的功能</li>
+<li>
+<p><code>FutureTask</code><br />
+对Callable的封装，可以让使用Callable像Runnable一样使用且可以获取Callable的返回值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">RunnableFuture</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="n">Runnable</span><span class="o">,</span> <span class="n">Future</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="cm">/**
+</span><span class="cm">     * Sets this Future to the result of its computation
+</span><span class="cm">     * unless it has been cancelled.
+</span><span class="cm">     */</span>
+    <span class="kt">void</span> <span class="nf">run</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FutureTask</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">RunnableFuture</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+    <span class="kd">public</span> <span class="nf">FutureTask</span><span class="o">(</span><span class="n">Callable</span><span class="o">&lt;</span><span class="n">V</span><span class="o">&gt;</span> <span class="n">callable</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">callable</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">NullPointerException</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">callable</span> <span class="o">=</span> <span class="n">callable</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">state</span> <span class="o">=</span> <span class="n">NEW</span><span class="o">;</span>       <span class="c1">// ensure visibility of callable
+</span><span class="c1"></span>    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nf">FutureTask</span><span class="o">(</span><span class="n">Runnable</span> <span class="n">runnable</span><span class="o">,</span> <span class="n">V</span> <span class="n">result</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">callable</span> <span class="o">=</span> <span class="n">Executors</span><span class="o">.</span><span class="na">callable</span><span class="o">(</span><span class="n">runnable</span><span class="o">,</span> <span class="n">result</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">state</span> <span class="o">=</span> <span class="n">NEW</span><span class="o">;</span>       <span class="c1">// ensure visibility of callable
+</span><span class="c1"></span>    <span class="o">}</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p><code>CompletableFuture</code>  提供了函数式编程的能力，可以通过回调的方式处理计算结果，并且提供了转换和组合CompletableFuture的方法,帮助我们简化异步编程的复杂性,有点类似于rxjava的模式，当然没有提供这么丰富的功能</p>
+</li>
 </ul>
 </li>
 </ul>
@@ -645,14 +699,39 @@ throws InterruptedException, ExecutionException, TimeoutException;用来获取�
 </ul>
 <h2 id="blockingdeque">BlockingDeque</h2>
 <ul>
-<li>BlockingDeque</li>
-<li>LinkedBlockingQueue</li>
-<li>LinkedBlockingDeque</li>
-<li>ConcurrentHashMap</li>
-<li>ConcurrentLinkedQueue</li>
-<li>DelayQueue</li>
-<li>SynchronousQueue</li>
-<li>LinkedTransferQueue</li>
+<li>
+<p>BlockingDeque<br />
+add/remove 添加元素/移除元素 当队列满/空时抛异常<br />
+offer/poll 添加元素/取出元素<br />
+put/take 添加元素/取出元素 当队列满/空时会阻塞put/take</p>
+</li>
+<li>
+<p>ArrayBlockingQueue<br />
+基于数组的阻塞队列，初始化需要指定固定大小</p>
+</li>
+<li>
+<p>LinkedBlockingQueue<br />
+基于链表实现的阻塞队列，初始化可以指定大小，也可以不指定。</p>
+</li>
+<li>
+<p>LinkedBlockingDeque</p>
+</li>
+<li>
+<p>ConcurrentHashMap</p>
+</li>
+<li>
+<p>ConcurrentLinkedQueue</p>
+</li>
+<li>
+<p>DelayQueue</p>
+</li>
+<li>
+<p>SynchronousQueue<br />
+无容量的队列</p>
+</li>
+<li>
+<p>LinkedTransferQueue</p>
+</li>
 </ul>
 <h2 id="-">多线程的经典场景-生产者消费者模式实现</h2>
 <ol>
@@ -660,6 +739,30 @@ throws InterruptedException, ExecutionException, TimeoutException;用来获取�
 <li>synchronized关键字实现</li>
 <li>lock实现</li>
 </ol>
+<h2 id="java-1">Java线程内存</h2>
+<p>Java线程内存有共享区和私有区</p>
+<ol>
+<li>共享区<br />
+堆 方法区(运行时常量池)[常量 静态变量 类信息]</li>
+<li>私有区 有三部分：栈虚拟机、本地方法栈、程序计数器
+<ol>
+<li>虚拟机栈 虚拟机栈的每个栈帧对应一个调用方法的信息，可以使用-Xss设置虚拟机栈大小，一般是1M。由以下四部分组成
+<ul>
+<li>局部变量表 用于存放八大基本数据类型和对象的引用</li>
+<li>操作数栈 存放操作数的一块临时空间</li>
+<li>动态链接 存放编译时不能确定方法入口的方法的地址，需要在运行时来保证方法调用的正确性。如：多态方法、native方法。当线程中调用到native方法时JVM不会在为其在虚拟机栈中创建栈帧，而是存储动态链接并直接调用native方法，</li>
+<li>方法出口 返回地址</li>
+</ul>
+</li>
+<li>本地方法栈 保存native方法信息，虚拟机规范中并没有强制规定本地方法栈的实现，各版本虚拟机也是自由实现，HotSpot则是将本地方法栈和虚拟机栈合二为一了。</li>
+<li>程序计数器 记录程序执行到哪个位置，指向的是当前线程正在执行的字节码指令的地址(行号)。由于Java是多线程的，为了保证多线程切换后正确的执行所以需要程序计数器来记录执行位置。</li>
+</ol>
+</li>
+</ol>
+<h2 id="heading-3">线程池</h2>
+<p>对于计算密集型和I/O密集型任务线程池的配置是不同的。<br />
+一般计算密集型的corePoolSize最好是：CPU核心数，I/O密集型的corePoolSize是：CPU核心数 * 2，但实际设计线程池时corePoolSize分别会是：CPU核心数+1和CPU核心数 * 2+1。为什么会+1？因为CPU从磁盘读取数据到内存时都是按页读取，一般一页是4kb，就算你只需要读取一字节操作系统也会读取一页数据到内存。这也是很多地方需要内存对齐的原因。在操作系统读取磁盘数据到内存的过程中可能会出现页缺失错误，这时候系统会将当前线程挂起，将CPU空闲出来，如果是corePoolSize等于CPU核心数就会浪费一个核心，如果是CPU核心数+1则可以充分利用CPU核心数。<br />
+当计算操作和I/O操作所耗时间差不多时应尽量将线程池拆分为计算密集型和I/O密集型</p>
 <p><span id="2">参考：</span></p>
 <ul>
 <li><a href="https://www.cnblogs.com/skorzeny/p/6480012.html">深入理解JVM - Java内存模型与线程 - 第十二章</a></li>
@@ -767,11 +870,11 @@ throws InterruptedException, ExecutionException, TimeoutException;用来获取�
     <div class="grow"></div>
 <nav class="pagination-single">
   
-    <a href="https://dshcao.github.io/zh/posts/%E6%8F%92%E4%BB%B6%E5%8C%96%E5%92%8C%E7%83%AD%E6%9B%B4%E6%96%B0/" class="pagination-single__left">
+    <a href="https://dshcao.github.io/zh/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="pagination-single__left">
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
       </div>
-      <div class="pagination-single__left-title">插件化和热更新&amp;App Bundle</div>      
+      <div class="pagination-single__left-title">数据结构与算法</div>      
     </a>
   
   <div class="grow"></div>

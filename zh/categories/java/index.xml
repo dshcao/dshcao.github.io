@@ -17,12 +17,39 @@
     
       
       <item>
+        <title>HashMap源码分析</title>
+        <link>https://dshcao.github.io/zh/posts/java-hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid>
+        <description>以JDK8源码分析 前言 HashMap是结合数组和链表，以Key-Value形式存储的集合。HashMap中有三个个概念：负载因子(loadF</description>
+      </item>
+      
+      <item>
+        <title>Java注解详解</title>
+        <link>https://dshcao.github.io/zh/posts/java-%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/</guid>
+        <description>前言 Java注解是JDK5提供的，用于为代码提供元数据。注解不直接影响代码执行。 注解也是接口类型。即反射时：annotationClass.</description>
+      </item>
+      
+      <item>
+        <title>Java范型与反射</title>
+        <link>https://dshcao.github.io/zh/posts/java-%E8%8C%83%E5%9E%8B%E4%B8%8E%E5%8F%8D%E5%B0%84/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-%E8%8C%83%E5%9E%8B%E4%B8%8E%E5%8F%8D%E5%B0%84/</guid>
+        <description>前言 泛型 ？ extends X 表示类型的上界，类型参数是X的子类 ？ super X 表示类型的下界，类型参数是X的超类 示例一： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 class</description>
+      </item>
+      
+      <item>
         <title>JVM/Dalvik/ART</title>
         <link>https://dshcao.github.io/zh/posts/jvmdalvikart/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jvmdalvikart/</guid>
-        <description>前置知识 Android中每个应用都对应一个单独的虚拟机，独立运行 JIT&amp;amp;AOT JIT，Just-in-time，即时编译，运行时动态编译。 AOT，Ahe</description>
+        <description>前置知识 Android中每个应用都对应一个单独的虚拟机，独立运行 JIT&amp;amp;AOT JIT，Just-in-time，即时编译，运行时动态编译。在运行时将频繁</description>
       </item>
       
       <item>
@@ -31,7 +58,7 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid>
-        <description></description>
+        <description>前言 RxJava是一个响应式的异步事件流编程库。 RxJava的优势： 函数式编程，代码逻辑清晰，优雅 避险回调地狱 方便的线程调度 RxJava中主</description>
       </item>
       
       <item>
@@ -40,7 +67,7 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</guid>
-        <description>前置知识 线程状态： 初始态（NEW） 运行态（RUNNABLE） 就绪态（READY） 运行态（RUNNNIN） 阻塞态（BLOCKED） 等待态（WA</description>
+        <description>前置知识 线程是CPU调度的最小单位。 进程是系统进行程序资源分配的最小单位，线程之间共享所在进程的资源。 一个进程至少有一个线程，一个线程必须依</description>
       </item>
       
       <item>
@@ -50,6 +77,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</guid>
         <description>Java内存模型 Java内存模型主要目标：定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的</description>
+      </item>
+      
+      <item>
+        <title>设计模式</title>
+        <link>https://dshcao.github.io/zh/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
+        <description>设计模式是解决问题的思想，是前辈总结的成熟的设计方案。 设计的总原则是：低耦合、高内聚，实现可复用，易维护。 设计模式原则 开闭原则 对扩展开放，对</description>
       </item>
       
     

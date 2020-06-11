@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Android-音视频基础知识(一) – dshcao blog</title>
+    
+
+
+<script defer src="/js/fuse.min.94c78ad70b02749822921660cf4e9f0b3701bc0680c421afb784a78228de0275.js"></script>
+
+<script>
+  
+  var runSearch = function() {
+    
+        var baseurl = "https:\/\/dshcao.github.io\/\/zh";
+    
+    
+    var searchResults = null;
+    var searchMenu = null;
+    var fuse = null;
+
+    function endsWith(str, suffix) {
+      return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
+
+    function initFuse() {
+      if (!endsWith(baseurl, "/")) {
+        baseurl = baseurl + '/';
+      };
+
+      $.ajax({
+        type: "GET",
+        url: baseurl + "index.json",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+      })
+        .done(function (index) {
+          fuse = new Fuse(index, {
+            keys: ['title', 'description', 'content']
+          });
+        })
+        .fail(function (jqxhr, textStatus, error) {
+          var err = textStatus + ", " + error;
+          console.error("Error getting Hugo index file:", err);
+        });
+    }
+
+    function renderSearchResults(results) {
+      searchResults = document.getElementById('search-results');
+      searchMenu = document.getElementById('search-menu');
+      searchResults.setAttribute('class', 'dropdown is-active');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'dropdown-content search-content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.setAttribute('class', 'dropdown-item');
+          item.innerHTML = `<div class="menu-item"><div class="menu-item__title">📄 ${result.title}</div><div class="menu-item__desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        item.setAttribute('class', 'dropdown-item');
+        item.innerText = 'No results found';
+        content.appendChild(item);
+      }
+
+      while (searchMenu.hasChildNodes()) {
+        searchMenu.removeChild(
+          searchMenu.lastChild
+        );
+      }
+      searchMenu.appendChild(content);
+    }
+
+    function renderSearchResultsMobile(results) {
+      searchResults = document.getElementById('search-mobile-results');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'mobile-search__content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.innerHTML = `<div class="mobile-search__item"><div class="mobile-search__item--title">📄 ${result.title}</div><div class="mobile-search__item--desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        content.appendChild(item);
+      }
+
+      $('#search-mobile-results').empty();
+      searchResults.appendChild(content);
+    }
+
+    initFuse();
+
+    $("#search").on('input', function (e) {
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+
+      if ($(window).width() < 770) {
+        return null;
+      } 
+
+      var results = fuse.search(e.target.value);
+      renderSearchResults(results);
+    });
+
+    $('#search').on('blur', function () {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      setTimeout(function () {
+        $('#search-results').attr('class', 'dropdown');
+      }, 100);
+    });
+
+    $('#search').on('click', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+      var results = fuse.search(e.target.value);
+      renderSearchResults(results);
+    });
+
+    $('#search').on('keydown', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      var items = $('#search-menu .dropdown-item');
+      var activeIndex = $('#search-menu .dropdown-item.is-active').index();
+
+      items.removeClass('is-active');
+      if (e.key === 'ArrowDown') {
+        items.eq(activeIndex + 1).addClass('is-active');
+      } else if (e.key === 'ArrowUp') {
+        items.eq(activeIndex - 1).addClass('is-active');
+      } else if (e.key === 'Enter') {
+        var currentItemLink = items.eq(activeIndex).attr('href');
+        if (currentItemLink) {
+          location.href = currentItemLink;
+        }
+      }
+    });
+
+    $("#search-mobile").on('input', function(e) {
+      if (!e.target.value) {
+        $('#search-mobile-results').empty();
+        return null;
+      }
+
+      var results = fuse.search(e.target.value);
+      renderSearchResultsMobile(results);
+    });
+  }
+</script>    
+    
+
+
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    <meta name="description" content="Android-音视频基础知识" />
+<meta name="keywords" content="">
+<meta name="created" content="2019-10-11T10:33:41&#43;0900">
+<meta name="modified" content="2019-10-11T10:33:41&#43;0900">
+
+
+<meta property="og:site_name" content="dshcao blog">
+<meta property="og:title" content="Android-音视频基础知识(一)">
+<meta property="og:url" content="https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/">
+<meta property="og:type" content="article">
+
+<meta name="generator" content="Hugo 0.61.0" />
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/logo.svg" sizes="any" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.json">
+
+
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "headline": "Android-音视频基础知识(一)",
+    "datePublished": "2019-10-11T10:33:41+09:00",
+    "dateModified": "2019-10-11T10:33:41+09:00",
+    "url" : "https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/",
+    "description": "Android-音视频基础知识",
+    "keywords": ["音视频","android"],
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://dshcao.github.io/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "dshcao blog",
+      "url": "https://dshcao.github.io/"
+    }
+  }
+</script>
+
+    
+
+
+
+
+
+    
+</head>
+
+<body id="root" class="theme__dark">
+    <script>
+        var localTheme = localStorage.getItem('theme');
+        if (localTheme) {
+            document.getElementById('root').className = `theme__${localTheme}`;
+        }        
+    </script>    
+    
+    <div id="body">
+        
+        <div class="container wrapper">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar__brand">
+    
+    <a href="/zh/" title="Home" rel="home" class="navbar__logo-link">
+      <img data-src="/logo.png" src="data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' width='48px' height='48px'%3E%3Cpath fill='%2337474f' d='M24.648,4l0.29,0.002c0.52,0.008,1.23,0.109,1.857,0.198c0.314,0.045,0.616,0.088,0.883,0.119 c0.164,0.024,0.715,0.227,1.043,0.348C29.468,4.941,32,6.875,32,6.875L31,5c0,0,1.563,0.445,2.125,0.875C34.247,6.733,34.354,7,35,7 h0.375L35,6c0.375,0.19,1.78,1.289,1.968,1.541L37,7.583l0.036,0.039c1.411,1.495,2.095,2.462,2.595,3.169 c0.339,0.48,0.945,0.822,1.243,1.21C41.225,12.454,42,14,42,14v-0.998c0,0,0.776,1.029,1.25,2.373C44,17.5,44,19,44,19 s-0.25-0.625-1-0.875C43,19,44,21,44,24.002v6c-0.74,0.57-0.989,1.443-1.214,2.386c-0.328,1.372-0.605,2.294-1.444,2.593L41,35.002 l-0.08,0.277c-0.533,0.662-0.994,1.351-1.439,2.018c-1.446,2.163-2.495,3.705-4.481,3.705c-1.041,0-2.044,0.167-2.441,0.559 C32.128,41.987,32,42.662,32,43.002c-1.012,0.377-2.167,1-8,1c-5,0-9.4-1.756-12.262-4.545c-0.965-0.785-2.272-1.669-2.857-2.273 C6.976,35.593,6.047,33.058,6,33.002c1.184,0.985,5.245,4.636,7.091,4.636l0,0C13.301,37.416,12,35.684,12,35.002 C13.429,37.162,17.405,40,23,40c4.125,0,3.892-0.73,6-1c4.875-0.625,7.492-5.439,8.214-6.816c0.05-0.096,0.202-1.02,0.24-1.092 c0.368-0.376,0.463-1.167,0.607-2.371C38.17,27.815,39,26.75,39,25.625S38,24,38,24s0-3-0.625-5.375 C37.25,18.151,36.738,16.409,34,13v1.002c-2.125-1.127-3.668-2.545-4.125-2.752C28.435,10.599,26.831,10,25,10c-4,0-4.625,1-8,2 c0,0,1.25,0,2,0c0,0-1.867,1.445-3,2.125c-1.875,1.125-4,5.034-4,7.875c0,3-2.485,4-4,4c-2.453,0-4-2-4-4 c0-1.133,0.45-2.5,0.886-3.425c0.411-0.873,0.799-1.697,0.795-2.581c0.031-0.106,0.274-0.383,0.435-0.566 c0.466-0.531,1.083-1.234,1.224-2.252c1.106-0.927,3.13-3.015,3.155-3.041c0.162-0.171,0.324-0.304,0.511-0.457 c0.324-0.265,0.728-0.594,1.221-1.205l0.423-0.525c0.798-0.428,2.222-1.035,2.776-1.271c0.342-0.146,0.602-0.258,0.716-0.313 L19.75,5.75C19.966,5.75,20,5.238,20,5c0-0.227,0.106-0.198,0.324-0.273C22.139,4.099,22.799,4,24.648,4L24.648,4'/%3E%3C/svg%3E" alt="Home" class="lazyload navbar__logo">
+    </a>
+    
+    <a href="/zh/" title="Home" rel="home" class="navbar__title-link">
+      <h6 class="navbar__title">dshcao blog</h6>
+    </a>    
+  </div>
+  
+  
+<div class="theme-mobile">
+  <div class="dropdown">
+    <button class="dropdown-trigger navbar__slide-down" aria-label="Invert Colors" style="">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" d="M24 0H0v24h24V0z"/><path fill="currentColor" d="M6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31l-4.95-4.95c-.39-.39-1.02-.39-1.41 0L6.34 7.93zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>      
+    </button>
+    <div class="dropdown-content select-theme">
+      
+        
+        <a href="#" class="dropdown-item select-theme__item is-active">
+          dark
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          light
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          hacker
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          solarized
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          custom
+        </a>
+        
+      
+    </div>
+  </div>
+</div>
+
+  
+<div id="mobileSearchBtn" class="mobile-search__btn">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+</div>
+
+<div id="search-mobile-container" class="mobile-search hide">
+  <div class="mobile-search__top">
+    <input id="search-mobile" type="text" aria-label="Mobile Search" placeholder="搜索" class="mobile-search__top--input"/>
+    <div id="search-mobile-close" class="mobile-search__top--icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/></svg>
+    </div>
+  </div>
+  <div id="search-mobile-results" class="mobile-search__body">
+    
+  </div>
+</div>
+
+  
+  <a role="button" class="navbar__burger" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>  
+
+  <div class="navbar__menu">
+    
+<div class="theme">
+  <div class="dropdown">
+    <button class="dropdown-trigger navbar__slide-down" aria-label="Select Theme Button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" d="M24 0H0v24h24V0z"/><path fill="currentColor" d="M6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31l-4.95-4.95c-.39-.39-1.02-.39-1.41 0L6.34 7.93zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>      
+    </button>
+    <div class="dropdown-content select-theme">
+      
+        
+        <a href="#" class="dropdown-item select-theme__item is-active">
+          dark
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          light
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          hacker
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          solarized
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          custom
+        </a>
+        
+      
+    </div>
+  </div>
+</div>
+
+    
+    <a href="/zh/archive" class="navbar__menu-item navbar__slide-down">存档</a>
+    
+    
+    <a href="/zh/posts" class="navbar__menu-item navbar__slide-down">文章</a>
+    
+    
+    <a href="/zh/pt" class="navbar__menu-item navbar__slide-down">展厅</a>
+    
+    
+    <a href="/zh/notes" class="navbar__menu-item navbar__slide-down">随笔</a>
+    
+    
+    <a href="/zh/about" class="navbar__menu-item navbar__slide-down">关于</a>
+    
+    
+  </div>
+</nav>
+            
+            
+
+
+<script src="/js/enquire.min.72cb9edeb1ca1b92f5bf9df8d31a1ecd1e423d0b5e0f48a2a208b020dd5053fa.js"></script>
+
+<main class="main-main">
+  
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+  <ol>
+    
+  
+  
+  
+  
+  
+  <li >    
+    
+      <a href="https://dshcao.github.io/zh/">dshcao blog</a>            
+        
+  </li>
+  
+  
+  <li >    
+    
+      <a href="https://dshcao.github.io/zh/posts/">文章</a>
+        
+  </li>
+  
+  
+  <li  class="is-active" >    
+    
+      <a href="https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/">Android-音视频基础知识(一)</a>
+        
+  </li>
+  
+  </ol>
+  
+</nav>
+  
+  <div class="single">
+    <h2 class="single__title">Android-音视频基础知识(一)</h2>
+    <div class="single__meta">
+      <div class="single__infos">
+  🕓 2019年 10月 11日 · ☕15 min read
+  
+</div>
+      <div class="single__tags caption">
+
+  
+    🏷️
+  
+  
+  <li>
+    <a href="/zh/tags/%E9%9F%B3%E8%A7%86%E9%A2%91" class="single__tag">
+      #音视频
+    </a>
+  </li>
+    
+
+  
+  
+  <li>
+    <a href="/zh/tags/android" class="single__tag">
+      #android
+    </a>
+  </li>
+    
+
+</div>
+    </div>    
+    <article class="single__contents">
+      <h2 id="rgbyuv">RGB&amp;YUV</h2>
+<ul>
+<li>RGB 红色(R)、绿色(G)、蓝色(B)三原色编码颜色。一般显示器上采用的标准。<!-- (一个发光单元里由RGB三色晶片组成全彩像素)。 -->其中每个原色用一个字节(8bit)表示，一个像素点占用3字节(24bit)。</li>
+<li>YUV YUV是一种颜色编码方式明亮度(Y)(Luminance/Luma)、色度(UV)(Chrominance/Chroma)，色度又包含色调、饱和度。YUV的出现是为了兼容黑白电视和彩色电视的显示，早期的黑白电视只有明亮度(Y)，出现彩色电视后为了兼容黑白电视和彩色电视发明了YUV颜色编码。YUV最大的优点就是占用极少宽带。</li>
+</ul>
+<h3 id="yuvycbcr">YUV&amp;YCbCr</h3>
+<p>YCbCr是YUV表示色彩信号的一种方式，Y是明亮度信息，Cb是蓝色偏移量，Cr是红色偏移量。一般我们将的YUV大多就是指YCbCr。</p>
+<h3 id="yuvrgb">YUV与RGB的转换</h3>
+<p>Y = 0.299 * R + 0.587 * G + 0.114 * B<br><br />
+U = -0.147 * R - 0.289 * G + 0.436 * B<br><br />
+V = 0.615 * R - 0.515 * G - 0.100 * B</p>
+<p>R = Y + 1.14 * V<br><br />
+G = Y - 0.39 * U - 0.58 * V<br><br />
+B = Y + 2.03 * U<br></p>
+<!-- 为什么YUV编码亮度和色度不是1:1采集？因为人对亮度敏感对色度不敏感，所以可以对色度更多的压缩。 -->
+<h3 id="yuv">YUV的采样</h3>
+<ul>
+<li>
+<p>YUV4:4:4<br />
+其中YUV444P的码流及映射</p>
+<pre><code>采样的码流：Y0 Y1 Y2 Y3 U0 U1 U2 U3 V0 V1 V2 V3
+映射出的像素点 [Y0 U0 V0]、[Y1 U1 V1]、[Y2 U2 V2]、[Y3 U3 V3] 
+</code></pre><p>可以看出该采样方式和RGB编码大小一样的，并没有达到节省宽带的目的。</p>
+</li>
+<li>
+<p>YUV4:2:2<br />
+其中I422的码流及映射</p>
+<pre><code>采样的码流：Y0 Y1 Y2 Y3 U0 U1 V0 V1
+映射出的像素点 [Y0 U0 V0]、[Y1 U0 V0]、[Y2 U1 V1]、[Y3 U1 V1] 
+</code></pre><p>可以看出该采样方式相比RGB编码节省了三分之一宽带。</p>
+</li>
+<li>
+<p>YUV4:2:0</p>
+</li>
+<li>
+<p>其中NV21的码流及映射</p>
+<pre><code>采样的码流：Y0 Y1 Y2 Y3 Y4 Y5 Y6 Y7 V0 U0 V1 U1
+映射出的像素点 [Y0 U0 V0]、[Y1 U0 V0]、[Y2 U0 V0]、[Y3 U0 V0]、[Y4 U1 V1]、[Y5 U1 V1]、[Y6 U1 V1]、[Y7 U1 V1] 
+</code></pre><p>可以看出该采样方式相比RGB编码节省了二分之一宽带。</p>
+</li>
+</ul>
+<h3 id="yuv-1">YUV存储方式</h3>
+<ul>
+<li>planar 平面模式 先存储Y分量，再分别存储U、V分量。</li>
+<li>packed 打包模式 Y、U、V分量连续交替存储。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>格式</th>
+<th>码流</th>
+<th>存储</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YUV444P</td>
+<td>YUV444P</td>
+<td>YYYYUUUUVVVV</td>
+<td>planar</td>
+</tr>
+<tr>
+<td>YUV422P</td>
+<td>I422</td>
+<td>YYYYUUVV</td>
+<td>planar</td>
+</tr>
+<tr>
+<td>YUV422</td>
+<td>YUYV</td>
+<td>YUYVYUYV</td>
+<td>packed</td>
+</tr>
+<tr>
+<td>YUV422</td>
+<td>UYVY</td>
+<td>UYVYUYVY</td>
+<td>packed</td>
+</tr>
+<tr>
+<td>YUV420P</td>
+<td>YU12(I420)</td>
+<td>YYYYYYYYUUVV</td>
+<td>planar</td>
+</tr>
+<tr>
+<td>YUV420P</td>
+<td>YV12</td>
+<td>YYYYYYYYVVUU</td>
+<td>planar</td>
+</tr>
+<tr>
+<td>YUV420SP</td>
+<td>NV12</td>
+<td>YYYYYYYYUVUV</td>
+<td>packed</td>
+</tr>
+<tr>
+<td>YUV420SP</td>
+<td>NV21</td>
+<td>YYYYYYYYVUVU</td>
+<td>packed</td>
+</tr>
+</tbody>
+</table>
+<p>其中NV12是IOS摄像头采集数据默认格式<br />
+NV21是Android摄像头采集数据默认格式</p>
+<h3 id="heading">封装格式</h3>
+<p>封装格式也叫容器，将已经编码压缩好的音频轨和视频轨按一定的格式放到一个文件中，封装格式仅是一个外壳</p>
+<table>
+<thead>
+<tr>
+<th>文件格式</th>
+<th>封装格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.avi</td>
+<td>AVI(Audio Video Interleaved)</td>
+</tr>
+<tr>
+<td>.wmv .asf</td>
+<td>WMV(Windows Media Video)</td>
+</tr>
+<tr>
+<td>.mpg .mpeg .vob .dat .3gp.mp4</td>
+<td>MPEG(Moving Picture Experts Group)</td>
+</tr>
+<tr>
+<td>.mkv</td>
+<td>Matroska</td>
+</tr>
+<tr>
+<td>.rm .rmvb</td>
+<td>Real Video</td>
+</tr>
+<tr>
+<td>.mov</td>
+<td>QuickTime File Format</td>
+</tr>
+<tr>
+<td>.flv</td>
+<td>Flash Video</td>
+</tr>
+</tbody>
+</table>
+<h3 id="heading-1">视频编码</h3>
+<p>视频编码是将视频像素数据(RGB/YUV等)压缩成视频码流从而降低视频数据量<br />
+名称        | 推出机构        | 推出时间 | 目前使用领域<br />
+&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;-|&mdash;&mdash;&ndash;|&mdash;&mdash;&mdash;-<br />
+HEVC(H265) | MPEG/ITU-T     | 2013   | 研发中<br />
+H264       | MPEG/ITU-T     | 2003   | 各个领域<br />
+MPEG4      | MPEG           | 2001   | 不温不火<br />
+MPEG2      | MPEG           | 1994   | 数字电视<br />
+VP9        | Google         | 2013   | 研发中<br />
+VP8        | Google         | 2008   | 不普及<br />
+VC-1       | Microsoft Inc. | 2006   | 微软平台</p>
+<p>其中研发中并不代表还没有使用，比如H265因其压缩比高，还原度高，在部分领域(电影行业)已经开始使用</p>
+<h3 id="heading-2">音频编码</h3>
+<p>音频编码是将音频采样数据(PCM等)压缩成音频码流从而降低音频的数据量<br />
+名称     | 推出机构        | 推出时间  | 目前使用领域<br />
+&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;-|&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&ndash;<br />
+AAC     | MPEG           | 1997    | 各个领域(新)<br />
+MP3     | MPEG           | 1993    | 各个领域(旧)<br />
+WMV     | Microsoft Inc. | 1999    | 微软平台<br />
+VC-3    | Dolby Inc.     | 1992    | 电影</p>
+<p>AAC相比MP3有更高的压缩比，同样大小的音频文件AAC质量更高</p>
+<h2 id="heading-3">音视频常见名词</h2>
+<ul>
+<li>dts(decoding timestamp) 解码时间戳，即一帧数据解码的时间</li>
+<li>pts(presentation timestamp) 显示时间戳，即一帧数据显示/播放的时间</li>
+<li>tb(timebase) 时间基，即时间单位。在FFmpeg中，很多时间并不是以自然时间为单位的。</li>
+<li>tbr(timebase of rate) 帧率时间基</li>
+<li>tbn(timebase of stream) 流时间基</li>
+<li>tbc(timebase of codec) 解码时间基</li>
+<li>帧率(fps) 单位kb/s(kbps)</li>
+<li>码率(bitrate)</li>
+<li>采样率</li>
+<li>I帧</li>
+<li>P帧</li>
+<li>B帧</li>
+<li>MB(macroblock) 巨图块，H.264/AVC的视讯编码机制是以图块(block-based)为基础单元，H264在编码时会将图像分割成许多矩形的小区域，称之为巨图块(macroblock，MB)</li>
+<li>NAL(Network Abstract Layer) 网络抽象层</li>
+<li>NALU(Network Abstract Layer Units) 网络抽象层单元，一个NALU存储了一帧画面压缩编码后的数据。</li>
+<li>VCL(Video Codec Layer) 视频编码层</li>
+<li>SPS 序列参数集，profile、level、宽高及颜色空间等信息，SPS只在关键帧时出现</li>
+<li>PPS 图像参数集，通常情况下PPS类似于SPS，PPS在任何一帧的头部出现</li>
+<li>GOP(group of pictures)</li>
+<li>IDR(instantaneous decoding refresh) 即时解码刷新，IDR一定是I帧，但I帧不一定是IDR</li>
+<li>SODB(String Of Data Bits) 数据比特串，最原始编码数据，长度不一定是8的倍数，所以需要加补齐，即加RBSP尾部(RBSP trailing bit)</li>
+<li>RBSP(Raw Byte Sequence Payload) 原始字节序列载荷</li>
+<li>EBSP(Encapsulated Byte Sequence Payload) 扩展字节序列载荷。H264文档并没有EBSP这一名词，但官方的JM使用了EBSP。EBSP的出现主要是是防止竞争，RBSP经过防竞争变换后成为EBSP。所以理论上：<code>NALU = NALU Header + RBSP</code>，实际上：<code>NALU = NALU Header + EBSP</code>。EBSP相较于RBSP，多了防止竞争的一个字节：0x03</li>
+<li>SEI(Supplemental Enhancement Information) 补充增强信息，SEI可以存放影片简介、版权宣告、用户自行定义的数据等</li>
+</ul>
+<h2 id="heading-4">编码及传输</h2>
+<h2 id="jm">JM</h2>
+<p>H.264 视频编解码标准是由 ITU-T 的VCEG(视频编码专家组)和ISO/IEC 的MPEG(活动图像编码专家组)的联合视频组JVT开发的。JM是JVT发布的用C语言编写而成的源代码公开的H.264编解码软件，通常作为算法研究和实际应用的平台。简单说就是官方发布的H.264编解码范本。JM8.6是JM 的一个版本，JM8.6(下文简称JM)没有引进最新的一些运动搜索以及快速模式选择算法。但研究它的工作方式和程序结构对H.264算法研究和在JM 基础上的代码剪裁仍然很有意义。</p>
+<h3 id="heading-5">视频编码及传输</h3>
+<pre><code>SODB + RBSP trailing bits = RBSP   
+NAL header(1 byte) + RBSP = NALU
+Start Code Prefix(3 bytes) + NALU + Start Code Prefix(3 bytes) + NALU + ... + = H.264BitsStream
+</code></pre><p>视频压缩的原理是利用影像在时间与空间上存有相似性。<br />
+H.264/AVC的视讯编码机制是以图块(block-based)为基础单元，也就是说先将整张影像分割成许多矩形的小区域，称之为宏块(macroblock，MB)，再将这些巨图块进行编码，先使用画面内预测(intra-prediction)与画面间预测(inter-prediction)技术，以去除影像之间的相似性来得到所谓的差余影像(residual)，再将差余影像施以空间转换(transform)与量化(quantize)来去除视觉冗余，最后视讯编码层会输出编码过的比特流(bitstream)，之后再包装成网络提取层的单元封包(NAL-unit)，经由网络传送到远程或储存在储存媒体中。</p>
+<p>当NALU的NAL header中NAL unit type是1，2，3，4，5时NALU主体RBSP即是Slice，见下面图表<a href="#11">NAL unit type</a><br />
+Slice = Slice header + Slice data<br />
+Slice data = MB + MB + &hellip; + MB<br />
+MB= mb_type(红块类型) + mb_pred(宏块预测数据) + coded_residual(残差数据)</p>
+<p>H.264/AVC的阶层架构由小到大依序是sub-block、block、macroblock、slice、slicegroup、frame/field-picture、sequence。<br />
+对一个采用4:2:0取样的MB而言，它是由16x16点的Luma与相对应的2个8x8点Chroma来组成，而在H.264/AVC的规范中，MB可再分割成多个16x8、8x16、8x8、8x4、4x8、4x4格式的sub-blocks。<br />
+slice时多个macroblock的集合，slice为H.264/AVC格式中的最小可译码单位(self-decodable unit)，也就是说一个slice单靠本身的压缩数据就能译码，而不必依靠其他slice<br />
+一张图像由多个slice组成，</p>
+<ol>
+<li>
+<p>起始码<br />
+一系列的起始码+NALU组成一个H264码流。H264码流中的起始码是固定的0x000001或0x00000001。如果NALU对应的Slice为一帧的开始则用4字节(0x00000001)表示，否则用3字节(0x000001)表示。那如果NALU内部出现0x000001或0x00000001怎么办？为了防止这种情况H264提出了防止竞争(emulation prevention)机制。在编码NALU时如果检测到连续两个0x00则插入一个0x03。当解码器在NALU检测到0x000003的数据时就把0x03抛弃，恢复原始数据。</p>
+</li>
+<li>
+<p>编码及传输<br />
+我们平时的每帧数据就是一个NAL单元（SPS与PPS除外）<br />
+一般来说编码器编出的首帧数据是PPS于SPS</p>
+</li>
+</ol>
+<p>H264的码流的打包方式有两种,一种为annex-b byte stream format 的格式，这个是绝大部分编码器的默认输出格式，就是每个帧的开头的3~4个字节是H264的起始码(0x000001或0x00000001)。<br />
+另一种是原始的NAL打包格式，就是开始的若干字节（1，2，4字节）是NAL的长度，而不是起始码,此时必须借助某个全局的数据来获得编 码器的profile,level,PPS,SPS等信息才可以解码。</p>
+<p>H264的功能分为两层</p>
+<ul>
+<li>VCL 视频编码层，负责有效表示视频数据的内容</li>
+<li>NAL 网络抽象层，负责格式化数据并提供头信息，以保证数据适合各种信道和存储介质上的传输<br />
+VCL数据是数据编码压缩后的视频序列，在VCL数据传输和存储之前这些编码的VCL数据再映射封装到NAL单元(NALU)中。每个NALU由一个NALU头信息和一个RBSP组成。<br />
+NALU头信息占一个字节，其中高位开始第：<br />
+1bit是禁止位F(forbidden_zero_bit)，必须是0，如果是1表示语法出错。<br />
+2～3bit是参考级别NRI(nal_ref_idc)，表示该NALU的重要性<br />
+4～8bit是NALU类型Type(nal_unit_type)，1～12由H264使用，24～31由H264以外的应用使用。</li>
+</ul>
+<p>图表<span id="11">NAL unit type</span><br />
+NAL unit type | NAL类型<br />
+&mdash;&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;<br />
+0             | 未定义<br />
+1             | 不分区，非IDR图像的片(非IDR Slice)<br />
+2             | 片分区A(Slice Partition A)<br />
+3             | 片分区B(Slice Partition B)<br />
+4             | 片分区C(Slice Partition C)<br />
+5             | IDR图像中的片(IDR Slice)<br />
+6             | SEI(补充增强信息单元)<br />
+7             | SPS(序列参数集)<br />
+8             | PPS(图像参数集)<br />
+9             | 分界符<br />
+10            | 序列结束<br />
+11            | 码流结束<br />
+12            | 填充<br />
+13~23         | 保留<br />
+24            | STAP-A 单一时间的组合包<br />
+25            | STAP-B 单一时间的组合包<br />
+26            | MTAP16 多个时间的组合包<br />
+27            | MTAP24 多个时间的组合包<br />
+28            | FU-A 分片的单元<br />
+29            | FU-B 分片的单元<br />
+30~31         | 未定义</p>
+<p>Start Code Prefix为3个字节. 但是，为了寻址方便，要求数据流在长度上对齐，因此H264建议在Start Code Prefix前面加若干个0.</p>
+<h3 id="heading-6">音频编码及传输</h3>
+<p>H264在网络传输过程中会被编码成一系列的网络数据包<br />
+NAL unit type都要与1F与运算转换，所以NAL unit type=7，在传输中实际传输的时67，67&amp;1F=7<br />
+HVS(人类视觉系统)由眼睛+神经+大脑构成，HVS特点：</p>
+<ol>
+<li>对高(刷新)频信息不敏感，60Hz以下是低频，60Hz以上是高频。类似于声频，当刷新频率高于60Hz时人类并不能比60Hz感受到更多。</li>
+<li>对高对比度更敏感</li>
+<li>对亮度信息比色度信息更敏感</li>
+<li>对运动的信息更敏感</li>
+</ol>
+<p>针对HVS特点，数字视频系统设计考虑：</p>
+<ol>
+<li>丢弃高频信息只编码低频信息</li>
+<li>提高边缘信息的主观质量，即对比度</li>
+<li>降低色度的解析度</li>
+<li>对感兴趣区域(Region of Interesting,ROI)做特殊处理</li>
+</ol>
+<h3 id="heading-7">分包</h3>
+<h3 id="heading-8">音频编码及传输</h3>
+<p>奈奎斯特采样定理：当采样频率fs.max大于信号中最高频率fmax的2倍时(fs.max&gt;2fmax)，采样之后的数字信号就可以完整地保留原始信号中的信息，一般实际应用中保证采样频率为信号最高频率的2.56～4倍</p>
+<ul>
+<li>采样频率： 每秒采集声音样本的次数。由于人耳所能听到的声音频率20Hz~20KHz，又由奈奎斯特采样定理可知当采样频率达到频率两倍时即可保留原始声波信号信息。因此采样率应该介于40~40K。一般的采样率有8K,11.025K,16K,22.05K,24K,44.1K,48K,96K，其中44.1K是CD音质，48K是DVD音质<br />
+11.025K是AM调幅广播声音品质，而22.05K和24K是FM调频广播的声音品质</li>
+<li>采样位数： 即所能表示声波的幅度。采样位数越大，所能表示的声波幅度越大，音质越好。一般又8bit，16bit，32bit。16bit已达CD音质</li>
+<li>声道数：声道可以简单理解为采集/播放音频数据的麦克风/喇叭个数，但也有的处理会将两个喇叭输出同一声道的声音。有单声道/双声道/多声道，双声道是立体声，三声道是环绕立体声。</li>
+<li>比特率：每秒传输的声音数据量。比特率=采样频率x采样位数x声道数</li>
+<li>周期：音频设备一次处理所需的帧数，对于音频设备的访问和音频数据的存储都是以此为单位</li>
+<li>交错模式：音频信号数据以连续帧的方式存储，即存储帧1的左、右声道样本，再存储帧2的左、右声道样本</li>
+<li>非交错模式：先存储一个周期内所有帧的左声道样本再存储一个周期内所有帧的右声道样本。</li>
+</ul>
+<h4 id="aac">AAC编码</h4>
+<p>ADTS Pkt + &hellip; + ADTS Pkt = AACBitsStream</p>
+<!-- memcpy(avFrame->data[0], bytes, size); //Y
+for (j = 0; j < size / 4; j++) {
+     *(avFrame->data[2] + j) = *(bytes + size + j * 2); // V
+     *(avFrame->data[1] + j) = *(bytes + size + j * 2 + 1); //U
+} 
+
+
+
+
+
+FFMPEG
+
+方法一：
+//1.根据格式获取缓存大小
+int av_image_get_buffer_size(enum AVPixelFormat pix_fmt, int width, int height, int align);
+//2.根据计算的缓存大小申请空间
+int av_image_fill_arrays(uint8_t *dst_data[4], int dst_linesize[4],const uint8_t *src,enum AVPixelFormat pix_fmt, int width, int height, int align);
+方法二：
+//根据格式申请缓存空间
+int av_image_alloc(uint8_t *pointers[4], int linesizes[4],int w, int h, enum AVPixelFormat pix_fmt, int align);
+方法二相当于方法一的两步
+
+av_init_packet 将已经存在的packet初始化为默认值
+av_packet_alloc 为packet分配内存并初始化为默认值
+av_new_packet 按制定大小为packet分配内存并初始化为默认值
+max_b_frames 两个非B帧之间最大B帧数
+
+
+frame->best_effort_timestamp
+ffmpeg获取可以从AVPacket和AVFrame中获取pts，一般两者一致，但有时候AVFrame没有pts或者是0/-1，这时候可以利用ffmpeg的方法
+av_frame_get_best_effort_timestamp推断出一个合适的pts时间戳，在ffmpeg已经不需要调用这个方法可以直接frame->best_effort_timestamp
+访问pts时间戳，即判断AVFrame pts异常时，可以用AVFrame->best_effort_timestamp代替
+
+av_q2d转换成时间
+PTS=PTS*av_q2d(video_stream->time_base)
+
+
+
+int avformat_alloc_output_context2(AVFormatContext **ctx, AVOutputFormat *oformat,const char *format_name, const char *filename);
+作用在于当我们需要将编码后的数据写入文件的时候用该方法，并配合
+int avio_open(AVIOContext **s, const char *url, int flags);
+AVStream *avformat_new_stream(AVFormatContext *s, const AVCodec *c);
+int avformat_write_header(AVFormatContext *s, AVDictionary **options);
+int av_write_trailer(AVFormatContext *s);
+让FFmpeg帮我们写文件，这样不用我们自己处理文件头文件尾格式问题
+
+
+
+
+
+openGL:
+Shader(着色器) 在GPU上运行的小程序
+
+
+android.hardware.Camera
+private String cameraFormatForPixelFormat(int pixel_format) {
+            switch(pixel_format) {
+            case ImageFormat.NV16:      return PIXEL_FORMAT_YUV422SP;
+            case ImageFormat.NV21:      return PIXEL_FORMAT_YUV420SP;
+            case ImageFormat.YUY2:      return PIXEL_FORMAT_YUV422I;
+            case ImageFormat.YV12:      return PIXEL_FORMAT_YUV420P;
+            case ImageFormat.RGB_565:   return PIXEL_FORMAT_RGB565;
+            case ImageFormat.JPEG:      return PIXEL_FORMAT_JPEG;
+            default:                    return null;
+            }
+        }
+
+
+
+https://blog.csdn.net/gb702250823/article/details/81627503
+MediaCodec的基本调用流程是：
+createEncoderByType/createDecoderByType
+configure
+start
+while(true) {
+     dequeueInputBuffer  //从输入流队列中取数据进行编码操作
+     getInputBuffers     //获取需要编码数据的输入流队列，返回的是一个ByteBuffer数组
+     queueInputBuffer    //输入流入队列
+     dequeueOutputBuffer //从输出队列中取出编码操作之后的数据
+     getOutPutBuffers    // 获取编解码之后的数据输出流队列，返回的是一个ByteBuffer数组
+     releaseOutputBuffer //处理完成，释放ByteBuffer数据
+}
+stop
+release
+
+
+相机拍摄预览文字有明显的闪烁纹，发现是设置了不支持的预览尺寸
+
+
+opengl
+像素缓冲区的作用：任何从 PBO 的读取或写入 PBO 的操作或任何缓冲区对象都用管线进行处理，这意味着 GPU 不需要完成所有其他操作，提高效率
+缓冲区对象在处理需要经常访问、修改或更新数据的场合中具有重大优势，比如异步调用 glReadPixels。
+将像素数据读取到 CPU 内存中需要 GPU 先完成正在进行的其它所有工作，
+如果 GPU 忙于渲染 3D 图形，这将影响图形渲染的效率。这时候可以使用 PBO，因为读取操作是通过管线进行的，
+所有对 glReadPixels 的调用能够立即返回。甚至可以多次调用，
+使用不同的缓冲区对象来读取不同的区域。
+如果不使用PBO而直接使用glReadPixels将是同步的，可能需要等待很久时间
+利用GPU管线的好处是：不需要等待GPU工作完成（比如：GPU正在渲染3D模型）
+
+
+camera.addCallbackBuffer(data);//复用分配的数组空间，提高效率，如果不设置的话每一帧会重新分配内存
+
+
+如果glReadPixels效率有问题可以用PBO
+
+AVPicture 存放yuv数据
+
+
+av_free&av_freep
+1.从概念上说，都是释放指针所指的那块内存，
+但是av_freep还多个功能，就是把当前指针置为NULL。
+
+2.从使用上说，也是有区别的，举例说明如下：
+uint8_t *buf = av_malloc(16);
+av_free(buf);
+
+uint8_t *buf = av_malloc(16);
+av_freep(&buf);
+
+
+AVPacket：存储压缩数据（视频对应H.264等码流数据，音频对应AAC/MP3等码流数据）
+AVFrame：存储非压缩的数据（视频对应RGB/YUV像素数据，音频对应PCM采样数据）
+
+memset是以字节为单位，初始化内存块
+
+视频或音频数据存储的2种格式packed和planar:
+假设有一路音频流，有左右两声道的数据。左声道用L表示，右声道用R表示。
+存储时，如果是左右声道数据交替存储成一维数组，这种格式称为packed。格式为LRLRLR....LRLR
+如果是分开存储成二维数组，这种格式称为planar。格式为LLLLLLLLLLLLLL和RRRRRRRRRRRRR
+视频也是如此，但是对于YUV格式的数据，比音频多一种存储方法叫semi-planar，也就是半planar。一共2路存储，Y一路，UV一路，其中UV交叉存储。
+
+c++声明即分配空间
+
+
+
+
+一些常用的Signal ：
+https://blog.csdn.net/yockie/article/details/51729774
+注意：如果是多线程程序，signal(SIGINT, sig_handler) 需要写在想要终止的那个线程里，只写在 main 函数不行。
+
+
+ALSA是Advanced Linux Sound Architecture，高级Linux声音架构的简称,它在Linux操作系统上提供了音频和MIDI（Musical Instrument Digital Interface，音乐设备数字化接口）的支持。在2.6系列内核中，ALSA已经成为默认的声音子系统，用来替换2.4系列内核中的OSS（Open Sound System，开放声音系统）。 [1]
+ALSA的主要特性包括：高效地支持从消费类入门级声卡到专业级音频设备所有类型的音频接口，完全模块化的设计， 支持对称多处理（SMP）和线程安全，对OSS的向后兼容，以及提供了用户空间的alsa-lib库来简化应用程序的开发。
+-->
+<p><span id="2">参考：</span></p>
+<ul>
+<li><a href="https://cloud.tencent.com/developer/article/1442041">一文读懂 YUV 的采样与格式</a></li>
+<li><a href="http://vcb-s.nmm-hd.org">音视频开发的一系列科普教程</a></li>
+</ul>
+<p><a href="https://www.jianshu.com/p/5f89ea2c3a28">https://www.jianshu.com/p/5f89ea2c3a28</a></p>
+<p><a href="https://www.cnblogs.com/yjg2014/p/6144977.html">https://www.cnblogs.com/yjg2014/p/6144977.html</a></p>
+
+    </article>
+    
+    
+<div class="whoami__gutter"></div>
+<hr class="hr-slash whoami-hr"/>
+<section class="whoami">  
+  <div class="whoami__image-wrapper">
+    
+    
+      
+        <img data-src="/images/whoami/avatar.jpg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24pt' height='24pt' viewBox='0 0 24 24' version='1.1'%3E%3Cg id='surface1035795'%3E%3Cpath style=' stroke:none;fill-rule:nonzero;fill:rgb(80%25,80%25,80%25);fill-opacity:1;' d='M 4 4 C 2.90625 4 2 4.90625 2 6 L 2 18 C 2 19.09375 2.90625 20 4 20 L 20 20 C 21.09375 20 22 19.09375 22 18 L 22 6 C 22 4.90625 21.09375 4 20 4 Z M 4 6 L 20 6 L 20 18 L 4 18 Z M 4 6 '/%3E%3C/g%3E%3C/svg%3E%0A" alt="dshcao" class="lazyload whoami__image"/>
+             
+    
+  </div>
+  <div class="whoami__contents">
+    <div class="whoami__written-by">
+      作者
+    </div>
+    <div class="whoami__title">
+      dshcao
+    </div>
+    <div class="whoami__desc">
+      Android Developer      
+    </div>
+    <div class="whoami__social">
+      
+      
+      <a href="mailto:513996717@qq.com" title="email" aria-label="email">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg>
+      </a>
+      
+      
+      
+      
+      
+      <a href="https://github.com/dshcao" title="github" aria-label="github">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 24 24" version="1.1">
+<g id="surface3680">
+<path fill="currentColor" d="M 10.898438 2.101562 C 6.300781 2.601562 2.601562 6.300781 2.101562 10.800781 C 1.601562 15.5 4.300781 19.699219 8.398438 21.300781 C 8.699219 21.398438 9 21.199219 9 20.800781 L 9 19.199219 C 9 19.199219 8.601562 19.300781 8.101562 19.300781 C 6.699219 19.300781 6.101562 18.101562 6 17.398438 C 5.898438 17 5.699219 16.699219 5.398438 16.398438 C 5.101562 16.300781 5 16.300781 5 16.199219 C 5 16 5.300781 16 5.398438 16 C 6 16 6.5 16.699219 6.699219 17 C 7.199219 17.800781 7.800781 18 8.101562 18 C 8.5 18 8.800781 17.898438 9 17.800781 C 9.101562 17.101562 9.398438 16.398438 10 16 C 7.699219 15.5 6 14.199219 6 12 C 6 10.898438 6.5 9.800781 7.199219 9 C 7.101562 8.800781 7 8.300781 7 7.601562 C 7 7.199219 7 6.601562 7.300781 6 C 7.300781 6 8.699219 6 10.101562 7.300781 C 10.601562 7.101562 11.300781 7 12 7 C 12.699219 7 13.398438 7.101562 14 7.300781 C 15.300781 6 16.800781 6 16.800781 6 C 17 6.601562 17 7.199219 17 7.601562 C 17 8.398438 16.898438 8.800781 16.800781 9 C 17.5 9.800781 18 10.800781 18 12 C 18 14.199219 16.300781 15.5 14 16 C 14.601562 16.5 15 17.398438 15 18.300781 L 15 20.898438 C 15 21.199219 15.300781 21.5 15.699219 21.398438 C 19.398438 19.898438 22 16.300781 22 12.101562 C 22 6.101562 16.898438 1.398438 10.898438 2.101562 Z M 10.898438 2.101562 "/>
+</g>
+</svg>
+
+      </a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <a href="https://stackoverflow.com/users/12583274/dshcao" title="stack-overflow" aria-label="stack-overflow">
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="25" height="25"><path fill="currentColor" d="M 9.914063 0.71875 L 9.085938 1.28125 L 11.894531 5.367188 L 12.71875 4.800781 Z M 7.695313 2.453125 L 7.039063 3.207031 L 10.917969 6.582031 L 11.574219 5.828125 Z M 6.226563 4.804688 L 5.773438 5.695313 L 10.210938 7.953125 L 10.664063 7.0625 Z M 5.363281 7.140625 L 5.136719 8.109375 L 9.976563 9.242188 L 10.203125 8.265625 Z M 3 9 L 3 14 L 12 14 L 12 9 L 11 9 L 11 13 L 4 13 L 4 9 Z M 5.03125 9.25 L 4.96875 10.25 L 9.972656 10.566406 L 10.035156 9.570313 Z M 5 11 L 5 12 L 10 12 L 10 11 Z"/></svg>
+      </a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+  </div>
+</section>
+<hr class="hr-slash whoami-hr" />
+
+    <section class="related">
+    
+    
+    <h1 class="related__title">
+      <hr class="hr-dots"/>
+      <div>
+        相关内容
+      </div>
+      <hr class="hr-dots"/>
+    </h1>
+    <ul class="related-ul">
+        
+        <li>
+          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E9%87%87%E5%BD%95%E6%91%84%E5%83%8F%E5%A4%B4/" class="related__link">Android直播-采录摄像头</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E5%BD%95%E5%88%B6%E5%B1%8F%E5%B9%95/" class="related__link">Android直播-录制屏幕</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-ffmpeg%E4%BD%BF%E7%94%A8/" class="related__link">Android-FFmpeg使用</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-sparsearray%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="related__link">SparseArray源码解析</a>
+        </li>
+        
+    </ul>
+    
+  </section>
+    <div class="grow"></div>
+<nav class="pagination-single">
+  
+    <a href="https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/" class="pagination-single__left">
+      <div class="pagination-single__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
+      </div>
+      <div class="pagination-single__left-title">Android四大组件-Activity/Fragment</div>      
+    </a>
+  
+  <div class="grow"></div>
+  
+    <a href="https://dshcao.github.io/zh/posts/android-%E7%83%AD%E6%9B%B4%E6%96%B0/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">Android-热更新</div>
+      <div class="pagination-single__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
+      </div>
+    </a>
+  
+</nav>
+    
+  
+    
+<div id="vcomments"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script>
+  new Valine({
+      el: '#vcomments' ,
+      appId: '26IJaKoF5dnnKNBiQRI3Ovw8-MdYXbMMI',
+      appKey: 'coAossMXBdLt88uP5QzSexla',
+      notify:  false ,
+      verify:  false ,
+      avatar:'mm',
+      placeholder: '说点什么吧...',
+      visitor:  false 
+  });
+</script>
+  
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+  
+  <div class="pswp__bg"></div>
+
+  
+  <div class="pswp__scroll-wrap">
+
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+
+    
+    <div class="pswp__ui pswp__ui--hidden">
+
+      <div class="pswp__top-bar">
+
+        
+
+        <div class="pswp__counter"></div>
+
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+        <button class="pswp__button pswp__button--share" title="Share"></button>
+
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+        
+        
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div>
+      </div>
+
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+    <div class="hide">
+    
+
+<div class="search">
+  <span class="icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+  </span>
+  <input id="search" aria-label="Site Search" class="input" type="text" placeholder="搜索" autocomplete="off">
+  <div id="search-results" class="dropdown">
+    <div id="search-menu" class="dropdown-menu" role="menu">
+    </div>
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</main>
+
+
+<aside class="main-side">
+  
+
+
+<section class="sidebar">
+  <div class="toc__flexbox" data-position="fixed">
+    <h6 class="toc__title">目录</h6>
+    
+      <label class="switch">
+        <input id="toggle-toc" aria-label="Toggle TOC" type="checkbox" checked>
+        <span class="slider round"></span>
+      </label>
+    
+  </div>
+  <div class="toc">
+    <ul id="toc"></ul>
+  </div>
+</section>
+
+
+
+</aside>
+
+<script>
+  enquire.register("screen and (max-width: 769px)", {
+    match: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "hide";
+      }
+    },
+    unmatch: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main-main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "main-side";
+      }
+      document.getElementsByClassName('navbar__burger')[0].classList.remove('is-active');
+      document.getElementsByClassName('navbar__menu')[0].classList.remove('is-active');
+      document.getElementsByClassName('mobile-search')[0].classList.add('hide');
+    },
+    setup: function () { },
+    deferSetup: true,
+    destroy: function () { },
+  });
+</script>
+
+
+
+
+<script defer src="/js/jquery.min.0925e8ad7bd971391a8b1e98be8e87a6971919eb5b60c196485941c3c1df089a.js"></script>
+
+<script defer src="/js/enquire.min.72cb9edeb1ca1b92f5bf9df8d31a1ecd1e423d0b5e0f48a2a208b020dd5053fa.js"></script>
+
+<script defer src="/js/clipboard.min.1626706afc88d95ebe1173b553ec732c6dc82a576989315fdf5e7779af738a44.js"></script>
+
+<script defer src="/js/lazysizes.min.31dd6a2d3a1ec0f78a8df007535cf23f03aeb5c70f026e6d6a19dac3b3acc340.js"></script>
+
+<script defer src="/js/zzo.min.31d5b7d503557f488cc17574468cbc03fca4e45f61c15080d29bff7e38043ec8.js"></script>
+
+
+  
+  <script defer src="/lib/photoswipe/photoswipe.min.78fc260a16dbbd76ec3b4da56ccdc7a076d21d31c501e0a17a4175c4a25d95ea.js"></script>
+  
+  <script defer src="/lib/photoswipe/photoswipe-ui-default.min.50a9333a7ff0d660714662cb1ab49ec81e1ed716eba78c729600166f7338da95.js"></script>
+  
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css">
+  
+  <link rel="stylesheet" href="/lib/photoswipe/custom-skin.min.css">
+
+
+
+  
+  <script defer src="/js/jquery.toc.min.376e1b5d343786c1978dbad9ea7a0e23088947732993a91dcbad995883c96ceb.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  window.onload = function() {
+    
+    (function () {
+      document.querySelectorAll('.chroma > table')
+        .forEach((element) => {
+          const sub = element.querySelector('code[data-lang]');
+          if (sub) {
+            $(element).closest('div.chroma').attr('data-lang', mapLang(sub.getAttribute('data-lang')));
+          }
+        }
+      );
+    })();
+
+    (function () {
+      document.querySelectorAll('.single__contents > pre > code')
+        .forEach((element) => {
+          if (!$(element).attr('data-lang')) {
+            $(element).parent().wrap('<div data-lang="Code" class="language-code"></div>');
+          }
+        });
+    })();
+
+    function mapLang(name) {
+      return {
+        coffeescript: 'CoffeeScript',
+        cpp: 'C++',
+        cs: 'C#',
+        css: 'CSS',
+        html: 'HTML',
+        http: 'HTTP',
+        js: 'JavaScript',
+        json: 'JSON',
+        objectivec: 'Objective-C',
+        php: 'PHP',
+        sql: 'SQL',
+        toml: 'TOML',
+        ts: 'TypeScript',
+        typescript: 'TypeScript',
+        xml: 'XML',
+        yaml: 'YAML',
+      }[name] || name.toUpperCase();
+    }
+
+    
+    runSearch();
+
+    
+    
+    
+    var enableBusuanzi = JSON.parse("false");
+    var busuanziPagePV = JSON.parse("true");
+    
+    if (enableBusuanzi && busuanziPagePV) {      
+      $('#busuanzi_value_page_pv').digits();
+    }    
+
+    var navbar = $('.navbar');
+
+    
+    
+    var enableToc = JSON.parse("true");
+    
+    if (enableToc) {
+      $("#toc").toc({ content: ".single__contents", headings: "h1,h2,h3,h4" });
+      $('#toc > li').each(function () {
+        $(this).find('ul').css('display', 'none');
+      });
+      $('#toc a').each(function () {
+        $(this).click(function () {
+          navbar.removeClass('navbar--show');
+          navbar.removeClass('navbar--hide');
+          navbar.addClass('navbar--hide');
+
+          $(".single__contents :header").each(function () {
+            $('.toc a').removeClass('active');
+          });
+          $(this).addClass('active');
+
+          $('#toc > li').each(function () {
+            $(this).find('ul').css('display', 'none');
+          });
+          $(this).next().css('display', 'block');
+          $(this).parents('ul').css('display', 'block');
+        });
+      });
+
+      
+      $("#toggle-toc").change(function () {
+        if (this.checked) {
+          $('.toc').fadeIn(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main-main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'fixed');
+        } else {
+          $('.toc').fadeOut(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'absolute');
+        }
+      });
+    }    
+
+    
+    var text, clip = new ClipboardJS('.anchor');
+    var headers = $('.single__contents :header').not('h6').not('h5');
+    headers.append(function (index, html) {
+      var element = $(this);
+      var url = encodeURI(document.location.origin + document.location.pathname);
+      var link = url + "#" + element[0].id;
+      return " <span class='anchor hide' data-clipboard-text='" + link + "' style='position: relative;'>" +
+        "<span style='font-size: 1rem; position: absolute; right: -2rem; top: 50%; transform: translateY(-50%)'>🔗</span>" +
+        "</span>"
+        ;
+    });
+    headers.on('mouseenter', function () {
+      $(this).find('.anchor').attr('class', 'anchor');
+    });
+    headers.on('mouseleave', function () {
+      $(this).find('.anchor').attr('class', 'anchor hide');
+    });
+
+    $(".anchor").on('mouseleave', function (e) {
+      $(this).attr('aria-label', null).removeClass('tooltipped tooltipped-s tooltipped-w');
+    });
+
+    clip.on('success', function (e) {
+      e.clearSelection();
+      $(e.trigger).attr('aria-label', 'Link copied to clipboard!').addClass('tooltipped tooltipped-s');
+    });
+    
+    $('.language-code').each(function (i, node) {
+      $(node).append('<span class="copy-to-clipboard" title="Copy to clipboard"/>');
+    });
+
+    
+    var clipInit = false;
+    $('pre.chroma code, .language-code code').each(function () {
+      var code = $(this),
+        text = code.text();
+
+      if (text.length > 30) {
+        if (!clipInit) {
+          var text, clip = new ClipboardJS('.copy-to-clipboard', {
+            text: function (trigger) {
+              console.log();
+              if ($(trigger).prev().find('code').length > 1) {                
+                text = $(trigger).prev().find(`code[class^="language-"]`).text();
+              } else {
+                text = $(trigger).prev().find('code').text();
+              }
+               
+              return text.replace(/^\$\s/gm, '');
+            }
+          });
+
+          var inPre;
+          clip.on('success', function (e) {
+            e.clearSelection();
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+          });
+
+          clip.on('error', function (e) {
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', fallbackMessage(e.action)).addClass('tooltipped tooltipped-w');
+            $(document).one('copy', function () {
+              $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+            });
+          });
+
+          clipInit = true;
+        }
+
+        var notAllowedClass = ['language-mermaid', 'language-viz', 'language-wave', 'language-chart', 'language-msc', 'language-flowchart'];
+        var isNotAllowedIncluded = false;
+        var curClassName = code.attr('class');
+
+        for (let str of notAllowedClass) {
+          if (curClassName && curClassName.startsWith(str)) {
+            isNotAllowedIncluded = true;
+            break;
+          } 
+        }
+        
+        if (!isNotAllowedIncluded) {
+          if (curClassName) {
+            code.closest('div.chroma').append('<span class="copy-to-clipboard" title="Copy to clipboard" />');
+          }         
+        }        
+      }
+    });
+
+    
+    
+    var enablePhotoSwipe = JSON.parse("true");
+    
+    if (enablePhotoSwipe) {
+      var pswpElement = $('.pswp')[0];
+      var imgElements = $('.single__contents').find('img');
+      var items = [];
+
+      imgElements.each(function (i, v) {
+        $(this).click(function (e) {
+          initGallery(i);
+        });
+        $(this).css('cursor', 'pointer');
+        items.push({
+          src: v['src'],
+          w: 0,
+          h: 0,
+          title: filename(v['src']),
+        });
+      });
+
+      function filename(str) {
+        var s = str.replace(/\\/g, '/');
+        s = s.substring(s.lastIndexOf('/') + 1);
+        return str ? s.replace(/[?#].+$/, '') : s.split('.')[0];
+      }
+
+      function initGallery(index) {
+        var options = { index: index };
+        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.listen('imageLoadComplete', function (index, item) {
+          if (item.h < 1 || item.w < 1) {
+            let img = new Image();
+            img.onload = () => {
+              item.w = img.width;
+              item.h = img.height;
+              gallery.invalidateCurrItems();
+              gallery.updateSize(true);
+            }
+            img.src = item.src;
+          }
+        });
+        gallery.init();
+      }
+    }
+
+    
+    
+    var lib = JSON.parse("null");
+
+    if (lib && lib.includes('mermaid')) {
+      
+      var themeVariant = localStorage.getItem('theme') || JSON.parse("\"dark\"");
+
+      if (themeVariant === "dark" || themeVariant === "hacker") {
+        mermaid.initialize({ theme: 'dark' });
+      } else {
+        mermaid.initialize({ theme: 'default' });
+      }
+      
+      let mermaids = [];
+      [].push.apply(mermaids, document.getElementsByClassName('language-mermaid'));
+      for (i = 0; i < mermaids.length; i++) {
+        $(mermaids[i]).unwrap('pre');
+        $(mermaids[i]).replaceWith(function () {
+          return $("<div />").append($(this).contents()).addClass('mermaid').css('padding', '34px 4px 6px');
+        });
+      }
+    }
+
+    
+    if (lib && lib.includes('katex')) {
+      var mathElements = document.getElementsByClassName('math');
+      var options = [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ];
+
+      renderMathInElement(document.querySelector('.single__contents'), options);
+    }
+
+    
+    if (lib && lib.includes('flowchartjs')) {
+      
+      var options = JSON.parse("{\"arrow-end\":\"block\",\"element-color\":\"black\",\"fill\":\"white\",\"flowstate\":{\"approved\":{\"fill\":\"#58C4A3\",\"font-size\":12,\"no-text\":\"n/a\",\"yes-text\":\"APPROVED\"},\"current\":{\"fill\":\"yellow\",\"font-color\":\"red\",\"font-weight\":\"bold\"},\"future\":{\"fill\":\"#FFFF99\"},\"invalid\":{\"fill\":\"#444444\"},\"past\":{\"fill\":\"#CCCCCC\",\"font-size\":12},\"rejected\":{\"fill\":\"#C45879\",\"font-size\":12,\"no-text\":\"REJECTED\",\"yes-text\":\"n/a\"},\"request\":{\"fill\":\"blue\"}},\"font-color\":\"black\",\"font-size\":14,\"line-color\":\"black\",\"line-length\":50,\"line-width\":3,\"no-text\":\"no\",\"scale\":1,\"symbols\":{\"end\":{\"class\":\"end-element\"},\"start\":{\"element-color\":\"green\",\"fill\":\"yellow\",\"font-color\":\"red\"}},\"text-margin\":10,\"x\":0,\"y\":0,\"yes-text\":\"yes\"}");
+
+      var flowchartPrefix = "language-flowchart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + flowchartPrefix + "]"), function(x){
+          x.style.display = 'none'
+          x.parentNode.style.backgroundColor = "transparent"
+          jsonContent = x.innerText;
+
+          node0 = document.createElement('div');
+          node0.id = 'flowchart' + index;
+          x.parentNode.insertBefore(node0, x);
+
+          var diagram = flowchart.parse(jsonContent);
+          diagram.drawSVG("flowchart"+index, options);
+
+          index +=1;
+      });      
+    }
+
+    
+    if (lib && lib.includes('mathjax')) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: false,
+          packages: { '[+]': ['noerrors'] }
+        },
+        loader: {
+          load: ['[tex]/noerrors']
+        },
+      };
+    }
+
+    
+    if (lib && lib.includes('msc')) {
+      
+      var options = JSON.parse("{\"theme\":\"hand\"}");    
+
+      var index = 0;
+      var chartPrefix = "language-msc";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'msc' + index;
+        x.parentNode.insertBefore(node0, x);
+        var diagram = Diagram.parse(jsonContent);
+        diagram.drawSVG("msc" + index, options);
+        index += 1;
+      });
+    }
+
+    
+    if (lib && lib.includes('chart')) {
+      var borderColor = "#666";
+      var bgColor = "#ddd";
+      var borderWidth = 2;
+
+      Chart.defaults.global.elements.rectangle.borderWidth = borderWidth;
+      Chart.defaults.global.elements.rectangle.borderColor = borderColor;
+      Chart.defaults.global.elements.rectangle.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.line.borderWidth = borderWidth;
+      Chart.defaults.global.elements.line.borderColor = borderColor;
+      Chart.defaults.global.elements.line.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.point.borderWidth = borderWidth;
+      Chart.defaults.global.elements.point.borderColor = borderColor;
+      Chart.defaults.global.elements.point.backgroundColor = bgColor;
+
+      var chartPrefix = "language-chart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('canvas');
+        node0.height = 200;
+        node0.style.height = 200;
+        node0.id = 'myChart' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        var ctx = document.getElementById('myChart' + index).getContext('2d');
+        var myChart = new Chart(ctx, source);
+        index += 1;
+      });            
+    }
+
+    
+    if (lib && lib.includes('wavedrom')) {
+      var wavePrefix = "language-wave";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + wavePrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'WaveDrom_Display_' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        WaveDrom.RenderWaveForm(index, source, "WaveDrom_Display_");
+        index += 1;
+      });
+    }
+
+    
+    if (lib && lib.includes('viz')) {
+      var vizPrefix = "language-viz-";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + vizPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        var engine;
+        x.getAttribute("class").split(" ").forEach(function (cls) {
+          if (cls.startsWith(vizPrefix)) {
+            engine = cls.substr(vizPrefix.length);
+          }
+        });
+        var viz = new Viz();
+        viz.renderSVGElement(x.innerText, { engine: engine })
+          .then(function (element) {
+            element.style.width = "100%";
+            x.parentNode.insertBefore(element, x);
+          })
+      });
+    }
+  }
+</script>
+
+
+            
+            <footer class="footer">
+    
+<div class="dropdown">
+  <button class="dropdown-trigger" aria-label="Select Theme Button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M12.65 15.67c.14-.36.05-.77-.23-1.05l-2.09-2.06.03-.03c1.74-1.94 2.98-4.17 3.71-6.53h1.94c.54 0 .99-.45.99-.99v-.02c0-.54-.45-.99-.99-.99H10V3c0-.55-.45-1-1-1s-1 .45-1 1v1H1.99c-.54 0-.99.45-.99.99 0 .55.45.99.99.99h10.18C11.5 7.92 10.44 9.75 9 11.35c-.81-.89-1.49-1.86-2.06-2.88-.16-.29-.45-.47-.78-.47-.69 0-1.13.75-.79 1.35.63 1.13 1.4 2.21 2.3 3.21L3.3 16.87c-.4.39-.4 1.03 0 1.42.39.39 1.02.39 1.42 0L9 14l2.02 2.02c.51.51 1.38.32 1.63-.35zM17.5 10c-.6 0-1.14.37-1.35.94l-3.67 9.8c-.24.61.22 1.26.87 1.26.39 0 .74-.24.88-.61l.89-2.39h4.75l.9 2.39c.14.36.49.61.88.61.65 0 1.11-.65.88-1.26l-3.67-9.8c-.22-.57-.76-.94-1.36-.94zm-1.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+  </button>
+  <div class="dropdown-content">
+    
+    
+    
+      
+      
+        
+      
+        
+        
+          
+            
+              <a href="https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/" data-lang="zh" class="dropdown-item is-active">中文</a>
+            
+          
+        
+      
+    
+  </div>
+</div>
+
+    
+<div class="footer__social">
+  <div class="social">
+    
+      
+      <a href="mailto:513996717@qq.com" title="email" aria-label="email">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg>
+      </a>
+            
+    
+            
+    
+      
+      <a href="https://github.com/dshcao" title="github" aria-label="github">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 24 24" version="1.1">
+<g id="surface3680">
+<path fill="currentColor" d="M 10.898438 2.101562 C 6.300781 2.601562 2.601562 6.300781 2.101562 10.800781 C 1.601562 15.5 4.300781 19.699219 8.398438 21.300781 C 8.699219 21.398438 9 21.199219 9 20.800781 L 9 19.199219 C 9 19.199219 8.601562 19.300781 8.101562 19.300781 C 6.699219 19.300781 6.101562 18.101562 6 17.398438 C 5.898438 17 5.699219 16.699219 5.398438 16.398438 C 5.101562 16.300781 5 16.300781 5 16.199219 C 5 16 5.300781 16 5.398438 16 C 6 16 6.5 16.699219 6.699219 17 C 7.199219 17.800781 7.800781 18 8.101562 18 C 8.5 18 8.800781 17.898438 9 17.800781 C 9.101562 17.101562 9.398438 16.398438 10 16 C 7.699219 15.5 6 14.199219 6 12 C 6 10.898438 6.5 9.800781 7.199219 9 C 7.101562 8.800781 7 8.300781 7 7.601562 C 7 7.199219 7 6.601562 7.300781 6 C 7.300781 6 8.699219 6 10.101562 7.300781 C 10.601562 7.101562 11.300781 7 12 7 C 12.699219 7 13.398438 7.101562 14 7.300781 C 15.300781 6 16.800781 6 16.800781 6 C 17 6.601562 17 7.199219 17 7.601562 C 17 8.398438 16.898438 8.800781 16.800781 9 C 17.5 9.800781 18 10.800781 18 12 C 18 14.199219 16.300781 15.5 14 16 C 14.601562 16.5 15 17.398438 15 18.300781 L 15 20.898438 C 15 21.199219 15.300781 21.5 15.699219 21.398438 C 19.398438 19.898438 22 16.300781 22 12.101562 C 22 6.101562 16.898438 1.398438 10.898438 2.101562 Z M 10.898438 2.101562 "/>
+</g>
+</svg>
+
+      </a>
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+      
+      <a href="https://stackoverflow.com/users/12583274/dshcao" title="stack-overflow" aria-label="stack-overflow">
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32"><path fill="currentColor" d="M 9.914063 0.71875 L 9.085938 1.28125 L 11.894531 5.367188 L 12.71875 4.800781 Z M 7.695313 2.453125 L 7.039063 3.207031 L 10.917969 6.582031 L 11.574219 5.828125 Z M 6.226563 4.804688 L 5.773438 5.695313 L 10.210938 7.953125 L 10.664063 7.0625 Z M 5.363281 7.140625 L 5.136719 8.109375 L 9.976563 9.242188 L 10.203125 8.265625 Z M 3 9 L 3 14 L 12 14 L 12 9 L 11 9 L 11 13 L 4 13 L 4 9 Z M 5.03125 9.25 L 4.96875 10.25 L 9.972656 10.566406 L 10.035156 9.570313 Z M 5 11 L 5 12 L 10 12 L 10 11 Z"/></svg>
+      </a>
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+    
+  <a href="https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80//index.xml" type="application/rss+xml" title="rss" aria-label="RSS Feed Link">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle fill="currentColor" cx="6.18" cy="17.82" r="2.18"/><path fill="currentColor" d="M5.59 10.23c-.84-.14-1.59.55-1.59 1.4 0 .71.53 1.28 1.23 1.4 2.92.51 5.22 2.82 5.74 5.74.12.7.69 1.23 1.4 1.23.85 0 1.54-.75 1.41-1.59-.68-4.2-3.99-7.51-8.19-8.18zm-.03-5.71C4.73 4.43 4 5.1 4 5.93c0 .73.55 1.33 1.27 1.4 6.01.6 10.79 5.38 11.39 11.39.07.73.67 1.28 1.4 1.28.84 0 1.5-.73 1.42-1.56-.73-7.34-6.57-13.19-13.92-13.92z"/></svg>
+  </a>
+
+  </div>
+</div>
+
+    
+<div id="gtt">
+  <div class="gtt">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M8.12 14.71L12 10.83l3.88 3.88c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L12.7 8.71c-.39-.39-1.02-.39-1.41 0L6.7 13.3c-.39.39-.39 1.02 0 1.41.39.38 1.03.39 1.42 0z"/></svg>
+  </div>
+</div>
+
+    <hr />
+
+    
+    <div class="footer__poweredby">
+    
+
+                
+            <p class="caption">
+                ©2020, All Rights Reserved
+            </p>
+        
+        <p class="caption">Powered by <a href="https://gohugo.io/" rel="noreferrer">Hugo</a> and the <a href="https://github.com/zzossig/hugo-theme-zzo" rel="noreferrer">Zzo theme</a></p>
+    </div>
+        
+</footer>
+        </div>    
+    </div>
+</body>
+
+</html>

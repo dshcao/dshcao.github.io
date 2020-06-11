@@ -409,7 +409,7 @@
     <h2 class="single__title">Android源码解析-NestedScrolling</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 12月 11日 · ☕10 min read
+  🕓 2019年 12月 11日 · ☕13 min read
   
 </div>
       <div class="single__tags caption">
@@ -451,6 +451,20 @@
 <h3 id="heading-1">嵌套原理</h3>
 <p>我们知道触摸事件被父控件拦截后子控件无法收到后续的事件。同样的如果子控件决定了消费触摸事件父控件的onTouchEvent也无法继续收到后续的触摸事件。嵌套滑动如何实现的呢？答案是通过requestDisallowInterceptTouchEvent(true)请求父控件不要拦截触摸事件，触摸事件传递到子控件并在子控件onTouchEvent中调用startNestedScroll开启整个嵌套滚动。startNestedScroll会检测支持嵌套滚动的父控件并持有该父控件。然后通过嵌套滚动API的回调方法实现子控件和父控件的通信</p>
 <h3 id="heading-2">执行过程</h3>
+<p>NestedChild                                     NestedParent</p>
+<p>startNestedScroll(TYPE_TOUCH)                   onStartNestedScroll(TYPE_TOUCH)<br />
+onNestedScrollAccepted(TYPE_TOUCH)<br />
+dispatchNestedPreScroll(TYPE_OUCH)              onNestedPreScroll(TYPE_TOUCH)<br />
+dispatchNestedScroll(TYPE_TOUCH)                onNestedScroll(TYPE_TOUCH)<br />
+dispatchNestedPreFling                          onNestedPreFling<br />
+dispatchNestedFling                             onNestedFling<br />
+startNestedScroll(TYPE_NON_TOUCH)               onStartNestedScroll(TYPE_NON_TOUCH)<br />
+onNestedScrollAccepted(TYPE_NON_TOUCH)<br />
+stopNestedScroll(TYPE_TOUCH)                    onStopNestedScroll(TYPE_NON_TOUCH)<br />
+dispatchNestedPreScroll(TYPE_NON_TOUCH)         onNestedPreScroll(TYPE_NON_TOUCH)<br />
+dispatchNestedScroll(TYPE_NON_TOUCH)            onNestedScroll(TYPE_NON_TOUCH)     <br />
+stopNestedScroll(TYPE_NON_TOUCH)                onStopNestedScroll(TYPE_NON_TOUCH)</p>
+<p>执行顺序从左到右，从上到下</p>
 <h2 id="nestedscrollingchildnestedscrollingchild2nestedscrollingchild3">NestedScrollingChild/NestedScrollingChild2/NestedScrollingChild3</h2>
 <p>NestedScrollingChild2继承自NestedScrollingChild并重载部分方法。为什么重载？增强实现。NestedScrollingChild3继承自NestedScrollingChild2并重载部分方法进一步增强实现。详情看下面源码解析注释。</p>
 <p>主要方法：</p>
@@ -702,7 +716,7 @@
 </li>
 <li>
 <p>dispatchNestedScroll<br />
-分发嵌套滑动事件。</p>
+子控件消费后再次向父控件分发嵌套滑动事件。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -798,7 +812,7 @@
 </div></li>
 <li>
 <p>dispatchNestedPreFling<br />
-分发fling事件。</p>
+子控件消费fling事件前向父控件分发fling事件，若父控件消费则子控件将无法再消费。有一定局限性</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -845,7 +859,7 @@
 </li>
 <li>
 <p>dispatchNestedFling<br />
-分发fling事件。</p>
+若父控件未消费会调用该方法再次向父控件分发fling事件，之后会再此交给子控件处理</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -965,6 +979,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="nestedscrollingchild2">NestedScrollingChild2</h3>
+<p>NestedScrollingChild2相比NestedScrollingChild主要增加了fling消费的支持。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -982,22 +997,26 @@
 </span><span class="lnt">13
 </span><span class="lnt">14
 </span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">NestedScrollingChild2</span> <span class="kd">extends</span> <span class="n">NestedScrollingChild</span> <span class="o">{</span>
 
-    <span class="kt">boolean</span> <span class="nf">startNestedScroll</span><span class="o">(</span><span class="nd">@ScrollAxis</span> <span class="kt">int</span> <span class="n">axes</span><span class="o">,</span> <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
-
-    <span class="kt">void</span> <span class="nf">stopNestedScroll</span><span class="o">(</span><span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
-
     <span class="kt">boolean</span> <span class="nf">hasNestedScrollingParent</span><span class="o">(</span><span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
 
-    <span class="kt">boolean</span> <span class="nf">dispatchNestedScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span>
+    <span class="kt">boolean</span> <span class="nf">startNestedScroll</span><span class="o">(</span><span class="nd">@ScrollAxis</span> <span class="kt">int</span> <span class="n">axes</span><span class="o">,</span> <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="c1">//当type=ViewCompat.TYPE_NON_TOUCH时，此方法是设计被fling状态时分发
+</span><span class="c1"></span>    <span class="kt">boolean</span> <span class="nf">dispatchNestedPreScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">dx</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dy</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">,</span>
+            <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">offsetInWindow</span><span class="o">,</span> <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+
+    <span class="c1">//当type=ViewCompat.TYPE_NON_TOUCH时，此方法是设计被fling状态时分发
+</span><span class="c1"></span>    <span class="kt">boolean</span> <span class="nf">dispatchNestedScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span>
             <span class="kt">int</span> <span class="n">dxUnconsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyUnconsumed</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">offsetInWindow</span><span class="o">,</span>
             <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
 
-    <span class="kt">boolean</span> <span class="nf">dispatchNestedPreScroll</span><span class="o">(</span><span class="kt">int</span> <span class="n">dx</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dy</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">,</span>
-            <span class="nd">@Nullable</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">offsetInWindow</span><span class="o">,</span> <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
+    <span class="kt">void</span> <span class="nf">stopNestedScroll</span><span class="o">(</span><span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
@@ -1325,6 +1344,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="nestedscrollingparent2">NestedScrollingParent2</h3>
+<p>NestedScrollingParent2相比NestedScrollingParent主要增加了对fling消费的支持。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -1343,6 +1363,8 @@
 </span><span class="lnt">14
 </span><span class="lnt">15
 </span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">NestedScrollingParent2</span> <span class="kd">extends</span> <span class="n">NestedScrollingParent</span> <span class="o">{</span>
@@ -1354,10 +1376,12 @@
 
     <span class="kt">void</span> <span class="nf">onStopNestedScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
 
-    <span class="kt">void</span> <span class="nf">onNestedScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span>
+    <span class="c1">//当type=ViewCompat.TYPE_NON_TOUCH时，此方法是设计被fling状态时回调的
+</span><span class="c1"></span>    <span class="kt">void</span> <span class="nf">onNestedScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dxConsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyConsumed</span><span class="o">,</span>
             <span class="kt">int</span> <span class="n">dxUnconsumed</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dyUnconsumed</span><span class="o">,</span> <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
-
-    <span class="kt">void</span> <span class="nf">onNestedPreScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dx</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dy</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">,</span>
+    
+    <span class="c1">//当type=ViewCompat.TYPE_NON_TOUCH时，此方法是设计被fling状态时回调的
+</span><span class="c1"></span>    <span class="kt">void</span> <span class="nf">onNestedPreScroll</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">View</span> <span class="n">target</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dx</span><span class="o">,</span> <span class="kt">int</span> <span class="n">dy</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="kt">int</span><span class="o">[</span><span class="o">]</span> <span class="n">consumed</span><span class="o">,</span>
             <span class="nd">@NestedScrollType</span> <span class="kt">int</span> <span class="n">type</span><span class="o">)</span><span class="o">;</span>
 
 <span class="o">}</span>
@@ -1381,6 +1405,321 @@
 </code></pre></td></tr></table>
 </div>
 </div><h2 id="nestedscrollingchildhelpernestedscrollingparenthelper">NestedScrollingChildHelper&amp;NestedScrollingParentHelper</h2>
+<h2 id="recyclerview">具体看下RecyclerView实现</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">onTouchEvent</span><span class="o">(</span><span class="n">MotionEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">switch</span> <span class="o">(</span><span class="n">action</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="n">MotionEvent</span><span class="o">.</span><span class="na">ACTION_DOWN</span><span class="o">:</span>
+        <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">MotionEvent</span><span class="o">.</span><span class="na">ACTION_MOVE</span><span class="o">:</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getX</span><span class="o">(</span><span class="n">index</span><span class="o">)</span> <span class="o">+</span> <span class="n">0</span><span class="o">.</span><span class="na">5f</span><span class="o">)</span><span class="o">;</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getY</span><span class="o">(</span><span class="n">index</span><span class="o">)</span> <span class="o">+</span> <span class="n">0</span><span class="o">.</span><span class="na">5f</span><span class="o">)</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">mLastTouchX</span> <span class="o">-</span> <span class="n">x</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">mLastTouchY</span> <span class="o">-</span> <span class="n">y</span><span class="o">;</span>
+
+        <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">dispatchNestedPreScroll</span><span class="o">(</span>
+                <span class="n">canScrollHorizontally</span> <span class="o">?</span> <span class="n">dx</span> <span class="o">:</span> <span class="n">0</span><span class="o">,</span>
+                <span class="n">canScrollVertically</span> <span class="o">?</span> <span class="n">dy</span> <span class="o">:</span> <span class="n">0</span><span class="o">,</span>
+                <span class="n">mReusableIntPair</span><span class="o">,</span> <span class="n">mScrollOffset</span><span class="o">,</span> <span class="n">TYPE_TOUCH</span>
+        <span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">dx</span> <span class="o">-</span><span class="o">=</span> <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="o">;</span>
+            <span class="n">dy</span> <span class="o">-</span><span class="o">=</span> <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="o">;</span>
+            <span class="c1">// Updated the nested offsets
+</span><span class="c1"></span>            <span class="n">mNestedOffsets</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">+</span><span class="o">=</span> <span class="n">mScrollOffset</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="o">;</span>
+            <span class="n">mNestedOffsets</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">+</span><span class="o">=</span> <span class="n">mScrollOffset</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="o">;</span>
+            <span class="c1">// Scroll has initiated, prevent parents from intercepting
+</span><span class="c1"></span>            <span class="n">getParent</span><span class="o">(</span><span class="o">)</span><span class="o">.</span><span class="na">requestDisallowInterceptTouchEvent</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="n">dispatchNestedScroll</span><span class="o">(</span><span class="n">consumedX</span><span class="o">,</span> <span class="n">consumedY</span><span class="o">,</span> <span class="n">unconsumedX</span><span class="o">,</span> <span class="n">unconsumedY</span><span class="o">,</span> <span class="n">mScrollOffset</span><span class="o">,</span>
+            <span class="n">TYPE_TOUCH</span><span class="o">,</span> <span class="n">mReusableIntPair</span><span class="o">)</span><span class="o">;</span>
+
+        <span class="n">dx</span> <span class="o">-</span><span class="o">=</span> <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">0</span><span class="o">]</span>
+        <span class="n">dy</span> <span class="o">-</span><span class="o">=</span> <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">1</span><span class="o">]</span>
+        <span class="nf">if</span> <span class="o">(</span><span class="n">consumed</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span> <span class="o">|</span><span class="o">|</span> <span class="n">consumed</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+            <span class="n">parent</span><span class="o">.</span><span class="na">requestDisallowInterceptTouchEvent</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+        <span class="o">}</span>
+        <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">MotionEvent</span><span class="o">.</span><span class="na">ACTION_UP</span><span class="o">:</span>
+        <span class="k">if</span> <span class="o">(</span><span class="o">!</span><span class="o">(</span><span class="o">(</span><span class="n">xvel</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span> <span class="o">|</span><span class="o">|</span> <span class="n">yvel</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span><span class="o">)</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">fling</span><span class="o">(</span><span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">xvel</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">yvel</span><span class="o">)</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">setScrollState</span><span class="o">(</span><span class="n">SCROLL_STATE_IDLE</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">stopNestedScroll</span><span class="o">(</span><span class="n">TYPE_TOUCH</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">break</span><span class="o">;</span>
+        <span class="k">case</span> <span class="n">MotionEvent</span><span class="o">.</span><span class="na">ACTION_CANCEL</span><span class="o">:</span>
+        <span class="n">stopNestedScroll</span><span class="o">(</span><span class="n">TYPE_TOUCH</span><span class="o">)</span><span class="o">;</span>
+        <span class="k">break</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">fling</span><span class="o">(</span><span class="kt">int</span> <span class="n">velocityX</span><span class="o">,</span> <span class="kt">int</span> <span class="n">velocityY</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+    <span class="c1">//分发Fling事件，若父控件消费，子控件不再消费
+</span><span class="c1"></span>    <span class="k">if</span> <span class="o">(</span><span class="o">!</span><span class="n">dispatchNestedPreFling</span><span class="o">(</span><span class="n">velocityX</span><span class="o">,</span> <span class="n">velocityY</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">canScroll</span> <span class="o">=</span> <span class="n">canScrollHorizontal</span> <span class="o">|</span><span class="o">|</span> <span class="n">canScrollVertical</span><span class="o">;</span>
+
+        <span class="c1">//子控件消费之前分发父控件消费
+</span><span class="c1"></span>        <span class="n">dispatchNestedFling</span><span class="o">(</span><span class="n">velocityX</span><span class="o">,</span> <span class="n">velocityY</span><span class="o">,</span> <span class="n">canScroll</span><span class="o">)</span><span class="o">;</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">mOnFlingListener</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">mOnFlingListener</span><span class="o">.</span><span class="na">onFling</span><span class="o">(</span><span class="n">velocityX</span><span class="o">,</span> <span class="n">velocityY</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">canScroll</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">nestedScrollAxis</span> <span class="o">=</span> <span class="n">ViewCompat</span><span class="o">.</span><span class="na">SCROLL_AXIS_NONE</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">canScrollHorizontal</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">nestedScrollAxis</span> <span class="o">|</span><span class="o">=</span> <span class="n">ViewCompat</span><span class="o">.</span><span class="na">SCROLL_AXIS_HORIZONTAL</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">canScrollVertical</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">nestedScrollAxis</span> <span class="o">|</span><span class="o">=</span> <span class="n">ViewCompat</span><span class="o">.</span><span class="na">SCROLL_AXIS_VERTICAL</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c1">//开始fling事件分发前置处理
+</span><span class="c1"></span>            <span class="n">startNestedScroll</span><span class="o">(</span><span class="n">nestedScrollAxis</span><span class="o">,</span> <span class="n">TYPE_NON_TOUCH</span><span class="o">)</span><span class="o">;</span>
+
+            <span class="n">velocityX</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="o">-</span><span class="n">mMaxFlingVelocity</span><span class="o">,</span> <span class="n">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">velocityX</span><span class="o">,</span> <span class="n">mMaxFlingVelocity</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">velocityY</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="o">-</span><span class="n">mMaxFlingVelocity</span><span class="o">,</span> <span class="n">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">velocityY</span><span class="o">,</span> <span class="n">mMaxFlingVelocity</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">mViewFlinger</span><span class="o">.</span><span class="na">fling</span><span class="o">(</span><span class="n">velocityX</span><span class="o">,</span> <span class="n">velocityY</span><span class="o">)</span><span class="o">;</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">ViewFlinger</span> <span class="kd">implements</span> <span class="n">Runnable</span> <span class="o">{</span>
+    <span class="n">ViewFlinger</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">mOverScroller</span> <span class="o">=</span> <span class="k">new</span> <span class="n">OverScroller</span><span class="o">(</span><span class="n">getContext</span><span class="o">(</span><span class="o">)</span><span class="o">,</span> <span class="n">sQuinticInterpolator</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">stop</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="kd">final</span> <span class="n">OverScroller</span> <span class="n">scroller</span> <span class="o">=</span> <span class="n">mOverScroller</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">scroller</span><span class="o">.</span><span class="na">computeScrollOffset</span><span class="o">(</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">scroller</span><span class="o">.</span><span class="na">getCurrX</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="kd">final</span> <span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">scroller</span><span class="o">.</span><span class="na">getCurrY</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">unconsumedX</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">mLastFlingX</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">unconsumedY</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">mLastFlingY</span><span class="o">;</span>
+            <span class="n">mLastFlingX</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+            <span class="n">mLastFlingY</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">consumedX</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">consumedY</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+
+            <span class="c1">// Nested Pre Scroll
+</span><span class="c1"></span>            <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+            <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+            <span class="c1">//子控件未消费前分发fling事件询问父控件是否消费
+</span><span class="c1"></span>            <span class="k">if</span> <span class="o">(</span><span class="n">dispatchNestedPreScroll</span><span class="o">(</span><span class="n">unconsumedX</span><span class="o">,</span> <span class="n">unconsumedY</span><span class="o">,</span> <span class="n">mReusableIntPair</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span>
+                    <span class="n">TYPE_NON_TOUCH</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">unconsumedX</span> <span class="o">-</span><span class="o">=</span> <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="o">;</span>
+                <span class="n">unconsumedY</span> <span class="o">-</span><span class="o">=</span> <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c1">//子控件消费fling事件
+</span><span class="c1"></span>            <span class="n">scrollStep</span><span class="o">(</span><span class="n">unconsumedX</span><span class="o">,</span> <span class="n">unconsumedY</span><span class="o">,</span> <span class="n">mReusableIntPair</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">consumedX</span> <span class="o">=</span> <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="o">;</span>
+            <span class="n">consumedY</span> <span class="o">=</span> <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="o">;</span>
+            <span class="n">unconsumedX</span> <span class="o">-</span><span class="o">=</span> <span class="n">consumedX</span><span class="o">;</span>
+            <span class="n">unconsumedY</span> <span class="o">-</span><span class="o">=</span> <span class="n">consumedY</span><span class="o">;</span>
+
+            <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+            <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+
+            <span class="c1">//子控件消费完再次分发询问父控件消费fling事件
+</span><span class="c1"></span>            <span class="n">dispatchNestedScroll</span><span class="o">(</span><span class="n">consumedX</span><span class="o">,</span> <span class="n">consumedY</span><span class="o">,</span> <span class="n">unconsumedX</span><span class="o">,</span> <span class="n">unconsumedY</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span>
+                    <span class="n">TYPE_NON_TOUCH</span><span class="o">,</span> <span class="n">mReusableIntPair</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">unconsumedX</span> <span class="o">-</span><span class="o">=</span> <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">0</span><span class="o">]</span><span class="o">;</span>
+            <span class="n">unconsumedY</span> <span class="o">-</span><span class="o">=</span> <span class="n">mReusableIntPair</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="o">;</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">consumedX</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span> <span class="o">|</span><span class="o">|</span> <span class="n">consumedY</span> <span class="o">!</span><span class="o">=</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">dispatchOnScrolled</span><span class="o">(</span><span class="n">consumedX</span><span class="o">,</span> <span class="n">consumedY</span><span class="o">)</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+            <span class="n">postOnAnimation</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">mEatRunOnAnimationRequest</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mReSchedulePostAnimationCallback</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">internalPostOnAnimation</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">setScrollState</span><span class="o">(</span><span class="n">SCROLL_STATE_IDLE</span><span class="o">)</span><span class="o">;</span>
+            <span class="c1">//分发结束fling事件
+</span><span class="c1"></span>            <span class="n">stopNestedScroll</span><span class="o">(</span><span class="n">TYPE_NON_TOUCH</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">stop</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">removeCallbacks</span><span class="o">(</span><span class="k">this</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">mOverScroller</span><span class="o">.</span><span class="na">abortAnimation</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>由RecyclerView源码可知nestedchild的dispatchNestedPreScroll(TYPE_NON_TOUCH)/dispatchNestedScroll(TYPE_NON_TOUCH)/stopNestedScroll(TYPE_NON_TOUCH)等方法及nestedparent的onNestedPreScroll(TYPE_NON_TOUCH)/onNestedScroll(TYPE_NON_TOUCH)/onStopNestedScroll(TYPE_NON_TOUCH)等方法均是针对fling增加的分发回调方法。因为之前针对fling的事件分发只有dispatchNestedPreFling/dispatchNestedFling及onNestedPreFling/onNestedFling。但这几个方法相对有局限性。比如dispatchNestedPreFling被父控件消费后子控件无法再次消费。dispatchNestedFling是在子控件消费fling事件之前分发给父控件处理，若想子控件处理fling事件后再次交给父控件处理则无能为力了。因此SDK新增了NestedScrollingXXX2，增加type区别touch和fling事件。<br />
+<br>总的来说NestedScrolling相关是SDK提供的一套有一定使用规则的接口api。其使用具体还看实现。具体可以参考文档.</p>
+<p><span id="2">参考：</span></p>
+<ul>
+<li><a href="https://segmentfault.com/a/1190000019272870">10分钟带你入门NestedScrolling机制</a></li>
+</ul>
 
     </article>
     
@@ -1477,15 +1816,15 @@
         </li>
         
         <li>
-          <a href="/zh/posts/android-ffmpeg/" class="related__link">Android-FFmpeg</a>
+          <a href="/zh/posts/android-%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/" class="related__link">Android打包流程</a>
         </li>
         
         <li>
-          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E9%87%87%E5%BD%95%E6%91%84%E5%83%8F%E5%A4%B4/" class="related__link">Android直播-采录摄像头</a>
+          <a href="/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/" class="related__link">Android四大组件-Activity/Fragment</a>
         </li>
         
         <li>
-          <a href="/zh/posts/jvmdalvikart/" class="related__link">JVM/Dalvik/ART</a>
+          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
         </li>
         
         <li>

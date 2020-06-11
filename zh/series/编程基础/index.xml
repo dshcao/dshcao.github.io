@@ -22,7 +22,7 @@
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/httphttps/</guid>
-        <description></description>
+        <description>HTTP(HyperText Transfer Protocol) 超文本传输协议，虽然名字叫传输协议，但其其实是应用层的协议，是构建在传输层协议TCP之上的协议。 http版本 诞生年份 HTTP/0.9 1991 文本信息 HTTP/1.0 1996 文</description>
       </item>
       
       <item>
@@ -31,7 +31,16 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jvmdalvikart/</guid>
-        <description>前置知识 Android中每个应用都对应一个单独的虚拟机，独立运行 JIT&amp;amp;AOT JIT，Just-in-time，即时编译，运行时动态编译。 AOT，Ahe</description>
+        <description>前置知识 Android中每个应用都对应一个单独的虚拟机，独立运行 JIT&amp;amp;AOT JIT，Just-in-time，即时编译，运行时动态编译。在运行时将频繁</description>
+      </item>
+      
+      <item>
+        <title>编程基础</title>
+        <link>https://dshcao.github.io/zh/posts/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</guid>
+        <description>字长 字长是CPU的主要技术指标之一，指的是CPU一次最大能并行处理的二进制位数 现在主流的计算机字长是32位与64位 原码&amp;amp;反码&amp;amp</description>
       </item>
       
     

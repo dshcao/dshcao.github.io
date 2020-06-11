@@ -405,7 +405,7 @@
     <h2 class="single__title">RxJava2源码及使用</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 10月 11日 · ☕0 min read
+  🕓 2019年 10月 11日 · ☕13 min read
   
 </div>
       <div class="single__tags caption">
@@ -442,7 +442,809 @@
 </div>
     </div>    
     <article class="single__contents">
-      
+      <h2 id="heading">前言</h2>
+<p>RxJava是一个响应式的异步事件流编程库。<br />
+RxJava的优势：<br />
+函数式编程，代码逻辑清晰，优雅<br />
+避险回调地狱<br />
+方便的线程调度</p>
+<p>RxJava中主要使用了观察者(订阅者)模式和装饰模式。</p>
+<h2 id="vs">观察者模式vs发布订阅模式</h2>
+<h3 id="heading-1">观察者模式</h3>
+<p>完整的观察者模式有四个部分：</p>
+<ul>
+<li>
+<p>抽象被观察者<br />
+可以增加/删除观察者<br />
+当数据状态改变可以通知观察者</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">interface</span> <span class="nc">Observable</span><span class="o">{</span>
+  <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Observer</span> <span class="n">o</span><span class="o">)</span><span class="o">;</span>
+  <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Observer</span> <span class="n">o</span><span class="o">)</span><span class="o">;</span>
+  <span class="kt">void</span> <span class="nf">change</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>抽象观察者<br />
+定义一个一个接口当被观察这数据状态改变时可以通知自己</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">interface</span> <span class="nc">Observer</span><span class="o">{</span>
+  <span class="kt">void</span> <span class="nf">onChange</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>具体被观察者<br />
+定义一个集合保存或有观察者引用</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">MyObservable</span><span class="o">{</span>
+  <span class="kt">boolean</span> <span class="n">change</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+  <span class="n">List</span><span class="o">&lt;</span><span class="n">Observer</span><span class="o">&gt;</span> <span class="n">observers</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Arraylist</span><span class="o">&lt;</span><span class="o">&gt;</span><span class="o">;</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">add</span><span class="o">(</span><span class="n">Observer</span> <span class="n">o</span><span class="o">)</span><span class="o">{</span>
+    <span class="n">observers</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">o</span><span class="o">)</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">(</span><span class="n">Observer</span> <span class="n">o</span><span class="o">)</span><span class="o">{</span>
+    <span class="n">observers</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">0</span><span class="o">)</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">nofifyObservers</span><span class="o">(</span><span class="o">)</span><span class="o">{</span>
+    <span class="k">if</span><span class="o">(</span><span class="o">!</span><span class="n">hasChange</span><span class="o">(</span><span class="o">)</span><span class="o">)</span><span class="o">{</span>
+      <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">for</span><span class="o">(</span><span class="n">Observer</span> <span class="n">o</span><span class="o">:</span><span class="n">observers</span><span class="o">)</span><span class="o">{</span>
+      <span class="n">o</span><span class="o">.</span><span class="na">onChange</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">hasChange</span><span class="o">(</span><span class="o">)</span><span class="o">{</span>
+    <span class="k">return</span> <span class="n">change</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">publish</span><span class="o">(</span><span class="n">String</span> <span class="n">message</span><span class="o">)</span><span class="o">{</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span>
+    <span class="n">change</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="n">nofifyObservers</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>具体观察者<br />
+具体实现接收到通知的业务逻辑</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">MyObserver</span><span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onChange</span><span class="o">(</span><span class="o">)</span><span class="o">{</span>
+    <span class="c1">//业务逻辑
+</span><span class="c1"></span>  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="heading-2">发布订阅模式</h3>
+<p>RxJava使用的模式。<br />
+发布订阅模式很像观察者模式，但和一般的观察者模式有一些区别。观察者模式中被观察者持有观察者的引用，当数据状态改变是通过观察者引用回调通知观察者。而发布订阅模式是发布者将数据流发布到管道，发布者不持有订阅着引用，订阅者在管道中即可获得数据流，实现两者的解耦。</p>
+<h2 id="rxjava">RxJava的结构</h2>
+<h3 id="rxjava-1">RxJava的五大观察者模式</h3>
+<ol>
+<li>Observable &amp; Observer<br />
+发送0~n个事件</li>
+<li>Flowable &amp; Subscriber<br />
+发送0~n个事件，支持背压的被观察者和观察者</li>
+<li>Single &amp; SingleObserver<br />
+只发送/接收一次事件或处理onError的被观察者和观察者</li>
+<li>Completable &amp; CompletableObserver<br />
+不发送/接收事件，只处理 onComplete 和 onError事件。</li>
+<li>Maybe &amp; MaybeObserver<br />
+发送0~1个事件</li>
+</ol>
+<p>其他被观察者：</p>
+<ul>
+<li><strong>ConnectableObservable</strong> 一般的被观察者和观察者是在订阅(subscribe)时触发事件(数据)发送，但ConnectableObservable则比较特殊，它是在使用操作符connect时才会触发事件(数据)发送。普通的Oservable调用pulish(observable.publish())操作符转成ConnectableObservable。ConnectableObservable调用refCount操作符可转成普通的Oservable。</li>
+</ul>
+<p>RxJava被观察者(发布者)和观察者(订阅者)主要分为两类：</p>
+<ul>
+<li>不支持背压的被观察者(Observable)和观察者(Observer)</li>
+<li>支持背压的发布者(Publisher)和订阅者(Subscriber)</li>
+</ul>
+<p>RxJava订阅关系涉及到的相关类：</p>
+<ol>
+<li>Emitter
+<ul>
+<li>支持背压部分的：FlowableEmitter</li>
+<li>不支持背压部分的：ObservableEmitter、CompletableEmitter、SingleEmitter、MaybeEmitter等。</li>
+</ul>
+</li>
+<li>XxxCreate
+<ul>
+<li>支持背压部分的：FlowableCreate</li>
+<li>不支持背压部分的：ObservableCreate、CompletableCreate、SingleCreate、MaybeCreate等。</li>
+</ul>
+</li>
+<li>XxxSource
+<ul>
+<li>支持背压部分的：Publisher(RxJava中没有FlowableSource，Publisher实际相当于FlowableSource)</li>
+<li>不支持背压部分的：ObservableSource、CompletableSource、SingleSource、MaybeSource等。</li>
+</ul>
+</li>
+</ol>
+<h3 id="publishersubscriberobservableobserver">Publisher/Subscriber和Observable/Observer</h3>
+<p>Publisher和Observable对应，Subscriber和Observer对应。<br />
+Publisher和Subscriber是支持背压部分的父类接口和抽象<br />
+Observable和Observer是不支持背压部分的父类接口和抽象</p>
+<h3 id="rxjava-2">RxJava流程的结构</h3>
+<p>流程结构中有三个重要概念：事件源(Source)、被观察者(Observable)、观察者(Observer)。<br />
+<strong>什么是事件源？</strong> 在RxJava中XxxSource及Publisher即代表了事件源接口，比如：ObservaleSource、CompletableSource、MaybeSource、SingleSource、Publisher等，他们的共同的特点是有一个subscribe方法。你会发现这几个事件源接口正好对应RxJava的五大被观察者，分别被五大被观察这继承，即被观察者本身也是事件源，这也是为什么观察者可以在一个事件流中不断转换。你可能还会问这怎么是事件源了？只有一个subscribe方法，事件源来自哪？这里还有一个最初事件源的概念，XXXSource不可能凭空发出一个事件，就像Retrofit中的RxJava2CallAdapter中，最初的事件是由Call发出的。RxJava中也可以构建出最初事件源(未实现HasUpstreamXXXSource)，一般是五大被观察者的create方法。比如：Observable.create中事件由ObservableEmitter发出。当然也可能是直接在subscribe(订阅时)调用观察者的onNext方法发送事件。比如：<code>Observable.just(1).subscribe(observer)</code>。<br></p>
+<p>举个例子来说明：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Observable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="n">1</span><span class="o">)</span>
+                <span class="c1">//Observable.just返回ObservableJust，这里相当于调用ObservableJust.map
+</span><span class="c1"></span>                <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="k">new</span> <span class="n">Function</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="n">String</span> <span class="nf">apply</span><span class="o">(</span><span class="n">Integer</span> <span class="n">integer</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+                        <span class="k">return</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">integer</span><span class="o">)</span><span class="o">;</span>
+                    <span class="o">}</span>
+                <span class="o">}</span><span class="o">)</span>
+                <span class="c1">//ObservableJust.map返回ObservableMap，这里相当于ObservableMap.subscribe
+</span><span class="c1"></span>                <span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="k">new</span> <span class="n">Observer</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSubscribe</span><span class="o">(</span><span class="n">Disposable</span> <span class="n">d</span><span class="o">)</span> <span class="o">{</span>
+                        
+                    <span class="o">}</span>
+
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNext</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+
+                    <span class="o">}</span>
+
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+
+                    <span class="o">}</span>
+
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onComplete</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+
+                    <span class="o">}</span>
+                <span class="o">}</span><span class="o">)</span><span class="o">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在每一次经过操作符对Observable转换的过程中你会发现都是实例化一个新的Observable并将原有的Observable作为Source传给新的Observable，转换过程就是经过这样层层包裹封装，类似装饰模式。同样的调用subscribe后原始的Observer会分别被层层包裹封装。比如上面的例子：</p>
+<p>&mdash;Observable.just &mdash;&gt;ObservableJust&mdash;-map&mdash;-&gt;ObservableMap&mdash;&mdash;subscribe&mdash;&mdash;&gt;<br><br />
+Observer&mdash;&ndash;subscribe&mdash;&mdash;&gt;MapObserver&ndash;source(ObservableJust).subscribe &ndash;&gt;ScalarDisposable(MapObserver.onNext)&mdash;&gt;Observer.onNext</p>
+<h3 id="cold-obseravle-hot-obserable">Cold Obseravle 和Hot Obserable</h3>
+<p>所谓的Cold Obseravle就是普通的Obserable，Hot Obserable就是ConnectableObservable。</p>
+<ul>
+<li>Cold Obseravle<br />
+当Obseravle被订阅才开始执行发射数据流的代码，当Obseravle被多个订阅者订阅时他们之间的关系是独立的，即多次订阅发射数据流的代码会独立的多次执行。</li>
+<li>Hot Obserable<br />
+无论Obseravle是否被订阅者订阅，事件始终会发生，即发射数据流的代码不会因为未被订阅不执行。类似广播的行为。</li>
+</ul>
+<p>Cold Obseravle 和Hot Obserable的转换：</p>
+<ol>
+<li>Cold Obseravle转Hot Obserable
+<ul>
+<li>调用publish()<br />
+调用publish()转换成ConnectableObservable，继续调用connect()。Obserable和Flowable可以使用该方法，但部分Obseravle如Single、Completable、Maybe等没有publish()直接调用</li>
+</ul>
+</li>
+<li>Hot Obserable转Cold Obseravle
+<ul>
+<li>调用refCount()</li>
+</ul>
+</li>
+</ol>
+<h3 id="subjectprocessor">观察者和被观察者合体的Subject/Processor</h3>
+<p>Subject和Processor/FlowableProcessor既是被观察者又是观察者，他们可以做为观察者将订阅的数据变成自己的数据发送出去。Subject不支持背压，Processor支持背压。<br />
+以Subject为例，它有多个子类：</p>
+<ul>
+<li>AsyncSubject<br />
+只会接受到onComplete之前的最后一个数据</li>
+<li>BehaviorSubject<br />
+接收订阅之前的最后一个数据(若订阅之前未发射过数据，则发射一个默认值)，再继续接受之后发射过来的数据。</li>
+<li>PublishSubject<br />
+观察者只接受订阅之后的数据</li>
+<li>ReplaySubject<br />
+无论何时订阅，都将发射所有的原始数据给观察者</li>
+<li>SerializedSubject<br />
+线程安全，多线程情况下保证同时只有一个线程执行onNext、onComplete、onError方法。</li>
+<li>UnicastSubject</li>
+</ul>
+<p>Processor的子类：</p>
+<ul>
+<li>FlowableProcessor</li>
+<li>AsyncProcessor</li>
+<li>BehaviorProcessor</li>
+<li>MulticastProcessor</li>
+<li>PublishProcessor</li>
+<li>ReplayProcessor</li>
+<li>SerializedProcessor</li>
+<li>UnicastProcessor</li>
+</ul>
+<h3 id="heading-3">背压</h3>
+<p>所谓背压即是当上流发送事件的速度快于下流测处理速度，这些事件将会消耗内存，长期积压容易OOM，RxJava中支持背压的观察者和被观察者则帮我们提供了一种处理这种场景的能力和手段，但这不是从根本上解决问题。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">enum</span> <span class="n">BackpressureStrategy</span> <span class="o">{</span>
+    <span class="cm">/**
+</span><span class="cm">     * 不缓存也不丢弃，下游必须自己处理可能的溢出
+</span><span class="cm">     */</span>
+    <span class="n">MISSING</span><span class="o">,</span>
+    <span class="cm">/**
+</span><span class="cm">     * 在下游无法跟上的情况下，发出MissingBackpressureException异常。
+</span><span class="cm">     */</span>
+    <span class="n">ERROR</span><span class="o">,</span>
+    <span class="cm">/**
+</span><span class="cm">     * 缓存所有值直到下游消费它，可能会OOM
+</span><span class="cm">     */</span>
+    <span class="n">BUFFER</span><span class="o">,</span>
+    <span class="cm">/**
+</span><span class="cm">     * 发送request指定数量的item，其他将被丢弃
+</span><span class="cm">     */</span>
+    <span class="n">DROP</span><span class="o">,</span>
+    <span class="cm">/**
+</span><span class="cm">     * 只保留最新的onNext值，如果下游无法跟上，则覆盖以前的任何值。
+</span><span class="cm">     */</span>
+    <span class="n">LATEST</span>
+<span class="o">}</span>
+
+<span class="n">Flowable</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="k">new</span> <span class="n">FlowableOnSubscribe</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">subscribe</span><span class="o">(</span><span class="n">FlowableEmitter</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">emitter</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">10000</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">emitter</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="n">i</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">emitter</span><span class="o">.</span><span class="na">onComplete</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span><span class="o">,</span> <span class="n">BackpressureStrategy</span><span class="o">.</span><span class="na">LATEST</span><span class="o">)</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="k">new</span> <span class="n">Subscriber</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSubscribe</span><span class="o">(</span><span class="n">Subscription</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&#34;kkkkkkk&#34;</span><span class="o">,</span> <span class="s">&#34;onSubscribe&#34;</span><span class="o">)</span><span class="o">;</span>
+          <span class="n">s</span><span class="o">.</span><span class="na">request</span><span class="o">(</span><span class="n">100</span><span class="o">)</span><span class="o">;</span><span class="c1">//下游需要处理的数据或item个数。
+</span><span class="c1"></span>      <span class="o">}</span>
+
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNext</span><span class="o">(</span><span class="n">Integer</span> <span class="n">integer</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&#34;kkkkkkk&#34;</span><span class="o">,</span> <span class="s">&#34;onNext&#34;</span> <span class="o">+</span> <span class="n">integer</span><span class="o">)</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&#34;kkkkkkk&#34;</span><span class="o">,</span> <span class="s">&#34;onError&#34;</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="na">getMessage</span><span class="o">(</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onComplete</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">Log</span><span class="o">.</span><span class="na">i</span><span class="o">(</span><span class="s">&#34;kkkkkkk&#34;</span><span class="o">,</span> <span class="s">&#34;onComplete&#34;</span><span class="o">)</span><span class="o">;</span>
+      <span class="o">}</span>
+  <span class="o">}</span><span class="o">)</span><span class="o">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="schedulerschedulersandroidschedulers">Scheduler/Schedulers/AndroidSchedulers</h3>
+<ul>
+<li><strong>Scheduler</strong> 每个Scheduler包含一个线程池</li>
+<li><strong>Schedulers</strong> 负责对Scheduler管理的策略类。</li>
+<li><strong>AndroidSchedulers</strong> Android平台主要用来管理切换到主线程的类。</li>
+</ul>
+<h3 id="heading-4">使用介绍</h3>
+<ul>
+<li>Observer和Consumer区别：<br />
+当Observable subscribe Observer时出现异常会走onError<br />
+当Observable subscribe Consumer时出现异常会抛出异常，若外层没有trycatch会崩溃</li>
+</ul>
+<h3 id="rxjava-">RxJava 操作符</h3>
+<ul>
+<li><strong>create</strong> 创建Observable需要自己管理事件的发送</li>
+<li><strong>unsafeCreate</strong> 使用一个已有的Observable创建。</li>
+<li><strong>fromArray</strong> 依次发送数组数据，如果数据为null，则发送onError事件</li>
+<li><strong>just</strong> 多个item时走fromArray操作符逻辑。</li>
+<li><strong>amb</strong> 传递两个或多个Observable给amb时，它只发射其中首先发射数据或通知（onError或onCompleted）的那个Observable的所有数据，而其他所有的Observable的发射物将被丢弃<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-ed1fc629ffa7d71e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>ambArray</strong> 逻辑同amb。</li>
+<li><strong>concat</strong> 连接多个Observable，Observable串行运行，串行发送事件</li>
+<li><strong>concatEager</strong> 连接多个Observable，Observable并行运行，缓存事件，串行发送事件</li>
+</ul>
+<!-- - **concatArrayEager** -->
+<ul>
+<li><strong>merge</strong> 连接多个Observable，Observable并行运行，并行发送事件</li>
+<li><strong>mergeWith</strong> 连接多个Observable，Observable并行运行，并行发送事件</li>
+<li><strong>mergeArray</strong> 逻辑同merge</li>
+<li><strong>combineLatest</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-5851b5aa86dcae1a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+</ul>
+<!-- - **fromPulisher** 
+- **fromFuture** 
+- **fromCallable** 
+- **fromIterable**  -->
+<ul>
+<li><strong>timer</strong> 延迟指定时间发送一次0L</li>
+<li><strong>interval</strong> 延迟指定时间指定间隔时间发送一次从0L开始递增的Long数字</li>
+<li><strong>range</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-d929bd571810d9c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>rangeLong</strong> 逻辑同rang，参数是long</li>
+<li><strong>intervalRang</strong> 相当于interval+rang</li>
+<li><strong>using</strong> 创建与Observable具有相同声明周期的一次性资源<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-0e9b680a34e49841.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+</ul>
+<!-- - **wrap**  -->
+<ul>
+<li><strong>defer</strong> 在订阅前不创建Observable对象，当订阅时为每个订阅者创建一个新的Observable对象。<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-e3dcf79165816270.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>empty</strong> 创建一个不发出任何项但正常终止的可观察对象。只执行一次onComplete事件。<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-bf1882e35a73af28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>never</strong> 创建一个不发出任何项且不终止的可观察对象<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-bb0b070ed593f833.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>throw</strong> 创建一个不发出任何项并以错误结束的可观察对象<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-ff38127c758b6dbb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>sequenceEqual</strong> 确定两个观测值是否发出相同的项目序列<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-d71b806c716a1750.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="65525736EEF185EA9AF7B9749C1A4081.jpg" /></li>
+<li><strong>switchOnNext</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-924c12c34135fe6d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>zip</strong> 按顺序结合两个或多个Observables发射的数据项，然后它发射这个函数返回的结果。它按照严格的顺序应用这个函数。它只发射与发射数据项最少的那个Observable一样多的数据.<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-25e064485a6e958c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>zipArray</strong></li>
+<li><strong>zipIterable</strong></li>
+<li><strong>buffer</strong> 周期性地从一个可观察到的数据集中收集数据包，并发出这些数据包，而不是一次发出一个数据包<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-a8671be3e549c287.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-aee971d7796b87b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>window</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-aee971d7796b87b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-06edbac34da6f141.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>sample</strong><br />
+定期扫描源Observable产生的结果，在指定的间隔周期内进行采样<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-02ffb9d171ac1e60.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="47147829FCF1EB022C75F610DFD73050.jpg" /></li>
+<li><strong>throttleLast</strong></li>
+<li><strong>throttleFirst</strong></li>
+<li><strong>flatMap</strong> 将源Observable发射的item转换成新的Observable发射出去，不保证转换后Observable的发射顺序<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-5e73fd9f78e76754.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>all</strong> 所有发射的item是否符合某个条件<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-eb7d3fd46954639b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="C031E36BD9F4425FC2AB2B59BE365928.jpg" /></li>
+<li><strong>compose</strong> 变换源Observable为新的Observable作为源Observable，并将对整个流产生影响，注意和flatMap区别</li>
+<li><strong>concatMap</strong> 类似于flatMap，但保证顺序<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-28e8b35e6194f890.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>contains</strong> 判断Observable发射的所有数据中，是否包含一个特定的值。给Contains传一个特定的值，如果原始Observable发射了那个值， 它返回的Observable将发射true，否则发射false<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-0311e6412bee4200.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>count</strong> 统计源Observable发射的items数并仅发射这个items数</li>
+<li><strong>debounce</strong> 指定时间跨度后发送最近一次的item<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-d9fc0308135032c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>materialize</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-7c7aa3b83179e648.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>dematerialize</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-2ec7ce9350d6205a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>doOnNext</strong>  在onNext前执行</li>
+<li><strong>doAfterNext</strong>  在onNext后执行</li>
+<li><strong>doOnError</strong> 在onError前执行</li>
+<li><strong>doOnComplete</strong> 在onComplete和doOnTerminate前执行</li>
+<li><strong>doOnTerminate</strong> 在doOnComplete后和doOnTerminate前执行</li>
+<li><strong>doOnDispose</strong> 在调用dispose()后执行</li>
+<li><strong>doOnEach</strong> 相当于doOnNext+doOnComplete</li>
+<li><strong>doOnLifecycle</strong> 相当于doOnSubscribe+doOnDispose</li>
+<li><strong>distinct</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-672441e9305230c1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>join</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-2745b75af3e7166c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>groupJoin</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-7b126bf2443eea58.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>ignoreElements</strong> 忽略所有源Observable产生的结果，只会执行onCpmpleted()或者onError()方法</li>
+<li><strong>isEmpty</strong> 判定原始Observable是否没有发射任何数据</li>
+<li><strong>lift</strong> 用参数Observer代理返回的源Observer
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Observable</span><span class="o">.</span><span class="na">just</span><span class="o">(</span><span class="n">1</span><span class="o">,</span> <span class="n">2</span><span class="o">,</span> <span class="n">3</span><span class="o">)</span><span class="o">.</span><span class="na">lift</span><span class="o">(</span><span class="k">new</span> <span class="n">ObservableOperator</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="n">Observer</span><span class="o">&lt;</span><span class="o">?</span> <span class="kd">super</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="nf">apply</span><span class="o">(</span><span class="n">Observer</span><span class="o">&lt;</span><span class="o">?</span> <span class="kd">super</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">observer</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+
+        <span class="k">return</span> <span class="k">new</span> <span class="n">Observer</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSubscribe</span><span class="o">(</span><span class="n">Disposable</span> <span class="n">d</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">observer</span><span class="o">.</span><span class="na">onSubscribe</span><span class="o">(</span><span class="n">d</span><span class="o">)</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNext</span><span class="o">(</span><span class="n">Integer</span> <span class="n">integer</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">observer</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">integer</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">observer</span><span class="o">.</span><span class="na">onError</span><span class="o">(</span><span class="n">e</span><span class="o">)</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onComplete</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">observer</span><span class="o">.</span><span class="na">onComplete</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span><span class="o">)</span><span class="o">.</span><span class="na">subscribe</span><span class="o">(</span><span class="k">new</span> <span class="n">Observer</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSubscribe</span><span class="o">(</span><span class="n">Disposable</span> <span class="n">d</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onNext</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onError</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onComplete</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="o">}</span>
+<span class="o">}</span><span class="o">)</span><span class="o">;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li><strong>map</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-02bf0537b279fbe8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>ofType</strong> 指定某个类型的class，过滤属于这个类型的的结果并cast，其它抛弃</li>
+<li><strong>publish</strong> 将普通Observable转成可连接的Observable(ConnectableObservable)。<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-847e0d1faabc21f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>RefCount</strong> 将一个可连接的Observable转换为普通的Observable</li>
+<li><strong>reduce</strong> 将一个函数应用于被观察者的每个item，最后发射<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-219b069a4a80958d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>repeat</strong> 重复发送item<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-f18aacb42e32a118.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>replay</strong> 确保所有的观察者收到同样的数据序列，即使他们在Observable开始发射数据之后才订阅<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-987094d393c909c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>retry</strong> 如果一个可观测到的源发出错误，请重新订阅它，希望它不会出错<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-fa41dbfbc267f3cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>retryUtil</strong></li>
+<li><strong>retryWhen</strong></li>
+<li><strong>scan</strong> 类似reduce，但不是最后发送一次数据，而是每次函数操作后发送一次数据。<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-dfd1e845caa99409.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="368B9B677A23D639B1C19FB6DD3B4736.jpg" /></li>
+<li><strong>serialize</strong> 强制Observable进行序列化调用并且不能有onError事件，否则终止。<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-a1f48fea714b65e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>share</strong> 相当于publish()+refCount()<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-675fe8542478b33e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>skip</strong></li>
+<li><strong>take</strong></li>
+<li><strong>takeWhile</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-f66a45c9ec03c715.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>sorted</strong></li>
+<li><strong>startWith</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-92502711200f67a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>timeInterval</strong><br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-73f555f64b0367ef.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>timeout</strong> 超过时间未发射item 就发射onError<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-879273c4fcc67c4b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>timestamp</strong> 为每个item附加一个时间戳。<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-5497eab3403c6302.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>to</strong> 将Observable转换成另一种对象或数据结构。<br />
+<img src="https://upload-images.jianshu.io/upload_images/3162899-58670b4ad0764598.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" /></li>
+<li><strong>toFlowable</strong> 转为支持背压的Observable，即Flowable(实际是Flowable的子类FlowableFromObservable)</li>
+</ul>
+<h3 id="heading-5">自定义操作符</h3>
+<p>重写subscribeActual方法。<br />
+可以参考just等，这里不严谨的实现简单的RxView的click操作符。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RxView</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">View</span><span class="o">&gt;</span> <span class="nf">click</span><span class="o">(</span><span class="n">View</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="n">ObservableClick</span><span class="o">(</span><span class="n">v</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ObservableClick</span> <span class="kd">extends</span> <span class="n">Observable</span><span class="o">&lt;</span><span class="n">View</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="n">View</span> <span class="n">view</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">ObservableClick</span><span class="o">(</span><span class="n">View</span> <span class="n">view</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">view</span> <span class="o">=</span> <span class="n">view</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">subscribeActual</span><span class="o">(</span><span class="n">Observer</span><span class="o">&lt;</span><span class="o">?</span> <span class="kd">super</span> <span class="n">View</span><span class="o">&gt;</span> <span class="n">observer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ViewClickDisposable</span> <span class="n">disposable</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ViewClickDisposable</span><span class="o">(</span><span class="n">observer</span><span class="o">,</span> <span class="n">view</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">observer</span><span class="o">.</span><span class="na">onSubscribe</span><span class="o">(</span><span class="n">disposable</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ViewClickDisposable</span> <span class="kd">extends</span> <span class="n">AtomicBoolean</span> <span class="kd">implements</span> <span class="n">View</span><span class="o">.</span><span class="na">OnClickListener</span><span class="o">,</span> <span class="n">Disposable</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="n">Observer</span><span class="o">&lt;</span><span class="o">?</span> <span class="kd">super</span> <span class="n">View</span><span class="o">&gt;</span> <span class="n">observer</span><span class="o">;</span>
+
+        <span class="kd">private</span> <span class="n">View</span> <span class="n">view</span><span class="o">;</span>
+
+        <span class="n">ViewClickDisposable</span><span class="o">(</span><span class="n">Observer</span><span class="o">&lt;</span><span class="o">?</span> <span class="kd">super</span> <span class="n">View</span><span class="o">&gt;</span> <span class="n">observer</span><span class="o">,</span> <span class="n">View</span> <span class="n">view</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">observer</span> <span class="o">=</span> <span class="n">observer</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">view</span> <span class="o">=</span> <span class="n">view</span><span class="o">;</span>
+            <span class="n">view</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="k">this</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onClick</span><span class="o">(</span><span class="n">View</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">isDisposed</span><span class="o">(</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">observer</span><span class="o">.</span><span class="na">onNext</span><span class="o">(</span><span class="n">v</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">observer</span><span class="o">.</span><span class="na">onComplete</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">dispose</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">set</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span><span class="o">;</span>
+            <span class="n">AndroidSchedulers</span><span class="o">.</span><span class="na">mainThread</span><span class="o">(</span><span class="o">)</span><span class="o">.</span><span class="na">scheduleDirect</span><span class="o">(</span><span class="o">(</span><span class="o">)</span> <span class="o">-</span><span class="o">&gt;</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">view</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">view</span><span class="o">.</span><span class="na">setOnClickListener</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isDisposed</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">get</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><span id="2">参考：</span></p>
+<ul>
+<li><a href="https://github.com/ReactiveX/RxJava/wiki/Backpressure">Backpressure</a></li>
+<li><a href="https://github.com/ReactiveX/RxJava/wiki/Alphabetical-List-of-Observable-Operators">Alphabetical List of Observable Operators</a></li>
+<li><a href="http://reactivex.io/documentation/operators.html">ReactiveX Documentation Operators</a></li>
+</ul>
+<!-- 执行了onError或onComplete还能再执行onNext吗 -->
+<!-- ObservableTransformer -->
     </article>
     
     
@@ -538,19 +1340,19 @@
         </li>
         
         <li>
-          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
+          <a href="/zh/posts/android-sparsearray%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="related__link">SparseArray源码解析</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/" class="related__link">Android四大组件-Activity/Fragment</a>
+          <a href="/zh/posts/java-%E8%8C%83%E5%9E%8B%E4%B8%8E%E5%8F%8D%E5%B0%84/" class="related__link">Java范型与反射</a>
         </li>
         
         <li>
-          <a href="/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/" class="related__link">贝塞尔曲线(Bezier curve)</a>
+          <a href="/zh/posts/jetpack-paging/" class="related__link">Jetpack-CameraX</a>
         </li>
         
         <li>
-          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E5%BD%95%E5%88%B6%E5%B1%8F%E5%B9%95/" class="related__link">Android直播-录制屏幕</a>
+          <a href="/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/" class="related__link">Android-音视频基础知识(一)</a>
         </li>
         
     </ul>
@@ -559,11 +1361,11 @@
     <div class="grow"></div>
 <nav class="pagination-single">
   
-    <a href="https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="pagination-single__left">
+    <a href="https://dshcao.github.io/zh/posts/android-sparsearray%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="pagination-single__left">
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
       </div>
-      <div class="pagination-single__left-title">多线程详解</div>      
+      <div class="pagination-single__left-title">SparseArray源码解析</div>      
     </a>
   
   <div class="grow"></div>

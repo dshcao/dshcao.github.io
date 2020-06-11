@@ -22,7 +22,7 @@
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-handler%E8%A7%A3%E6%9E%90/</guid>
-        <description></description>
+        <description>前言 Handler使Android中非常重要的组成部门，很多地方包括系统服务也大量用到Handler这一机制。Handler让我们的开发难度</description>
       </item>
       
     
