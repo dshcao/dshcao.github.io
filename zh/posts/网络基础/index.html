@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>网络基础 – dshcao blog</title>
+    
+
+
+<script defer src="/js/fuse.min.94c78ad70b02749822921660cf4e9f0b3701bc0680c421afb784a78228de0275.js"></script>
+
+<script>
+  
+  var runSearch = function() {
+    
+        var baseurl = "https:\/\/dshcao.github.io\/\/zh";
+    
+    
+    var searchResults = null;
+    var searchMenu = null;
+    var fuse = null;
+
+    function endsWith(str, suffix) {
+      return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
+
+    function initFuse() {
+      if (!endsWith(baseurl, "/")) {
+        baseurl = baseurl + '/';
+      };
+
+      $.ajax({
+        type: "GET",
+        url: baseurl + "index.json",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+      })
+        .done(function (index) {
+          fuse = new Fuse(index, {
+            keys: ['title', 'description', 'content']
+          });
+        })
+        .fail(function (jqxhr, textStatus, error) {
+          var err = textStatus + ", " + error;
+          console.error("Error getting Hugo index file:", err);
+        });
+    }
+
+    function renderSearchResults(results) {
+      searchResults = document.getElementById('search-results');
+      searchMenu = document.getElementById('search-menu');
+      searchResults.setAttribute('class', 'dropdown is-active');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'dropdown-content search-content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.setAttribute('class', 'dropdown-item');
+          item.innerHTML = `<div class="menu-item"><div class="menu-item__title">📄 ${result.title}</div><div class="menu-item__desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        item.setAttribute('class', 'dropdown-item');
+        item.innerText = 'No results found';
+        content.appendChild(item);
+      }
+
+      while (searchMenu.hasChildNodes()) {
+        searchMenu.removeChild(
+          searchMenu.lastChild
+        );
+      }
+      searchMenu.appendChild(content);
+    }
+
+    function renderSearchResultsMobile(results) {
+      searchResults = document.getElementById('search-mobile-results');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'mobile-search__content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.innerHTML = `<div class="mobile-search__item"><div class="mobile-search__item--title">📄 ${result.title}</div><div class="mobile-search__item--desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        content.appendChild(item);
+      }
+
+      $('#search-mobile-results').empty();
+      searchResults.appendChild(content);
+    }
+
+    initFuse();
+
+    $("#search").on('input', function (e) {
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+
+      if ($(window).width() < 770) {
+        return null;
+      } 
+
+      var results = fuse.search(e.target.value);
+      renderSearchResults(results);
+    });
+
+    $('#search').on('blur', function () {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      setTimeout(function () {
+        $('#search-results').attr('class', 'dropdown');
+      }, 100);
+    });
+
+    $('#search').on('click', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+      var results = fuse.search(e.target.value);
+      renderSearchResults(results);
+    });
+
+    $('#search').on('keydown', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      var items = $('#search-menu .dropdown-item');
+      var activeIndex = $('#search-menu .dropdown-item.is-active').index();
+
+      items.removeClass('is-active');
+      if (e.key === 'ArrowDown') {
+        items.eq(activeIndex + 1).addClass('is-active');
+      } else if (e.key === 'ArrowUp') {
+        items.eq(activeIndex - 1).addClass('is-active');
+      } else if (e.key === 'Enter') {
+        var currentItemLink = items.eq(activeIndex).attr('href');
+        if (currentItemLink) {
+          location.href = currentItemLink;
+        }
+      }
+    });
+
+    $("#search-mobile").on('input', function(e) {
+      if (!e.target.value) {
+        $('#search-mobile-results').empty();
+        return null;
+      }
+
+      var results = fuse.search(e.target.value);
+      renderSearchResultsMobile(results);
+    });
+  }
+</script>    
+    
+
+
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    <meta name="description" content="网络基础" />
+<meta name="keywords" content="">
+<meta name="created" content="2019-10-11T10:33:41&#43;0900">
+<meta name="modified" content="2019-10-11T10:33:41&#43;0900">
+
+
+<meta property="og:site_name" content="dshcao blog">
+<meta property="og:title" content="网络基础">
+<meta property="og:url" content="https://dshcao.github.io/zh/posts/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+<meta property="og:type" content="article">
+
+<meta name="generator" content="Hugo 0.61.0" />
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://dshcao.github.io/zh/posts/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/logo.svg" sizes="any" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.json">
+
+
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "headline": "网络基础",
+    "datePublished": "2019-10-11T10:33:41+09:00",
+    "dateModified": "2019-10-11T10:33:41+09:00",
+    "url" : "https://dshcao.github.io/zh/posts/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/",
+    "description": "网络基础",
+    "keywords": ["java"],
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://dshcao.github.io/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "dshcao blog",
+      "url": "https://dshcao.github.io/"
+    }
+  }
+</script>
+
+    
+
+
+
+
+
+    
+</head>
+
+<body id="root" class="theme__dark">
+    <script>
+        var localTheme = localStorage.getItem('theme');
+        if (localTheme) {
+            document.getElementById('root').className = `theme__${localTheme}`;
+        }        
+    </script>    
+    
+    <div id="body">
+        
+        <div class="container wrapper">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar__brand">
+    
+    <a href="/zh/" title="Home" rel="home" class="navbar__logo-link">
+      <img data-src="/logo.png" src="data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' width='48px' height='48px'%3E%3Cpath fill='%2337474f' d='M24.648,4l0.29,0.002c0.52,0.008,1.23,0.109,1.857,0.198c0.314,0.045,0.616,0.088,0.883,0.119 c0.164,0.024,0.715,0.227,1.043,0.348C29.468,4.941,32,6.875,32,6.875L31,5c0,0,1.563,0.445,2.125,0.875C34.247,6.733,34.354,7,35,7 h0.375L35,6c0.375,0.19,1.78,1.289,1.968,1.541L37,7.583l0.036,0.039c1.411,1.495,2.095,2.462,2.595,3.169 c0.339,0.48,0.945,0.822,1.243,1.21C41.225,12.454,42,14,42,14v-0.998c0,0,0.776,1.029,1.25,2.373C44,17.5,44,19,44,19 s-0.25-0.625-1-0.875C43,19,44,21,44,24.002v6c-0.74,0.57-0.989,1.443-1.214,2.386c-0.328,1.372-0.605,2.294-1.444,2.593L41,35.002 l-0.08,0.277c-0.533,0.662-0.994,1.351-1.439,2.018c-1.446,2.163-2.495,3.705-4.481,3.705c-1.041,0-2.044,0.167-2.441,0.559 C32.128,41.987,32,42.662,32,43.002c-1.012,0.377-2.167,1-8,1c-5,0-9.4-1.756-12.262-4.545c-0.965-0.785-2.272-1.669-2.857-2.273 C6.976,35.593,6.047,33.058,6,33.002c1.184,0.985,5.245,4.636,7.091,4.636l0,0C13.301,37.416,12,35.684,12,35.002 C13.429,37.162,17.405,40,23,40c4.125,0,3.892-0.73,6-1c4.875-0.625,7.492-5.439,8.214-6.816c0.05-0.096,0.202-1.02,0.24-1.092 c0.368-0.376,0.463-1.167,0.607-2.371C38.17,27.815,39,26.75,39,25.625S38,24,38,24s0-3-0.625-5.375 C37.25,18.151,36.738,16.409,34,13v1.002c-2.125-1.127-3.668-2.545-4.125-2.752C28.435,10.599,26.831,10,25,10c-4,0-4.625,1-8,2 c0,0,1.25,0,2,0c0,0-1.867,1.445-3,2.125c-1.875,1.125-4,5.034-4,7.875c0,3-2.485,4-4,4c-2.453,0-4-2-4-4 c0-1.133,0.45-2.5,0.886-3.425c0.411-0.873,0.799-1.697,0.795-2.581c0.031-0.106,0.274-0.383,0.435-0.566 c0.466-0.531,1.083-1.234,1.224-2.252c1.106-0.927,3.13-3.015,3.155-3.041c0.162-0.171,0.324-0.304,0.511-0.457 c0.324-0.265,0.728-0.594,1.221-1.205l0.423-0.525c0.798-0.428,2.222-1.035,2.776-1.271c0.342-0.146,0.602-0.258,0.716-0.313 L19.75,5.75C19.966,5.75,20,5.238,20,5c0-0.227,0.106-0.198,0.324-0.273C22.139,4.099,22.799,4,24.648,4L24.648,4'/%3E%3C/svg%3E" alt="Home" class="lazyload navbar__logo">
+    </a>
+    
+    <a href="/zh/" title="Home" rel="home" class="navbar__title-link">
+      <h6 class="navbar__title">dshcao blog</h6>
+    </a>    
+  </div>
+  
+  
+<div class="theme-mobile">
+  <div class="dropdown">
+    <button class="dropdown-trigger navbar__slide-down" aria-label="Invert Colors" style="">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" d="M24 0H0v24h24V0z"/><path fill="currentColor" d="M6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31l-4.95-4.95c-.39-.39-1.02-.39-1.41 0L6.34 7.93zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>      
+    </button>
+    <div class="dropdown-content select-theme">
+      
+        
+        <a href="#" class="dropdown-item select-theme__item is-active">
+          dark
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          light
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          hacker
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          solarized
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          custom
+        </a>
+        
+      
+    </div>
+  </div>
+</div>
+
+  
+<div id="mobileSearchBtn" class="mobile-search__btn">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+</div>
+
+<div id="search-mobile-container" class="mobile-search hide">
+  <div class="mobile-search__top">
+    <input id="search-mobile" type="text" aria-label="Mobile Search" placeholder="搜索" class="mobile-search__top--input"/>
+    <div id="search-mobile-close" class="mobile-search__top--icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/></svg>
+    </div>
+  </div>
+  <div id="search-mobile-results" class="mobile-search__body">
+    
+  </div>
+</div>
+
+  
+  <a role="button" class="navbar__burger" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>  
+
+  <div class="navbar__menu">
+    
+<div class="theme">
+  <div class="dropdown">
+    <button class="dropdown-trigger navbar__slide-down" aria-label="Select Theme Button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" d="M24 0H0v24h24V0z"/><path fill="currentColor" d="M6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31l-4.95-4.95c-.39-.39-1.02-.39-1.41 0L6.34 7.93zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>      
+    </button>
+    <div class="dropdown-content select-theme">
+      
+        
+        <a href="#" class="dropdown-item select-theme__item is-active">
+          dark
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          light
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          hacker
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          solarized
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          custom
+        </a>
+        
+      
+    </div>
+  </div>
+</div>
+
+    
+    <a href="/zh/archive" class="navbar__menu-item navbar__slide-down">存档</a>
+    
+    
+    <a href="/zh/posts" class="navbar__menu-item navbar__slide-down">文章</a>
+    
+    
+    <a href="/zh/pt" class="navbar__menu-item navbar__slide-down">展厅</a>
+    
+    
+    <a href="/zh/notes" class="navbar__menu-item navbar__slide-down">随笔</a>
+    
+    
+    <a href="/zh/about" class="navbar__menu-item navbar__slide-down">关于</a>
+    
+    
+  </div>
+</nav>
+            
+            
+
+
+<script src="/js/enquire.min.72cb9edeb1ca1b92f5bf9df8d31a1ecd1e423d0b5e0f48a2a208b020dd5053fa.js"></script>
+
+<main class="main-main">
+  
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+  <ol>
+    
+  
+  
+  
+  
+  
+  <li >    
+    
+      <a href="https://dshcao.github.io/zh/">dshcao blog</a>            
+        
+  </li>
+  
+  
+  <li >    
+    
+      <a href="https://dshcao.github.io/zh/posts/">文章</a>
+        
+  </li>
+  
+  
+  <li  class="is-active" >    
+    
+      <a href="https://dshcao.github.io/zh/posts/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">网络基础</a>
+        
+  </li>
+  
+  </ol>
+  
+</nav>
+  
+  <div class="single">
+    <h2 class="single__title">网络基础</h2>
+    <div class="single__meta">
+      <div class="single__infos">
+  🕓 2019年 10月 11日 · ☕15 min read
+  
+</div>
+      <div class="single__tags caption">
+
+  
+    🏷️
+  
+  
+  <li>
+    <a href="/zh/tags/java" class="single__tag">
+      #java
+    </a>
+  </li>
+    
+
+</div>
+    </div>    
+    <article class="single__contents">
+      <h2 id="tcpiposi">TCP/IP和OSI</h2>
+<h3 id="tcpip">TCP/IP协议簇</h3>
+<p>TCP/IP协议簇既然是以TCP和IP两个协议命名，足以说明TCP和IP两个协议在这个协议簇中的重要性了。另外这个协议簇中比较重要的还有SLIP协议、PPP协议、ICMP协议、ARP协议、UDP协议、FTP协议、DNS协议、SMTP协议等</p>
+<h3 id="tcpip-1">TCP/IP模型</h3>
+<p>TCP/IP协议簇构成的通信互联系统，当前工业中事实上的标准是TCP/IP四层模型。</p>
+<ol>
+<li>
+<p>链路层(网络接口层)(Link Layer)</p>
+<p>链路层主要包括：MAC(媒体接入控制)、RLC(无线链路控制)、BMC(广播/组播控制)、MTU(最大传输单元)、PDCP(分组数据汇聚协议)、PPP(点对电协议)、SLIP(串行线路因特网协议)、CSLIP(压缩的串行线路因特网协议)、ARP(地址解析协议)、RARP(反向地址转换协议)。</p>
+<p>MTU、PPP、CSLIP、SLIP、ARP、RARP等用于传输有地址的帧以及错误检测功能。</p>
+<p>ISO2110、IEEE802、IEEE802.2等用于以二进制数据形式在物理媒体上传输数据。</p>
+<p>链路层主要是负责提供介质访问和链路管理及物理传输。</p>
+<p>对应OSI模型的数据链路层和物理层。</p>
+</li>
+<li>
+<p>网络层(网际层)(Internet Layer)</p>
+<p>网络层的协议主要有：IP、ICMP、IGMP、BGP、RIP、OSPF等。</p>
+<!-- 关于ARP和RARP到底是网络层协议还是链路层协议，请参考[ARP协议属于网络层还是数据链路层？](#2) -->
+<p>网络层主要是负责IP寻址和路由选择。</p>
+<p>对应OSI模型的网络层。</p>
+</li>
+<li>
+<p>传输层(Transport Layer)</p>
+<p>传输层的协议主要有：TCP、UDP、RTP、SCTP。</p>
+<p>传输层主要是负责建立、管理和维护端对端的连接。</p>
+<p>对应OSI模型的传输层。</p>
+</li>
+<li>
+<p>应用层(Application Layer)</p>
+<p>应用层的主要协议有：HTTP、SMTP、SNMP、FTP、Telnet、SSH、NFS、DNS、TFTP等。</p>
+<p>对应OSI模型的应用层、表示层、会话层。</p>
+</li>
+</ol>
+<h3 id="osiopen-system-interconnection">OSI(Open System Interconnection)</h3>
+<!-- OSI参考模型与TCP/IP参考模型都不完美，由于在ISO制定OSI参考模型过程中总是着眼于通信模型所必需的功能，理想化得等待政府行为来统一各种网络协议，在制定过程中忽略了互联网协议的重要性。当考虑到这一点时，却由于功能复杂难以实现等原因，失去了市场。 -->
+<p>OSI(开放式系统互联)是国际标准组织制定的的模型，由于其模型过于复杂理想化并没有市场。</p>
+<ol>
+<li>
+<p>物理层(Physical Layer)</p>
+<p>物理层主要是负责在物理媒体(<strong>网卡，网线，集线器，中继器，调制解调器</strong>)上传输原始的数据比特流。</p>
+</li>
+<li>
+<p>数据链路层(Data Link Layer)</p>
+<p>数据链路层主要是负责提供介质访问和链路管理。包括将数据分成一个个数据帧，以数据帧为单位传输。有应有答，遇错重发。该层的设备有：<strong>网卡，网桥，网路交换机</strong>等。</p>
+</li>
+<li>
+<p>网络层(Network Layer)</p>
+<p>网络层主要是负责IP寻址和路由选择。包括将数据分成一定长度的分组，将分组穿过通信子网，从信源选择路径后传到信宿。该层的设备有：<strong>路由</strong>。</p>
+</li>
+<li>
+<p>传输层(Transport Layer)</p>
+<p>传输层主要负责建立、管理和维护端对端的连接。包括提供不具体网络的高效、经济、透明的端到端数据传输服务。</p>
+</li>
+<li>
+<p>会话层(Session Layer)</p>
+<p>会话层主要负责建立、管理和维护会话。进程间的对话也称为会话，会话层管理不同主机上各进程间的对话。</p>
+</li>
+<li>
+<p>表示层(Presentation Layer)</p>
+<p>表示层主要负责对来自应用层的命令和数据进行解释，对各种语法赋予相应 的含义，并按照一定的格式传送给会话层。其主要功能是&quot;处理用户信息的表示问题，如编码、 数据格式转换和加密解密，压缩解压缩&quot;等</p>
+</li>
+<li>
+<p>应用层(Application Layer)</p>
+<p>应用层主要负责为应用程序提供网络服务，提供应用程序访问OSI环境的手段。</p>
+</li>
+</ol>
+<h3 id="tcpip-2">TCP/IP五层模型</h3>
+<p>OSI和TCP/IP四层模型都有各自的缺陷，TCP/IP五层模型是结合OSI和TCP/IP优点的分层，是OSI的简化模型。五层模型主要用于学术学习。<br />
+TCP/IP五层分别是：</p>
+<ol>
+<li>
+<p>物理层(Physical Layer)</p>
+<p>对应OSI模型的物理层</p>
+</li>
+<li>
+<p>数据链路层(Data Link Layer)</p>
+<p>对应OSI模型的数据链路层。</p>
+</li>
+<li>
+<p>网络层(Internet Layer)</p>
+<p>对应OSI模型的网络层。</p>
+</li>
+<li>
+<p>传输层(Transport Layer)</p>
+<p>对应OSI模型的传输层。</p>
+</li>
+<li>
+<p>应用层(Application Layer)</p>
+<p>对应OSI模型的应用层、表示层、会话层。</p>
+</li>
+</ol>
+<h2 id="uriurl">URI和URL</h2>
+<p>URI(Uniform Resource Identifier) 统一资源标识符，用于标识某一互联网资源的字符串。<br />
+URL(Uniform Resource Locator)统一资源定位符，因特网的万维网服务程序上用于指定信息位置的表示方法。</p>
+<p>可以认为URL是URI特例、子集。</p>
+<h2 id="mac-ip-">MAC地址 IP地址 端口号</h2>
+<ul>
+<li>
+<p>MAC(Media Access Control)地址<br />
+MAC地址一般是由6字节(12个十六进制数表示，如：08:00:20:0A:8C:6D)，前3字节(24位)是由生产网卡的厂商向IEEE申请的厂商地址，后3字节由厂商自行分配给所生产的每个网卡设备(厂商将MAC地址写进网卡的BIOS里)且保证不重复，这样就保证了全球唯一。现在一般的接入Internet的方式是将主机通过局域网组织在一起然后通过交换机和Internet相连，为了防止IP盗用问题在交换机在内部存在一个IP地址-MAC地址的映射表，当有数据包发给局域网内某一台主机时交换机接收下来并根据映射表转发给对应的主机上。</p>
+</li>
+<li>
+<p>IP地址 定位到某个计算机</p>
+</li>
+<li>
+<p>端口号 端口号用16位表示，即0~65535，用于定位到主机上的某个应用程序，其中:</p>
+<ul>
+<li>0~1023 是分配给系统的端口号</li>
+<li>1024~49151 是登记端口号，是要是分配给第三方应用使用，但是必须在IANA（互联网数字分配机构）按照规定手续登记</li>
+<li>49152~65535 是短暂端口号，是留给客户进程选择暂时使用，一个进程使用完就可以供其他进程使用。</li>
+</ul>
+</li>
+</ul>
+<p>常用端口号：</p>
+<table>
+<thead>
+<tr>
+<th>TCP端口号</th>
+<th>应用程序</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>21</td>
+<td>FTP服务器</td>
+</tr>
+<tr>
+<td>22</td>
+<td>SSH服务器</td>
+</tr>
+<tr>
+<td>25</td>
+<td>SMTP服务器</td>
+</tr>
+<tr>
+<td>80</td>
+<td>HTTP服务器</td>
+</tr>
+<tr>
+<td>2000</td>
+<td>FTP客户端</td>
+</tr>
+<tr>
+<td>2001</td>
+<td>HTTP客户端</td>
+</tr>
+</tbody>
+</table>
+<h2 id="socket">Socket</h2>
+<p>根据RFC793的定义：端口号拼接到IP地址就构成了套接字。即Socket用于描述IP地址和端口，是一个通信链的句柄，可以用来实现不同虚拟机或不同计算机之间的通信。</p>
+<!-- 操作系统将TCP连接抽象为套接字表示的本地端点（local end-point），作为编程接口给程序使用 -->
+<p>Socket(套接字)是一个抽象层。传输层实现端到端的通信，两边的通信端点(主机IP地址+端口号)即是Socket。每个TCP的Socket的内核中都有一个发送缓冲区和一个接收缓冲区。</p>
+<p>在编程中Socket是应用层与TCP/IP协议族通信的中间软件抽象层，一组编程接口，对TCP/IP的封装。</p>
+<p>Java中的Socket类则是对套接字的具体实现。</p>
+<!-- 所以你会看到使用OkHttp进行Http请求时里面使用了Socket，而其连接池实际上就是Socket连接。 -->
+<h2 id="heading">全双工&amp;半双工&amp;单工</h2>
+<ul>
+<li>全双工 客户端向服务端发送数据的同时服务端也可以向客户端发送数据</li>
+<li>半双工 同一时刻允许客户端向服务端发送数据或 服务端向客户端发送数据，两者不可同时进行</li>
+<li>单工 只能客户端向服务端发送数据</li>
+</ul>
+<h2 id="tcp">TCP</h2>
+<p>数据在TCP层称为流（Stream），数据分组称为分段（Segment）。</p>
+<p>TCP是一种面向连接的、可靠的、基于字节流的传输层通信协议。TCP层是位于IP层之上，应用层之下的中间层。不同主机的应用层之间经常需要可靠的、像管道一样的连接，但网络层不提供这样的流机制，IP只提供不可靠的包交换。</p>
+<p>TCP协议的运行可划分为三个阶段：连接创建(connection establishment)、数据传送（data transfer）和连接终止（connection termination）。</p>
+<p>ACK：Acknowledgment，确认应答，表示已收到消息。ACK是一些通信协议下用来做确认消息的控制字符。在TCP协议中表示创建连接时收到了SYN数据包或使用连接时收到数据包或断开连接时收到FIN数据包。<br />
+RST：重置连接<br />
+SYN：Synchronize，发起了一个新连接<br />
+FIN：为1表示发送方没有数据要传输了，要求释放连接。<br />
+TCB：当主机收到一个TCP包时，用两端的IP地址与端口号来标识这个TCP包属于哪个session。使用一张表来存储所有的session，表中的每条记录称作Transmission Control Block（TCB），TCB结构的定义包括连接使用的源端口、目的端口、目的ip、序号、应答序号、对方窗口大小、己方窗口大小、tcp状态、tcp输入/输出队列、应用层输出队列、tcp的重传有关变量等<br />
+CRC：Cyclic redundancy check，循环冗余校验，CRC为校验和的一种。一种根据网络数据包或电脑文件等数据产生简短固定位数校验码的一种散列函数，主要用来检测或校验数据传输或者保存后可能出现的错误。<br />
+MTU：Maximum Transmission Unit，最大传输单元，是指数据链接层上面所能通过的最大数据包大小（以字节为单位）。最大传输单元这个参数通常与通信接口有关（网络卡、串口等）。<br />
+RTT：Round-trip delay time，在通信（Communication）、电脑网络（Computer network）领域中，意指：在双方通信中，发讯方的信号（Signal）传播（Propagation）到收讯方的时间（意即：传播延迟（Propagation delay）），加上收讯方回传消息到发讯方的时间（如果没有造成双向传播速率差异的因素，此时间与发讯方将信号传播到收讯方的时间一样久）。<br />
+MSS：最大分段大小，是在单个分段中TCP愿意接受的数据的字节数最大值。MSS应当足够小以避免IP分片，它会导致丢包或过多的重传。在TCP连接创建时，双端在SYN报文中用MSS选项宣布各自的MSS，这是从双端各自直接相连的数据链路层的最大传输单元(MTU)的尺寸减去固定的IP首部和TCP首部长度。</p>
+<p>TCP数据包头结构见参考<a href="#">TCP Header</a></p>
+<h3 id="tcp---tcpthree-way-handshake">TCP建立连接 - TCP三次握手(three-way handshake)</h3>
+<p>三次握手主要是解决数据传输的可靠性，交换TCP通信的初始序号。因为数据传输过程中数据包会拆分成多个Segment，每个Segment由一个序号标识。</p>
+<p>两个终端的连接通常是由一端(服务器端)打开一个套接字（socket）(比如HTTP的80，HTTPS的443端口)然后监听来自另一方的连接，这就是通常所指的被动打开（passive open）。服务器端被被动打开以后，用户端就能开始创建主动打开（active open）。</p>
+<p>为什么是三次握手？TCP是全双工传输，如果是两次握手只能保证客户端给服务端发送数据的可靠性(第二次握手已经可以确认第一次握手客户端发送给服务端的序号已收到)，但不能保证服务端给客户端发送数据的可靠性，因为并不能保证第二次握手服务端发送给客户端的序号客户端已收到。</p>
+<ol>
+<li>
+<p>客户端请求建立连接<br><br />
+客户端向服务端 发送一个SYN数据包，SYN位置为1，SYN数据包包含一个随机数J。</p>
+<!-- 客户端将SYN数据包的序号设定为随机数J。 -->
+<p>Client -&gt; Server  SYN=1，seq=J(系统生成的随机数)</p>
+<p>seq为什么必须是随机数？想象一下如果在第一次握手后网络意外断开然后重新连接再次握手，如果是固定的一个序列数那就没法判断之前第一次握手的数据包到底是哪一次的。</p>
+</li>
+<li>
+<p>针对客户端的SYN的确认应答并请求建立连接<br><br />
+服务端收到SYN数据包并确认合法后想客户端发送一个SYN-ACK数据包，SYN位和ACK位置为1，SYN-ACK数据包包含一个随机产生的序号K，另外作为对客户端请求建立连接的确认应答，确认应答码ack=J+1</p>
+<p>Server-&gt;Client SYN=1，ACK=1，ack=J+1，seq=K</p>
+<p>其中ack=J+1是向客户端表示服务端确实收到客户端的seq且无误</p>
+</li>
+<li>
+<p>针对服务端的SYN的确认应答<br><br />
+客户端收到服务端的SYN-ACK数据包并确认合法后向服务端发送一个ACK数据包，ACK位置为1，作为对服务端请求建立连接的确认应答，确认应答码ack=K+1。当服务端收到ACK数据包时就完成了三次握手，并进入了连接创建状态。</p>
+<!-- 客户端将ACK数据包的序号设定为J+1， -->
+<p>Server-&gt;Client ACK=1，ack=K+1</p>
+<p>其中ack=K+1是向服务端表示客户端确实收到服务端的seq且无误，第三次握手是可以同时携带数据的</p>
+</li>
+</ol>
+<h4 id="-syn">三次握手漏洞 SYN洪泛攻击</h4>
+<p>定义：<br />
+通过网络服务所在的端口发送大量伪造原地址的攻击报文，发送到服务端，造成服务端上的半开连接队列被占满，从而阻止其他用户进行访问。</p>
+<p>原理：<br />
+攻击者客户端利用伪造的IP地址向服务端发出请求(第一次握手)，而服务端的响应(第二次握手)的报文将永远发送不到真实的客户端，服务端在等待客户端的第三次握手(永远都不会有的)，服务端在等待这种半开的连接过程中消耗了资源，如果有成千上万的这种连接，主机资源将被耗尽，从而达到攻击的目的。</p>
+<p>服务器端如果在一定时间内没有收到的TCP会重发SYN-ACK。在Linux下，默认重试次数为5次，重试的间隔时间从1s开始每次都翻倍，5次的重试时间间隔为1s, 2s, 4s, 8s, 16s，总共31s，第5次发出后还要等32s才知道第5次也超时了，所以，总共需要 1s + 2s + 4s+ 8s+ 16s + 32s = 63s，TCP才会断开这个连接。使用三个TCP参数来调整行为：tcp_synack_retries 减少重试次数；tcp_max_syn_backlog，增大SYN连接数；tcp_abort_on_overflow决定超出能力时的行为。</p>
+<p>解决方案：1.无效连接监控释放 2.延缓TCB(Transmission Control Block)分配方法 3.防火墙</p>
+<h3 id="tcp-1">TCP数据传输</h3>
+<p>三次握手建立连接后TCP向应用层发送信号开始传输数据和通信，TCP按照以下方式处理数据传输：</p>
+<ol>
+<li>TCP使用HTTP，SMTP和POP3（电子邮件）和FTP等协议将来自应用程序的消息分解为适当长度(通常受该计算机连接的网络的数据链路层的最大传输单元（MTU）的限制)的Segment并标记序列号。</li>
+<li>TCP将Segment（message pieces）传输到远程主机。</li>
+<li>远程主机上的TCP会重组这些Segment。</li>
+<li>远程主机收到Segment会向发送方发送ACK确认应答消息表示已收到某个Segment。</li>
+</ol>
+<h3 id="tcp---tcpfour-way-handshake">TCP断开连接 - TCP四次挥手(four-way handshake)</h3>
+<p>四次挥手是HTTP断开连接的过程，断开连接可能是客户端向服务端请求断开连接，也可能是服务端向客户端请求断开连接，两者过程基本一致。</p>
+<p>TCP连接可以工作在TCP半开状态。即一侧关闭了连接，不再发送数据；但另一侧没有关闭连接，仍可以发送数据。已关闭的一侧仍然应接收数据，直至对侧也关闭了连接。</p>
+<p>首先发出FIN的一侧，如果给对侧的FIN响应了ACK，那么就会超时等待2*MSL时间，然后关闭连接。在这段超时等待时间内，本地的端口不能被新连接使用；避免延时的包的到达与随后的新连接相混淆。RFC793定义了MSL为2分钟，Linux设置成了30s。</p>
+<!-- 这也是Java Socket为什么频繁断开再连接导致报端口占用异常的原因 -->
+<p>以客户端向服务端断开连接为例：</p>
+<ol>
+<li>
+<p>客户端向服务端发送关闭连接请求</p>
+<p>Client-&gt;Server FIN=1，seq=u</p>
+<p>第一次挥手后客户端不能再向服务端发送数据了。</p>
+</li>
+<li>
+<p>服务端向客户端发送关闭连接确认</p>
+<p>此时服务端仍可向客户端发送数据，但客户端不能向服务端发送数据</p>
+<p>Server-&gt;Client ACK=1，ack=u+1，seq=v</p>
+</li>
+<li>
+<p>服务端向客户端发送关闭连接请求</p>
+<p>Server-&gt;Client FIN=1，ACK=1，ack=u+1，seq=w</p>
+</li>
+<li>
+<p>客户端向服务端发送关闭连接确认</p>
+<p>Client-&gt;Server ACK=1，ack=w+1，seq=u+1</p>
+</li>
+</ol>
+<h4 id="heading-1">为什么需要四次挥手</h4>
+<p>原因和三次握手一样，TCP是全双工的，但不同于握手，2、3过程可能无法合并，因为服务端此时可能并未将所有数据发送给客户端。如果客户端向服务端发送关闭连接请求时服务端也正好要向客户端发送关闭连接请求，那么2、3是可能合并的，即四次挥手是可能变成三次挥手的。</p>
+<h3 id="tcp-2">TCP为什么是可靠的？</h3>
+<p>TCP提供了对丢失，损坏，重复或接收顺序错误的Segment的恢复机制：</p>
+<ol>
+<li>TCP会将来自应用层的数据分解成多个Segment，通过用序列号标记每个Segment的顺序。每个Segment还附加一个CRC校验码，TCP服务端收到Segment后可以用过CRC校验码进行CRC校验Segment是否损坏，不匹配CRC校验的Segment将被丢弃。</li>
+<li>TCP协议要求TCP服务端收到Segment后需要客户端返回ACK确认应答消息(并不绝对一个Segment对应一个ACK确认应答消息，)，如果TCP客户端在合理的往返时延（RTT）内未收到ACK确认应答消息，TCP客户端会重发这个Segment。</li>
+</ol>
+<h3 id="heading-2">滑动窗口机制</h3>
+<p>发送方和接收方都会维护一个数据帧的序列，这个序列被成为窗口。<br />
+发送方的窗口由接收方确定。接收方在“接收窗口”域指出还可接收的字节数量。发送方在没有新的确认包的情况下至多发送“接收窗口”允许的字节数量。<br />
+滑动窗口的目的：<br />
+确保数据不丢失，如果发送的数据丢失了可以重新发。<br />
+控制发送速度，控制发送速度，以免接收方的缓存不够大导致溢出，同时控制流量也可以避免网络拥塞。</p>
+<!-- #### 确认应答中的序列号 -->
+<!-- #### 累计ACK -->
+<h2 id="udpuser-datagram-protocol">UDP(User Datagram Protocol)</h2>
+<p>数据在UDP中分组称为Message。</p>
+<p>UDP是一种无连接的、不可靠的、面向报文、没有拥塞控制的通信协议。</p>
+<ul>
+<li>
+<p><strong>无连接的</strong>：和TCP要建立连接不同，UDP传输数据不需要建立连接，就像写信，在信封写上收信人名称、地址就可以交给邮局发送了，至于能不能送到，就要看邮局的送信能力和送信过程的困难程度了。</p>
+</li>
+<li>
+<p><strong>不可靠的</strong>：因为UDP发出去的数据包发出去就不管了，不管它会不会到达，所以很可能会出现丢包现象，使传输的数据出错。</p>
+</li>
+<li>
+<p><strong>面向报文</strong>：数据报文，就相当于一个数据包，应用层交给UDP多大的数据包，UDP就照样发送，不会像TCP那样拆分。</p>
+</li>
+<li>
+<p><strong>没有拥塞控制</strong>：拥塞，是指到达通信子网中某一部分的分组数量过多，使得该部分网络来不及处理，以致引起这部分乃至整个网络性能下降的现象，严重时甚至会导致网络通信业务陷入停顿，即出现死锁现象，就像交通堵塞一样。TCP建立连接后如果发送的数据因为信道质量的原因不能到达目的地，它会不断重发，有可能导致越来越塞，所以需要一个复杂的原理来控制拥塞。而UDP就没有这个烦恼，发出去就不管了。</p>
+</li>
+<li>
+<p>应用场景 很多的实时应用（如IP电话、实时视频会议、某些多人同时在线游戏等）要求源主机以很定的速率发送数据，并且允许在网络发生拥塞时候丢失一些数据，但是要求不能有太大的延时，UDP就刚好适合这种要求。</p>
+</li>
+</ul>
+<h3 id="udp">UDP报文结构</h3>
+<p>UDP报文由报文首部和报文数据两部分组成。其中报文首部有八字节四部分组成：源端口(2字节)+目的端口(2字节)+长度(2字节)+校验和(2字节)。</p>
+<ul>
+<li><strong>源端口</strong> 源端口号，在需要对方回信时选用，不需要时可用全0。</li>
+<li><strong>目的端口</strong> 目的端口号，这在终点交付报文时必须要使用到。</li>
+<li><strong>长度</strong> UDP用户数据包的长度，其最小值是8（仅有首部时）。</li>
+<li><strong>校验和</strong> 检测UDP用户数据报在传输中是否有错,有错就丢弃。</li>
+</ul>
+<h2 id="ip">IP</h2>
+<p>数据在IP层称为Datagram，数据分组称为分片（Fragment）。</p>
+<p>IP协议定义了寻址方法和数据报的封装结构。</p>
+<p><span id="2">参考：</span></p>
+<ul>
+<li><a href="http://www.52im.net/topic-tcpipvol1.html">TCP/IP详解（中文版）</a></li>
+<li><a href="https://www.cnblogs.com/z-sm/p/7501549.html">TCP/IP模型及OSI七层参考模型各层的功能和主要协议</a></li>
+<li><a href="https://blog.csdn.net/htyurencaotang/article/details/11473015">ISO/OSI网络体系结构和TCP/IP协议模型</a></li>
+<li><a href="https://blog.csdn.net/weibo1230123/article/details/82778993">MAC地址的意义及作用？（mac）</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E4%BC%A0%E8%BE%93%E6%8E%A7%E5%88%B6%E5%8D%8F%E8%AE%AE">维基百科-传输控制协议</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/TCP/IP%E5%8D%8F%E8%AE%AE%E6%97%8F">维基百科-互联网协议套件</a></li>
+<li><a href="https://www.inetdaemon.com/tutorials/internet/tcp/3-way_handshake.shtml">TCP 3-Way Handshake (SYN,SYN-ACK,ACK)</a></li>
+<li><a href="https://www.inetdaemon.com/tutorials/internet/tcp/tcp_header.shtml">TCP Header</a></li>
+</ul>
+<!-- [ARP协议属于网络层还是数据链路层？](https://zhidao.baidu.com/question/96465384.html) -->
+<!-- [TCP/IP协议簇分层详解？](https://blog.csdn.net/hankscpp/article/details/8611229) -->
+<!-- [OSI七层协议大白话解读](https://blog.csdn.net/taotongning/article/details/81352985) -->
+<!-- [TCP/IP协议簇](https://www.jianshu.com/p/e4efd121a48c) -->
+  <!-- 包是全能性术语；
+  帧用于表示数据链路层中包的单位；
+  片是 IP中数据的单位；
+  段则表示 TCP 数据流中的信息；
+  消息是指应用协议中数据的单位 -->
+  <!--  服务器端的连接数量是无限的，只受内存的限制。客户端的连接数量，过去由于在发送第一个SYN到服务器之前需要先分配一个随机空闲的端口，这限制了客户端IP地址的对外发出连接的数量上限。从Linux 4.2开始，有了socket选项IP_BIND_ADDRESS_NO_PORT，它通知Linux内核不保留usingbind使用端口号为0时内部使用的临时端口（ephemeral port），在connect时会自动选择端口以组成独一无二的四元组（同一个客户端端口可用于连接不同的服务器套接字；同一个服务器端口可用于接受不同客户端套接字的连接）。[2]对于不能确认的包、接收但还没读取的数据，都会占用操作系统的资源。-->
+    </article>
+    
+    
+<div class="whoami__gutter"></div>
+<hr class="hr-slash whoami-hr"/>
+<section class="whoami">  
+  <div class="whoami__image-wrapper">
+    
+    
+      
+        <img data-src="/images/whoami/avatar.jpg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24pt' height='24pt' viewBox='0 0 24 24' version='1.1'%3E%3Cg id='surface1035795'%3E%3Cpath style=' stroke:none;fill-rule:nonzero;fill:rgb(80%25,80%25,80%25);fill-opacity:1;' d='M 4 4 C 2.90625 4 2 4.90625 2 6 L 2 18 C 2 19.09375 2.90625 20 4 20 L 20 20 C 21.09375 20 22 19.09375 22 18 L 22 6 C 22 4.90625 21.09375 4 20 4 Z M 4 6 L 20 6 L 20 18 L 4 18 Z M 4 6 '/%3E%3C/g%3E%3C/svg%3E%0A" alt="dshcao" class="lazyload whoami__image"/>
+             
+    
+  </div>
+  <div class="whoami__contents">
+    <div class="whoami__written-by">
+      作者
+    </div>
+    <div class="whoami__title">
+      dshcao
+    </div>
+    <div class="whoami__desc">
+      Android Developer      
+    </div>
+    <div class="whoami__social">
+      
+      
+      <a href="mailto:513996717@qq.com" title="email" aria-label="email">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg>
+      </a>
+      
+      
+      
+      
+      
+      <a href="https://github.com/dshcao" title="github" aria-label="github">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 24 24" version="1.1">
+<g id="surface3680">
+<path fill="currentColor" d="M 10.898438 2.101562 C 6.300781 2.601562 2.601562 6.300781 2.101562 10.800781 C 1.601562 15.5 4.300781 19.699219 8.398438 21.300781 C 8.699219 21.398438 9 21.199219 9 20.800781 L 9 19.199219 C 9 19.199219 8.601562 19.300781 8.101562 19.300781 C 6.699219 19.300781 6.101562 18.101562 6 17.398438 C 5.898438 17 5.699219 16.699219 5.398438 16.398438 C 5.101562 16.300781 5 16.300781 5 16.199219 C 5 16 5.300781 16 5.398438 16 C 6 16 6.5 16.699219 6.699219 17 C 7.199219 17.800781 7.800781 18 8.101562 18 C 8.5 18 8.800781 17.898438 9 17.800781 C 9.101562 17.101562 9.398438 16.398438 10 16 C 7.699219 15.5 6 14.199219 6 12 C 6 10.898438 6.5 9.800781 7.199219 9 C 7.101562 8.800781 7 8.300781 7 7.601562 C 7 7.199219 7 6.601562 7.300781 6 C 7.300781 6 8.699219 6 10.101562 7.300781 C 10.601562 7.101562 11.300781 7 12 7 C 12.699219 7 13.398438 7.101562 14 7.300781 C 15.300781 6 16.800781 6 16.800781 6 C 17 6.601562 17 7.199219 17 7.601562 C 17 8.398438 16.898438 8.800781 16.800781 9 C 17.5 9.800781 18 10.800781 18 12 C 18 14.199219 16.300781 15.5 14 16 C 14.601562 16.5 15 17.398438 15 18.300781 L 15 20.898438 C 15 21.199219 15.300781 21.5 15.699219 21.398438 C 19.398438 19.898438 22 16.300781 22 12.101562 C 22 6.101562 16.898438 1.398438 10.898438 2.101562 Z M 10.898438 2.101562 "/>
+</g>
+</svg>
+
+      </a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <a href="https://stackoverflow.com/users/12583274/dshcao" title="stack-overflow" aria-label="stack-overflow">
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="25" height="25"><path fill="currentColor" d="M 9.914063 0.71875 L 9.085938 1.28125 L 11.894531 5.367188 L 12.71875 4.800781 Z M 7.695313 2.453125 L 7.039063 3.207031 L 10.917969 6.582031 L 11.574219 5.828125 Z M 6.226563 4.804688 L 5.773438 5.695313 L 10.210938 7.953125 L 10.664063 7.0625 Z M 5.363281 7.140625 L 5.136719 8.109375 L 9.976563 9.242188 L 10.203125 8.265625 Z M 3 9 L 3 14 L 12 14 L 12 9 L 11 9 L 11 13 L 4 13 L 4 9 Z M 5.03125 9.25 L 4.96875 10.25 L 9.972656 10.566406 L 10.035156 9.570313 Z M 5 11 L 5 12 L 10 12 L 10 11 Z"/></svg>
+      </a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+  </div>
+</section>
+<hr class="hr-slash whoami-hr" />
+
+    <section class="related">
+    
+    
+    <h1 class="related__title">
+      <hr class="hr-dots"/>
+      <div>
+        相关内容
+      </div>
+      <hr class="hr-dots"/>
+    </h1>
+    <ul class="related-ul">
+        
+        <li>
+          <a href="/zh/posts/java-%E8%8C%83%E5%9E%8B%E4%B8%8E%E5%8F%8D%E5%B0%84/" class="related__link">Java范型与反射</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="related__link">设计模式</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/java-%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/" class="related__link">Java注解详解</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/jvmdalvikart/" class="related__link">JVM/Dalvik/ART</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/java-threadlocal%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="related__link">Java ThreadLocal源码解析</a>
+        </li>
+        
+    </ul>
+    
+  </section>
+    <div class="grow"></div>
+<nav class="pagination-single">
+  
+    <a href="https://dshcao.github.io/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="pagination-single__left">
+      <div class="pagination-single__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
+      </div>
+      <div class="pagination-single__left-title">自定义View-measure&amp;layout</div>      
+    </a>
+  
+  <div class="grow"></div>
+  
+    <a href="https://dshcao.github.io/zh/posts/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">编程基础</div>
+      <div class="pagination-single__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
+      </div>
+    </a>
+  
+</nav>
+    
+  
+    
+<div id="vcomments"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script>
+  new Valine({
+      el: '#vcomments' ,
+      appId: '26IJaKoF5dnnKNBiQRI3Ovw8-MdYXbMMI',
+      appKey: 'coAossMXBdLt88uP5QzSexla',
+      notify:  false ,
+      verify:  false ,
+      avatar:'mm',
+      placeholder: '说点什么吧...',
+      visitor:  false 
+  });
+</script>
+  
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+  
+  <div class="pswp__bg"></div>
+
+  
+  <div class="pswp__scroll-wrap">
+
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+
+    
+    <div class="pswp__ui pswp__ui--hidden">
+
+      <div class="pswp__top-bar">
+
+        
+
+        <div class="pswp__counter"></div>
+
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+        <button class="pswp__button pswp__button--share" title="Share"></button>
+
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+        
+        
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div>
+      </div>
+
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+    <div class="hide">
+    
+
+<div class="search">
+  <span class="icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+  </span>
+  <input id="search" aria-label="Site Search" class="input" type="text" placeholder="搜索" autocomplete="off">
+  <div id="search-results" class="dropdown">
+    <div id="search-menu" class="dropdown-menu" role="menu">
+    </div>
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</main>
+
+
+<aside class="main-side">
+  
+
+
+<section class="sidebar">
+  <div class="toc__flexbox" data-position="fixed">
+    <h6 class="toc__title">目录</h6>
+    
+      <label class="switch">
+        <input id="toggle-toc" aria-label="Toggle TOC" type="checkbox" checked>
+        <span class="slider round"></span>
+      </label>
+    
+  </div>
+  <div class="toc">
+    <ul id="toc"></ul>
+  </div>
+</section>
+
+
+
+</aside>
+
+<script>
+  enquire.register("screen and (max-width: 769px)", {
+    match: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "hide";
+      }
+    },
+    unmatch: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main-main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "main-side";
+      }
+      document.getElementsByClassName('navbar__burger')[0].classList.remove('is-active');
+      document.getElementsByClassName('navbar__menu')[0].classList.remove('is-active');
+      document.getElementsByClassName('mobile-search')[0].classList.add('hide');
+    },
+    setup: function () { },
+    deferSetup: true,
+    destroy: function () { },
+  });
+</script>
+
+
+
+
+<script defer src="/js/jquery.min.0925e8ad7bd971391a8b1e98be8e87a6971919eb5b60c196485941c3c1df089a.js"></script>
+
+<script defer src="/js/enquire.min.72cb9edeb1ca1b92f5bf9df8d31a1ecd1e423d0b5e0f48a2a208b020dd5053fa.js"></script>
+
+<script defer src="/js/clipboard.min.1626706afc88d95ebe1173b553ec732c6dc82a576989315fdf5e7779af738a44.js"></script>
+
+<script defer src="/js/lazysizes.min.31dd6a2d3a1ec0f78a8df007535cf23f03aeb5c70f026e6d6a19dac3b3acc340.js"></script>
+
+<script defer src="/js/zzo.min.31d5b7d503557f488cc17574468cbc03fca4e45f61c15080d29bff7e38043ec8.js"></script>
+
+
+  
+  <script defer src="/lib/photoswipe/photoswipe.min.78fc260a16dbbd76ec3b4da56ccdc7a076d21d31c501e0a17a4175c4a25d95ea.js"></script>
+  
+  <script defer src="/lib/photoswipe/photoswipe-ui-default.min.50a9333a7ff0d660714662cb1ab49ec81e1ed716eba78c729600166f7338da95.js"></script>
+  
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css">
+  
+  <link rel="stylesheet" href="/lib/photoswipe/custom-skin.min.css">
+
+
+
+  
+  <script defer src="/js/jquery.toc.min.376e1b5d343786c1978dbad9ea7a0e23088947732993a91dcbad995883c96ceb.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  window.onload = function() {
+    
+    (function () {
+      document.querySelectorAll('.chroma > table')
+        .forEach((element) => {
+          const sub = element.querySelector('code[data-lang]');
+          if (sub) {
+            $(element).closest('div.chroma').attr('data-lang', mapLang(sub.getAttribute('data-lang')));
+          }
+        }
+      );
+    })();
+
+    (function () {
+      document.querySelectorAll('.single__contents > pre > code')
+        .forEach((element) => {
+          if (!$(element).attr('data-lang')) {
+            $(element).parent().wrap('<div data-lang="Code" class="language-code"></div>');
+          }
+        });
+    })();
+
+    function mapLang(name) {
+      return {
+        coffeescript: 'CoffeeScript',
+        cpp: 'C++',
+        cs: 'C#',
+        css: 'CSS',
+        html: 'HTML',
+        http: 'HTTP',
+        js: 'JavaScript',
+        json: 'JSON',
+        objectivec: 'Objective-C',
+        php: 'PHP',
+        sql: 'SQL',
+        toml: 'TOML',
+        ts: 'TypeScript',
+        typescript: 'TypeScript',
+        xml: 'XML',
+        yaml: 'YAML',
+      }[name] || name.toUpperCase();
+    }
+
+    
+    runSearch();
+
+    
+    
+    
+    var enableBusuanzi = JSON.parse("false");
+    var busuanziPagePV = JSON.parse("true");
+    
+    if (enableBusuanzi && busuanziPagePV) {      
+      $('#busuanzi_value_page_pv').digits();
+    }    
+
+    var navbar = $('.navbar');
+
+    
+    
+    var enableToc = JSON.parse("true");
+    
+    if (enableToc) {
+      $("#toc").toc({ content: ".single__contents", headings: "h1,h2,h3,h4" });
+      $('#toc > li').each(function () {
+        $(this).find('ul').css('display', 'none');
+      });
+      $('#toc a').each(function () {
+        $(this).click(function () {
+          navbar.removeClass('navbar--show');
+          navbar.removeClass('navbar--hide');
+          navbar.addClass('navbar--hide');
+
+          $(".single__contents :header").each(function () {
+            $('.toc a').removeClass('active');
+          });
+          $(this).addClass('active');
+
+          $('#toc > li').each(function () {
+            $(this).find('ul').css('display', 'none');
+          });
+          $(this).next().css('display', 'block');
+          $(this).parents('ul').css('display', 'block');
+        });
+      });
+
+      
+      $("#toggle-toc").change(function () {
+        if (this.checked) {
+          $('.toc').fadeIn(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main-main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'fixed');
+        } else {
+          $('.toc').fadeOut(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'absolute');
+        }
+      });
+    }    
+
+    
+    var text, clip = new ClipboardJS('.anchor');
+    var headers = $('.single__contents :header').not('h6').not('h5');
+    headers.append(function (index, html) {
+      var element = $(this);
+      var url = encodeURI(document.location.origin + document.location.pathname);
+      var link = url + "#" + element[0].id;
+      return " <span class='anchor hide' data-clipboard-text='" + link + "' style='position: relative;'>" +
+        "<span style='font-size: 1rem; position: absolute; right: -2rem; top: 50%; transform: translateY(-50%)'>🔗</span>" +
+        "</span>"
+        ;
+    });
+    headers.on('mouseenter', function () {
+      $(this).find('.anchor').attr('class', 'anchor');
+    });
+    headers.on('mouseleave', function () {
+      $(this).find('.anchor').attr('class', 'anchor hide');
+    });
+
+    $(".anchor").on('mouseleave', function (e) {
+      $(this).attr('aria-label', null).removeClass('tooltipped tooltipped-s tooltipped-w');
+    });
+
+    clip.on('success', function (e) {
+      e.clearSelection();
+      $(e.trigger).attr('aria-label', 'Link copied to clipboard!').addClass('tooltipped tooltipped-s');
+    });
+    
+    $('.language-code').each(function (i, node) {
+      $(node).append('<span class="copy-to-clipboard" title="Copy to clipboard"/>');
+    });
+
+    
+    var clipInit = false;
+    $('pre.chroma code, .language-code code').each(function () {
+      var code = $(this),
+        text = code.text();
+
+      if (text.length > 30) {
+        if (!clipInit) {
+          var text, clip = new ClipboardJS('.copy-to-clipboard', {
+            text: function (trigger) {
+              console.log();
+              if ($(trigger).prev().find('code').length > 1) {                
+                text = $(trigger).prev().find(`code[class^="language-"]`).text();
+              } else {
+                text = $(trigger).prev().find('code').text();
+              }
+               
+              return text.replace(/^\$\s/gm, '');
+            }
+          });
+
+          var inPre;
+          clip.on('success', function (e) {
+            e.clearSelection();
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+          });
+
+          clip.on('error', function (e) {
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', fallbackMessage(e.action)).addClass('tooltipped tooltipped-w');
+            $(document).one('copy', function () {
+              $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+            });
+          });
+
+          clipInit = true;
+        }
+
+        var notAllowedClass = ['language-mermaid', 'language-viz', 'language-wave', 'language-chart', 'language-msc', 'language-flowchart'];
+        var isNotAllowedIncluded = false;
+        var curClassName = code.attr('class');
+
+        for (let str of notAllowedClass) {
+          if (curClassName && curClassName.startsWith(str)) {
+            isNotAllowedIncluded = true;
+            break;
+          } 
+        }
+        
+        if (!isNotAllowedIncluded) {
+          if (curClassName) {
+            code.closest('div.chroma').append('<span class="copy-to-clipboard" title="Copy to clipboard" />');
+          }         
+        }        
+      }
+    });
+
+    
+    
+    var enablePhotoSwipe = JSON.parse("true");
+    
+    if (enablePhotoSwipe) {
+      var pswpElement = $('.pswp')[0];
+      var imgElements = $('.single__contents').find('img');
+      var items = [];
+
+      imgElements.each(function (i, v) {
+        $(this).click(function (e) {
+          initGallery(i);
+        });
+        $(this).css('cursor', 'pointer');
+        items.push({
+          src: v['src'],
+          w: 0,
+          h: 0,
+          title: filename(v['src']),
+        });
+      });
+
+      function filename(str) {
+        var s = str.replace(/\\/g, '/');
+        s = s.substring(s.lastIndexOf('/') + 1);
+        return str ? s.replace(/[?#].+$/, '') : s.split('.')[0];
+      }
+
+      function initGallery(index) {
+        var options = { index: index };
+        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.listen('imageLoadComplete', function (index, item) {
+          if (item.h < 1 || item.w < 1) {
+            let img = new Image();
+            img.onload = () => {
+              item.w = img.width;
+              item.h = img.height;
+              gallery.invalidateCurrItems();
+              gallery.updateSize(true);
+            }
+            img.src = item.src;
+          }
+        });
+        gallery.init();
+      }
+    }
+
+    
+    
+    var lib = JSON.parse("null");
+
+    if (lib && lib.includes('mermaid')) {
+      
+      var themeVariant = localStorage.getItem('theme') || JSON.parse("\"dark\"");
+
+      if (themeVariant === "dark" || themeVariant === "hacker") {
+        mermaid.initialize({ theme: 'dark' });
+      } else {
+        mermaid.initialize({ theme: 'default' });
+      }
+      
+      let mermaids = [];
+      [].push.apply(mermaids, document.getElementsByClassName('language-mermaid'));
+      for (i = 0; i < mermaids.length; i++) {
+        $(mermaids[i]).unwrap('pre');
+        $(mermaids[i]).replaceWith(function () {
+          return $("<div />").append($(this).contents()).addClass('mermaid').css('padding', '34px 4px 6px');
+        });
+      }
+    }
+
+    
+    if (lib && lib.includes('katex')) {
+      var mathElements = document.getElementsByClassName('math');
+      var options = [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ];
+
+      renderMathInElement(document.querySelector('.single__contents'), options);
+    }
+
+    
+    if (lib && lib.includes('flowchartjs')) {
+      
+      var options = JSON.parse("{\"arrow-end\":\"block\",\"element-color\":\"black\",\"fill\":\"white\",\"flowstate\":{\"approved\":{\"fill\":\"#58C4A3\",\"font-size\":12,\"no-text\":\"n/a\",\"yes-text\":\"APPROVED\"},\"current\":{\"fill\":\"yellow\",\"font-color\":\"red\",\"font-weight\":\"bold\"},\"future\":{\"fill\":\"#FFFF99\"},\"invalid\":{\"fill\":\"#444444\"},\"past\":{\"fill\":\"#CCCCCC\",\"font-size\":12},\"rejected\":{\"fill\":\"#C45879\",\"font-size\":12,\"no-text\":\"REJECTED\",\"yes-text\":\"n/a\"},\"request\":{\"fill\":\"blue\"}},\"font-color\":\"black\",\"font-size\":14,\"line-color\":\"black\",\"line-length\":50,\"line-width\":3,\"no-text\":\"no\",\"scale\":1,\"symbols\":{\"end\":{\"class\":\"end-element\"},\"start\":{\"element-color\":\"green\",\"fill\":\"yellow\",\"font-color\":\"red\"}},\"text-margin\":10,\"x\":0,\"y\":0,\"yes-text\":\"yes\"}");
+
+      var flowchartPrefix = "language-flowchart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + flowchartPrefix + "]"), function(x){
+          x.style.display = 'none'
+          x.parentNode.style.backgroundColor = "transparent"
+          jsonContent = x.innerText;
+
+          node0 = document.createElement('div');
+          node0.id = 'flowchart' + index;
+          x.parentNode.insertBefore(node0, x);
+
+          var diagram = flowchart.parse(jsonContent);
+          diagram.drawSVG("flowchart"+index, options);
+
+          index +=1;
+      });      
+    }
+
+    
+    if (lib && lib.includes('mathjax')) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: false,
+          packages: { '[+]': ['noerrors'] }
+        },
+        loader: {
+          load: ['[tex]/noerrors']
+        },
+      };
+    }
+
+    
+    if (lib && lib.includes('msc')) {
+      
+      var options = JSON.parse("{\"theme\":\"hand\"}");    
+
+      var index = 0;
+      var chartPrefix = "language-msc";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'msc' + index;
+        x.parentNode.insertBefore(node0, x);
+        var diagram = Diagram.parse(jsonContent);
+        diagram.drawSVG("msc" + index, options);
+        index += 1;
+      });
+    }
+
+    
+    if (lib && lib.includes('chart')) {
+      var borderColor = "#666";
+      var bgColor = "#ddd";
+      var borderWidth = 2;
+
+      Chart.defaults.global.elements.rectangle.borderWidth = borderWidth;
+      Chart.defaults.global.elements.rectangle.borderColor = borderColor;
+      Chart.defaults.global.elements.rectangle.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.line.borderWidth = borderWidth;
+      Chart.defaults.global.elements.line.borderColor = borderColor;
+      Chart.defaults.global.elements.line.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.point.borderWidth = borderWidth;
+      Chart.defaults.global.elements.point.borderColor = borderColor;
+      Chart.defaults.global.elements.point.backgroundColor = bgColor;
+
+      var chartPrefix = "language-chart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('canvas');
+        node0.height = 200;
+        node0.style.height = 200;
+        node0.id = 'myChart' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        var ctx = document.getElementById('myChart' + index).getContext('2d');
+        var myChart = new Chart(ctx, source);
+        index += 1;
+      });            
+    }
+
+    
+    if (lib && lib.includes('wavedrom')) {
+      var wavePrefix = "language-wave";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + wavePrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'WaveDrom_Display_' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        WaveDrom.RenderWaveForm(index, source, "WaveDrom_Display_");
+        index += 1;
+      });
+    }
+
+    
+    if (lib && lib.includes('viz')) {
+      var vizPrefix = "language-viz-";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + vizPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        var engine;
+        x.getAttribute("class").split(" ").forEach(function (cls) {
+          if (cls.startsWith(vizPrefix)) {
+            engine = cls.substr(vizPrefix.length);
+          }
+        });
+        var viz = new Viz();
+        viz.renderSVGElement(x.innerText, { engine: engine })
+          .then(function (element) {
+            element.style.width = "100%";
+            x.parentNode.insertBefore(element, x);
+          })
+      });
+    }
+  }
+</script>
+
+
+            
+            <footer class="footer">
+    
+<div class="dropdown">
+  <button class="dropdown-trigger" aria-label="Select Theme Button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M12.65 15.67c.14-.36.05-.77-.23-1.05l-2.09-2.06.03-.03c1.74-1.94 2.98-4.17 3.71-6.53h1.94c.54 0 .99-.45.99-.99v-.02c0-.54-.45-.99-.99-.99H10V3c0-.55-.45-1-1-1s-1 .45-1 1v1H1.99c-.54 0-.99.45-.99.99 0 .55.45.99.99.99h10.18C11.5 7.92 10.44 9.75 9 11.35c-.81-.89-1.49-1.86-2.06-2.88-.16-.29-.45-.47-.78-.47-.69 0-1.13.75-.79 1.35.63 1.13 1.4 2.21 2.3 3.21L3.3 16.87c-.4.39-.4 1.03 0 1.42.39.39 1.02.39 1.42 0L9 14l2.02 2.02c.51.51 1.38.32 1.63-.35zM17.5 10c-.6 0-1.14.37-1.35.94l-3.67 9.8c-.24.61.22 1.26.87 1.26.39 0 .74-.24.88-.61l.89-2.39h4.75l.9 2.39c.14.36.49.61.88.61.65 0 1.11-.65.88-1.26l-3.67-9.8c-.22-.57-.76-.94-1.36-.94zm-1.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+  </button>
+  <div class="dropdown-content">
+    
+    
+    
+      
+      
+        
+      
+        
+        
+          
+            
+              <a href="https://dshcao.github.io/zh/posts/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" data-lang="zh" class="dropdown-item is-active">中文</a>
+            
+          
+        
+      
+    
+  </div>
+</div>
+
+    
+<div class="footer__social">
+  <div class="social">
+    
+      
+      <a href="mailto:513996717@qq.com" title="email" aria-label="email">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg>
+      </a>
+            
+    
+            
+    
+      
+      <a href="https://github.com/dshcao" title="github" aria-label="github">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 24 24" version="1.1">
+<g id="surface3680">
+<path fill="currentColor" d="M 10.898438 2.101562 C 6.300781 2.601562 2.601562 6.300781 2.101562 10.800781 C 1.601562 15.5 4.300781 19.699219 8.398438 21.300781 C 8.699219 21.398438 9 21.199219 9 20.800781 L 9 19.199219 C 9 19.199219 8.601562 19.300781 8.101562 19.300781 C 6.699219 19.300781 6.101562 18.101562 6 17.398438 C 5.898438 17 5.699219 16.699219 5.398438 16.398438 C 5.101562 16.300781 5 16.300781 5 16.199219 C 5 16 5.300781 16 5.398438 16 C 6 16 6.5 16.699219 6.699219 17 C 7.199219 17.800781 7.800781 18 8.101562 18 C 8.5 18 8.800781 17.898438 9 17.800781 C 9.101562 17.101562 9.398438 16.398438 10 16 C 7.699219 15.5 6 14.199219 6 12 C 6 10.898438 6.5 9.800781 7.199219 9 C 7.101562 8.800781 7 8.300781 7 7.601562 C 7 7.199219 7 6.601562 7.300781 6 C 7.300781 6 8.699219 6 10.101562 7.300781 C 10.601562 7.101562 11.300781 7 12 7 C 12.699219 7 13.398438 7.101562 14 7.300781 C 15.300781 6 16.800781 6 16.800781 6 C 17 6.601562 17 7.199219 17 7.601562 C 17 8.398438 16.898438 8.800781 16.800781 9 C 17.5 9.800781 18 10.800781 18 12 C 18 14.199219 16.300781 15.5 14 16 C 14.601562 16.5 15 17.398438 15 18.300781 L 15 20.898438 C 15 21.199219 15.300781 21.5 15.699219 21.398438 C 19.398438 19.898438 22 16.300781 22 12.101562 C 22 6.101562 16.898438 1.398438 10.898438 2.101562 Z M 10.898438 2.101562 "/>
+</g>
+</svg>
+
+      </a>
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+      
+      <a href="https://stackoverflow.com/users/12583274/dshcao" title="stack-overflow" aria-label="stack-overflow">
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32"><path fill="currentColor" d="M 9.914063 0.71875 L 9.085938 1.28125 L 11.894531 5.367188 L 12.71875 4.800781 Z M 7.695313 2.453125 L 7.039063 3.207031 L 10.917969 6.582031 L 11.574219 5.828125 Z M 6.226563 4.804688 L 5.773438 5.695313 L 10.210938 7.953125 L 10.664063 7.0625 Z M 5.363281 7.140625 L 5.136719 8.109375 L 9.976563 9.242188 L 10.203125 8.265625 Z M 3 9 L 3 14 L 12 14 L 12 9 L 11 9 L 11 13 L 4 13 L 4 9 Z M 5.03125 9.25 L 4.96875 10.25 L 9.972656 10.566406 L 10.035156 9.570313 Z M 5 11 L 5 12 L 10 12 L 10 11 Z"/></svg>
+      </a>
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+    
+  <a href="https://dshcao.github.io/zh/posts/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80//index.xml" type="application/rss+xml" title="rss" aria-label="RSS Feed Link">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle fill="currentColor" cx="6.18" cy="17.82" r="2.18"/><path fill="currentColor" d="M5.59 10.23c-.84-.14-1.59.55-1.59 1.4 0 .71.53 1.28 1.23 1.4 2.92.51 5.22 2.82 5.74 5.74.12.7.69 1.23 1.4 1.23.85 0 1.54-.75 1.41-1.59-.68-4.2-3.99-7.51-8.19-8.18zm-.03-5.71C4.73 4.43 4 5.1 4 5.93c0 .73.55 1.33 1.27 1.4 6.01.6 10.79 5.38 11.39 11.39.07.73.67 1.28 1.4 1.28.84 0 1.5-.73 1.42-1.56-.73-7.34-6.57-13.19-13.92-13.92z"/></svg>
+  </a>
+
+  </div>
+</div>
+
+    
+<div id="gtt">
+  <div class="gtt">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M8.12 14.71L12 10.83l3.88 3.88c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L12.7 8.71c-.39-.39-1.02-.39-1.41 0L6.7 13.3c-.39.39-.39 1.02 0 1.41.39.38 1.03.39 1.42 0z"/></svg>
+  </div>
+</div>
+
+    <hr />
+
+    
+    <div class="footer__poweredby">
+    
+
+                
+            <p class="caption">
+                ©2020, All Rights Reserved
+            </p>
+        
+        <p class="caption">Powered by <a href="https://gohugo.io/" rel="noreferrer">Hugo</a> and the <a href="https://github.com/zzossig/hugo-theme-zzo" rel="noreferrer">Zzo theme</a></p>
+    </div>
+        
+</footer>
+        </div>    
+    </div>
+</body>
+
+</html>

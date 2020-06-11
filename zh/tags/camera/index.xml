@@ -25,21 +25,6 @@
         <description>一、camera2 CameraX是Jetpack对camera2功能的封装，并可向后兼容至 Android 5.0（API 级别 21）</description>
       </item>
       
-      <item>
-        <title>Jetpack-CameraX</title>
-        <link>https://dshcao.github.io/zh/posts/jetpack-paging/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/jetpack-paging/</guid>
-        <description>DataSource
-DataSource.Factory
-PagedList
-PagedList.Builder
-LivePagedListBuilder
-PagedListAdapter
-https://github.com/android/architecture-components-samples</description>
-      </item>
-      
     
   </channel>
 </rss>

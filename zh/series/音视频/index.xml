@@ -17,21 +17,21 @@
     
       
       <item>
+        <title>Android-FFmpeg打造自己的播放器</title>
+        <link>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</guid>
+        <description>如何实现 播放音频 SDL2 AudioTrack OpenSLES ijksdl 播放视频 SDL2 SurfaceView ANativeWindow ijksdl</description>
+      </item>
+      
+      <item>
         <title>Android-音视频基础知识(一)</title>
         <link>https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/</guid>
         <description>RGB&amp;amp;YUV RGB 红色(R)、绿色(G)、蓝色(B)三原色编码颜色。一般显示器上采用的标准。其中每个原色用一个字节(8bit)表示，一个像素点占用3字节(</description>
-      </item>
-      
-      <item>
-        <title>模版</title>
-        <link>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</guid>
-        <description>如何实现 播放音频 SDL2 AudioTrack OpenSLES ijksdl 播放视频 SDL2 SurfaceView ANativeWindow ijksdl</description>
       </item>
       
     

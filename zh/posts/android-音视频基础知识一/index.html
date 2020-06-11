@@ -441,13 +441,14 @@
 <h3 id="yuvycbcr">YUV&amp;YCbCr</h3>
 <p>YCbCr是YUV表示色彩信号的一种方式，Y是明亮度信息，Cb是蓝色偏移量，Cr是红色偏移量。一般我们将的YUV大多就是指YCbCr。</p>
 <h3 id="yuvrgb">YUV与RGB的转换</h3>
-<p>Y = 0.299 * R + 0.587 * G + 0.114 * B<br><br />
-U = -0.147 * R - 0.289 * G + 0.436 * B<br><br />
-V = 0.615 * R - 0.515 * G - 0.100 * B</p>
-<p>R = Y + 1.14 * V<br><br />
-G = Y - 0.39 * U - 0.58 * V<br><br />
-B = Y + 2.03 * U<br></p>
-<!-- 为什么YUV编码亮度和色度不是1:1采集？因为人对亮度敏感对色度不敏感，所以可以对色度更多的压缩。 -->
+<pre><code>Y = 0.299 * R + 0.587 * G + 0.114 * B
+U = -0.147 * R - 0.289 * G + 0.436 * B
+V = 0.615 * R - 0.515 * G - 0.100 * B
+
+R = Y + 1.14 * V
+G = Y - 0.39 * U - 0.58 * V
+B = Y + 2.03 * U
+</code></pre><!-- 为什么YUV编码亮度和色度不是1:1采集？因为人对亮度敏感对色度不敏感，所以可以对色度更多的压缩。 -->
 <h3 id="yuv">YUV的采样</h3>
 <ul>
 <li>
@@ -582,25 +583,100 @@ NV21是Android摄像头采集数据默认格式</p>
 </tbody>
 </table>
 <h3 id="heading-1">视频编码</h3>
-<p>视频编码是将视频像素数据(RGB/YUV等)压缩成视频码流从而降低视频数据量<br />
-名称        | 推出机构        | 推出时间 | 目前使用领域<br />
-&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;-|&mdash;&mdash;&ndash;|&mdash;&mdash;&mdash;-<br />
-HEVC(H265) | MPEG/ITU-T     | 2013   | 研发中<br />
-H264       | MPEG/ITU-T     | 2003   | 各个领域<br />
-MPEG4      | MPEG           | 2001   | 不温不火<br />
-MPEG2      | MPEG           | 1994   | 数字电视<br />
-VP9        | Google         | 2013   | 研发中<br />
-VP8        | Google         | 2008   | 不普及<br />
-VC-1       | Microsoft Inc. | 2006   | 微软平台</p>
+<p>视频编码是将视频像素数据(RGB/YUV等)压缩成视频码流从而降低视频数据量</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>推出机构</th>
+<th>推出时间</th>
+<th>目前使用领域</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HEVC(H265)</td>
+<td>MPEG/ITU-T</td>
+<td>2013</td>
+<td>研发中</td>
+</tr>
+<tr>
+<td>H264</td>
+<td>MPEG/ITU-T</td>
+<td>2003</td>
+<td>各个领域</td>
+</tr>
+<tr>
+<td>MPEG4</td>
+<td>MPEG</td>
+<td>2001</td>
+<td>不温不火</td>
+</tr>
+<tr>
+<td>MPEG2</td>
+<td>MPEG</td>
+<td>1994</td>
+<td>数字电视</td>
+</tr>
+<tr>
+<td>VP9</td>
+<td>Google</td>
+<td>2013</td>
+<td>研发中</td>
+</tr>
+<tr>
+<td>VP8</td>
+<td>Google</td>
+<td>2008</td>
+<td>不普及</td>
+</tr>
+<tr>
+<td>VC-1</td>
+<td>Microsoft Inc.</td>
+<td>2006</td>
+<td>微软平台</td>
+</tr>
+</tbody>
+</table>
 <p>其中研发中并不代表还没有使用，比如H265因其压缩比高，还原度高，在部分领域(电影行业)已经开始使用</p>
 <h3 id="heading-2">音频编码</h3>
-<p>音频编码是将音频采样数据(PCM等)压缩成音频码流从而降低音频的数据量<br />
-名称     | 推出机构        | 推出时间  | 目前使用领域<br />
-&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;-|&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&ndash;<br />
-AAC     | MPEG           | 1997    | 各个领域(新)<br />
-MP3     | MPEG           | 1993    | 各个领域(旧)<br />
-WMV     | Microsoft Inc. | 1999    | 微软平台<br />
-VC-3    | Dolby Inc.     | 1992    | 电影</p>
+<p>音频编码是将音频采样数据(PCM等)压缩成音频码流从而降低音频的数据量</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>推出机构</th>
+<th>推出时间</th>
+<th>目前使用领域</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AAC</td>
+<td>MPEG</td>
+<td>1997</td>
+<td>各个领域(新)</td>
+</tr>
+<tr>
+<td>MP3</td>
+<td>MPEG</td>
+<td>1993</td>
+<td>各个领域(旧)</td>
+</tr>
+<tr>
+<td>WMV</td>
+<td>Microsoft Inc.</td>
+<td>1999</td>
+<td>微软平台</td>
+</tr>
+<tr>
+<td>VC-3</td>
+<td>Dolby Inc.</td>
+<td>1992</td>
+<td>电影</td>
+</tr>
+</tbody>
+</table>
 <p>AAC相比MP3有更高的压缩比，同样大小的音频文件AAC质量更高</p>
 <h2 id="heading-3">音视频常见名词</h2>
 <ul>
@@ -669,30 +745,101 @@ NALU头信息占一个字节，其中高位开始第：<br />
 2～3bit是参考级别NRI(nal_ref_idc)，表示该NALU的重要性<br />
 4～8bit是NALU类型Type(nal_unit_type)，1～12由H264使用，24～31由H264以外的应用使用。</li>
 </ul>
-<p>图表<span id="11">NAL unit type</span><br />
-NAL unit type | NAL类型<br />
-&mdash;&mdash;&mdash;&mdash;&mdash;|&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;<br />
-0             | 未定义<br />
-1             | 不分区，非IDR图像的片(非IDR Slice)<br />
-2             | 片分区A(Slice Partition A)<br />
-3             | 片分区B(Slice Partition B)<br />
-4             | 片分区C(Slice Partition C)<br />
-5             | IDR图像中的片(IDR Slice)<br />
-6             | SEI(补充增强信息单元)<br />
-7             | SPS(序列参数集)<br />
-8             | PPS(图像参数集)<br />
-9             | 分界符<br />
-10            | 序列结束<br />
-11            | 码流结束<br />
-12            | 填充<br />
-13~23         | 保留<br />
-24            | STAP-A 单一时间的组合包<br />
-25            | STAP-B 单一时间的组合包<br />
-26            | MTAP16 多个时间的组合包<br />
-27            | MTAP24 多个时间的组合包<br />
-28            | FU-A 分片的单元<br />
-29            | FU-B 分片的单元<br />
-30~31         | 未定义</p>
+<p>图表<span id="11">NAL unit type</span></p>
+<table>
+<thead>
+<tr>
+<th>NAL unit type</th>
+<th>NAL类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>未定义</td>
+</tr>
+<tr>
+<td>1</td>
+<td>不分区，非IDR图像的片(非IDR Slice)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>片分区A(Slice Partition A)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>片分区B(Slice Partition B)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>片分区C(Slice Partition C)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>IDR图像中的片(IDR Slice)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>SEI(补充增强信息单元)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>SPS(序列参数集)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>PPS(图像参数集)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>分界符</td>
+</tr>
+<tr>
+<td>10</td>
+<td>序列结束</td>
+</tr>
+<tr>
+<td>11</td>
+<td>码流结束</td>
+</tr>
+<tr>
+<td>12</td>
+<td>填充</td>
+</tr>
+<tr>
+<td>13~23</td>
+<td>保留</td>
+</tr>
+<tr>
+<td>24</td>
+<td>STAP-A 单一时间的组合包</td>
+</tr>
+<tr>
+<td>25</td>
+<td>STAP-B 单一时间的组合包</td>
+</tr>
+<tr>
+<td>26</td>
+<td>MTAP16 多个时间的组合包</td>
+</tr>
+<tr>
+<td>27</td>
+<td>MTAP24 多个时间的组合包</td>
+</tr>
+<tr>
+<td>28</td>
+<td>FU-A 分片的单元</td>
+</tr>
+<tr>
+<td>29</td>
+<td>FU-B 分片的单元</td>
+</tr>
+<tr>
+<td>30~31</td>
+<td>未定义</td>
+</tr>
+</tbody>
+</table>
 <p>Start Code Prefix为3个字节. 但是，为了寻址方便，要求数据流在长度上对齐，因此H264建议在Start Code Prefix前面加若干个0.</p>
 <h3 id="heading-6">音频编码及传输</h3>
 <p>H264在网络传输过程中会被编码成一系列的网络数据包<br />
@@ -875,8 +1022,9 @@ ALSA的主要特性包括：高效地支持从消费类入门级声卡到专业�
 <li><a href="https://cloud.tencent.com/developer/article/1442041">一文读懂 YUV 的采样与格式</a></li>
 <li><a href="http://vcb-s.nmm-hd.org">音视频开发的一系列科普教程</a></li>
 </ul>
-<p><a href="https://www.jianshu.com/p/5f89ea2c3a28">https://www.jianshu.com/p/5f89ea2c3a28</a></p>
-<p><a href="https://www.cnblogs.com/yjg2014/p/6144977.html">https://www.cnblogs.com/yjg2014/p/6144977.html</a></p>
+<!-- https://www.jianshu.com/p/5f89ea2c3a28
+
+https://www.cnblogs.com/yjg2014/p/6144977.html -->
 
     </article>
     
@@ -969,6 +1117,10 @@ ALSA的主要特性包括：高效地支持从消费类入门级声卡到专业�
     <ul class="related-ul">
         
         <li>
+          <a href="/zh/posts/android-ffmpeg%E4%BD%BF%E7%94%A8/" class="related__link">Android-FFmpeg使用</a>
+        </li>
+        
+        <li>
           <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E9%87%87%E5%BD%95%E6%91%84%E5%83%8F%E5%A4%B4/" class="related__link">Android直播-采录摄像头</a>
         </li>
         
@@ -977,15 +1129,11 @@ ALSA的主要特性包括：高效地支持从消费类入门级声卡到专业�
         </li>
         
         <li>
-          <a href="/zh/posts/android-ffmpeg%E4%BD%BF%E7%94%A8/" class="related__link">Android-FFmpeg使用</a>
+          <a href="/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/" class="related__link">Android-FFmpeg打造自己的播放器</a>
         </li>
         
         <li>
-          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/android-sparsearray%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="related__link">SparseArray源码解析</a>
+          <a href="/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/" class="related__link">Android四大组件-Activity/Fragment</a>
         </li>
         
     </ul>

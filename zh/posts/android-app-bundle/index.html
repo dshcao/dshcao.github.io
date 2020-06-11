@@ -174,7 +174,7 @@
 <link rel="stylesheet" href="/css/main.min.css">
 
 
-    <meta name="description" content="Syntax highlighting test" />
+    <meta name="description" content="Android AppBundle" />
 <meta name="keywords" content="">
 <meta name="created" content="2019-10-11T10:33:41&#43;0900">
 <meta name="modified" content="2019-10-11T10:33:41&#43;0900">
@@ -204,8 +204,8 @@
     "datePublished": "2019-10-11T10:33:41+09:00",
     "dateModified": "2019-10-11T10:33:41+09:00",
     "url" : "https://dshcao.github.io/zh/posts/android-app-bundle/",
-    "description": "Syntax highlighting test",
-    "keywords": ["android","插件化","热更新"],
+    "description": "Android AppBundle",
+    "keywords": ["android","AppBundle"],
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://dshcao.github.io/"
@@ -405,7 +405,7 @@
     <h2 class="single__title">Android AppBundle</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 10月 11日 · ☕6 min read
+  🕓 2019年 10月 11日 · ☕3 min read
   
 </div>
       <div class="single__tags caption">
@@ -424,17 +424,8 @@
   
   
   <li>
-    <a href="/zh/tags/%E6%8F%92%E4%BB%B6%E5%8C%96" class="single__tag">
-      #插件化
-    </a>
-  </li>
-    
-
-  
-  
-  <li>
-    <a href="/zh/tags/%E7%83%AD%E6%9B%B4%E6%96%B0" class="single__tag">
-      #热更新
+    <a href="/zh/tags/appbundle" class="single__tag">
+      #AppBundle
     </a>
   </li>
     
@@ -442,235 +433,157 @@
 </div>
     </div>    
     <article class="single__contents">
-      <h2 id="heading">热修复方案介绍</h2>
-<h3 id="andfix">AndFix</h3>
-<p>Native层函数指针替换，即时生效</p>
-<h3 id="qq">QQ控件超级补丁</h3>
-<p>类加载/multidex，重启生效</p>
-<h3 id="robust">Robust</h3>
-<p>字节码插桩/Instant Run 即时生效</p>
-<h3 id="tinker">Tinker</h3>
-<p>类加载，重启生效</p>
-<h3 id="sophix">Sophix</h3>
-<p>号称目前最优秀的热修复方案。融合Native层函数指针替换和类加载两种技术</p>
-<p>由于官方不支持插件化和热更新（理由是安全问题）导致原生插件化和热更新只能另辟蹊径<br />
-热更新分两种，一种是重启生效，一种是即时生效<br />
-即时生效的原理是：这个过程相当复杂不易控制<br />
-这里主要讲喜爱重启生效热更新模式的原理：<br />
-<mark>ClassLoader</mark>,java的ClassLoader双亲委托机制<br />
-干预Android加载，既然要干预那就要首先了解其原加载过程</p>
-<h2 id="heading-1">双亲委托</h2>
-<p>简单说类加载器的双亲委托就是在当前类加载器加载某个类之前先逐级向上询问父类加载器是否已加载过(是否已有类的缓存)，如果已加载就返回，如果未加载则有当前类加载器加载该类。你可能会问ClassLoader本身也是一个类，它是怎么被加载的呢？在jvm启动的时候就有一个根ClassLoader,即：bootstrapclassloader<br><br />
-设计双亲委托模式的好处：<br />
-1.避免重复加载 2.安全，避免核心api被修改</p>
-<h2 id="pathclassloaderdexclassloader">PathClassLoader和DexClassLoader源码分析</h2>
-<p>要做热更新就要用<code>ClassLoader</code>加载hotfix dex中的类,用哪个<code>ClassLoader</code>呢？我们在Activity中打印<code>classLoader::class.java.name</code>可以看到是<code>dalvik.system.PathClassLoader</code></p>
-<p>查看<code>PathClassLoader</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="nf">PathClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">parent</span><span class="o">)</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="kd">public</span> <span class="nf">PathClassLoader</span><span class="o">(</span><span class="n">String</span> <span class="n">dexPath</span><span class="o">,</span> <span class="n">String</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">parent</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">(</span><span class="n">dexPath</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">librarySearchPath</span><span class="o">,</span> <span class="n">parent</span><span class="o">)</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>只有几个构造方法，但<code>PathClassLoader</code>继承自<code>BaseDexClassLoader</code>，继续进入<code>BaseDexClassLoader</code>查看</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">protected</span> <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">loadClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">resolve</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ClassNotFoundException</span> <span class="o">{</span>
-        <span class="c1">// 首先检查是否已经加载过
-</span><span class="c1"></span>        <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">c</span> <span class="o">=</span> <span class="n">findLoadedClass</span><span class="o">(</span><span class="n">name</span><span class="o">)</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="n">parent</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">c</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="na">loadClass</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="kc">false</span><span class="o">)</span><span class="o">;</span>
-                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="n">c</span> <span class="o">=</span> <span class="n">findBootstrapClassOrNull</span><span class="o">(</span><span class="n">name</span><span class="o">)</span><span class="o">;</span>
-                <span class="o">}</span>
-            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c1">//parent.loadClass可鞥在此抛出异常
-</span><span class="c1"></span>            <span class="o">}</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">c</span> <span class="o">=</span> <span class="n">findClass</span><span class="o">(</span><span class="n">name</span><span class="o">)</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">c</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p><code>loadClass</code>首先检查是不是已加载过这个类，若没有，调用父ClassLoader的<code>loadClass</code>，以此上推检查父ClassLoader是否加载过此类，若都没有加载则调用<code>findClass</code></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="nd">@Override</span>
-<span class="kd">protected</span> <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">findClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ClassNotFoundException</span> <span class="o">{</span>
-    <span class="c1">// First, check whether the class is present in our shared libraries.
-</span><span class="c1"></span>    <span class="k">if</span> <span class="o">(</span><span class="n">sharedLibraryLoaders</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">for</span> <span class="o">(</span><span class="n">ClassLoader</span> <span class="n">loader</span> <span class="o">:</span> <span class="n">sharedLibraryLoaders</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="n">loader</span><span class="o">.</span><span class="na">loadClass</span><span class="o">(</span><span class="n">name</span><span class="o">)</span><span class="o">;</span>
-            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">ignored</span><span class="o">)</span> <span class="o">{</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="c1">// Check whether the class in question is present in the dexPath that
-</span><span class="c1"></span>    <span class="c1">// this classloader operates on.
-</span><span class="c1"></span>    <span class="n">List</span><span class="o">&lt;</span><span class="n">Throwable</span><span class="o">&gt;</span> <span class="n">suppressedExceptions</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Throwable</span><span class="o">&gt;</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
-    <span class="n">Class</span> <span class="n">c</span> <span class="o">=</span> <span class="n">pathList</span><span class="o">.</span><span class="na">findClass</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">suppressedExceptions</span><span class="o">)</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">c</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">ClassNotFoundException</span> <span class="n">cnfe</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ClassNotFoundException</span><span class="o">(</span>
-                <span class="s">&#34;Didn&#39;t find class \&#34;&#34;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#34;\&#34; on path: &#34;</span> <span class="o">+</span> <span class="n">pathList</span><span class="o">)</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">t</span> <span class="o">:</span> <span class="n">suppressedExceptions</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">cnfe</span><span class="o">.</span><span class="na">addSuppressed</span><span class="o">(</span><span class="n">t</span><span class="o">)</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">throw</span> <span class="n">cnfe</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="n">c</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>最终执行到<code>Class c = pathList.findClass(name, suppressedExceptions);</code>，再继续查看<code>DexPathList</code>的<code>findClass</code>方法</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">findClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Throwable</span><span class="o">&gt;</span> <span class="n">suppressed</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">for</span> <span class="o">(</span><span class="n">Element</span> <span class="n">element</span> <span class="o">:</span> <span class="n">dexElements</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="na">findClass</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">definingContext</span><span class="o">,</span> <span class="n">suppressed</span><span class="o">)</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">clazz</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">clazz</span><span class="o">;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
+      <!-- ## 热修复方案介绍
+### AndFix 
+Native层函数指针替换，即时生效
+### QQ控件超级补丁
+类加载/multidex，重启生效
+### Robust
+字节码插桩/Instant Run 即时生效
+### Tinker
+类加载，重启生效
+### Sophix 
+号称目前最优秀的热修复方案。融合Native层函数指针替换和类加载两种技术
 
-    <span class="k">if</span> <span class="o">(</span><span class="n">dexElementsSuppressedExceptions</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">suppressed</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">dexElementsSuppressedExceptions</span><span class="o">)</span><span class="o">)</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>再继续进入<code>Element</code>的<code>findClass</code>方法</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Class</span><span class="o">&lt;</span><span class="o">?</span><span class="o">&gt;</span> <span class="n">findClass</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="n">ClassLoader</span> <span class="n">definingContext</span><span class="o">,</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Throwable</span><span class="o">&gt;</span> <span class="n">suppressed</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">dexFile</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span> <span class="o">?</span> <span class="n">dexFile</span><span class="o">.</span><span class="na">loadClassBinaryName</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">definingContext</span><span class="o">,</span> <span class="n">suppressed</span><span class="o">)</span><span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><!-- 
+由于官方不支持插件化和热更新（理由是安全问题）导致原生插件化和热更新只能另辟蹊径
+热更新分两种，一种是重启生效，一种是即时生效
+即时生效的原理是：这个过程相当复杂不易控制
+这里主要讲喜爱重启生效热更新模式的原理：
+<mark>ClassLoader</mark>,java的ClassLoader双亲委托机制
+干预Android加载，既然要干预那就要首先了解其原加载过程
+
+## 双亲委托
+简单说类加载器的双亲委托就是在当前类加载器加载某个类之前先逐级向上询问父类加载器是否已加载过(是否已有类的缓存)，如果已加载就返回，如果未加载则有当前类加载器加载该类。你可能会问ClassLoader本身也是一个类，它是怎么被加载的呢？在jvm启动的时候就有一个根ClassLoader,即：bootstrapclassloader<br>
+设计双亲委托模式的好处：
+1.避免重复加载 2.安全，避免核心api被修改
+
+## PathClassLoader和DexClassLoader源码分析
+
+要做热更新就要用`ClassLoader`加载hotfix dex中的类,用哪个`ClassLoader`呢？我们在Activity中打印`classLoader::class.java.name`可以看到是`dalvik.system.PathClassLoader`
+
+查看`PathClassLoader`
+``` java
+public PathClassLoader(String dexPath, ClassLoader parent) {
+    super(dexPath, null, null, parent);
+}
+public PathClassLoader(String dexPath, String librarySearchPath, ClassLoader parent) {
+    super(dexPath, null, librarySearchPath, parent);
+}
+```
+只有几个构造方法，但`PathClassLoader`继承自`BaseDexClassLoader`，继续进入`BaseDexClassLoader`查看
+``` java
+protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        // 首先检查是否已经加载过
+        Class<?> c = findLoadedClass(name);
+        if (c == null) {
+            try {
+                if (parent != null) {
+                    c = parent.loadClass(name, false);
+                } else {
+                    c = findBootstrapClassOrNull(name);
+                }
+            } catch (ClassNotFoundException e) {
+                //parent.loadClass可鞥在此抛出异常
+            }
+            if (c == null) {
+                c = findClass(name);
+            }
+        }
+        return c;
+}
+```
+`loadClass`首先检查是不是已加载过这个类，若没有，调用父ClassLoader的`loadClass`，以此上推检查父ClassLoader是否加载过此类，若都没有加载则调用`findClass`
+``` java
+@Override
+protected Class<?> findClass(String name) throws ClassNotFoundException {
+    // First, check whether the class is present in our shared libraries.
+    if (sharedLibraryLoaders != null) {
+        for (ClassLoader loader : sharedLibraryLoaders) {
+            try {
+                return loader.loadClass(name);
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
+    }
+    // Check whether the class in question is present in the dexPath that
+    // this classloader operates on.
+    List<Throwable> suppressedExceptions = new ArrayList<Throwable>();
+    Class c = pathList.findClass(name, suppressedExceptions);
+    if (c == null) {
+        ClassNotFoundException cnfe = new ClassNotFoundException(
+                "Didn't find class \"" + name + "\" on path: " + pathList);
+        for (Throwable t : suppressedExceptions) {
+            cnfe.addSuppressed(t);
+        }
+        throw cnfe;
+    }
+    return c;
+}
+```
+最终执行到`Class c = pathList.findClass(name, suppressedExceptions);`，再继续查看`DexPathList`的`findClass`方法
+``` java
+public Class<?> findClass(String name, List<Throwable> suppressed) {
+    for (Element element : dexElements) {
+        Class<?> clazz = element.findClass(name, definingContext, suppressed);
+        if (clazz != null) {
+            return clazz;
+        }
+    }
+
+    if (dexElementsSuppressedExceptions != null) {
+        suppressed.addAll(Arrays.asList(dexElementsSuppressedExceptions));
+    }
+    return null;
+}
+```
+再继续进入`Element`的`findClass`方法
+``` java
+public Class<?> findClass(String name, ClassLoader definingContext,List<Throwable> suppressed) {
+    return dexFile != null ? dexFile.loadClassBinaryName(name, definingContext, suppressed): null;
+}
+```
+<!-- 
 DexFile即是dex文件的包装,我们只要在`dexElements`中用组件的dex文件构造出`Element`插入到`dexElements`即可，为了达到热更新的目的必须先加载自己的dex文件才能达到覆盖旧class文件的目的
  -->
-<p>我们只需要获取热更新补丁的<code>dexElements</code>与原<code>dexElements</code>合并，app再次重新启动就会完成修复</p>
-<h2 id="d8">使用d8编译热修复补丁</h2>
-<ol>
-<li>
-<p>将java/kotlin文件编译成class文件</p>
-<ul>
-<li>javac path/to/HotfixTest.java</li>
-<li>kotlinc path/to/HotfixTest.kt</li>
-</ul>
-</li>
-<li>
-<p>d8是dex编译器，是dx的升级版，用于取代dx。路径：sdk/build_tools/buildtToolsVersion(如：28.0.3)/d8<br />
-使用d8将class文件编译成dex<br />
-./path/to/d8 path/to/HotfixTest.class</p>
-</li>
-</ol>
-<h2 id="android-n">Android N热修复问题</h2>
-<p>由于Android N以后采用混合编译运行即：AOT编译，解释执行与JIT编译，见参考<a href="#2">Android N混合编译与对热补丁影响解析</a>。热点代码会缓存到base.art中，而且这个缓存是没法干预的，在程序启动前我们在Application干预前就已经存在了。如果我们要打补丁的类被优化到了base.art缓存就导致我们插入到dexElements并不会起作用，因为会优先从base.art查找。为此我们需要使用自定义的ClassLoader绕过。自定义一个PatchClassLoader并实例一个对象，再实例一个PathClassLoader，并将实例的PatchClassLoader设为PathClassLoader的父类加载器。使用该PathClassLoader替代App原有的PathClassLoader。为什么不直接用自定义的PatchClassLoader呢？看看DexFile类的注释文档你就会明白了。<br />
-另外Android5.0之前Android的一个优化是会将没有直接引用其他dex的类打上CLASS_ISPREVERIFIED标志，如果被打上CLASS_ISPREVERIFIED标志的类不在同一个dex会导致崩溃。这个问题可以从字节码插桩来解决。即将一个空类编译成单独的dex文件，然后利用ASM操作字节码给需要热修复的类的无参构造方法中插入对这个空类的引用。这样所有需要修复的类都引用另外一个dex的类阻止被打上CLASS_ISPREVERIFIED标志。操作字节码可以利用Gradle插件。<br><br />
-混淆的问题 读取混淆mapping文件将patch.dex中的类也按mapping混淆。<br><br />
-如何知道哪些文件修改了需要编译进patch.dex呢？可以每次打包记录每个文件的MD5值，如果不相等即有改变就编译进patch.dex</p>
-<h2 id="heading-2">热修复中四大组件</h2>
-<p>1.利用代理activity启动插件化中的activity<br />
-2.模仿系统加载启动activity</p>
-<h2 id="heading-3">总结</h2>
-<p>插件化在几年前火的一塌糊涂，由插件化延续到后来的热更新，近几年似乎没了当初的狂热<br />
-插件化和热更新的意义在于动态化升级。不同于web只要后台发布用户前端的下次请求页面和逻辑都会改变，Android的UI及逻辑代码在手机上，发布需要经过各大市场，由审核时间，且就算发布到各大市场用户也不一定更新，强制用户更新的结果可能是被用户强制卸载。但是发布新功能/紧急修复bug的需求是巨大的。于是先有了</p>
-<ul>
-<li>将web那一套搬到移动端的做法，但是web在移动端的性能让其体验很差，虽然出现了很多框架增强了许多，但还是有差距</li>
-<li>原生的插件化和热更新</li>
-<li>RectNative 热更新</li>
-</ul>
-<p>RectNative用脚本语言js控制逻辑，使用c++桥接的形式控制原生控件显示，由于脚本语言不用编译，可以动态发布从而实现热更新</p>
-<p><span id="2">参考：</span></p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzAwNDY1ODY2OQ==&amp;mid=2649286341&amp;idx=1&amp;sn=054d595af6e824cbe4edd79427fc2706&amp;scene=0%23wechat_redirect">Android N混合编译与对热补丁影响解析</a><br><br />
-<a href="https://mp.weixin.qq.com/s?__biz=MzI1MTA1MzM2Nw==&amp;mid=400118620&amp;idx=1&amp;sn=b4fdd5055731290eef12ad0d17f39d4a">安卓App热补丁动态修复技术介绍</a></p>
+<!-- 
+ 我们只需要获取热更新补丁的`dexElements`与原`dexElements`合并，app再次重新启动就会完成修复
+
+
+## 使用d8编译热修复补丁
+1. 将java/kotlin文件编译成class文件
+   * javac path/to/HotfixTest.java
+   * kotlinc path/to/HotfixTest.kt
+
+2. d8是dex编译器，是dx的升级版，用于取代dx。路径：sdk/build_tools/buildtToolsVersion(如：28.0.3)/d8
+使用d8将class文件编译成dex
+./path/to/d8 path/to/HotfixTest.class
+
+## Android N热修复问题
+由于Android N以后采用混合编译运行即：AOT编译，解释执行与JIT编译，见参考[Android N混合编译与对热补丁影响解析](#2)。热点代码会缓存到base.art中，而且这个缓存是没法干预的，在程序启动前我们在Application干预前就已经存在了。如果我们要打补丁的类被优化到了base.art缓存就导致我们插入到dexElements并不会起作用，因为会优先从base.art查找。为此我们需要使用自定义的ClassLoader绕过。自定义一个PatchClassLoader并实例一个对象，再实例一个PathClassLoader，并将实例的PatchClassLoader设为PathClassLoader的父类加载器。使用该PathClassLoader替代App原有的PathClassLoader。为什么不直接用自定义的PatchClassLoader呢？看看DexFile类的注释文档你就会明白了。
+另外Android5.0之前Android的一个优化是会将没有直接引用其他dex的类打上CLASS_ISPREVERIFIED标志，如果被打上CLASS_ISPREVERIFIED标志的类不在同一个dex会导致崩溃。这个问题可以从字节码插桩来解决。即将一个空类编译成单独的dex文件，然后利用ASM操作字节码给需要热修复的类的无参构造方法中插入对这个空类的引用。这样所有需要修复的类都引用另外一个dex的类阻止被打上CLASS_ISPREVERIFIED标志。操作字节码可以利用Gradle插件。<br>
+混淆的问题 读取混淆mapping文件将patch.dex中的类也按mapping混淆。<br>
+如何知道哪些文件修改了需要编译进patch.dex呢？可以每次打包记录每个文件的MD5值，如果不相等即有改变就编译进patch.dex
+
+## 热修复中四大组件
+1.利用代理activity启动插件化中的activity
+2.模仿系统加载启动activity
+
+## 总结
+插件化在几年前火的一塌糊涂，由插件化延续到后来的热更新，近几年似乎没了当初的狂热
+插件化和热更新的意义在于动态化升级。不同于web只要后台发布用户前端的下次请求页面和逻辑都会改变，Android的UI及逻辑代码在手机上，发布需要经过各大市场，由审核时间，且就算发布到各大市场用户也不一定更新，强制用户更新的结果可能是被用户强制卸载。但是发布新功能/紧急修复bug的需求是巨大的。于是先有了
+* 将web那一套搬到移动端的做法，但是web在移动端的性能让其体验很差，虽然出现了很多框架增强了许多，但还是有差距
+* 原生的插件化和热更新
+* RectNative 热更新
+
+RectNative用脚本语言js控制逻辑，使用c++桥接的形式控制原生控件显示，由于脚本语言不用编译，可以动态发布从而实现热更新
+
+
+
+<span id="2">参考：</span>
+
+[Android N混合编译与对热补丁影响解析](https://mp.weixin.qq.com/s?__biz=MzAwNDY1ODY2OQ==&mid=2649286341&idx=1&sn=054d595af6e824cbe4edd79427fc2706&scene=0%23wechat_redirect)<br>
+[安卓App热补丁动态修复技术介绍](https://mp.weixin.qq.com/s?__biz=MzI1MTA1MzM2Nw==&mid=400118620&idx=1&sn=b4fdd5055731290eef12ad0d17f39d4a) --><blockquote>
+</blockquote>
 
     </article>
     
@@ -763,23 +676,23 @@ DexFile即是dex文件的包装,我们只要在`dexElements`中用组件的dex�
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/android-%E7%83%AD%E6%9B%B4%E6%96%B0/" class="related__link">Android-热更新</a>
+          <a href="/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/" class="related__link">Android-音视频基础知识(一)</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-%E6%8F%92%E4%BB%B6%E5%8C%96/" class="related__link">Android插件化</a>
+          <a href="/zh/posts/android-mvcmvp%E5%8F%8Amvvm/" class="related__link">Android-MVC、MVP及MVVM</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/" class="related__link">Android-事件分发机制</a>
+          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E5%BD%95%E5%88%B6%E5%B1%8F%E5%B9%95/" class="related__link">Android直播-录制屏幕</a>
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-paging/" class="related__link">Jetpack-CameraX</a>
+          <a href="/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/" class="related__link">Android四大组件-Service</a>
         </li>
         
         <li>
-          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E9%87%87%E5%BD%95%E6%91%84%E5%83%8F%E5%A4%B4/" class="related__link">Android直播-采录摄像头</a>
+          <a href="/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/" class="related__link">RxJava2源码及使用</a>
         </li>
         
     </ul>

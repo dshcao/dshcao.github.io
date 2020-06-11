@@ -53,6 +53,15 @@
       </item>
       
       <item>
+        <title>Java ThreadLocal源码解析</title>
+        <link>https://dshcao.github.io/zh/posts/java-threadlocal%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-threadlocal%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
+        <description>ThreadLocal应用场景 ThreadLocal适合需要在不同线程存储不同且唯一的上下文信息的场景 魔数0x61c88647 0x61c88</description>
+      </item>
+      
+      <item>
         <title>RxJava2源码及使用</title>
         <link>https://dshcao.github.io/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>

@@ -26,6 +26,15 @@
       </item>
       
       <item>
+        <title>Java ThreadLocal源码解析</title>
+        <link>https://dshcao.github.io/zh/posts/java-threadlocal%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-threadlocal%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
+        <description>ThreadLocal应用场景 ThreadLocal适合需要在不同线程存储不同且唯一的上下文信息的场景 魔数0x61c88647 0x61c88</description>
+      </item>
+      
+      <item>
         <title>Java注解详解</title>
         <link>https://dshcao.github.io/zh/posts/java-%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -59,6 +68,24 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid>
         <description>前言 RxJava是一个响应式的异步事件流编程库。 RxJava的优势： 函数式编程，代码逻辑清晰，优雅 避险回调地狱 方便的线程调度 RxJava中主</description>
+      </item>
+      
+      <item>
+        <title>依赖注入和控制反转(IoC)</title>
+        <link>https://dshcao.github.io/zh/posts/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%ACioc/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%ACioc/</guid>
+        <description>控制反转(IoC) Java设计六大原则中有一项是依赖倒置，简单说就是面向接口编程。 比如Java中每个Service都有一个接口类和实现类，接</description>
+      </item>
+      
+      <item>
+        <title>网络基础</title>
+        <link>https://dshcao.github.io/zh/posts/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/</guid>
+        <description>TCP/IP和OSI TCP/IP协议簇 TCP/IP协议簇既然是以TCP和IP两个协议命名，足以说明TCP和IP两个协议在这个协议簇中的重要性</description>
       </item>
       
       <item>

@@ -89,7 +89,7 @@
       </item>
       
       <item>
-        <title>Jetpack-Navigation详解</title>
+        <title>Jetpack-Room&amp;LiveData&amp;ViewModel详解</title>
         <link>https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
@@ -184,7 +184,7 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-app-bundle/</guid>
-        <description>热修复方案介绍 AndFix Native层函数指针替换，即时生效 QQ控件超级补丁 类加载/multidex，重启生效 Robust 字节码插桩/Instant Run 即时生效</description>
+        <description>ClassLoader,java的ClassLoader双亲委托机制 干预Android加载，既然要干预那就要首先了解其原加载过程 ## 双亲委托 简</description>
       </item>
       
       <item>
@@ -221,6 +221,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-ffmpeg%E4%BD%BF%E7%94%A8/</guid>
         <description></description>
+      </item>
+      
+      <item>
+        <title>Android-FFmpeg打造自己的播放器</title>
+        <link>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</guid>
+        <description>如何实现 播放音频 SDL2 AudioTrack OpenSLES ijksdl 播放视频 SDL2 SurfaceView ANativeWindow ijksdl</description>
       </item>
       
       <item>
@@ -382,7 +391,7 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/git-%E8%AF%A6%E8%A7%A3/</guid>
-        <description></description>
+        <description>[http] proxy = 127.0.0.1:1081 [https] proxy = 127.0.0.1:1081</description>
       </item>
       
       <item>
@@ -392,6 +401,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/java-hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</guid>
         <description>以JDK8源码分析 前言 HashMap是结合数组和链表，以Key-Value形式存储的集合。HashMap中有三个个概念：负载因子(loadF</description>
+      </item>
+      
+      <item>
+        <title>Java ThreadLocal源码解析</title>
+        <link>https://dshcao.github.io/zh/posts/java-threadlocal%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-threadlocal%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</guid>
+        <description>ThreadLocal应用场景 ThreadLocal适合需要在不同线程存储不同且唯一的上下文信息的场景 魔数0x61c88647 0x61c88</description>
       </item>
       
       <item>
@@ -419,21 +437,6 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jetpack-camerax/</guid>
         <description>一、camera2 CameraX是Jetpack对camera2功能的封装，并可向后兼容至 Android 5.0（API 级别 21）</description>
-      </item>
-      
-      <item>
-        <title>Jetpack-CameraX</title>
-        <link>https://dshcao.github.io/zh/posts/jetpack-paging/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/jetpack-paging/</guid>
-        <description>DataSource
-DataSource.Factory
-PagedList
-PagedList.Builder
-LivePagedListBuilder
-PagedListAdapter
-https://github.com/android/architecture-components-samples</description>
       </item>
       
       <item>
@@ -473,6 +476,15 @@ https://github.com/android/architecture-components-samples</description>
       </item>
       
       <item>
+        <title>依赖注入和控制反转(IoC)</title>
+        <link>https://dshcao.github.io/zh/posts/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%ACioc/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%ACioc/</guid>
+        <description>控制反转(IoC) Java设计六大原则中有一项是依赖倒置，简单说就是面向接口编程。 比如Java中每个Service都有一个接口类和实现类，接</description>
+      </item>
+      
+      <item>
         <title>多线程详解</title>
         <link>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -500,15 +512,6 @@ https://github.com/android/architecture-components-samples</description>
       </item>
       
       <item>
-        <title>模版</title>
-        <link>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</guid>
-        <description>如何实现 播放音频 SDL2 AudioTrack OpenSLES ijksdl 播放视频 SDL2 SurfaceView ANativeWindow ijksdl</description>
-      </item>
-      
-      <item>
         <title>算法-快速排序算法</title>
         <link>https://dshcao.github.io/zh/posts/%E7%AE%97%E6%B3%95-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -533,6 +536,15 @@ https://github.com/android/architecture-components-samples</description>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</guid>
         <description>字长 字长是CPU的主要技术指标之一，指的是CPU一次最大能并行处理的二进制位数 现在主流的计算机字长是32位与64位 原码&amp;amp;反码&amp;amp</description>
+      </item>
+      
+      <item>
+        <title>网络基础</title>
+        <link>https://dshcao.github.io/zh/posts/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/</guid>
+        <description>TCP/IP和OSI TCP/IP协议簇 TCP/IP协议簇既然是以TCP和IP两个协议命名，足以说明TCP和IP两个协议在这个协议簇中的重要性</description>
       </item>
       
       <item>
@@ -578,15 +590,6 @@ https://github.com/android/architecture-components-samples</description>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/about/</guid>
         <description>GitHub. 掘金. 微博.</description>
-      </item>
-      
-      <item>
-        <title>Emoji Support</title>
-        <link>https://dshcao.github.io/zh/posts/emoji-support/</link>
-        <pubDate>Sat, 16 Dec 2017 12:00:06 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/emoji-support/</guid>
-        <description>&lt;p&gt;Emoji can be enabled in a Hugo project in a number of ways.&lt;/p&gt;</description>
       </item>
       
       <item>

@@ -80,7 +80,7 @@
       </item>
       
       <item>
-        <title>Jetpack-Navigation详解</title>
+        <title>Jetpack-Room&amp;LiveData&amp;ViewModel详解</title>
         <link>https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/</link>
         <pubDate>Mon, 23 Dec 2019 12:00:06 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
@@ -130,7 +130,7 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-app-bundle/</guid>
-        <description>热修复方案介绍 AndFix Native层函数指针替换，即时生效 QQ控件超级补丁 类加载/multidex，重启生效 Robust 字节码插桩/Instant Run 即时生效</description>
+        <description>ClassLoader,java的ClassLoader双亲委托机制 干预Android加载，既然要干预那就要首先了解其原加载过程 ## 双亲委托 简</description>
       </item>
       
       <item>
@@ -158,6 +158,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-ffmpeg%E4%BD%BF%E7%94%A8/</guid>
         <description></description>
+      </item>
+      
+      <item>
+        <title>Android-FFmpeg打造自己的播放器</title>
+        <link>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</guid>
+        <description>如何实现 播放音频 SDL2 AudioTrack OpenSLES ijksdl 播放视频 SDL2 SurfaceView ANativeWindow ijksdl</description>
       </item>
       
       <item>
@@ -287,21 +296,6 @@
       </item>
       
       <item>
-        <title>Jetpack-CameraX</title>
-        <link>https://dshcao.github.io/zh/posts/jetpack-paging/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/jetpack-paging/</guid>
-        <description>DataSource
-DataSource.Factory
-PagedList
-PagedList.Builder
-LivePagedListBuilder
-PagedListAdapter
-https://github.com/android/architecture-components-samples</description>
-      </item>
-      
-      <item>
         <title>JVM/Dalvik/ART</title>
         <link>https://dshcao.github.io/zh/posts/jvmdalvikart/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -344,15 +338,6 @@ https://github.com/android/architecture-components-samples</description>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</guid>
         <description>Java内存模型 Java内存模型主要目标：定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的</description>
-      </item>
-      
-      <item>
-        <title>模版</title>
-        <link>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/</guid>
-        <description>如何实现 播放音频 SDL2 AudioTrack OpenSLES ijksdl 播放视频 SDL2 SurfaceView ANativeWindow ijksdl</description>
       </item>
       
       <item>
