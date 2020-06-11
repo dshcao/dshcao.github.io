@@ -9,7 +9,7 @@
     <managingEditor>513996717@qq.com (dshcao)</managingEditor>
     <webMaster>513996717@qq.com (dshcao)</webMaster>
     <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
-    <lastBuildDate>Fri, 27 Dec 2019 10:33:41 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 20 May 2020 10:33:41 +0900</lastBuildDate>
     
         <atom:link href="https://dshcao.github.io/zh/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -19,9 +19,18 @@
       <item>
         <title>android</title>
         <link>https://dshcao.github.io/zh/tags/android/</link>
-        <pubDate>Fri, 27 Dec 2019 10:33:41 +0900</pubDate>
+        <pubDate>Wed, 20 May 2020 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/android/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>retrofit</title>
+        <link>https://dshcao.github.io/zh/tags/retrofit/</link>
+        <pubDate>Wed, 20 May 2020 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/retrofit/</guid>
         <description></description>
       </item>
       
@@ -134,15 +143,6 @@
       </item>
       
       <item>
-        <title>adroid</title>
-        <link>https://dshcao.github.io/zh/tags/adroid/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/tags/adroid/</guid>
-        <description></description>
-      </item>
-      
-      <item>
         <title>anr</title>
         <link>https://dshcao.github.io/zh/tags/anr/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -179,6 +179,15 @@
       </item>
       
       <item>
+        <title>arouter</title>
+        <link>https://dshcao.github.io/zh/tags/arouter/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/arouter/</guid>
+        <description></description>
+      </item>
+      
+      <item>
         <title>camera</title>
         <link>https://dshcao.github.io/zh/tags/camera/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -202,6 +211,24 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/git/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>glide</title>
+        <link>https://dshcao.github.io/zh/tags/glide/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/glide/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>gradle</title>
+        <link>https://dshcao.github.io/zh/tags/gradle/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/gradle/</guid>
         <description></description>
       </item>
       
@@ -238,6 +265,15 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/ndk/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>pdf</title>
+        <link>https://dshcao.github.io/zh/tags/pdf/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/pdf/</guid>
         <description></description>
       </item>
       
@@ -337,6 +373,15 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</guid>
+        <description></description>
+      </item>
+      
+      <item>
+        <title>设计模式</title>
+        <link>https://dshcao.github.io/zh/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
         <description></description>
       </item>
       

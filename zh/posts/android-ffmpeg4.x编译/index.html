@@ -1,0 +1,2328 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Android-FFmpeg编译及数据结构分析 – dshcao blog</title>
+    
+
+
+<script defer src="/js/fuse.min.94c78ad70b02749822921660cf4e9f0b3701bc0680c421afb784a78228de0275.js"></script>
+
+<script>
+  
+  var runSearch = function() {
+    
+        var baseurl = "https:\/\/dshcao.github.io\/\/zh";
+    
+    
+    var searchResults = null;
+    var searchMenu = null;
+    var fuse = null;
+
+    function endsWith(str, suffix) {
+      return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
+
+    function initFuse() {
+      if (!endsWith(baseurl, "/")) {
+        baseurl = baseurl + '/';
+      };
+
+      $.ajax({
+        type: "GET",
+        url: baseurl + "index.json",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+      })
+        .done(function (index) {
+          fuse = new Fuse(index, {
+            keys: ['title', 'description', 'content']
+          });
+        })
+        .fail(function (jqxhr, textStatus, error) {
+          var err = textStatus + ", " + error;
+          console.error("Error getting Hugo index file:", err);
+        });
+    }
+
+    function renderSearchResults(results) {
+      searchResults = document.getElementById('search-results');
+      searchMenu = document.getElementById('search-menu');
+      searchResults.setAttribute('class', 'dropdown is-active');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'dropdown-content search-content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.setAttribute('class', 'dropdown-item');
+          item.innerHTML = `<div class="menu-item"><div class="menu-item__title">📄 ${result.title}</div><div class="menu-item__desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        item.setAttribute('class', 'dropdown-item');
+        item.innerText = 'No results found';
+        content.appendChild(item);
+      }
+
+      while (searchMenu.hasChildNodes()) {
+        searchMenu.removeChild(
+          searchMenu.lastChild
+        );
+      }
+      searchMenu.appendChild(content);
+    }
+
+    function renderSearchResultsMobile(results) {
+      searchResults = document.getElementById('search-mobile-results');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'mobile-search__content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.innerHTML = `<div class="mobile-search__item"><div class="mobile-search__item--title">📄 ${result.title}</div><div class="mobile-search__item--desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        content.appendChild(item);
+      }
+
+      $('#search-mobile-results').empty();
+      searchResults.appendChild(content);
+    }
+
+    initFuse();
+
+    $("#search").on('input', function (e) {
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+
+      if ($(window).width() < 770) {
+        return null;
+      } 
+
+      var results = fuse.search(e.target.value);
+      renderSearchResults(results);
+    });
+
+    $('#search').on('blur', function () {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      setTimeout(function () {
+        $('#search-results').attr('class', 'dropdown');
+      }, 100);
+    });
+
+    $('#search').on('click', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+      var results = fuse.search(e.target.value);
+      renderSearchResults(results);
+    });
+
+    $('#search').on('keydown', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      var items = $('#search-menu .dropdown-item');
+      var activeIndex = $('#search-menu .dropdown-item.is-active').index();
+
+      items.removeClass('is-active');
+      if (e.key === 'ArrowDown') {
+        items.eq(activeIndex + 1).addClass('is-active');
+      } else if (e.key === 'ArrowUp') {
+        items.eq(activeIndex - 1).addClass('is-active');
+      } else if (e.key === 'Enter') {
+        var currentItemLink = items.eq(activeIndex).attr('href');
+        if (currentItemLink) {
+          location.href = currentItemLink;
+        }
+      }
+    });
+
+    $("#search-mobile").on('input', function(e) {
+      if (!e.target.value) {
+        $('#search-mobile-results').empty();
+        return null;
+      }
+
+      var results = fuse.search(e.target.value);
+      renderSearchResultsMobile(results);
+    });
+  }
+</script>    
+    
+
+
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    <meta name="description" content="Android-FFmpeg编译及数据结构分析" />
+<meta name="keywords" content="">
+<meta name="created" content="2019-10-11T10:33:41&#43;0900">
+<meta name="modified" content="2019-10-11T10:33:41&#43;0900">
+
+
+<meta property="og:site_name" content="dshcao blog">
+<meta property="og:title" content="Android-FFmpeg编译及数据结构分析">
+<meta property="og:url" content="https://dshcao.github.io/zh/posts/android-ffmpeg4.x%E7%BC%96%E8%AF%91/">
+<meta property="og:type" content="article">
+
+<meta name="generator" content="Hugo 0.61.0" />
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://dshcao.github.io/zh/posts/android-ffmpeg4.x%E7%BC%96%E8%AF%91/">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/logo.svg" sizes="any" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.json">
+
+
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "headline": "Android-FFmpeg编译及数据结构分析",
+    "datePublished": "2019-10-11T10:33:41+09:00",
+    "dateModified": "2019-10-11T10:33:41+09:00",
+    "url" : "https://dshcao.github.io/zh/posts/android-ffmpeg4.x%E7%BC%96%E8%AF%91/",
+    "description": "Android-FFmpeg编译及数据结构分析",
+    "keywords": ["音视频"],
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://dshcao.github.io/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "dshcao blog",
+      "url": "https://dshcao.github.io/"
+    }
+  }
+</script>
+
+    
+
+
+
+
+
+    
+</head>
+
+<body id="root" class="theme__dark">
+    <script>
+        var localTheme = localStorage.getItem('theme');
+        if (localTheme) {
+            document.getElementById('root').className = `theme__${localTheme}`;
+        }        
+    </script>    
+    
+    <div id="body">
+        
+        <div class="container wrapper">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar__brand">
+    
+    <a href="/zh/" title="Home" rel="home" class="navbar__logo-link">
+      <img data-src="/logo.png" src="data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' width='48px' height='48px'%3E%3Cpath fill='%2337474f' d='M24.648,4l0.29,0.002c0.52,0.008,1.23,0.109,1.857,0.198c0.314,0.045,0.616,0.088,0.883,0.119 c0.164,0.024,0.715,0.227,1.043,0.348C29.468,4.941,32,6.875,32,6.875L31,5c0,0,1.563,0.445,2.125,0.875C34.247,6.733,34.354,7,35,7 h0.375L35,6c0.375,0.19,1.78,1.289,1.968,1.541L37,7.583l0.036,0.039c1.411,1.495,2.095,2.462,2.595,3.169 c0.339,0.48,0.945,0.822,1.243,1.21C41.225,12.454,42,14,42,14v-0.998c0,0,0.776,1.029,1.25,2.373C44,17.5,44,19,44,19 s-0.25-0.625-1-0.875C43,19,44,21,44,24.002v6c-0.74,0.57-0.989,1.443-1.214,2.386c-0.328,1.372-0.605,2.294-1.444,2.593L41,35.002 l-0.08,0.277c-0.533,0.662-0.994,1.351-1.439,2.018c-1.446,2.163-2.495,3.705-4.481,3.705c-1.041,0-2.044,0.167-2.441,0.559 C32.128,41.987,32,42.662,32,43.002c-1.012,0.377-2.167,1-8,1c-5,0-9.4-1.756-12.262-4.545c-0.965-0.785-2.272-1.669-2.857-2.273 C6.976,35.593,6.047,33.058,6,33.002c1.184,0.985,5.245,4.636,7.091,4.636l0,0C13.301,37.416,12,35.684,12,35.002 C13.429,37.162,17.405,40,23,40c4.125,0,3.892-0.73,6-1c4.875-0.625,7.492-5.439,8.214-6.816c0.05-0.096,0.202-1.02,0.24-1.092 c0.368-0.376,0.463-1.167,0.607-2.371C38.17,27.815,39,26.75,39,25.625S38,24,38,24s0-3-0.625-5.375 C37.25,18.151,36.738,16.409,34,13v1.002c-2.125-1.127-3.668-2.545-4.125-2.752C28.435,10.599,26.831,10,25,10c-4,0-4.625,1-8,2 c0,0,1.25,0,2,0c0,0-1.867,1.445-3,2.125c-1.875,1.125-4,5.034-4,7.875c0,3-2.485,4-4,4c-2.453,0-4-2-4-4 c0-1.133,0.45-2.5,0.886-3.425c0.411-0.873,0.799-1.697,0.795-2.581c0.031-0.106,0.274-0.383,0.435-0.566 c0.466-0.531,1.083-1.234,1.224-2.252c1.106-0.927,3.13-3.015,3.155-3.041c0.162-0.171,0.324-0.304,0.511-0.457 c0.324-0.265,0.728-0.594,1.221-1.205l0.423-0.525c0.798-0.428,2.222-1.035,2.776-1.271c0.342-0.146,0.602-0.258,0.716-0.313 L19.75,5.75C19.966,5.75,20,5.238,20,5c0-0.227,0.106-0.198,0.324-0.273C22.139,4.099,22.799,4,24.648,4L24.648,4'/%3E%3C/svg%3E" alt="Home" class="lazyload navbar__logo">
+    </a>
+    
+    <a href="/zh/" title="Home" rel="home" class="navbar__title-link">
+      <h6 class="navbar__title">dshcao blog</h6>
+    </a>    
+  </div>
+  
+  
+<div class="theme-mobile">
+  <div class="dropdown">
+    <button class="dropdown-trigger navbar__slide-down" aria-label="Invert Colors" style="">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" d="M24 0H0v24h24V0z"/><path fill="currentColor" d="M6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31l-4.95-4.95c-.39-.39-1.02-.39-1.41 0L6.34 7.93zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>      
+    </button>
+    <div class="dropdown-content select-theme">
+      
+        
+        <a href="#" class="dropdown-item select-theme__item is-active">
+          dark
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          light
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          hacker
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          solarized
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          custom
+        </a>
+        
+      
+    </div>
+  </div>
+</div>
+
+  
+<div id="mobileSearchBtn" class="mobile-search__btn">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+</div>
+
+<div id="search-mobile-container" class="mobile-search hide">
+  <div class="mobile-search__top">
+    <input id="search-mobile" type="text" aria-label="Mobile Search" placeholder="搜索" class="mobile-search__top--input"/>
+    <div id="search-mobile-close" class="mobile-search__top--icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/></svg>
+    </div>
+  </div>
+  <div id="search-mobile-results" class="mobile-search__body">
+    
+  </div>
+</div>
+
+  
+  <a role="button" class="navbar__burger" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>  
+
+  <div class="navbar__menu">
+    
+<div class="theme">
+  <div class="dropdown">
+    <button class="dropdown-trigger navbar__slide-down" aria-label="Select Theme Button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" d="M24 0H0v24h24V0z"/><path fill="currentColor" d="M6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31l-4.95-4.95c-.39-.39-1.02-.39-1.41 0L6.34 7.93zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>      
+    </button>
+    <div class="dropdown-content select-theme">
+      
+        
+        <a href="#" class="dropdown-item select-theme__item is-active">
+          dark
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          light
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          hacker
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          solarized
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          custom
+        </a>
+        
+      
+    </div>
+  </div>
+</div>
+
+    
+    <a href="/zh/archive" class="navbar__menu-item navbar__slide-down">存档</a>
+    
+    
+    <a href="/zh/posts" class="navbar__menu-item navbar__slide-down">文章</a>
+    
+    
+    <a href="/zh/pt" class="navbar__menu-item navbar__slide-down">展厅</a>
+    
+    
+    <a href="/zh/notes" class="navbar__menu-item navbar__slide-down">随笔</a>
+    
+    
+    <a href="/zh/about" class="navbar__menu-item navbar__slide-down">关于</a>
+    
+    
+  </div>
+</nav>
+            
+            
+
+
+<script src="/js/enquire.min.72cb9edeb1ca1b92f5bf9df8d31a1ecd1e423d0b5e0f48a2a208b020dd5053fa.js"></script>
+
+<main class="main-main">
+  
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+  <ol>
+    
+  
+  
+  
+  
+  
+  <li >    
+    
+      <a href="https://dshcao.github.io/zh/">dshcao blog</a>            
+        
+  </li>
+  
+  
+  <li >    
+    
+      <a href="https://dshcao.github.io/zh/posts/">文章</a>
+        
+  </li>
+  
+  
+  <li  class="is-active" >    
+    
+      <a href="https://dshcao.github.io/zh/posts/android-ffmpeg4.x%E7%BC%96%E8%AF%91/">Android-FFmpeg编译及数据结构分析</a>
+        
+  </li>
+  
+  </ol>
+  
+</nav>
+  
+  <div class="single">
+    <h2 class="single__title">Android-FFmpeg编译及数据结构分析</h2>
+    <div class="single__meta">
+      <div class="single__infos">
+  🕓 2019年 10月 11日 · ☕9 min read
+  
+</div>
+      <div class="single__tags caption">
+
+  
+    🏷️
+  
+  
+  <li>
+    <a href="/zh/tags/%E9%9F%B3%E8%A7%86%E9%A2%91" class="single__tag">
+      #音视频
+    </a>
+  </li>
+    
+
+</div>
+    </div>    
+    <article class="single__contents">
+      <h2 id="ffmpeg">FFmpeg简介</h2>
+<p>以下翻译自官网<a href="http://ffmpeg.org/about.html">About FFmpeg</a><br />
+<strong>libavutil</strong> FFmpeg公共的工具函数以及数据结构库，其中包括随机数生成器、AVFrame等。<br />
+<strong>libavcodec</strong> 用于音视频编码和解码的库。<br />
+<strong>libavformat</strong> 用于多媒体容器格式的封装(复用)和解封装(解复用)的库。<br />
+<strong>libavdevice</strong> 用于从设备中采集及向设备输出显示。可以从许多常见的多媒体输入/输出软件框架（包括Video4Linux，Video4Linux2，VfW和ALSA）中获取和呈现。<br />
+<strong>libavfilter</strong> 用于音视频过滤器的库，比如给视频加上水印、视频裁剪等。<br />
+<strong>libswscale</strong> 用于图像的缩放和格式转换的库。<br />
+<strong>libswresample</strong> 用于对音频转码的库，包括音频重采样，重矩阵化和样本格式转换操作。<br />
+<strong>libpostproc</strong> 用于后期效果处理的库，如图像的去块效应。<br />
+<strong>libavresample</strong> 已经被官方建议使用libswresample替代，两者的关系可以参考<a href="#2">libswresample与libavresample</a></p>
+<h3 id="ffserver">ffserver</h3>
+<p>用于直播的多媒体流服务器，4.xx.xx版本的FFmpeg已经将ffserver移除了。</p>
+<h3 id="ffplay">ffplay</h3>
+<p>一个基于SDL和FFmpeg的多媒体播放器。ffplay也是很经典的，被很多初学播放器的开发者所学习。但是SDL官方给出的Android版本耦合严重，在Android上一般不会采用SDL来显示。</p>
+<h3 id="ffprobe">ffprobe</h3>
+<p>一个简单的多媒体流分析器，用于查看多媒体文件信息。</p>
+<h3 id="ffmpeg415">FFmpeg4.1.5编译</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">ABIs</span><span class="o">=</span><span class="o">(</span>armeabi-v7a arm64-v8a<span class="o">)</span>
+<span class="nv">FFMPEG_DIR</span><span class="o">=</span><span class="k">$(</span> 
+	<span class="nb">cd</span> <span class="s2">&#34;</span><span class="k">$(</span>dirname <span class="nv">$0</span><span class="k">)</span><span class="s2">&#34;</span> 
+	<span class="nb">pwd</span> 
+	<span class="k">)</span>
+<span class="nv">PREFIX</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$FFMPEG_DIR</span><span class="s2">/android</span><span class="s2">&#34;</span>
+<span class="nv">NDK_HOME</span><span class="o">=</span><span class="s2">&#34;/Users/dscao/android-ndk/android-ndk-r20b&#34;</span>
+
+<span class="c1"># 检查当前编译系统</span>
+<span class="nv">host</span><span class="o">=</span><span class="k">$(</span>uname <span class="p">|</span> tr <span class="s1">&#39;A-Z&#39;</span> <span class="s1">&#39;a-z&#39;</span><span class="k">)</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$host</span> <span class="o">=</span> <span class="s2">&#34;darwin&#34;</span> <span class="o">]</span> <span class="o">||</span> <span class="o">[</span> <span class="nv">$host</span> <span class="o">=</span> <span class="s2">&#34;linux&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+	<span class="nb">echo</span> <span class="s2">&#34;</span><span class="s2">system: </span><span class="nv">$host</span><span class="s2">&#34;</span>
+<span class="k">else</span>
+	<span class="nb">echo</span> <span class="s2">&#34;unsupport system, only support Mac OS X and Linux now.&#34;</span>
+	<span class="nb">exit</span> <span class="m">1</span>
+<span class="k">fi</span>
+<span class="nv">machine</span><span class="o">=</span><span class="k">$(</span>uname -m<span class="k">)</span>
+
+<span class="nv">TOOLCHAINS</span><span class="o">=</span><span class="si">${</span><span class="nv">NDK_HOME</span><span class="si">}</span>/toolchains/llvm/prebuilt/<span class="si">${</span><span class="nv">host</span><span class="si">}</span>-<span class="si">${</span><span class="nv">machine</span><span class="si">}</span>
+
+checkError<span class="o">(</span><span class="o">)</span><span class="o">{</span>
+    <span class="k">if</span> <span class="o">[</span> <span class="nv">$1</span> -ne <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="k">if</span> <span class="o">[</span> -n <span class="nv">$2</span> <span class="o">]</span><span class="p">;</span><span class="k">then</span>
+        <span class="nb">echo</span> <span class="nv">$2</span>
+        <span class="k">else</span>
+        <span class="nb">echo</span> <span class="s2">&#34;error building ffmpeg&#34;</span>
+        <span class="k">fi</span>
+        <span class="nb">exit</span> <span class="m">1</span>
+    <span class="k">fi</span>
+<span class="o">}</span>
+
+makeDir<span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">if</span> <span class="o">[</span> ! -x <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+		mkdir -p <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>
+	<span class="k">fi</span>
+<span class="o">}</span>
+
+build_and<span class="o">(</span><span class="o">)</span><span class="o">{</span>
+
+    <span class="nv">ABI</span><span class="o">=</span><span class="nv">$1</span>
+    <span class="nv">ARCH</span><span class="o">=</span><span class="nv">$2</span>
+    <span class="nv">CPU</span><span class="o">=</span><span class="nv">$3</span>
+    <span class="nv">AAPI</span><span class="o">=</span><span class="nv">$4</span>
+    <span class="nv">SYSROOT</span><span class="o">=</span><span class="nv">$5</span>
+    <span class="nv">CROSS_PREFIX</span><span class="o">=</span><span class="nv">$6</span>
+    <span class="nv">CC</span><span class="o">=</span><span class="nv">$7</span>
+    <span class="nv">ECFLAGS</span><span class="o">=</span><span class="nv">$8</span>
+
+    <span class="nb">cd</span> <span class="nv">$FFMPEG_DIR</span>
+    <span class="nv">LIB_X264_DIR</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">FFMPEG_DIR</span><span class="si">}</span><span class="s2">/x264</span><span class="s2">&#34;</span>
+    <span class="nv">LIB_FDKAAC_DIR</span><span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span>dirname <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="k">)</span><span class="s2">/fdk-aac/android</span><span class="s2">&#34;</span>
+
+    rm -rf <span class="si">${</span><span class="nv">PREFIX</span><span class="si">}</span>/<span class="si">${</span><span class="nv">ABI</span><span class="si">}</span>
+    makeDir <span class="si">${</span><span class="nv">PREFIX</span><span class="si">}</span>/<span class="si">${</span><span class="nv">ABI</span><span class="si">}</span>
+    checkError <span class="nv">$?</span> <span class="s2">&#34;</span><span class="s2">ffmpeg 创建</span><span class="si">${</span><span class="nv">PREFIX</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">ABI</span><span class="si">}</span><span class="s2">目录失败</span><span class="s2">&#34;</span>
+
+    ./configure <span class="se">\
+</span><span class="se"></span>    --prefix<span class="o">=</span><span class="si">${</span><span class="nv">PREFIX</span><span class="si">}</span>/<span class="si">${</span><span class="nv">ABI</span><span class="si">}</span> <span class="se">\
+</span><span class="se"></span>    --arch<span class="o">=</span><span class="si">${</span><span class="nv">ARCH</span><span class="si">}</span> <span class="se">\
+</span><span class="se"></span>    --cpu<span class="o">=</span><span class="si">${</span><span class="nv">CPU</span><span class="si">}</span> <span class="se">\
+</span><span class="se"></span>    --target-os<span class="o">=</span>android <span class="se">\
+</span><span class="se"></span>    --enable-cross-compile <span class="se">\
+</span><span class="se"></span>    --disable-static <span class="se">\
+</span><span class="se"></span>    --enable-shared <span class="se">\
+</span><span class="se"></span>    --extra-cflags<span class="o">=</span><span class="s2">&#34;</span><span class="s2">-I</span><span class="si">${</span><span class="nv">LIB_X264_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">ABI</span><span class="si">}</span><span class="s2">/include -I</span><span class="si">${</span><span class="nv">LIB_FDKAAC_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">ABI</span><span class="si">}</span><span class="s2">/include -DANDROID -lc -lm -ldl</span><span class="s2">&#34;</span> <span class="se">\
+</span><span class="se"></span>    --extra-ldflags<span class="o">=</span><span class="s2">&#34;</span><span class="s2">-L</span><span class="si">${</span><span class="nv">LIB_X264_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">ABI</span><span class="si">}</span><span class="s2">/lib -L</span><span class="si">${</span><span class="nv">LIB_FDKAAC_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">ABI</span><span class="si">}</span><span class="s2">/lib -L</span><span class="si">${</span><span class="nv">SYSROOT</span><span class="si">}</span><span class="s2">/usr/lib -lc -lm -ldl</span><span class="s2">&#34;</span> <span class="se">\
+</span><span class="se"></span>    --enable-gpl <span class="se">\
+</span><span class="se"></span>    --enable-version3 <span class="se">\
+</span><span class="se"></span>    --enable-nonfree <span class="se">\
+</span><span class="se"></span>    --enable-protocols <span class="se">\
+</span><span class="se"></span>    --enable-avresample <span class="se">\
+</span><span class="se"></span>    --enable-neon <span class="se">\
+</span><span class="se"></span>    --enable-mediacodec <span class="se">\
+</span><span class="se"></span>    --enable-jni <span class="se">\
+</span><span class="se"></span>    --enable-pthreads <span class="se">\
+</span><span class="se"></span>    --enable-libfdk-aac <span class="se">\
+</span><span class="se"></span>    --enable-encoder<span class="o">=</span>libfdk_aac <span class="se">\
+</span><span class="se"></span>    --enable-decoder<span class="o">=</span>aac <span class="se">\
+</span><span class="se"></span>    --enable-decoder<span class="o">=</span>aac_latm <span class="se">\
+</span><span class="se"></span>    --enable-libx264 <span class="se">\
+</span><span class="se"></span>    --enable-encoder<span class="o">=</span>libx264 <span class="se">\
+</span><span class="se"></span>    --enable-decoder<span class="o">=</span>h264 <span class="se">\
+</span><span class="se"></span>    --enable-pic <span class="se">\
+</span><span class="se"></span>    --disable-programs <span class="se">\
+</span><span class="se"></span>    --disable-ffmpeg <span class="se">\
+</span><span class="se"></span>    --disable-ffplay <span class="se">\
+</span><span class="se"></span>    --disable-ffprobe <span class="se">\
+</span><span class="se"></span>    --disable-doc <span class="se">\
+</span><span class="se"></span>    --disable-asm <span class="se">\
+</span><span class="se"></span>    --disable-symver <span class="se">\
+</span><span class="se"></span>    --cc<span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">TOOLCHAINS</span><span class="si">}</span><span class="s2">/bin/</span><span class="si">${</span><span class="nv">CC</span><span class="si">}</span><span class="si">${</span><span class="nv">AAPI</span><span class="si">}</span><span class="s2">-clang</span><span class="s2">&#34;</span> <span class="se">\
+</span><span class="se"></span>    --cxx<span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">TOOLCHAINS</span><span class="si">}</span><span class="s2">/bin/</span><span class="si">${</span><span class="nv">CC</span><span class="si">}</span><span class="si">${</span><span class="nv">AAPI</span><span class="si">}</span><span class="s2">-clang++</span><span class="s2">&#34;</span> <span class="se">\
+</span><span class="se"></span>    --cross-prefix<span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">TOOLCHAINS</span><span class="si">}</span><span class="s2">/bin/</span><span class="si">${</span><span class="nv">CROSS_PREFIX</span><span class="si">}</span><span class="s2">&#34;</span><span class="se">\
+</span><span class="se"></span>    --sysroot<span class="o">=</span><span class="s2">&#34;</span><span class="si">${</span><span class="nv">TOOLCHAINS</span><span class="si">}</span><span class="s2">/sysroot</span><span class="s2">&#34;</span> <span class="se">\
+</span><span class="se"></span>    --extra-cflags<span class="o">=</span><span class="s2">&#34;</span><span class="s2">-D__ANDROID_API__=</span><span class="si">${</span><span class="nv">AAPI</span><span class="si">}</span><span class="s2"> </span><span class="si">${</span><span class="nv">ECFLAGS</span><span class="si">}</span><span class="s2">&#34;</span> <span class="se">\
+</span><span class="se"></span>    --extra-ldflags<span class="o">=</span><span class="s2">&#34;&#34;</span> <span class="se">\
+</span><span class="se"></span>
+    make clean
+    checkError <span class="nv">$?</span> <span class="s2">&#34;ffmpeg make clean 过程出错&#34;</span>
+    make -j4 <span class="o">&amp;&amp;</span> make install
+    checkError <span class="nv">$?</span> <span class="s2">&#34;ffmpeg make&amp;make install 过程出错&#34;</span>
+<span class="o">}</span>
+
+<span class="c1"># build start</span>
+<span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$NDK_HOME</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+	<span class="nb">echo</span> <span class="s2">&#34;NDK_HOME not set&#34;</span>
+	<span class="nb">exit</span> <span class="m">1</span>
+<span class="k">fi</span>
+
+<span class="nb">echo</span> <span class="s2">&#34;</span><span class="k">$(</span>dirname <span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="k">)</span><span class="s2">/x264</span><span class="s2">&#34;</span>
+
+<span class="k">for</span> abi in <span class="si">${</span><span class="nv">ABIs</span><span class="p">[*]</span><span class="si">}</span><span class="p">;</span> <span class="k">do</span>
+    <span class="k">case</span> <span class="nv">$abi</span> in
+        armeabi-v7a<span class="o">)</span>
+        build_and <span class="nv">$abi</span> <span class="s2">&#34;arm&#34;</span> <span class="s2">&#34;armv7-a&#34;</span> <span class="s2">&#34;16&#34;</span> <span class="s2">&#34;</span><span class="si">${</span><span class="nv">NDK_HOME</span><span class="si">}</span><span class="s2">/sysroot</span><span class="s2">&#34;</span> <span class="s2">&#34;arm-linux-androideabi-&#34;</span> <span class="s2">&#34;armv7a-linux-androideabi&#34;</span> <span class="s2">&#34;-marm -U_FILE_OFFSET_BITS -DBIONIC_IOCTL_NO_SIGNEDNESS_OVERLOAD -Os -fPIC -DANDROID -D__thumb__ -mthumb -Wfatal-errors -Wno-deprecated -mfloat-abi=softfp&#34;</span>
+        <span class="p">;</span><span class="p">;</span>
+        arm64-v8a<span class="o">)</span>
+        build_and <span class="nv">$abi</span> <span class="s2">&#34;aarch64&#34;</span> <span class="s2">&#34;armv8-a&#34;</span> <span class="s2">&#34;21&#34;</span> <span class="s2">&#34;</span><span class="si">${</span><span class="nv">NDK_HOME</span><span class="si">}</span><span class="s2">/sysroot</span><span class="s2">&#34;</span> <span class="s2">&#34;aarch64-linux-android-&#34;</span> <span class="s2">&#34;aarch64-linux-android&#34;</span> <span class="s2">&#34;-U_FILE_OFFSET_BITS -DBIONIC_IOCTL_NO_SIGNEDNESS_OVERLOAD -Os -fPIC -DANDROID -D__thumb__ -mthumb -Wfatal-errors -Wno-deprecated -mfloat-abi=softfp&#34;</span>
+        <span class="p">;</span><span class="p">;</span>
+    <span class="k">esac</span>
+<span class="k">done</span>
+
+<span class="nb">exit</span> <span class="m">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="heading">数据结构解析</h2>
+<h3 id="avframe">AVFrame</h3>
+<p>AVFrame是（解码后的）原始的音频和视频数据，因为AVFrame既表示音频数据又要表示视频数据，所以结构体中有些成员是对音频有效视频无效的，有些是对视频有效音频无效的。同时AVFrame既表示是解码后的数据又是编码前的数据<br><br />
+AVFrame必须通过<code>av_frame_alloc()</code>/<code>av_frame_free()</code>一对函数分别分配内存和释放内存。当我们想重复使用一个AVFrame对象时可以通过<code>av_frame_alloc()</code>先分配内存，当接收使用过数据后使用<code>av_frame_unref()</code>释放该帧持有的任何引用并重置为分配内存时的原始状态重新使用，最后在不需要的时候再调用<code>av_frame_free()</code>释放内存。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span><span class="lnt">221
+</span><span class="lnt">222
+</span><span class="lnt">223
+</span><span class="lnt">224
+</span><span class="lnt">225
+</span><span class="lnt">226
+</span><span class="lnt">227
+</span><span class="lnt">228
+</span><span class="lnt">229
+</span><span class="lnt">230
+</span><span class="lnt">231
+</span><span class="lnt">232
+</span><span class="lnt">233
+</span><span class="lnt">234
+</span><span class="lnt">235
+</span><span class="lnt">236
+</span><span class="lnt">237
+</span><span class="lnt">238
+</span><span class="lnt">239
+</span><span class="lnt">240
+</span><span class="lnt">241
+</span><span class="lnt">242
+</span><span class="lnt">243
+</span><span class="lnt">244
+</span><span class="lnt">245
+</span><span class="lnt">246
+</span><span class="lnt">247
+</span><span class="lnt">248
+</span><span class="lnt">249
+</span><span class="lnt">250
+</span><span class="lnt">251
+</span><span class="lnt">252
+</span><span class="lnt">253
+</span><span class="lnt">254
+</span><span class="lnt">255
+</span><span class="lnt">256
+</span><span class="lnt">257
+</span><span class="lnt">258
+</span><span class="lnt">259
+</span><span class="lnt">260
+</span><span class="lnt">261
+</span><span class="lnt">262
+</span><span class="lnt">263
+</span><span class="lnt">264
+</span><span class="lnt">265
+</span><span class="lnt">266
+</span><span class="lnt">267
+</span><span class="lnt">268
+</span><span class="lnt">269
+</span><span class="lnt">270
+</span><span class="lnt">271
+</span><span class="lnt">272
+</span><span class="lnt">273
+</span><span class="lnt">274
+</span><span class="lnt">275
+</span><span class="lnt">276
+</span><span class="lnt">277
+</span><span class="lnt">278
+</span><span class="lnt">279
+</span><span class="lnt">280
+</span><span class="lnt">281
+</span><span class="lnt">282
+</span><span class="lnt">283
+</span><span class="lnt">284
+</span><span class="lnt">285
+</span><span class="lnt">286
+</span><span class="lnt">287
+</span><span class="lnt">288
+</span><span class="lnt">289
+</span><span class="lnt">290
+</span><span class="lnt">291
+</span><span class="lnt">292
+</span><span class="lnt">293
+</span><span class="lnt">294
+</span><span class="lnt">295
+</span><span class="lnt">296
+</span><span class="lnt">297
+</span><span class="lnt">298
+</span><span class="lnt">299
+</span><span class="lnt">300
+</span><span class="lnt">301
+</span><span class="lnt">302
+</span><span class="lnt">303
+</span><span class="lnt">304
+</span><span class="lnt">305
+</span><span class="lnt">306
+</span><span class="lnt">307
+</span><span class="lnt">308
+</span><span class="lnt">309
+</span><span class="lnt">310
+</span><span class="lnt">311
+</span><span class="lnt">312
+</span><span class="lnt">313
+</span><span class="lnt">314
+</span><span class="lnt">315
+</span><span class="lnt">316
+</span><span class="lnt">317
+</span><span class="lnt">318
+</span><span class="lnt">319
+</span><span class="lnt">320
+</span><span class="lnt">321
+</span><span class="lnt">322
+</span><span class="lnt">323
+</span><span class="lnt">324
+</span><span class="lnt">325
+</span><span class="lnt">326
+</span><span class="lnt">327
+</span><span class="lnt">328
+</span><span class="lnt">329
+</span><span class="lnt">330
+</span><span class="lnt">331
+</span><span class="lnt">332
+</span><span class="lnt">333
+</span><span class="lnt">334
+</span><span class="lnt">335
+</span><span class="lnt">336
+</span><span class="lnt">337
+</span><span class="lnt">338
+</span><span class="lnt">339
+</span><span class="lnt">340
+</span><span class="lnt">341
+</span><span class="lnt">342
+</span><span class="lnt">343
+</span><span class="lnt">344
+</span><span class="lnt">345
+</span><span class="lnt">346
+</span><span class="lnt">347
+</span><span class="lnt">348
+</span><span class="lnt">349
+</span><span class="lnt">350
+</span><span class="lnt">351
+</span><span class="lnt">352
+</span><span class="lnt">353
+</span><span class="lnt">354
+</span><span class="lnt">355
+</span><span class="lnt">356
+</span><span class="lnt">357
+</span><span class="lnt">358
+</span><span class="lnt">359
+</span><span class="lnt">360
+</span><span class="lnt">361
+</span><span class="lnt">362
+</span><span class="lnt">363
+</span><span class="lnt">364
+</span><span class="lnt">365
+</span><span class="lnt">366
+</span><span class="lnt">367
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">typedef</span> <span class="k">struct</span> <span class="nc">AVFrame</span> <span class="p">{</span>
+<span class="cp">#</span><span class="cp">define AV_NUM_DATA_POINTERS 8</span><span class="cp">
+</span><span class="cp"></span>    
+    <span class="cm">/**
+</span><span class="cm">     * data指向picture/channel的planes，如data[0]=plane0,data[1]=plane1,data[2]=plane2；如果只有一个plane则只有data[0]有数据
+</span><span class="cm">     * 对于打包(packet)格式：
+</span><span class="cm">     * 1.音频，如双声道L,R两个channel，其数据LRLRLR形式交织存储在一个plane
+</span><span class="cm">     * 1.视频，如NV21 YYYYYYYYVUVU形式存储在一个plane中
+</span><span class="cm">     * 对于平面(planar)格式：
+</span><span class="cm">     * 1.音频，如双声道L,R两个channel，其数据LLLRRR形式存储在两个plane 中，data[0]=planeL,data[1]=planeR
+</span><span class="cm">     * 1.视频，如YU12(I420) YYYYYYYYUUVV形式存储在三个plane中，data[0]=planeY,data[1]=planeU,data[2]=planeV
+</span><span class="cm">     */</span>
+    <span class="kt">uint8_t</span> <span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="n">AV_NUM_DATA_POINTERS</span><span class="p">]</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 对于视频指的是图像每一行的字节大小
+</span><span class="cm">     * 对于视频则是每个plane的大小，对于packet格式的音频数据只有一个plane,对于planar格式的音频数据每个channel的plane又必须相同大小
+</span><span class="cm">     * 所以对于音频数据实际上只使用inesize[0]
+</span><span class="cm">     * 
+</span><span class="cm">     * 对于视频linesizes的大小应该是CPU对齐首选项的倍数，对于现代计算机来说就是16或者32。
+</span><span class="cm">     * 对于有些代码需要这样的对齐否则运行会很慢，而有些则不需要
+</span><span class="cm">     *
+</span><span class="cm">     * linesize可能大于实际可用数据的大小，因为出于性能原因可能会有额外的填充
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">linesize</span><span class="p">[</span><span class="n">AV_NUM_DATA_POINTERS</span><span class="p">]</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * pointers to the data planes/channels.
+</span><span class="cm">     *
+</span><span class="cm">     * For video, this should simply point to data[].
+</span><span class="cm">     *
+</span><span class="cm">     * For planar audio, each channel has a separate data pointer, and
+</span><span class="cm">     * linesize[0] contains the size of each channel buffer.
+</span><span class="cm">     * For packed audio, there is just one data pointer, and linesize[0]
+</span><span class="cm">     * contains the total size of the buffer for all channels.
+</span><span class="cm">     *
+</span><span class="cm">     * Note: Both data and extended_data should always be set in a valid frame,
+</span><span class="cm">     * but for planar audio with more channels that can fit in data,
+</span><span class="cm">     * extended_data must be used in order to access all channels.
+</span><span class="cm">     */</span>
+    <span class="kt">uint8_t</span> <span class="o">*</span><span class="o">*</span><span class="n">extended_data</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 仅限视频帧有效，视频帧的像素尺寸大小
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">;</span>
+    <span class="cm">/**
+</span><span class="cm">     * @}
+</span><span class="cm">     */</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 音频帧（每个通道）的采样数
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">nb_samples</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 音频 AVSampleFormat的枚举值
+</span><span class="cm">     * 视频 AVPixelFormat的枚举值
+</span><span class="cm">     * -1表示未设置或者未知的格式
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">format</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 1表示是关键帧(I帧)，0表示是非关键帧
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">key_frame</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 视频帧类型，见：AVPictureType
+</span><span class="cm">     */</span>
+    <span class="k">enum</span> <span class="nc">AVPictureType</span> <span class="n">pict_type</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 视频帧(采样)的纵横比，0表示未知，1表示位指定
+</span><span class="cm">     */</span>
+    <span class="n">AVRational</span> <span class="n">sample_aspect_ratio</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 向用户显示(播放)帧的时间戳(以time_base为单位)
+</span><span class="cm">     */</span>
+    <span class="kt">int64_t</span> <span class="n">pts</span><span class="p">;</span>
+
+<span class="cp">#</span><span class="cp">if FF_API_PKT_PTS</span><span class="cp">
+</span><span class="cp"></span>    <span class="cm">/**
+</span><span class="cm">     * 解码成AVFrame时从AVPacket复制的pts，已被废弃，推荐使用pts代替,大于等于57的api中已不在定义该字段
+</span><span class="cm">     */</span>
+    <span class="n">attribute_deprecated</span>
+    <span class="kt">int64_t</span> <span class="n">pkt_pts</span><span class="p">;</span>
+<span class="cp">#</span><span class="cp">endif</span><span class="cp">
+</span><span class="cp"></span>
+    <span class="cm">/**
+</span><span class="cm">     * 解码时从AVPacket复制的dts。这也是AVFrame的pts如果AVPacket只有dts而没有pts
+</span><span class="cm">     */</span>
+    <span class="kt">int64_t</span> <span class="n">pkt_dts</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 编码流中的图像序号
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">coded_picture_number</span><span class="p">;</span>
+    <span class="cm">/**
+</span><span class="cm">     * 帧在显示序列的图像序号
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">display_picture_number</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 质量(1(好)~FF_LAMBDA_MAX(坏))
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">quality</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 用户想要在帧中携带的私有数据
+</span><span class="cm">     */</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">opaque</span><span class="p">;</span>
+
+<span class="cp">#</span><span class="cp">if FF_API_ERROR_FRAME</span><span class="cp">
+</span><span class="cp"></span>    <span class="cm">/**
+</span><span class="cm">     * @deprecated unused
+</span><span class="cm">     */</span>
+    <span class="n">attribute_deprecated</span>
+    <span class="kt">uint64_t</span> <span class="n">error</span><span class="p">[</span><span class="n">AV_NUM_DATA_POINTERS</span><span class="p">]</span><span class="p">;</span>
+<span class="cp">#</span><span class="cp">endif</span><span class="cp">
+</span><span class="cp"></span>
+    <span class="cm">/**
+</span><span class="cm">     * When decoding, this signals how much the picture must be delayed.
+</span><span class="cm">     * extra_delay = repeat_pict / (2*fps)
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">repeat_pict</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 图像逐行/隔行模式标识。图像的内容是否隔行扫描（交错帧）
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">interlaced_frame</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 如果内容是交错的，则会首先显示顶部字段
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">top_field_first</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 告诉用户应用程序调色板已从上一帧更改。
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">palette_has_changed</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * reordered opaque 64 bits (generally an integer or a double precision float
+</span><span class="cm">     * PTS but can be anything).
+</span><span class="cm">     * The user sets AVCodecContext.reordered_opaque to represent the input at
+</span><span class="cm">     * that time,
+</span><span class="cm">     * the decoder reorders values as needed and sets AVFrame.reordered_opaque
+</span><span class="cm">     * to exactly one of the values provided by the user through AVCodecContext.reordered_opaque
+</span><span class="cm">     * @deprecated in favor of pkt_pts
+</span><span class="cm">     */</span>
+    <span class="kt">int64_t</span> <span class="n">reordered_opaque</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 音频采样率
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">sample_rate</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 声道布局AV_CH_XX
+</span><span class="cm">     */</span>
+    <span class="kt">uint64_t</span> <span class="n">channel_layout</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * AVBuffer references backing the data for this frame. If all elements of
+</span><span class="cm">     * this array are NULL, then this frame is not reference counted. This array
+</span><span class="cm">     * must be filled contiguously -- if buf[i] is non-NULL then buf[j] must
+</span><span class="cm">     * also be non-NULL for all j &lt; i.
+</span><span class="cm">     *
+</span><span class="cm">     * There may be at most one AVBuffer per data plane, so for video this array
+</span><span class="cm">     * always contains all the references. For planar audio with more than
+</span><span class="cm">     * AV_NUM_DATA_POINTERS channels, there may be more buffers than can fit in
+</span><span class="cm">     * this array. Then the extra AVBufferRef pointers are stored in the
+</span><span class="cm">     * extended_buf array.
+</span><span class="cm">     */</span>
+    <span class="n">AVBufferRef</span> <span class="o">*</span><span class="n">buf</span><span class="p">[</span><span class="n">AV_NUM_DATA_POINTERS</span><span class="p">]</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * For planar audio which requires more than AV_NUM_DATA_POINTERS
+</span><span class="cm">     * AVBufferRef pointers, this array will hold all the references which
+</span><span class="cm">     * cannot fit into AVFrame.buf.
+</span><span class="cm">     *
+</span><span class="cm">     * Note that this is different from AVFrame.extended_data, which always
+</span><span class="cm">     * contains all the pointers. This array only contains the extra pointers,
+</span><span class="cm">     * which cannot fit into AVFrame.buf.
+</span><span class="cm">     *
+</span><span class="cm">     * This array is always allocated using av_malloc() by whoever constructs
+</span><span class="cm">     * the frame. It is freed in av_frame_unref().
+</span><span class="cm">     */</span>
+    <span class="n">AVBufferRef</span> <span class="o">*</span><span class="o">*</span><span class="n">extended_buf</span><span class="p">;</span>
+    <span class="cm">/**
+</span><span class="cm">     * extended_buf元素个数
+</span><span class="cm">     */</span>
+    <span class="kt">int</span>        <span class="n">nb_extended_buf</span><span class="p">;</span>
+
+    <span class="n">AVFrameSideData</span> <span class="o">*</span><span class="o">*</span><span class="n">side_data</span><span class="p">;</span>
+    <span class="cm">/*
+</span><span class="cm">     * side_data元素个数
+</span><span class="cm">     */</span>
+    <span class="kt">int</span>            <span class="n">nb_side_data</span><span class="p">;</span>
+
+<span class="cm">/**
+</span><span class="cm"> * @defgroup lavu_frame_flags AV_FRAME_FLAGS
+</span><span class="cm"> * @ingroup lavu_frame
+</span><span class="cm"> * Flags describing additional frame properties.
+</span><span class="cm"> *
+</span><span class="cm"> * @{
+</span><span class="cm"> */</span>
+
+<span class="cm">/**
+</span><span class="cm"> * The frame data may be corrupted, e.g. due to decoding errors.
+</span><span class="cm"> */</span>
+<span class="cp">#</span><span class="cp">define AV_FRAME_FLAG_CORRUPT       (1 &lt;&lt; 0)</span><span class="cp">
+</span><span class="cp"></span><span class="cm">/**
+</span><span class="cm"> * A flag to mark the frames which need to be decoded, but shouldn&#39;t be output.
+</span><span class="cm"> */</span>
+<span class="cp">#</span><span class="cp">define AV_FRAME_FLAG_DISCARD   (1 &lt;&lt; 2)</span><span class="cp">
+</span><span class="cp"></span><span class="cm">/**
+</span><span class="cm"> * @}
+</span><span class="cm"> */</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * Frame flags, a combination of @ref lavu_frame_flags
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">flags</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * MPEG vs JPEG YUV range.
+</span><span class="cm">     * - encoding: Set by user
+</span><span class="cm">     * - decoding: Set by libavcodec
+</span><span class="cm">     */</span>
+    <span class="k">enum</span> <span class="nc">AVColorRange</span> <span class="n">color_range</span><span class="p">;</span>
+
+    <span class="k">enum</span> <span class="nc">AVColorPrimaries</span> <span class="n">color_primaries</span><span class="p">;</span>
+
+    <span class="k">enum</span> <span class="nc">AVColorTransferCharacteristic</span> <span class="n">color_trc</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * YUV colorspace type.
+</span><span class="cm">     * - encoding: Set by user
+</span><span class="cm">     * - decoding: Set by libavcodec
+</span><span class="cm">     */</span>
+    <span class="k">enum</span> <span class="nc">AVColorSpace</span> <span class="n">colorspace</span><span class="p">;</span>
+
+    <span class="k">enum</span> <span class="nc">AVChromaLocation</span> <span class="n">chroma_location</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 流时间基为单位使用启发式方法估算的帧的时间戳，通常作为帧的pts使用，正常情况和pts是一样的。
+</span><span class="cm">     * 使用best_effort_timestamp作为帧的pts是更好的选择
+</span><span class="cm">     * - encoding: unused
+</span><span class="cm">     * - decoding: set by libavcodec, read by user.
+</span><span class="cm">     */</span>
+    <span class="kt">int64_t</span> <span class="n">best_effort_timestamp</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * reordered pos from the last AVPacket that has been input into the decoder
+</span><span class="cm">     * - encoding: unused
+</span><span class="cm">     * - decoding: Read by user.
+</span><span class="cm">     */</span>
+    <span class="kt">int64_t</span> <span class="n">pkt_pos</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * 以流时间基为单位的packet的持续时间，如果是0表示未知
+</span><span class="cm">     * - encoding: unused
+</span><span class="cm">     * - decoding: Read by user.
+</span><span class="cm">     */</span>
+    <span class="kt">int64_t</span> <span class="n">pkt_duration</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * metadata.
+</span><span class="cm">     * - encoding: Set by user.
+</span><span class="cm">     * - decoding: Set by libavcodec.
+</span><span class="cm">     */</span>
+    <span class="n">AVDictionary</span> <span class="o">*</span><span class="n">metadata</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * decode error flags of the frame, set to a combination of
+</span><span class="cm">     * FF_DECODE_ERROR_xxx flags if the decoder produced a frame, but there
+</span><span class="cm">     * were errors during the decoding.
+</span><span class="cm">     * - encoding: unused
+</span><span class="cm">     * - decoding: set by libavcodec, read by user.
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">decode_error_flags</span><span class="p">;</span>
+<span class="cp">#</span><span class="cp">define FF_DECODE_ERROR_INVALID_BITSTREAM   1</span><span class="cp">
+</span><span class="cp"></span><span class="cp">#</span><span class="cp">define FF_DECODE_ERROR_MISSING_REFERENCE   2</span><span class="cp">
+</span><span class="cp"></span>
+    <span class="cm">/**
+</span><span class="cm">     * 音频通道数
+</span><span class="cm">     * - encoding: unused
+</span><span class="cm">     * - decoding: Read by user.
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">channels</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * size of the corresponding packet containing the compressed
+</span><span class="cm">     * frame.
+</span><span class="cm">     * It is set to a negative value if unknown.
+</span><span class="cm">     * - encoding: unused
+</span><span class="cm">     * - decoding: set by libavcodec, read by user.
+</span><span class="cm">     */</span>
+    <span class="kt">int</span> <span class="n">pkt_size</span><span class="p">;</span>
+
+<span class="cp">#</span><span class="cp">if FF_API_FRAME_QP</span><span class="cp">
+</span><span class="cp"></span>    <span class="cm">/**
+</span><span class="cm">     * QP table
+</span><span class="cm">     */</span>
+    <span class="n">attribute_deprecated</span>
+    <span class="kt">int8_t</span> <span class="o">*</span><span class="n">qscale_table</span><span class="p">;</span>
+    <span class="cm">/**
+</span><span class="cm">     * QP store stride
+</span><span class="cm">     */</span>
+    <span class="n">attribute_deprecated</span>
+    <span class="kt">int</span> <span class="n">qstride</span><span class="p">;</span>
+
+    <span class="n">attribute_deprecated</span>
+    <span class="kt">int</span> <span class="n">qscale_type</span><span class="p">;</span>
+
+    <span class="n">attribute_deprecated</span>
+    <span class="n">AVBufferRef</span> <span class="o">*</span><span class="n">qp_table_buf</span><span class="p">;</span>
+<span class="cp">#</span><span class="cp">endif</span><span class="cp">
+</span><span class="cp"></span>    <span class="cm">/**
+</span><span class="cm">     * For hwaccel-format frames, this should be a reference to the
+</span><span class="cm">     * AVHWFramesContext describing the frame.
+</span><span class="cm">     */</span>
+    <span class="n">AVBufferRef</span> <span class="o">*</span><span class="n">hw_frames_ctx</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * AVBufferRef for free use by the API user. FFmpeg will never check the
+</span><span class="cm">     * contents of the buffer ref. FFmpeg calls av_buffer_unref() on it when
+</span><span class="cm">     * the frame is unreferenced. av_frame_copy_props() calls create a new
+</span><span class="cm">     * reference with av_buffer_ref() for the target frame&#39;s opaque_ref field.
+</span><span class="cm">     *
+</span><span class="cm">     * This is unrelated to the opaque field, although it serves a similar
+</span><span class="cm">     * purpose.
+</span><span class="cm">     */</span>
+    <span class="n">AVBufferRef</span> <span class="o">*</span><span class="n">opaque_ref</span><span class="p">;</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * @anchor cropping
+</span><span class="cm">     * @name Cropping
+</span><span class="cm">     * Video frames only. The number of pixels to discard from the the
+</span><span class="cm">     * top/bottom/left/right border of the frame to obtain the sub-rectangle of
+</span><span class="cm">     * the frame intended for presentation.
+</span><span class="cm">     * @{
+</span><span class="cm">     */</span>
+    <span class="n">size_t</span> <span class="n">crop_top</span><span class="p">;</span>
+    <span class="n">size_t</span> <span class="n">crop_bottom</span><span class="p">;</span>
+    <span class="n">size_t</span> <span class="n">crop_left</span><span class="p">;</span>
+    <span class="n">size_t</span> <span class="n">crop_right</span><span class="p">;</span>
+    <span class="cm">/**
+</span><span class="cm">     * @}
+</span><span class="cm">     */</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * AVBufferRef for internal use by a single libav* library.
+</span><span class="cm">     * Must not be used to transfer data between libraries.
+</span><span class="cm">     * Has to be NULL when ownership of the frame leaves the respective library.
+</span><span class="cm">     *
+</span><span class="cm">     * Code outside the FFmpeg libs should never check or change the contents of the buffer ref.
+</span><span class="cm">     *
+</span><span class="cm">     * FFmpeg calls av_buffer_unref() on it when the frame is unreferenced.
+</span><span class="cm">     * av_frame_copy_props() calls create a new reference with av_buffer_ref()
+</span><span class="cm">     * for the target frame&#39;s private_ref field.
+</span><span class="cm">     */</span>
+    <span class="n">AVBufferRef</span> <span class="o">*</span><span class="n">private_ref</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">AVFrame</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="avpacket">AVPacket</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">//占坑，敬请期待
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="avstream">AVStream</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="c1">//占坑，敬请期待
+</span></code></pre></td></tr></table>
+</div>
+</div><p><span id="2">参考：</span></p>
+<ul>
+<li><a href="http://ffmpeg.org/">FFmpeg官网</a></li>
+<li><a href="http://ffmpeg.org/doxygen/4.1/examples.html">Examples</a></li>
+<li><a href="http://ffmpeg.org/pipermail/ffmpeg-devel/2012-April/123746.html">libswresample与libavresample</a></li>
+</ul>
+<!-- https://github.com/shishuo365/libcurl-android/tree/master/jni -->
+
+    </article>
+    
+    
+<div class="whoami__gutter"></div>
+<hr class="hr-slash whoami-hr"/>
+<section class="whoami">  
+  <div class="whoami__image-wrapper">
+    
+    
+      
+        <img data-src="/images/whoami/avatar.jpg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24pt' height='24pt' viewBox='0 0 24 24' version='1.1'%3E%3Cg id='surface1035795'%3E%3Cpath style=' stroke:none;fill-rule:nonzero;fill:rgb(80%25,80%25,80%25);fill-opacity:1;' d='M 4 4 C 2.90625 4 2 4.90625 2 6 L 2 18 C 2 19.09375 2.90625 20 4 20 L 20 20 C 21.09375 20 22 19.09375 22 18 L 22 6 C 22 4.90625 21.09375 4 20 4 Z M 4 6 L 20 6 L 20 18 L 4 18 Z M 4 6 '/%3E%3C/g%3E%3C/svg%3E%0A" alt="dshcao" class="lazyload whoami__image"/>
+             
+    
+  </div>
+  <div class="whoami__contents">
+    <div class="whoami__written-by">
+      作者
+    </div>
+    <div class="whoami__title">
+      dshcao
+    </div>
+    <div class="whoami__desc">
+      Android Developer      
+    </div>
+    <div class="whoami__social">
+      
+      
+      <a href="mailto:513996717@qq.com" title="email" aria-label="email">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg>
+      </a>
+      
+      
+      
+      
+      
+      <a href="https://github.com/dshcao" title="github" aria-label="github">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 24 24" version="1.1">
+<g id="surface3680">
+<path fill="currentColor" d="M 10.898438 2.101562 C 6.300781 2.601562 2.601562 6.300781 2.101562 10.800781 C 1.601562 15.5 4.300781 19.699219 8.398438 21.300781 C 8.699219 21.398438 9 21.199219 9 20.800781 L 9 19.199219 C 9 19.199219 8.601562 19.300781 8.101562 19.300781 C 6.699219 19.300781 6.101562 18.101562 6 17.398438 C 5.898438 17 5.699219 16.699219 5.398438 16.398438 C 5.101562 16.300781 5 16.300781 5 16.199219 C 5 16 5.300781 16 5.398438 16 C 6 16 6.5 16.699219 6.699219 17 C 7.199219 17.800781 7.800781 18 8.101562 18 C 8.5 18 8.800781 17.898438 9 17.800781 C 9.101562 17.101562 9.398438 16.398438 10 16 C 7.699219 15.5 6 14.199219 6 12 C 6 10.898438 6.5 9.800781 7.199219 9 C 7.101562 8.800781 7 8.300781 7 7.601562 C 7 7.199219 7 6.601562 7.300781 6 C 7.300781 6 8.699219 6 10.101562 7.300781 C 10.601562 7.101562 11.300781 7 12 7 C 12.699219 7 13.398438 7.101562 14 7.300781 C 15.300781 6 16.800781 6 16.800781 6 C 17 6.601562 17 7.199219 17 7.601562 C 17 8.398438 16.898438 8.800781 16.800781 9 C 17.5 9.800781 18 10.800781 18 12 C 18 14.199219 16.300781 15.5 14 16 C 14.601562 16.5 15 17.398438 15 18.300781 L 15 20.898438 C 15 21.199219 15.300781 21.5 15.699219 21.398438 C 19.398438 19.898438 22 16.300781 22 12.101562 C 22 6.101562 16.898438 1.398438 10.898438 2.101562 Z M 10.898438 2.101562 "/>
+</g>
+</svg>
+
+      </a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <a href="https://stackoverflow.com/users/12583274/dshcao" title="stack-overflow" aria-label="stack-overflow">
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="25" height="25"><path fill="currentColor" d="M 9.914063 0.71875 L 9.085938 1.28125 L 11.894531 5.367188 L 12.71875 4.800781 Z M 7.695313 2.453125 L 7.039063 3.207031 L 10.917969 6.582031 L 11.574219 5.828125 Z M 6.226563 4.804688 L 5.773438 5.695313 L 10.210938 7.953125 L 10.664063 7.0625 Z M 5.363281 7.140625 L 5.136719 8.109375 L 9.976563 9.242188 L 10.203125 8.265625 Z M 3 9 L 3 14 L 12 14 L 12 9 L 11 9 L 11 13 L 4 13 L 4 9 Z M 5.03125 9.25 L 4.96875 10.25 L 9.972656 10.566406 L 10.035156 9.570313 Z M 5 11 L 5 12 L 10 12 L 10 11 Z"/></svg>
+      </a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+  </div>
+</section>
+<hr class="hr-slash whoami-hr" />
+
+    <section class="related">
+    
+    
+    <h1 class="related__title">
+      <hr class="hr-dots"/>
+      <div>
+        相关内容
+      </div>
+      <hr class="hr-dots"/>
+    </h1>
+    <ul class="related-ul">
+        
+        <li>
+          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E5%BD%95%E5%88%B6%E5%B1%8F%E5%B9%95/" class="related__link">Android直播-录制屏幕</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-ffmpeg%E4%BD%BF%E7%94%A8/" class="related__link">Android-FFmpeg使用</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/" class="related__link">Android-音视频基础知识(一)</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-ffplay%E8%A7%A3%E6%9E%90/" class="related__link">Android-ffplay解析</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/" class="related__link">Android-FFmpeg打造自己的播放器</a>
+        </li>
+        
+    </ul>
+    
+  </section>
+    <div class="grow"></div>
+<nav class="pagination-single">
+  
+    <a href="https://dshcao.github.io/zh/posts/android-ffplay%E8%A7%A3%E6%9E%90/" class="pagination-single__left">
+      <div class="pagination-single__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
+      </div>
+      <div class="pagination-single__left-title">Android-ffplay解析</div>      
+    </a>
+  
+  <div class="grow"></div>
+  
+    <a href="https://dshcao.github.io/zh/posts/android-ffmpeg%E6%89%93%E9%80%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E6%92%AD%E6%94%BE%E5%99%A8/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">Android-FFmpeg打造自己的播放器</div>
+      <div class="pagination-single__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
+      </div>
+    </a>
+  
+</nav>
+    
+  
+    
+<div id="vcomments"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script>
+  new Valine({
+      el: '#vcomments' ,
+      appId: '26IJaKoF5dnnKNBiQRI3Ovw8-MdYXbMMI',
+      appKey: 'coAossMXBdLt88uP5QzSexla',
+      notify:  false ,
+      verify:  false ,
+      avatar:'mm',
+      placeholder: '说点什么吧...',
+      visitor:  false 
+  });
+</script>
+  
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+  
+  <div class="pswp__bg"></div>
+
+  
+  <div class="pswp__scroll-wrap">
+
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+
+    
+    <div class="pswp__ui pswp__ui--hidden">
+
+      <div class="pswp__top-bar">
+
+        
+
+        <div class="pswp__counter"></div>
+
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+        <button class="pswp__button pswp__button--share" title="Share"></button>
+
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+        
+        
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div>
+      </div>
+
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+    <div class="hide">
+    
+
+<div class="search">
+  <span class="icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+  </span>
+  <input id="search" aria-label="Site Search" class="input" type="text" placeholder="搜索" autocomplete="off">
+  <div id="search-results" class="dropdown">
+    <div id="search-menu" class="dropdown-menu" role="menu">
+    </div>
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</main>
+
+
+<aside class="main-side">
+  
+
+
+<section class="sidebar">
+  <div class="toc__flexbox" data-position="fixed">
+    <h6 class="toc__title">目录</h6>
+    
+      <label class="switch">
+        <input id="toggle-toc" aria-label="Toggle TOC" type="checkbox" checked>
+        <span class="slider round"></span>
+      </label>
+    
+  </div>
+  <div class="toc">
+    <ul id="toc"></ul>
+  </div>
+</section>
+
+
+
+</aside>
+
+<script>
+  enquire.register("screen and (max-width: 769px)", {
+    match: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "hide";
+      }
+    },
+    unmatch: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main-main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "main-side";
+      }
+      document.getElementsByClassName('navbar__burger')[0].classList.remove('is-active');
+      document.getElementsByClassName('navbar__menu')[0].classList.remove('is-active');
+      document.getElementsByClassName('mobile-search')[0].classList.add('hide');
+    },
+    setup: function () { },
+    deferSetup: true,
+    destroy: function () { },
+  });
+</script>
+
+
+
+
+<script defer src="/js/jquery.min.0925e8ad7bd971391a8b1e98be8e87a6971919eb5b60c196485941c3c1df089a.js"></script>
+
+<script defer src="/js/enquire.min.72cb9edeb1ca1b92f5bf9df8d31a1ecd1e423d0b5e0f48a2a208b020dd5053fa.js"></script>
+
+<script defer src="/js/clipboard.min.1626706afc88d95ebe1173b553ec732c6dc82a576989315fdf5e7779af738a44.js"></script>
+
+<script defer src="/js/lazysizes.min.31dd6a2d3a1ec0f78a8df007535cf23f03aeb5c70f026e6d6a19dac3b3acc340.js"></script>
+
+<script defer src="/js/zzo.min.31d5b7d503557f488cc17574468cbc03fca4e45f61c15080d29bff7e38043ec8.js"></script>
+
+
+  
+  <script defer src="/lib/photoswipe/photoswipe.min.78fc260a16dbbd76ec3b4da56ccdc7a076d21d31c501e0a17a4175c4a25d95ea.js"></script>
+  
+  <script defer src="/lib/photoswipe/photoswipe-ui-default.min.50a9333a7ff0d660714662cb1ab49ec81e1ed716eba78c729600166f7338da95.js"></script>
+  
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css">
+  
+  <link rel="stylesheet" href="/lib/photoswipe/custom-skin.min.css">
+
+
+
+  
+  <script defer src="/js/jquery.toc.min.376e1b5d343786c1978dbad9ea7a0e23088947732993a91dcbad995883c96ceb.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  window.onload = function() {
+    
+    (function () {
+      document.querySelectorAll('.chroma > table')
+        .forEach((element) => {
+          const sub = element.querySelector('code[data-lang]');
+          if (sub) {
+            $(element).closest('div.chroma').attr('data-lang', mapLang(sub.getAttribute('data-lang')));
+          }
+        }
+      );
+    })();
+
+    (function () {
+      document.querySelectorAll('.single__contents > pre > code')
+        .forEach((element) => {
+          if (!$(element).attr('data-lang')) {
+            $(element).parent().wrap('<div data-lang="Code" class="language-code"></div>');
+          }
+        });
+    })();
+
+    function mapLang(name) {
+      return {
+        coffeescript: 'CoffeeScript',
+        cpp: 'C++',
+        cs: 'C#',
+        css: 'CSS',
+        html: 'HTML',
+        http: 'HTTP',
+        js: 'JavaScript',
+        json: 'JSON',
+        objectivec: 'Objective-C',
+        php: 'PHP',
+        sql: 'SQL',
+        toml: 'TOML',
+        ts: 'TypeScript',
+        typescript: 'TypeScript',
+        xml: 'XML',
+        yaml: 'YAML',
+      }[name] || name.toUpperCase();
+    }
+
+    
+    runSearch();
+
+    
+    
+    
+    var enableBusuanzi = JSON.parse("false");
+    var busuanziPagePV = JSON.parse("true");
+    
+    if (enableBusuanzi && busuanziPagePV) {      
+      $('#busuanzi_value_page_pv').digits();
+    }    
+
+    var navbar = $('.navbar');
+
+    
+    
+    var enableToc = JSON.parse("true");
+    
+    if (enableToc) {
+      $("#toc").toc({ content: ".single__contents", headings: "h1,h2,h3,h4" });
+      $('#toc > li').each(function () {
+        $(this).find('ul').css('display', 'none');
+      });
+      $('#toc a').each(function () {
+        $(this).click(function () {
+          navbar.removeClass('navbar--show');
+          navbar.removeClass('navbar--hide');
+          navbar.addClass('navbar--hide');
+
+          $(".single__contents :header").each(function () {
+            $('.toc a').removeClass('active');
+          });
+          $(this).addClass('active');
+
+          $('#toc > li').each(function () {
+            $(this).find('ul').css('display', 'none');
+          });
+          $(this).next().css('display', 'block');
+          $(this).parents('ul').css('display', 'block');
+        });
+      });
+
+      
+      $("#toggle-toc").change(function () {
+        if (this.checked) {
+          $('.toc').fadeIn(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main-main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'fixed');
+        } else {
+          $('.toc').fadeOut(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'absolute');
+        }
+      });
+    }    
+
+    
+    var text, clip = new ClipboardJS('.anchor');
+    var headers = $('.single__contents :header').not('h6').not('h5');
+    headers.append(function (index, html) {
+      var element = $(this);
+      var url = encodeURI(document.location.origin + document.location.pathname);
+      var link = url + "#" + element[0].id;
+      return " <span class='anchor hide' data-clipboard-text='" + link + "' style='position: relative;'>" +
+        "<span style='font-size: 1rem; position: absolute; right: -2rem; top: 50%; transform: translateY(-50%)'>🔗</span>" +
+        "</span>"
+        ;
+    });
+    headers.on('mouseenter', function () {
+      $(this).find('.anchor').attr('class', 'anchor');
+    });
+    headers.on('mouseleave', function () {
+      $(this).find('.anchor').attr('class', 'anchor hide');
+    });
+
+    $(".anchor").on('mouseleave', function (e) {
+      $(this).attr('aria-label', null).removeClass('tooltipped tooltipped-s tooltipped-w');
+    });
+
+    clip.on('success', function (e) {
+      e.clearSelection();
+      $(e.trigger).attr('aria-label', 'Link copied to clipboard!').addClass('tooltipped tooltipped-s');
+    });
+    
+    $('.language-code').each(function (i, node) {
+      $(node).append('<span class="copy-to-clipboard" title="Copy to clipboard"/>');
+    });
+
+    
+    var clipInit = false;
+    $('pre.chroma code, .language-code code').each(function () {
+      var code = $(this),
+        text = code.text();
+
+      if (text.length > 30) {
+        if (!clipInit) {
+          var text, clip = new ClipboardJS('.copy-to-clipboard', {
+            text: function (trigger) {
+              console.log();
+              if ($(trigger).prev().find('code').length > 1) {                
+                text = $(trigger).prev().find(`code[class^="language-"]`).text();
+              } else {
+                text = $(trigger).prev().find('code').text();
+              }
+               
+              return text.replace(/^\$\s/gm, '');
+            }
+          });
+
+          var inPre;
+          clip.on('success', function (e) {
+            e.clearSelection();
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+          });
+
+          clip.on('error', function (e) {
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', fallbackMessage(e.action)).addClass('tooltipped tooltipped-w');
+            $(document).one('copy', function () {
+              $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+            });
+          });
+
+          clipInit = true;
+        }
+
+        var notAllowedClass = ['language-mermaid', 'language-viz', 'language-wave', 'language-chart', 'language-msc', 'language-flowchart'];
+        var isNotAllowedIncluded = false;
+        var curClassName = code.attr('class');
+
+        for (let str of notAllowedClass) {
+          if (curClassName && curClassName.startsWith(str)) {
+            isNotAllowedIncluded = true;
+            break;
+          } 
+        }
+        
+        if (!isNotAllowedIncluded) {
+          if (curClassName) {
+            code.closest('div.chroma').append('<span class="copy-to-clipboard" title="Copy to clipboard" />');
+          }         
+        }        
+      }
+    });
+
+    
+    
+    var enablePhotoSwipe = JSON.parse("true");
+    
+    if (enablePhotoSwipe) {
+      var pswpElement = $('.pswp')[0];
+      var imgElements = $('.single__contents').find('img');
+      var items = [];
+
+      imgElements.each(function (i, v) {
+        $(this).click(function (e) {
+          initGallery(i);
+        });
+        $(this).css('cursor', 'pointer');
+        items.push({
+          src: v['src'],
+          w: 0,
+          h: 0,
+          title: filename(v['src']),
+        });
+      });
+
+      function filename(str) {
+        var s = str.replace(/\\/g, '/');
+        s = s.substring(s.lastIndexOf('/') + 1);
+        return str ? s.replace(/[?#].+$/, '') : s.split('.')[0];
+      }
+
+      function initGallery(index) {
+        var options = { index: index };
+        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.listen('imageLoadComplete', function (index, item) {
+          if (item.h < 1 || item.w < 1) {
+            let img = new Image();
+            img.onload = () => {
+              item.w = img.width;
+              item.h = img.height;
+              gallery.invalidateCurrItems();
+              gallery.updateSize(true);
+            }
+            img.src = item.src;
+          }
+        });
+        gallery.init();
+      }
+    }
+
+    
+    
+    var lib = JSON.parse("null");
+
+    if (lib && lib.includes('mermaid')) {
+      
+      var themeVariant = localStorage.getItem('theme') || JSON.parse("\"dark\"");
+
+      if (themeVariant === "dark" || themeVariant === "hacker") {
+        mermaid.initialize({ theme: 'dark' });
+      } else {
+        mermaid.initialize({ theme: 'default' });
+      }
+      
+      let mermaids = [];
+      [].push.apply(mermaids, document.getElementsByClassName('language-mermaid'));
+      for (i = 0; i < mermaids.length; i++) {
+        $(mermaids[i]).unwrap('pre');
+        $(mermaids[i]).replaceWith(function () {
+          return $("<div />").append($(this).contents()).addClass('mermaid').css('padding', '34px 4px 6px');
+        });
+      }
+    }
+
+    
+    if (lib && lib.includes('katex')) {
+      var mathElements = document.getElementsByClassName('math');
+      var options = [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ];
+
+      renderMathInElement(document.querySelector('.single__contents'), options);
+    }
+
+    
+    if (lib && lib.includes('flowchartjs')) {
+      
+      var options = JSON.parse("{\"arrow-end\":\"block\",\"element-color\":\"black\",\"fill\":\"white\",\"flowstate\":{\"approved\":{\"fill\":\"#58C4A3\",\"font-size\":12,\"no-text\":\"n/a\",\"yes-text\":\"APPROVED\"},\"current\":{\"fill\":\"yellow\",\"font-color\":\"red\",\"font-weight\":\"bold\"},\"future\":{\"fill\":\"#FFFF99\"},\"invalid\":{\"fill\":\"#444444\"},\"past\":{\"fill\":\"#CCCCCC\",\"font-size\":12},\"rejected\":{\"fill\":\"#C45879\",\"font-size\":12,\"no-text\":\"REJECTED\",\"yes-text\":\"n/a\"},\"request\":{\"fill\":\"blue\"}},\"font-color\":\"black\",\"font-size\":14,\"line-color\":\"black\",\"line-length\":50,\"line-width\":3,\"no-text\":\"no\",\"scale\":1,\"symbols\":{\"end\":{\"class\":\"end-element\"},\"start\":{\"element-color\":\"green\",\"fill\":\"yellow\",\"font-color\":\"red\"}},\"text-margin\":10,\"x\":0,\"y\":0,\"yes-text\":\"yes\"}");
+
+      var flowchartPrefix = "language-flowchart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + flowchartPrefix + "]"), function(x){
+          x.style.display = 'none'
+          x.parentNode.style.backgroundColor = "transparent"
+          jsonContent = x.innerText;
+
+          node0 = document.createElement('div');
+          node0.id = 'flowchart' + index;
+          x.parentNode.insertBefore(node0, x);
+
+          var diagram = flowchart.parse(jsonContent);
+          diagram.drawSVG("flowchart"+index, options);
+
+          index +=1;
+      });      
+    }
+
+    
+    if (lib && lib.includes('mathjax')) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: false,
+          packages: { '[+]': ['noerrors'] }
+        },
+        loader: {
+          load: ['[tex]/noerrors']
+        },
+      };
+    }
+
+    
+    if (lib && lib.includes('msc')) {
+      
+      var options = JSON.parse("{\"theme\":\"hand\"}");    
+
+      var index = 0;
+      var chartPrefix = "language-msc";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'msc' + index;
+        x.parentNode.insertBefore(node0, x);
+        var diagram = Diagram.parse(jsonContent);
+        diagram.drawSVG("msc" + index, options);
+        index += 1;
+      });
+    }
+
+    
+    if (lib && lib.includes('chart')) {
+      var borderColor = "#666";
+      var bgColor = "#ddd";
+      var borderWidth = 2;
+
+      Chart.defaults.global.elements.rectangle.borderWidth = borderWidth;
+      Chart.defaults.global.elements.rectangle.borderColor = borderColor;
+      Chart.defaults.global.elements.rectangle.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.line.borderWidth = borderWidth;
+      Chart.defaults.global.elements.line.borderColor = borderColor;
+      Chart.defaults.global.elements.line.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.point.borderWidth = borderWidth;
+      Chart.defaults.global.elements.point.borderColor = borderColor;
+      Chart.defaults.global.elements.point.backgroundColor = bgColor;
+
+      var chartPrefix = "language-chart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('canvas');
+        node0.height = 200;
+        node0.style.height = 200;
+        node0.id = 'myChart' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        var ctx = document.getElementById('myChart' + index).getContext('2d');
+        var myChart = new Chart(ctx, source);
+        index += 1;
+      });            
+    }
+
+    
+    if (lib && lib.includes('wavedrom')) {
+      var wavePrefix = "language-wave";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + wavePrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'WaveDrom_Display_' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        WaveDrom.RenderWaveForm(index, source, "WaveDrom_Display_");
+        index += 1;
+      });
+    }
+
+    
+    if (lib && lib.includes('viz')) {
+      var vizPrefix = "language-viz-";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + vizPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        var engine;
+        x.getAttribute("class").split(" ").forEach(function (cls) {
+          if (cls.startsWith(vizPrefix)) {
+            engine = cls.substr(vizPrefix.length);
+          }
+        });
+        var viz = new Viz();
+        viz.renderSVGElement(x.innerText, { engine: engine })
+          .then(function (element) {
+            element.style.width = "100%";
+            x.parentNode.insertBefore(element, x);
+          })
+      });
+    }
+  }
+</script>
+
+
+            
+            <footer class="footer">
+    
+<div class="dropdown">
+  <button class="dropdown-trigger" aria-label="Select Theme Button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M12.65 15.67c.14-.36.05-.77-.23-1.05l-2.09-2.06.03-.03c1.74-1.94 2.98-4.17 3.71-6.53h1.94c.54 0 .99-.45.99-.99v-.02c0-.54-.45-.99-.99-.99H10V3c0-.55-.45-1-1-1s-1 .45-1 1v1H1.99c-.54 0-.99.45-.99.99 0 .55.45.99.99.99h10.18C11.5 7.92 10.44 9.75 9 11.35c-.81-.89-1.49-1.86-2.06-2.88-.16-.29-.45-.47-.78-.47-.69 0-1.13.75-.79 1.35.63 1.13 1.4 2.21 2.3 3.21L3.3 16.87c-.4.39-.4 1.03 0 1.42.39.39 1.02.39 1.42 0L9 14l2.02 2.02c.51.51 1.38.32 1.63-.35zM17.5 10c-.6 0-1.14.37-1.35.94l-3.67 9.8c-.24.61.22 1.26.87 1.26.39 0 .74-.24.88-.61l.89-2.39h4.75l.9 2.39c.14.36.49.61.88.61.65 0 1.11-.65.88-1.26l-3.67-9.8c-.22-.57-.76-.94-1.36-.94zm-1.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+  </button>
+  <div class="dropdown-content">
+    
+    
+    
+      
+      
+        
+      
+        
+        
+          
+            
+              <a href="https://dshcao.github.io/zh/posts/android-ffmpeg4.x%E7%BC%96%E8%AF%91/" data-lang="zh" class="dropdown-item is-active">中文</a>
+            
+          
+        
+      
+    
+  </div>
+</div>
+
+    
+<div class="footer__social">
+  <div class="social">
+    
+      
+      <a href="mailto:513996717@qq.com" title="email" aria-label="email">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg>
+      </a>
+            
+    
+            
+    
+      
+      <a href="https://github.com/dshcao" title="github" aria-label="github">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 24 24" version="1.1">
+<g id="surface3680">
+<path fill="currentColor" d="M 10.898438 2.101562 C 6.300781 2.601562 2.601562 6.300781 2.101562 10.800781 C 1.601562 15.5 4.300781 19.699219 8.398438 21.300781 C 8.699219 21.398438 9 21.199219 9 20.800781 L 9 19.199219 C 9 19.199219 8.601562 19.300781 8.101562 19.300781 C 6.699219 19.300781 6.101562 18.101562 6 17.398438 C 5.898438 17 5.699219 16.699219 5.398438 16.398438 C 5.101562 16.300781 5 16.300781 5 16.199219 C 5 16 5.300781 16 5.398438 16 C 6 16 6.5 16.699219 6.699219 17 C 7.199219 17.800781 7.800781 18 8.101562 18 C 8.5 18 8.800781 17.898438 9 17.800781 C 9.101562 17.101562 9.398438 16.398438 10 16 C 7.699219 15.5 6 14.199219 6 12 C 6 10.898438 6.5 9.800781 7.199219 9 C 7.101562 8.800781 7 8.300781 7 7.601562 C 7 7.199219 7 6.601562 7.300781 6 C 7.300781 6 8.699219 6 10.101562 7.300781 C 10.601562 7.101562 11.300781 7 12 7 C 12.699219 7 13.398438 7.101562 14 7.300781 C 15.300781 6 16.800781 6 16.800781 6 C 17 6.601562 17 7.199219 17 7.601562 C 17 8.398438 16.898438 8.800781 16.800781 9 C 17.5 9.800781 18 10.800781 18 12 C 18 14.199219 16.300781 15.5 14 16 C 14.601562 16.5 15 17.398438 15 18.300781 L 15 20.898438 C 15 21.199219 15.300781 21.5 15.699219 21.398438 C 19.398438 19.898438 22 16.300781 22 12.101562 C 22 6.101562 16.898438 1.398438 10.898438 2.101562 Z M 10.898438 2.101562 "/>
+</g>
+</svg>
+
+      </a>
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+      
+      <a href="https://stackoverflow.com/users/12583274/dshcao" title="stack-overflow" aria-label="stack-overflow">
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32"><path fill="currentColor" d="M 9.914063 0.71875 L 9.085938 1.28125 L 11.894531 5.367188 L 12.71875 4.800781 Z M 7.695313 2.453125 L 7.039063 3.207031 L 10.917969 6.582031 L 11.574219 5.828125 Z M 6.226563 4.804688 L 5.773438 5.695313 L 10.210938 7.953125 L 10.664063 7.0625 Z M 5.363281 7.140625 L 5.136719 8.109375 L 9.976563 9.242188 L 10.203125 8.265625 Z M 3 9 L 3 14 L 12 14 L 12 9 L 11 9 L 11 13 L 4 13 L 4 9 Z M 5.03125 9.25 L 4.96875 10.25 L 9.972656 10.566406 L 10.035156 9.570313 Z M 5 11 L 5 12 L 10 12 L 10 11 Z"/></svg>
+      </a>
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+    
+  <a href="https://dshcao.github.io/zh/posts/android-ffmpeg4.x%E7%BC%96%E8%AF%91//index.xml" type="application/rss+xml" title="rss" aria-label="RSS Feed Link">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle fill="currentColor" cx="6.18" cy="17.82" r="2.18"/><path fill="currentColor" d="M5.59 10.23c-.84-.14-1.59.55-1.59 1.4 0 .71.53 1.28 1.23 1.4 2.92.51 5.22 2.82 5.74 5.74.12.7.69 1.23 1.4 1.23.85 0 1.54-.75 1.41-1.59-.68-4.2-3.99-7.51-8.19-8.18zm-.03-5.71C4.73 4.43 4 5.1 4 5.93c0 .73.55 1.33 1.27 1.4 6.01.6 10.79 5.38 11.39 11.39.07.73.67 1.28 1.4 1.28.84 0 1.5-.73 1.42-1.56-.73-7.34-6.57-13.19-13.92-13.92z"/></svg>
+  </a>
+
+  </div>
+</div>
+
+    
+<div id="gtt">
+  <div class="gtt">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M8.12 14.71L12 10.83l3.88 3.88c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L12.7 8.71c-.39-.39-1.02-.39-1.41 0L6.7 13.3c-.39.39-.39 1.02 0 1.41.39.38 1.03.39 1.42 0z"/></svg>
+  </div>
+</div>
+
+    <hr />
+
+    
+    <div class="footer__poweredby">
+    
+
+                
+            <p class="caption">
+                ©2020, All Rights Reserved
+            </p>
+        
+        <p class="caption">Powered by <a href="https://gohugo.io/" rel="noreferrer">Hugo</a> and the <a href="https://github.com/zzossig/hugo-theme-zzo" rel="noreferrer">Zzo theme</a></p>
+    </div>
+        
+</footer>
+        </div>    
+    </div>
+</body>
+
+</html>

@@ -26,6 +26,15 @@
       </item>
       
       <item>
+        <title>Android-draw&amp;onDraw</title>
+        <link>https://dshcao.github.io/zh/posts/android-drawondraw/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-drawondraw/</guid>
+        <description>前言 Android应用将经过测量、布局、绘制的surface缓存数据通过SurfaceFlinger渲染到显示屏幕上，通过Android的刷</description>
+      </item>
+      
+      <item>
         <title>自定义View-measure&amp;layout</title>
         <link>https://dshcao.github.io/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>

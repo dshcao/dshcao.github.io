@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ffmpeg on dshcao blog</title>
+    <link>https://dshcao.github.io/zh/series/ffmpeg/</link>
+    <description>Recent content in ffmpeg on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <managingEditor>513996717@qq.com (dshcao)</managingEditor>
+    <webMaster>513996717@qq.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Fri, 11 Oct 2019 10:33:41 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/zh/series/ffmpeg/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>Android-ffplay解析</title>
+        <link>https://dshcao.github.io/zh/posts/android-ffplay%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ffplay%E8%A7%A3%E6%9E%90/</guid>
+        <description>首先移植到Android，在SDL2源码的Android项目(android-project)中添加编译好的ffmpeg的so。 然后复制co</description>
+      </item>
+      
+    
+  </channel>
+</rss>

@@ -17,6 +17,24 @@
     
       
       <item>
+        <title>Android-Gradle应用</title>
+        <link>https://dshcao.github.io/zh/posts/android-gradle%E5%BA%94%E7%94%A8/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-gradle%E5%BA%94%E7%94%A8/</guid>
+        <description>Gradle插件开发 开发Gradle插件的三种方式 直接写在build.gradle中，适合简单逻辑，只对该build.gradle可见 在项目</description>
+      </item>
+      
+      <item>
+        <title>Android浏览器-编译Chromium</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E7%BC%96%E8%AF%91chromium/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E7%BC%96%E8%AF%91chromium/</guid>
+        <description>安装depot_tools git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git 报错： fatal: unable to access &#39;https://chromium.googlesource.com/chromium/tools/depot_tools.git/&#39;: Failed to connect to chromium.googlesource.com port 443: Operation timed out 这是由于terminal没有走代理，需要配置代理http监听端口号por</description>
+      </item>
+      
+      <item>
         <title>HashMap源码分析</title>
         <link>https://dshcao.github.io/zh/posts/java-hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -80,6 +98,15 @@
       </item>
       
       <item>
+        <title>动态代理</title>
+        <link>https://dshcao.github.io/zh/posts/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/</guid>
+        <description>前言 解说动态代理前我们需要先知道什么是代理模式。 代理模式即是给目标对象提供一个代理对象，由代理对象控制对目标对象的引用。引入代理对象的目的：</description>
+      </item>
+      
+      <item>
         <title>多线程详解</title>
         <link>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -95,6 +122,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</guid>
         <description>Java内存模型 Java内存模型主要目标：定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的</description>
+      </item>
+      
+      <item>
+        <title>模版</title>
+        <link>https://dshcao.github.io/zh/posts/java-jvm/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-jvm/</guid>
+        <description>CMS 新生代：复制 JVM 内存分区 JVM在执行Java程序的过程中会把它管理的内存分为：方法区（运行时常量池）、堆、程序计数器、虚拟机栈、本地方法栈、</description>
       </item>
       
       <item>

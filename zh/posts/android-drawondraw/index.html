@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Android-draw&amp;onDraw – dshcao blog</title>
+    
+
+
+<script defer src="/js/fuse.min.94c78ad70b02749822921660cf4e9f0b3701bc0680c421afb784a78228de0275.js"></script>
+
+<script>
+  
+  var runSearch = function() {
+    
+        var baseurl = "https:\/\/dshcao.github.io\/\/zh";
+    
+    
+    var searchResults = null;
+    var searchMenu = null;
+    var fuse = null;
+
+    function endsWith(str, suffix) {
+      return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
+
+    function initFuse() {
+      if (!endsWith(baseurl, "/")) {
+        baseurl = baseurl + '/';
+      };
+
+      $.ajax({
+        type: "GET",
+        url: baseurl + "index.json",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+      })
+        .done(function (index) {
+          fuse = new Fuse(index, {
+            keys: ['title', 'description', 'content']
+          });
+        })
+        .fail(function (jqxhr, textStatus, error) {
+          var err = textStatus + ", " + error;
+          console.error("Error getting Hugo index file:", err);
+        });
+    }
+
+    function renderSearchResults(results) {
+      searchResults = document.getElementById('search-results');
+      searchMenu = document.getElementById('search-menu');
+      searchResults.setAttribute('class', 'dropdown is-active');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'dropdown-content search-content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.setAttribute('class', 'dropdown-item');
+          item.innerHTML = `<div class="menu-item"><div class="menu-item__title">📄 ${result.title}</div><div class="menu-item__desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        item.setAttribute('class', 'dropdown-item');
+        item.innerText = 'No results found';
+        content.appendChild(item);
+      }
+
+      while (searchMenu.hasChildNodes()) {
+        searchMenu.removeChild(
+          searchMenu.lastChild
+        );
+      }
+      searchMenu.appendChild(content);
+    }
+
+    function renderSearchResultsMobile(results) {
+      searchResults = document.getElementById('search-mobile-results');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'mobile-search__content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.innerHTML = `<div class="mobile-search__item"><div class="mobile-search__item--title">📄 ${result.title}</div><div class="mobile-search__item--desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        content.appendChild(item);
+      }
+
+      $('#search-mobile-results').empty();
+      searchResults.appendChild(content);
+    }
+
+    initFuse();
+
+    $("#search").on('input', function (e) {
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+
+      if ($(window).width() < 770) {
+        return null;
+      } 
+
+      var results = fuse.search(e.target.value);
+      renderSearchResults(results);
+    });
+
+    $('#search').on('blur', function () {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      setTimeout(function () {
+        $('#search-results').attr('class', 'dropdown');
+      }, 100);
+    });
+
+    $('#search').on('click', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+      var results = fuse.search(e.target.value);
+      renderSearchResults(results);
+    });
+
+    $('#search').on('keydown', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      var items = $('#search-menu .dropdown-item');
+      var activeIndex = $('#search-menu .dropdown-item.is-active').index();
+
+      items.removeClass('is-active');
+      if (e.key === 'ArrowDown') {
+        items.eq(activeIndex + 1).addClass('is-active');
+      } else if (e.key === 'ArrowUp') {
+        items.eq(activeIndex - 1).addClass('is-active');
+      } else if (e.key === 'Enter') {
+        var currentItemLink = items.eq(activeIndex).attr('href');
+        if (currentItemLink) {
+          location.href = currentItemLink;
+        }
+      }
+    });
+
+    $("#search-mobile").on('input', function(e) {
+      if (!e.target.value) {
+        $('#search-mobile-results').empty();
+        return null;
+      }
+
+      var results = fuse.search(e.target.value);
+      renderSearchResultsMobile(results);
+    });
+  }
+</script>    
+    
+
+
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    <meta name="description" content="Android-draw&amp;onDraw" />
+<meta name="keywords" content="">
+<meta name="created" content="2019-10-11T10:33:41&#43;0900">
+<meta name="modified" content="2019-10-11T10:33:41&#43;0900">
+
+
+<meta property="og:site_name" content="dshcao blog">
+<meta property="og:title" content="Android-draw&amp;onDraw">
+<meta property="og:url" content="https://dshcao.github.io/zh/posts/android-drawondraw/">
+<meta property="og:type" content="article">
+
+<meta name="generator" content="Hugo 0.61.0" />
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://dshcao.github.io/zh/posts/android-drawondraw/">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/logo.svg" sizes="any" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.json">
+
+
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "headline": "Android-draw\u0026onDraw",
+    "datePublished": "2019-10-11T10:33:41+09:00",
+    "dateModified": "2019-10-11T10:33:41+09:00",
+    "url" : "https://dshcao.github.io/zh/posts/android-drawondraw/",
+    "description": "Android-draw\u0026onDraw",
+    "keywords": ["android","自定义view"],
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://dshcao.github.io/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "dshcao blog",
+      "url": "https://dshcao.github.io/"
+    }
+  }
+</script>
+
+    
+
+
+
+
+
+    
+</head>
+
+<body id="root" class="theme__dark">
+    <script>
+        var localTheme = localStorage.getItem('theme');
+        if (localTheme) {
+            document.getElementById('root').className = `theme__${localTheme}`;
+        }        
+    </script>    
+    
+    <div id="body">
+        
+        <div class="container wrapper">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar__brand">
+    
+    <a href="/zh/" title="Home" rel="home" class="navbar__logo-link">
+      <img data-src="/logo.png" src="data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' width='48px' height='48px'%3E%3Cpath fill='%2337474f' d='M24.648,4l0.29,0.002c0.52,0.008,1.23,0.109,1.857,0.198c0.314,0.045,0.616,0.088,0.883,0.119 c0.164,0.024,0.715,0.227,1.043,0.348C29.468,4.941,32,6.875,32,6.875L31,5c0,0,1.563,0.445,2.125,0.875C34.247,6.733,34.354,7,35,7 h0.375L35,6c0.375,0.19,1.78,1.289,1.968,1.541L37,7.583l0.036,0.039c1.411,1.495,2.095,2.462,2.595,3.169 c0.339,0.48,0.945,0.822,1.243,1.21C41.225,12.454,42,14,42,14v-0.998c0,0,0.776,1.029,1.25,2.373C44,17.5,44,19,44,19 s-0.25-0.625-1-0.875C43,19,44,21,44,24.002v6c-0.74,0.57-0.989,1.443-1.214,2.386c-0.328,1.372-0.605,2.294-1.444,2.593L41,35.002 l-0.08,0.277c-0.533,0.662-0.994,1.351-1.439,2.018c-1.446,2.163-2.495,3.705-4.481,3.705c-1.041,0-2.044,0.167-2.441,0.559 C32.128,41.987,32,42.662,32,43.002c-1.012,0.377-2.167,1-8,1c-5,0-9.4-1.756-12.262-4.545c-0.965-0.785-2.272-1.669-2.857-2.273 C6.976,35.593,6.047,33.058,6,33.002c1.184,0.985,5.245,4.636,7.091,4.636l0,0C13.301,37.416,12,35.684,12,35.002 C13.429,37.162,17.405,40,23,40c4.125,0,3.892-0.73,6-1c4.875-0.625,7.492-5.439,8.214-6.816c0.05-0.096,0.202-1.02,0.24-1.092 c0.368-0.376,0.463-1.167,0.607-2.371C38.17,27.815,39,26.75,39,25.625S38,24,38,24s0-3-0.625-5.375 C37.25,18.151,36.738,16.409,34,13v1.002c-2.125-1.127-3.668-2.545-4.125-2.752C28.435,10.599,26.831,10,25,10c-4,0-4.625,1-8,2 c0,0,1.25,0,2,0c0,0-1.867,1.445-3,2.125c-1.875,1.125-4,5.034-4,7.875c0,3-2.485,4-4,4c-2.453,0-4-2-4-4 c0-1.133,0.45-2.5,0.886-3.425c0.411-0.873,0.799-1.697,0.795-2.581c0.031-0.106,0.274-0.383,0.435-0.566 c0.466-0.531,1.083-1.234,1.224-2.252c1.106-0.927,3.13-3.015,3.155-3.041c0.162-0.171,0.324-0.304,0.511-0.457 c0.324-0.265,0.728-0.594,1.221-1.205l0.423-0.525c0.798-0.428,2.222-1.035,2.776-1.271c0.342-0.146,0.602-0.258,0.716-0.313 L19.75,5.75C19.966,5.75,20,5.238,20,5c0-0.227,0.106-0.198,0.324-0.273C22.139,4.099,22.799,4,24.648,4L24.648,4'/%3E%3C/svg%3E" alt="Home" class="lazyload navbar__logo">
+    </a>
+    
+    <a href="/zh/" title="Home" rel="home" class="navbar__title-link">
+      <h6 class="navbar__title">dshcao blog</h6>
+    </a>    
+  </div>
+  
+  
+<div class="theme-mobile">
+  <div class="dropdown">
+    <button class="dropdown-trigger navbar__slide-down" aria-label="Invert Colors" style="">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" d="M24 0H0v24h24V0z"/><path fill="currentColor" d="M6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31l-4.95-4.95c-.39-.39-1.02-.39-1.41 0L6.34 7.93zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>      
+    </button>
+    <div class="dropdown-content select-theme">
+      
+        
+        <a href="#" class="dropdown-item select-theme__item is-active">
+          dark
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          light
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          hacker
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          solarized
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          custom
+        </a>
+        
+      
+    </div>
+  </div>
+</div>
+
+  
+<div id="mobileSearchBtn" class="mobile-search__btn">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+</div>
+
+<div id="search-mobile-container" class="mobile-search hide">
+  <div class="mobile-search__top">
+    <input id="search-mobile" type="text" aria-label="Mobile Search" placeholder="搜索" class="mobile-search__top--input"/>
+    <div id="search-mobile-close" class="mobile-search__top--icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/></svg>
+    </div>
+  </div>
+  <div id="search-mobile-results" class="mobile-search__body">
+    
+  </div>
+</div>
+
+  
+  <a role="button" class="navbar__burger" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>  
+
+  <div class="navbar__menu">
+    
+<div class="theme">
+  <div class="dropdown">
+    <button class="dropdown-trigger navbar__slide-down" aria-label="Select Theme Button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" d="M24 0H0v24h24V0z"/><path fill="currentColor" d="M6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31l-4.95-4.95c-.39-.39-1.02-.39-1.41 0L6.34 7.93zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>      
+    </button>
+    <div class="dropdown-content select-theme">
+      
+        
+        <a href="#" class="dropdown-item select-theme__item is-active">
+          dark
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          light
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          hacker
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          solarized
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          custom
+        </a>
+        
+      
+    </div>
+  </div>
+</div>
+
+    
+    <a href="/zh/archive" class="navbar__menu-item navbar__slide-down">存档</a>
+    
+    
+    <a href="/zh/posts" class="navbar__menu-item navbar__slide-down">文章</a>
+    
+    
+    <a href="/zh/pt" class="navbar__menu-item navbar__slide-down">展厅</a>
+    
+    
+    <a href="/zh/notes" class="navbar__menu-item navbar__slide-down">随笔</a>
+    
+    
+    <a href="/zh/about" class="navbar__menu-item navbar__slide-down">关于</a>
+    
+    
+  </div>
+</nav>
+            
+            
+
+
+<script src="/js/enquire.min.72cb9edeb1ca1b92f5bf9df8d31a1ecd1e423d0b5e0f48a2a208b020dd5053fa.js"></script>
+
+<main class="main-main">
+  
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+  <ol>
+    
+  
+  
+  
+  
+  
+  <li >    
+    
+      <a href="https://dshcao.github.io/zh/">dshcao blog</a>            
+        
+  </li>
+  
+  
+  <li >    
+    
+      <a href="https://dshcao.github.io/zh/posts/">文章</a>
+        
+  </li>
+  
+  
+  <li  class="is-active" >    
+    
+      <a href="https://dshcao.github.io/zh/posts/android-drawondraw/">Android-draw&amp;onDraw</a>
+        
+  </li>
+  
+  </ol>
+  
+</nav>
+  
+  <div class="single">
+    <h2 class="single__title">Android-draw&amp;onDraw</h2>
+    <div class="single__meta">
+      <div class="single__infos">
+  🕓 2019年 10月 11日 · ☕20 min read
+  
+</div>
+      <div class="single__tags caption">
+
+  
+    🏷️
+  
+  
+  <li>
+    <a href="/zh/tags/android" class="single__tag">
+      #android
+    </a>
+  </li>
+    
+
+  
+  
+  <li>
+    <a href="/zh/tags/%E8%87%AA%E5%AE%9A%E4%B9%89view" class="single__tag">
+      #自定义view
+    </a>
+  </li>
+    
+
+</div>
+    </div>    
+    <article class="single__contents">
+      <h2 id="heading">前言</h2>
+<p>Android应用将经过测量、布局、绘制的surface缓存数据通过SurfaceFlinger渲染到显示屏幕上，通过Android的刷新机制来刷新绘制。</p>
+<p>应用层负责绘制，系统层负责渲染。</p>
+<h2 id="paint">Paint</h2>
+<p>初始化一般都需要添加抗锯齿：<br />
+<br><code>var paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)</code></p>
+<h3 id="paintstyle">Paint.Style</h3>
+<p>指定绘制的基本体样式。默认FILL</p>
+<ul>
+<li>Paint.Style.FILL 使用填充样式填充几何图形和文本，忽略绘制中与stroke相关的设置。</li>
+<li>Paint.Style.STROKE 使用stroke相关的设置绘制几何图形和文本的边线。</li>
+<li>Paint.Style.FILL_AND_STROKE 同时填充几何图形和文字及使用stroke相关的设置绘制边线。如果几何图形方向是逆时针可能会产生意外的效果，但单独的FILL或STROKE则没有此问题</li>
+</ul>
+<h3 id="paintalign">Paint.Align</h3>
+<p>Align指定drawText如何相对于[x，y]坐标对齐其文本。默认LEFT</p>
+<ul>
+<li>Paint.Align.LEFT 文本绘制在x，y原点的右侧</li>
+<li>Paint.Align.CENTER 文本在x，y原点水平居中绘制</li>
+<li>Paint.Align.RIGHT文本绘制在x，y原点的左侧</li>
+</ul>
+<h3 id="paintcap">Paint.Cap</h3>
+<p>指定了边线和路径的开始和结束的处理方式。默认BUTT</p>
+<ul>
+<li>Paint.Cap.BUTT 线条以实际path长度结束。不超出path</li>
+<li>Paint.Cap.ROUND stroke呈半圆突出，中心在path的末端.即首尾两端是strokewidth长度直径的半圆。首尾相加多出一个直径（strokewidth）的长度。即实际长度=设置的线条长度+strokewidth</li>
+<li>Paint.Cap.SQUARE stroke呈方形突出，中心在path的末端.即首尾两端是strokewidth长度边上的正方形。首尾相加多出一个变长（strokewidth）的长度。即实际长度=设置的线条长度+strokewidth</li>
+</ul>
+<h3 id="paintjoin">Paint.Join</h3>
+<p>指定线条和曲线段在线条路径上连接的处理方式。默认为MITER</p>
+<ul>
+<li>Paint.Join.MITER 接合处的外缘以锐角相交</li>
+<li>Paint.Join.ROUND 连接的外缘以圆弧相交</li>
+<li>Paint.Join.BEVEL 接合处的外缘与直线相交。相交的外部会被切除。</li>
+</ul>
+<h3 id="api">API解析</h3>
+<ul>
+<li>set(src)将src中的字段复制到此paint。这相当于对所有src字段调用get，并在此字段上调用相应的set方法</li>
+<li>getTypeface()/setTypeface(typeface) 获取/设置字体样式。</li>
+<li>getTextSize()/setTextSize(textSize) 获取/设置字体大小</li>
+<li>getFontMetrics(metrics) 给定paint字体样式和字体大小设置后用此方法获取推荐的行间距</li>
+<li>getFontMetricsInt(fmi) getFontMetrics类似，只是结果已经转成int。</li>
+<li>getFontSpacing() 该方法直接调用的getFontMetrics(null)</li>
+<li>getStyle()/setStyle(style) 获取/设置style，canvas.drawBitmap()方法始终假定填充模式</li>
+<li>setARGB(int a, int r, int g, int b)</li>
+<li>getColor()/setColor(color) 获取/设置颜色</li>
+<li>setColorFilter(filter) 设置ColorFilter</li>
+<li>setAlpha(a) 设置alpha。保留setColor(color)中color的r,g,b。只改变a值。</li>
+<li>setBlendMode(blendmode) 设置合成模式。混合模式定义源像素（由绘图命令生成）与目标像素（渲染目标的内容）的合成方式。</li>
+<li>setStartHyphenEdit(startHyphen)</li>
+<li>setFontFeatureSettings(settings)</li>
+<li>setFontVariationSettings(fontVariationSettings)</li>
+<li>setFlags(flags)</li>
+<li>setHinting(mode) mode:HINTING_OFF/HINTING_ON 设置字体微调,  由于当今手机密度高，此方法已无用武之地</li>
+<li>setAntiAlias(aa)/setDither(dither) 抗锯齿/防抖动</li>
+<li>setLetterSpacing(letterSpacing) 设置字母间距。以'EM'为单位。轻微展开间距的典型值是0.05，负值则表示收紧间距</li>
+<li>setWordSpacing(float wordSpacing) 设置paint的额外文字间距</li>
+<li>setStrokeCap(cap)/setStrokeWidth(width)</li>
+<li>setMaskFilter(MaskFilter maskfilter)</li>
+<li>setPathEffect(PathEffect effect)</li>
+<li>setShader(Shader shader)</li>
+<li>setStartHyphenEdit(int startHyphen)</li>
+<li>setStrokeJoin(Join join)</li>
+<li>setStrokeMiter(float miter)</li>
+<li>setTextAlign(Align align) 设置文本对其方式</li>
+<li>setTextLocales(LocaleList locales) 根据设置的locales绘制文字。比如日语和中文的同一汉字写法可能不一样。</li>
+<li>setTextScaleX(float scaleX) 设置文本的水平缩放因子。默认1.0；&lt;1变窄，&gt;1变宽</li>
+<li>setTextSkewX(float skewX) 为paint绘制文本的的水平错切因子。默认值为0。对于近似倾斜文本，请使用-0.25左右的值。</li>
+<li>setXfermode(Xfermode xfermode)</li>
+<li>getTextWidths(CharSequence text, int start, int end,float[] widths)</li>
+<li>getTextRunCursor(CharSequence text, int contextStart, int contextEnd, boolean isRtl, int offset,int cursorOpt)</li>
+<li>getRunAdvance(CharSequence text, int start, int end, int contextStart,int contextEnd, boolean isRtl, int offset)</li>
+<li>getOffsetForAdvance(CharSequence text, int start, int end, int contextStart,int contextEnd, boolean isRtl, float advance)</li>
+<li>getTextRunAdvances(char[] chars, int index,int count, int contextIndex,int contextCount, boolean isRtl,<br />
+float[] advances,int advancesIndex)</li>
+<li>getTextPath(String text, int start, int end,float x, float y, Path path)</li>
+<li>getTextBounds(CharSequence text, int start, int end,Rect bounds) 返回文字最小矩形边界，什么是最小矩形边界？如果对比measureText会发现measureText计算的文字宽度要大于getTextBounds返回的文字宽度，因为measureText是添加两边了系统默认文字间距的宽度，getTextBounds则是不带系统默认文字间距的</li>
+<li>getUnderlinePosition()</li>
+<li>getUnderlineThickness()</li>
+<li>setUnderlineText(boolean underlineText) 是都设置下划线</li>
+<li>breakText(String text, boolean measureForwards,float maxWidth, float[] measuredWidth)</li>
+<li>breakText(CharSequence text, int start, int end,boolean measureForwards,float maxWidth, float[] measuredWidth)</li>
+<li>clearShadowLayer()</li>
+<li>equalsForTextMeasurement(Paint other)</li>
+<li>isStrikeThruText()</li>
+<li>getStrikeThruThickness()</li>
+<li>getStrikeThruPosition()</li>
+<li>getFillPath(Path src, Path dst)</li>
+<li>measureText(CharSequence text, int start, int end) 返回text的宽度。</li>
+<li>setShadowLayer(float radius, float dx, float dy, int shadowColor)</li>
+<li>getShadowLayerRadius()</li>
+<li>getShadowLayerDx()/getShadowLayerDy()</li>
+<li>getShadowLayerColor()</li>
+<li>setFilterBitmap(boolean filter)</li>
+<li>setElegantTextHeight(boolean elegant)</li>
+<li>setSubpixelText(boolean subpixelText)</li>
+<li>setStrikeThruText(boolean strikeThruText) 是否设置删除线</li>
+<li>setLinearText(boolean linearText)</li>
+<li>setFakeBoldText(boolean fakeBoldText) 设置或清除flag:FAKE_BOLD_TEXT_FLAG 是否使用伪粗体</li>
+<li>ascent()</li>
+<li>descent()</li>
+<li>hasGlyph(String string)</li>
+<li>reset()</li>
+</ul>
+<h2 id="path">Path</h2>
+<p>Path是由直线、二次曲线和三次曲线组成的复合几何路径。由于其复合及相对无规则性，判断哪些区域是path区域显得尤其重要。换句话说就是判断一个点是不是path内部点。一个点是内部点还是外部点的判断依赖于Direction和FillType。<br />
+Path应用场景<br />
+绘制：可以使用canvas.drawPath(path，paint)绘制，是填充还是描边是由paint样式决定的。<br />
+裁剪：clipPath(path)等<br />
+绘制文字：drawTextOnPath(text, path, hOffset,vOffset, paint)。</p>
+<h3 id="pathdirection">Path.Direction</h3>
+<ul>
+<li>Path.Direction.CW clockwise 顺时针</li>
+<li>Path.Direction.CCW counter-clockwise 逆时针</li>
+</ul>
+<h3 id="pathfilltype">Path.FillType</h3>
+<p>填充类型，FillType默认是WINDING</p>
+<ul>
+<li>Path.FillType.WINDING 从判断点延伸出一条射线，判断其交点（该射线不能与path图形相切），假如path从左边穿过射线计数+1，path从右边穿过射线计数-1，若结构不为0则认为该店是path内部点。例如：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">override</span> <span class="k">fun</span> <span class="nf">onDraw</span><span class="p">(</span><span class="n">canvas</span><span class="p">:</span> <span class="n">Canvas</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">addCircle</span><span class="p">(</span><span class="m">200f</span><span class="p">,</span> <span class="m">200f</span><span class="p">,</span> <span class="m">100f</span><span class="p">,</span> <span class="n">Path</span><span class="p">.</span><span class="n">Direction</span><span class="p">.</span><span class="n">CW</span><span class="p">)</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">addCircle</span><span class="p">(</span><span class="m">300f</span><span class="p">,</span> <span class="m">200f</span><span class="p">,</span> <span class="m">100f</span><span class="p">,</span> <span class="n">Path</span><span class="p">.</span><span class="n">Direction</span><span class="p">.</span><span class="n">CCW</span><span class="p">)</span>
+    <span class="n">canvas</span><span class="p">.</span><span class="n">drawPath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">paint</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>为什么用Path绘制相交的两个圆如果Direction相同，相交部分会被填充？如果Direction相反相交部分不会被填充？因为Direction相同是相交部分是内部点，Direction相反是相交部分是外部点。我们来分析以下：<br />
+取两圆相交部分一点延伸出一条射线，因为FillType默认是WINDING，不难判断两个圆Direction相反时，两圆从射线两边穿过，计数是0，即该点不是内部点。相反如果两个圆方向相同，两圆从射线同一边穿过，计数为2或-2，非0，即该点是内部点。</p>
+<ul>
+<li>Path.FillType.EVEN_ODD 从判断点延伸出一条射线，判断其交点（该射线不能与path图形相切），若相交点计数是奇数则判断该点是内部点，反之则是内部点。</li>
+<li>Path.FillType.INVERSE_WINDING 与WINDING相反</li>
+<li>Path.FillType.INVERSE_EVEN_ODD 与EVEN_ODD相反</li>
+</ul>
+<h3 id="pathop">Path.Op</h3>
+<p>组合两条path的操作或者说是两个Path对象的逻辑运算，类似集合运算。<br />
+Path.Op.DIFFERENCE 从第一条路径中减去第二条路径<br />
+Path.Op.INTERSECT 两条路径的交集<br />
+Path.Op.UNION 两条路径的并集<br />
+Path.Op.XOR 两个path异或操作。与INTERSECT相反，即并集减去交集。<br />
+Path.Op.REVERSE_DIFFERENCE 从第二条路径中减去第一条路径</p>
+<h3 id="pathmeasure">PathMeasure</h3>
+<h3 id="api-1">API解析</h3>
+<ul>
+<li>isEmpty() path是否包含直线或者曲线</li>
+<li>reset() 清除path上所有直线和曲线。但不会改变fillType的设置。reset()后path.isEmpty()=true</li>
+<li>rewind() 清除path上所有直线和曲线且会重置fillType。但会保留内部数据结构以加快重用</li>
+<li>op() 多个path做逻辑操作。true表示操作成功，false表示失败</li>
+<li>getFillType()/setFillType(FillType ft) 获取/设置fillType</li>
+<li>isConvex() 返回由路径内容定义的路径凸性。如果一条路径只有一个轮廓，并且只有一个方向的曲线，那么它就是凸的</li>
+<li>isInverseFillType() 是否是INVERSE_xx的FillType变量</li>
+<li>toggleInverseFillType() 如果FillType是INVERSE_xx修改为xx，如果是xx则修改为INVERSE_xx</li>
+<li>approximate(float acceptableError)
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">//将path拆分为一系列的线段。每三个float元素表示一个点。该三个点分别表示1.起始点到这个点的长度占整个path的比例2.x坐标3.y坐标
+</span><span class="c1"></span><span class="c1">//acceptableError 路径上的连段可接受的误差。通常这是0.5，以便误差小于半像素
+</span><span class="c1"></span><span class="nd">@Size</span><span class="o">(</span><span class="n">min</span> <span class="o">=</span> <span class="n">6</span><span class="o">,</span> <span class="n">multiple</span> <span class="o">=</span> <span class="n">3</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kt">float</span><span class="o">[</span><span class="o">]</span> <span class="nf">approximate</span><span class="o">(</span><span class="nd">@FloatRange</span><span class="o">(</span><span class="n">from</span> <span class="o">=</span> <span class="n">0</span><span class="o">)</span> <span class="kt">float</span> <span class="n">acceptableError</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">acceptableError</span> <span class="o">&lt;</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;AcceptableError must be greater than or equal to 0&#34;</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">nApproximate</span><span class="o">(</span><span class="n">mNativePath</span><span class="o">,</span> <span class="n">acceptableError</span><span class="o">)</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>close() 闭合当前轮廓。如果当前点不等于轮廓的第一个点会自动添加一个点段链接当前点和第一个点闭合轮廓。</li>
+<li>incReserve(extraPtCount) 提示path准备添加更多点。这可以更有效地给path分配存储。extraPtCount：添加到path的额外点数</li>
+<li>setLastPoint(dx,dy) 设置path的最后一个点。dx：相对于当前path最后一个点的x偏移量；dy：相对于当前path最后一个点的x偏移量</li>
+<li>transform(matrix) 通过矩阵变换path中的点</li>
+<li>transform(matrix, dst) 通过矩阵变换path中的点，并将变换结果写入dst。如果dst为空，则修改原始path</li>
+<li>offset(dx,dy) 将当前path偏移指定dx,dy</li>
+<li>offset(dx,dy,dst) 偏移指定dx,dy后将变换的结果写入dst。如果dst为空，则修改原始path</li>
+<li>set(src) 将当前path内容替换为src的内容</li>
+<li>isRect(rect) 当前path边界是否是矩形，如果是矩形返回true，并且rect不为null的情况下将path边界数据赋值给rect。如果不是矩形则返回false并忽略参数rect</li>
+<li>computeBounds(bounds, exact) 计算路径控制点边界并将结果写入bounds。如果路径没有控制点或者只有一个控制点，则bounds返回(0,0,0,0)</li>
+<li>moveTo(x, y) 一般是path下一个轮廓的开始，即将下一个轮廓的起点设置为点(x, y)</li>
+<li>lineTo(x, y) 添加一条直线从轮廓最后一个点到指定点(x, y)，做没有使用moveTo(x, y)开始这个轮廓则默认第一个点是(0, 0)</li>
+<li>addRect() 向path添加一个闭合的矩形轮廓</li>
+<li>addRoundRect() 将闭合的圆角矩形轮廓添加到path</li>
+<li>addArc(oval, startAngle, sweepAngle) 将指定的圆弧作为一个新轮廓添加到path中。oval：定义圆弧形状和大小的椭圆边界；startAngle：开始角度(x正轴是0度)；sweepAngle：startAngle开始顺时针方向的角度。</li>
+<li>arcTo(oval, startAngle, sweepAngle,forceMoveTo) 将指定的圆弧作为一个新轮廓添加到path中，如果路径的最后一个点不同于圆弧的起始点则添加一个lineTo操作连接最后一个点和圆弧起点。如果路径是空的则添加一个moveTo操作，移动到圆弧的起点。oval：定义圆弧形状和大小的椭圆边界；startAngle：开始角度(x正轴是0度)；sweepAngle：startAngle开始顺时针方向的角度；forceMoveTo：是否强制使用moveTo移动到圆弧起点，若为true，则路径的最后一个点不同于圆弧的起始点是使用moveTo而不是lineTo。addArc相当于arcTo(oval, startAngle, sweepAngle,true)</li>
+<li>addCircle() 将闭合的圆形轮廓添加到path</li>
+<li>addOval() 将闭合的椭圆形轮廓添加到path</li>
+<li>addPath(src) 将src副本添加到path</li>
+<li>addPath(src, dx, dy) 将经过平移dx,dy的src副本添加到path</li>
+<li>addPath(src, matrix) 将经过matrix变换的src副本添加到path</li>
+<li>quadTo(x1, y1, x2, y2) 将一个以路径最后一个点为起始点，(x1, y1)为控制点，(x2, y2)为结束点的二阶贝塞尔轮廓添加到路径。做没有使用moveTo(x, y)开始这个轮廓则默认第一个点是(0, 0)</li>
+<li>cubicTo(x1, y1, x2, y2,x3, y3) 将一个以路径最后一个点为起始点，(x1, y1)为第一控制点，(x2, y2)为第二控制点，(x3, y3)为结束点的三阶贝塞尔轮廓添加到路径。做没有使用moveTo(x, y)开始这个轮廓则默认第一个点是(0, 0)</li>
+<li>rXXX() 相应操作的相对模式</li>
+</ul>
+<h2 id="region">Region</h2>
+<h3 id="regionop">Region.Op</h3>
+<p>组合两个Region的操作或者说是两个Region对象的逻辑运算，类似集合运算。<br />
+Region.Op.DIFFERENCE 从第一个Region中减去第二个Region<br />
+Region.Op.INTERSECT 两个Region区域的交集<br />
+Region.Op.UNION 两个Region区域的并集<br />
+Region.Op.XOR 两个Region异或操作。与INTERSECT相反，即并集减去交集。<br />
+Region.Op.REVERSE_DIFFERENCE 从第二个Region区域中减去第一个Region区域<br />
+Region.Op.REPLACE 只取第二个Region部分</p>
+<h3 id="api-2">API解析</h3>
+<ul>
+<li>isEmpty() Region是否为空</li>
+<li>setEmpty() 设置Region为空region</li>
+<li>getBounds() 返回Region的矩形边界</li>
+<li>getBoundaryPath() 将Region的边界作为path返回。若Region为空，返回的path也是空path</li>
+<li>isComplex() 如果Region包含超过一个矩形则返回true</li>
+<li>isRect() 如果Region包含有一个矩形返回true</li>
+<li>contains(x, y) 如果点(x,y)包含在Region内返回true</li>
+<li>quickContains(r) 如果Region是单个矩形(即非复杂图形，isComplex()=false)且Region区域包含矩形r则返回true。返回false并不代表Region区域不包含矩形r区域，有可能是因为Region是一个复杂图形，即isComplex()=true</li>
+<li>quickReject(r) 如果Region是空或者和矩形r区域不相交则返回true。返回flase并不保证相交但返回true一定保证不相交</li>
+<li>quickReject(rgn) 如果Region是空或者和区域rgn不相交则返回true。返回flase并不保证相交但返回true一定保证不相交</li>
+<li>set(r[|region]) 设置Region区域为指定的矩形r（或执行的区域region）</li>
+<li>setPath(path, clip) 将Region设置为path和clip所描述的区域，如果该区域不是空则返回true。此方法将生成一个与path相同的像素绘制区域（无抗锯齿）。path中超过clip的区域将被裁剪。</li>
+<li>translate(dx, dy, dst) 将变换dx, dy后的Region结果赋给dst，若dst为null，则修改自己。</li>
+<li>op(rect, region,op) 将Region与rect和region经过op操作后的结果设置给Region。</li>
+</ul>
+<h3 id="regioniteratorregion">RegionIterator&amp;Region的绘制</h3>
+<p>canvas并没有直接绘制Region的方法。但可以通过RegionIterator</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">override</span> <span class="k">fun</span> <span class="nf">onDraw</span><span class="p">(</span><span class="n">canvas</span><span class="p">:</span> <span class="n">Canvas</span><span class="p">)</span>
+    <span class="n">path</span><span class="p">.</span><span class="n">addCircle</span><span class="p">(</span><span class="m">500f</span><span class="p">,</span> <span class="m">500f</span><span class="p">,</span> <span class="m">300f</span><span class="p">,</span> <span class="n">Path</span><span class="p">.</span><span class="n">Direction</span><span class="p">.</span><span class="n">CW</span><span class="p">)</span><span class="p">;</span>
+    <span class="k">val</span> <span class="py">region</span> <span class="p">=</span> <span class="n">Region</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+    <span class="n">region</span><span class="p">.</span><span class="n">setPath</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">Region</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">700</span><span class="p">,</span> <span class="m">600</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
+    
+    <span class="k">val</span> <span class="py">iterator</span> <span class="p">=</span> <span class="n">RegionIterator</span><span class="p">(</span><span class="n">region</span><span class="p">)</span><span class="p">;</span>
+    <span class="k">val</span> <span class="py">rect</span> <span class="p">=</span> <span class="n">Rect</span><span class="p">(</span><span class="p">)</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">iterator</span><span class="p">.</span><span class="n">next</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">canvas</span><span class="p">.</span><span class="n">drawRect</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">paint</span><span class="p">)</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>从绘制代码可以看出Region的绘制机制实际上是把自己切分成多个细小的矩形区域进制绘制，三个矩形区域可能是一像素或者几个像素宽高，所以当Region是path时可能无法在整体上做到抗锯齿。实际上Region主要作用并不是用于绘制，所以也没必要做抗锯齿。</p>
+<h3 id="pathregion">Path&amp;Region</h3>
+<p>以上可以知道Region无直接绘制方法且可能无法做到抗锯齿，而Path可以。Path还几乎可以做Region所能做的所有操作，为什么不直接用Path替代Region呢？因为Region有一点是Path无法替代的：判断某个点是否在某个区域。比如一个不规则区域(圆形按钮)，我们想实现非不规则区域不响应点击事件可以使用Region判断。</p>
+<h2 id="canvas">Canvas</h2>
+<!-- view中onDraw(Canvas)中Canvas是哪里传递过来的 -->
+<!-- 需要指出的是Canvas的matrix是从view传递过来的，所以onDraw设置canvas.setMatrix后下次还需要重新设置。因为view的matrix并未改变。 -->
+<h3 id="api-3">API解析</h3>
+<ul>
+<li>isHardwareAccelerated() canvas 是否使用了硬件加速 4.0后默认开启硬件加速。可以通过view.setLayerType(View.LAYER_TYPE_SOFTWARE,null)关闭view硬件加速</li>
+<li>setBitmap(Bitmap bitmap) 重置之前的所有状态然后绘制bitmap。在API26之前，当前矩阵和剪辑堆栈被保留。bitmap:必须是可变的，即bitmap.isMutable=true</li>
+<li>setMatrix(Matrix matrix) 使用指定矩阵替换当前矩阵。如果matrix是null，则当前矩阵会被重置为单位矩阵。官方建议使用concat(Matrix)/scale(float, float)/translate(float, float)/rotate(float)代替此方法</li>
+<li>drawBitmap(bitmap, src, dst, paint) src：需要绘制bitmap的区域(部分)，可以裁剪图片。 dst：需要绘制到canvas哪个区域</li>
+<li>drawBitmap(bitmap, left, top, paint) left:绘制bitmap（在canvas）的左边起始位置 top：绘制bitmap（在canvas）的上边起始位置</li>
+<li>drawBitmap(bitmap, matrix, paint) 使用指定matrix绘制bitmap</li>
+<li>drawBitmapMesh(@NonNull Bitmap bitmap, int meshWidth, int meshHeight,float[] verts, int vertOffset, int[] colors, int colorOffset,Paint paint) <br>使用网格绘制bitmap meshWidth:横向网格数或网格列数 meshHeight：纵向网格数或网格行数 verts：顶点数，两个一对表示一个定点的x,y值，verts的大小至少是(meshWidth+1) * (meshHeight+1) * 2 + vertOffset vertOffset：绘制前要跳过的顶点元素数 colors:可能为空。指定每个顶点处的颜色，该颜色与在相应单元格内的位图颜色叠加。如果不为空，则数组中必须至少有（meshWidth+1）*（meshHeight+1）+colorOffset值 colorOffset：绘制前要跳过的颜色元素数</li>
+<li>drawPath(path, paint) 绘制path，path是被填充还是绘制边宽依赖paint的Style</li>
+<li>drawRGB(r, g, b) 使用srcover porterduff模式，用指定的RGB颜色填充整个画布的位图（仅限于当前clip区域）</li>
+<li>drawARGB(a, r, g, b) 使用srcover porterduff模式，用指定的ARGB颜色填充整个画布的位图（仅限于当前clip区域）</li>
+<li>drawColor(int color, PorterDuff.Mode mode) 用指定的颜色和porterduff xfermode填充整个画布的位图（仅限于当前clip区域）</li>
+<li>drawColor(int color, BlendMode mode) 用指定的颜色和blendmode填充整个画布的位图（仅限于当前clip区域）</li>
+<li>drawArc(oval, startAngle, sweepAngle, useCenter, paint) oval:扇形椭圆区域 startAngle：开始角度(x正轴是0度)；sweepAngle：startAngle开始顺时针方向的角度 useCenter：是否包含椭圆区域中心，false则只绘制扇形两点相连的区域 true会绘制扇形亮点分别与椭圆区域中心相连的区域</li>
+<li>drawCircle(cx, cy, radius, paint) 不解释。</li>
+<li>drawOval(RectF oval, Paint paint) 不解释。</li>
+<li>drawRect(RectF rect, Paint paint) 不解释。</li>
+<li>ddrawRoundRect(RectF rect, float rx, float ry, Paint paint) 不解释。</li>
+<li>drawDoubleRoundRect(RectF outer, float[] outerRadii,RectF inner, float[] innerRadii, Paint paint)</li>
+<li>drawLine() 绘制一条直线</li>
+<li>drawLines(float[] pts, int offset, int count,Paint paint) offset:绘制前从pts跳过的个数 count：从offset绘制的个数</li>
+<li>drawPoints(float[] pts, int offset, int count,Paint paint) 类比drawLines</li>
+<li>drawPicture(Picture picture, RectF dst) 绘制Picture。Picture的作用是提高绘制效率，比如你用canvas连续绘制多个几个图形不如先在Picture上绘制连续的多个几何图形，在使用canvas绘制picture，这样效率更高。</li>
+<li>drawText(CharSequence text, int start, int end, float x, float y, Paint paint) <br> start:要绘制的文本中第一个字符的索引 end:要绘制的文本中最后一个字符的索引，不包含end x：文本绘制位置的原点x坐标 y：文本绘制位置的原点y坐标</li>
+<li>drawTextOnPath(String text, Path path, float hOffset, float vOffset, Paint paint) <br> 沿path绘制文字，paint的Align决定了沿path何处开始绘制文本 hOffset：沿路径绘制文本的水平偏移量 vOffset：沿路径绘制文本的纵向偏移量</li>
+<li>drawTextRun(CharSequence text, int start, int end, int contextStart,int contextEnd, float x, float y, boolean isRtl, Paint paint) <br>绘制文本，和drawText的区别是增加了文字上下文支持。什么是文字上下文？在一些文字中，比如阿拉伯文字，一个文字单独写和这个文字与某些其他文字一起写时写法是不一样的，我们熟悉的汉字和英文是没有这种情况的。知道这些我们应该知道contextStart和contextEnd的意义了。0 &lt;= contextStart &lt;= start &lt;= end &lt;= contextEnd&lt;= text.length</li>
+<li>drawTextRun(MeasuredText text, int start, int end, int contextStart,int contextEnd, float x, float y, boolean isRtl, Paint paint) <br> MeasuredTexts是Android Q增加的用于处理文字的类。具体看文档</li>
+<li>drawVertices(VertexMode mode, int vertexCount, float[] verts,int vertOffset, float[] texs, int texOffset, int[] colors,int colorOffset, short[] indices, int indexOffset, int indexCount, Paint paint) <br>类似于opengl</li>
+<li>drawRenderNode(RenderNode renderNode) <br>RenderNode需要Android Q版本。</li>
+<li>drawPaint(Paint paint) 使用指定的paint填充整个画布的位图（仅限于当前clip区域），这相当于（但速度更快）使用指定的paint绘制无限大的矩形。</li>
+<li>setDrawFilter(DrawFilter filter) <br>在canvas层面设置绘制过滤器。DrawFilter的唯一子类PaintFlagsDrawFilter可以使用：canvas.setDrawFilter(PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG))，这样在canvas层面增加抗锯齿效果（即使paint没有添加抗锯齿效果）</li>
+<li>clipPath(Path path) 裁剪path区域</li>
+<li>clipOutPath(Path path) 裁剪path意外区域</li>
+<li>clipRect(RectF rect) 裁剪rect区域</li>
+<li>clipOutRect(RectF rect) 裁剪rect意外区域</li>
+<li>getClipBounds() 当前剪辑的边界（在本地坐标中）。</li>
+<li>concat(Matrix matrix) 使用指定矩阵matrix叠加当前矩阵。matrix是null则不做任何操作</li>
+<li>rotate(float degrees, float px, float py) 画布旋转，不解释</li>
+<li>scale(float sx, float sy, float px, float py) 画布缩放，不解释</li>
+<li>skew(float sx, float sy) 画布错切，不解释</li>
+<li>translate(float dx, float dy) 画布位移，不解释</li>
+<li>save() <br>save()是和restore()配合使用的。save()保存当前matrix和clip到私有堆栈上，随后对translate、scale、rotate、skew、concat或clipRect、clipPath的调用将在调用restore()后被忘记并回复到save()之前的设置。返回值是restoreToCount(int saveCount)时回复到指定save状态需要传递的参数。简单来说save()后的各种操作是在当前图层绘制和操作而后面的saveLayer则是在新的离屏图层绘制操作。</li>
+<li>saveLayer(RectF bounds, Paint paint) 行为和save()相同，但它还将分配并重定向到离屏的渲染目标。注意：这种方法非常昂贵，对包含的内容产生的渲染成本是原来的两倍多。尽可能避免使用此方法，而是在视图上使用View#LAYER_TYPE_HARDWARE hardware 图层来应用xfermode、color filter或alpha，因为它的性能比此方法好得多。所有绘图调用都指向新分配的离屏渲染目标。只有在调用restore()时，才会将离屏缓冲区内容绘制到上一图层（嵌套调用时）或者canvas画布上。</li>
+<li>saveLayerAlpha(RectF bounds, int alpha) 类似saveLayer()。</li>
+<li>getSaveCount() 等于save()调用次数-restore()调用次数</li>
+<li>restore() 返回最近一次save()的状态，删除最近一次save()之后对matrix/clip状态的所有修改。restore()调用次数不应该多于save()次数。</li>
+<li>restoreToCount(int saveCount) 返回指定的某次save()状态。restore()是返回最近一次save()状态；restoreToCount(int saveCount)返回指定的save()=saveCount的状态</li>
+<li>quickReject(RectF rect, EdgeType type) 如果指定的rect区域在被当前矩阵变换后完全位于当前剪辑之外，则返回true。调用此函数以检查要绘制的区域是否被剪裁掉。EdgeType.BW(Black-and-White)：非抗锯齿 EdgeType.AA(Antialiased):抗拒次，表示实际检测区域是rect的抗锯齿区域，即比rect范围大。</li>
+<li>quickReject(Path path, EdgeType type) 如果指定的path区域在被当前矩阵变换后完全位于当前剪辑之外，则返回true。调用此函数以检查要绘制的区域是否被剪裁掉。</li>
+<li>disableZ() <br>禁用Z轴支持（比如：translationZ），防止在此点之后绘制的任何rendernode被可视地重新排序或渲染阴影。这不受任何ave()或restore()调用的影响，因为它不被视为当前矩阵或剪辑的一部分</li>
+<li>enableZ() <br>启用Z轴支持</li>
+<li>setDensity(int density) 见参考<a href="#2">android大屏幕解决图片被放大问题</a></li>
+<li>isOpaque() 是否不透明，如果当前层绘制的设备不透明，则返回true（即不支持每像素alpha）。</li>
+<li>getWidth()/getHeight() 返回当前绘图层的宽度/高度</li>
+<li>getMaximumBitmapWidth()/getMaximumBitmapHeight() 返回使用此画布绘制的位图所允许的最大宽度。尝试使用比此值更宽的位图绘制将导致错误。</li>
+</ul>
+<p>为什么使用save()和restore()？你可能有疑问我们画的时候可以做相应偏移缩放旋转啊，理论上是可以但是有时候使用画布做相应变化更简便容易。</p>
+<h3 id="drawxxxpath">drawXXX和使用path实现的区别</h3>
+<p>比如drawLine(100，100，200，200)和下面代码中利用path实现</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">path</span><span class="o">.</span><span class="na">moveTo</span><span class="o">(</span><span class="n">100</span><span class="o">,</span> <span class="n">100</span><span class="o">)</span>
+<span class="n">path</span><span class="o">.</span><span class="na">lineTo</span><span class="o">(</span><span class="n">200</span><span class="o">,</span> <span class="n">200</span><span class="o">)</span>
+<span class="n">paint</span><span class="o">.</span><span class="na">strokeWidth</span> <span class="o">=</span> <span class="n">Utils</span><span class="o">.</span><span class="na">dp2px</span><span class="o">(</span><span class="n">5f</span><span class="o">)</span>
+<span class="n">override</span> <span class="n">fun</span> <span class="nf">onDraw</span><span class="o">(</span><span class="n">canvas</span><span class="o">:</span> <span class="n">Canvas</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">canvas</span><span class="o">.</span><span class="na">drawPath</span><span class="o">(</span><span class="n">path</span><span class="o">,</span> <span class="n">paint</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>两者有何区别？<br />
+你会发现drawLine()可以绘制，drawPath却不一定可以绘制，只有paint.style非Paint.Style.FILL时，使用path实现的代码才能绘制出一条直线。线段是没有大小的，而drawLine()会忽略paint.style的设置直接使用Paint.Style.STROKE。drawPath()则不会。</p>
+<h2 id="android">Android绘制的基础知识</h2>
+<h3 id="heading-1">文字的测量及绘制</h3>
+<p>canvas.drawText(CharSequence text, int start, int end, float x, float y, Paint paint) x/y分别是绘制文字的x,y起点。但需要注意的是绘制文字的起点并不是文字的左上角。而是文字边界的x坐标值和文字baseline的y坐标值。当我们指定paint.textAlign = Paint.Align.CENTER时x指的是文字水平宽度的中心坐标值，y依然是baseline的y坐标值。<br />
+如何文字居中？</p>
+<ul>
+<li>横向对其<br />
+默认的系统都会给文字左右留有间距。当字号相差较大且换行时看起来文字左边并不对其。如果想绘制时想避免间距可以绘制时做相应偏移
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">val</span> <span class="py">textBounds</span> <span class="p">=</span> <span class="n">Rect</span><span class="p">(</span><span class="p">)</span>
+<span class="n">canvas</span><span class="p">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">text</span><span class="p">.</span><span class="n">length</span><span class="p">,</span> <span class="p">-</span><span class="n">textBounds</span><span class="p">.</span><span class="n">left</span><span class="p">,</span> <span class="m">300f</span><span class="p">,</span> <span class="n">paint</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>纵向对齐</li>
+</ul>
+<ol>
+<li>使用getTextBounds计算
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">val</span> <span class="py">textBounds</span> <span class="p">=</span> <span class="n">Rect</span><span class="p">(</span><span class="p">)</span>
+<span class="n">paint</span><span class="p">.</span><span class="n">getTextBounds</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span><span class="n">text</span><span class="p">.</span><span class="n">length</span><span class="p">,</span> <span class="n">textBounds</span><span class="p">)</span>
+<span class="k">val</span> <span class="py">offsetY</span> <span class="p">=</span> <span class="p">(</span><span class="n">textBounds</span><span class="p">.</span><span class="n">top</span> <span class="p">+</span> <span class="n">textBounds</span><span class="p">.</span><span class="n">bottom</span><span class="p">)</span> <span class="p">/</span> <span class="m">2f</span>
+<span class="c1">//假设我们期望的中心坐标值是(centerX,centerY)，只需要
+</span><span class="c1"></span><span class="n">canvas</span><span class="p">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="n">text</span><span class="p">.</span><span class="n">length</span><span class="p">,</span><span class="n">centerX</span><span class="p">,</span><span class="n">centerY</span> <span class="p">-</span> <span class="n">offsetY</span><span class="p">,</span><span class="n">paint</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>该方法的好处是文字中体绝对居中，但部分文字比如：a,p,q字母看起来没那么居中，而b这样的字母看起来居中。另外如果文字是动态的那么可能出现文字跳动的情况，以为前一次文字可能是aaaa,而后变为ppppp，中心位置发生了变化。</p>
+</li>
+<li>使用getFontMetrics()
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="k">val</span> <span class="py">fontMetrics</span> <span class="p">=</span> <span class="n">paint</span><span class="p">.</span><span class="n">fontMetrics</span>
+<span class="k">val</span> <span class="py">offsetY</span> <span class="p">=</span> <span class="p">(</span><span class="n">fontMetrics</span><span class="p">.</span><span class="n">ascent</span> <span class="p">+</span> <span class="n">fontMetrics</span><span class="p">.</span><span class="n">descent</span><span class="p">)</span> <span class="p">/</span> <span class="m">2f</span>
+<span class="c1">//假设我们期望的中心坐标值是(centerX,centerY)，只需要
+</span><span class="c1"></span><span class="n">canvas</span><span class="p">.</span><span class="n">drawText</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="n">text</span><span class="p">.</span><span class="n">length</span><span class="p">,</span><span class="n">centerX</span><span class="p">,</span><span class="n">centerY</span> <span class="p">-</span> <span class="n">offsetY</span><span class="p">,</span><span class="n">paint</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>该方法整体没有getTextBounds那么绝对居中，而且如果文字都是aaaa看起来会靠下一些，但基本满足要求而且当文字动态时不会出现跳动的情况。</p>
+</li>
+</ol>
+<ul>
+<li>多行绘制
+<ul>
+<li>StaticLayout</li>
+<li>paint.breakText()</li>
+</ul>
+</li>
+</ul>
+<h3 id="pathandroid">Path在Android中的使用</h3>
+<h3 id="picture">Picture</h3>
+<h3 id="xfermode">Xfermode</h3>
+<p>PorterDuffXfermode</p>
+<h3 id="shader">Shader</h3>
+<p>Shader（着色器）是一个绘制期间返回水平跨度颜色的基类对象。当调用paint.setShader(shader)后使用该paint绘制的任何对象(除了位图)都将从shader获取颜色</p>
+<ul>
+<li>BitmapShader</li>
+<li>LinearGradient</li>
+<li>RadialGradient</li>
+<li>SweepGradient</li>
+<li>ComposeShader</li>
+</ul>
+<h3 id="rendernode">RenderNode</h3>
+<h3 id="cameracamera">Camera及Camera坐标系</h3>
+<p><span id="2">参考：</span></p>
+<ul>
+<li><a href="http://hi.baidu.com/lypoint/item/d39d2fcab9d76ad49744524c">android大屏幕解决图片被放大问题</a></li>
+<li><a href="https://www.dazhuanlan.com/2019/10/11/5d9fe8671bbe3/?__cf_chl_jschl_tk__=b304ceb50474a2c61d98c80e7ede1c53339b180e-1584676276-0-ATStCqpj-_27x5EanqgF_8Sknbg6juGvVzdST4f-SvAqbesVxA5QRCuZGhguEaFBubY7FX84_RotvzWmuZYr65mUUTEEZupk639waAVVDPrHWRwR3RY1QpM5OJXX84qO4HiRhT9B6QrQ1Pb8XV2U98S26Wi-byM7FGFDCn339-twZEphFyiUI8uVNJv2psdb3KUmohKMPYBJ6m_0gMi-owgskAabaif1cPWXjsEnZmLAnGn9j7Gwyh9v5q4MIvDOB9gTDoBj8uU7e8YEkoaOWnwGEI9Cd6X5A7WX97TZhfE0aMyJcP9yqmoR9a_sofQCJw">Android硬件位图填坑之获取硬件画布 · Hiten’s Blog.</a></li>
+<li><a href="https://blog.csdn.net/aigestudio/article/details/41799811">自定义控件其实很简单1/3</a></li>
+</ul>
+<!-- https://blog.csdn.net/iblade/article/details/80240961 -->
+    </article>
+    
+    
+<div class="whoami__gutter"></div>
+<hr class="hr-slash whoami-hr"/>
+<section class="whoami">  
+  <div class="whoami__image-wrapper">
+    
+    
+      
+        <img data-src="/images/whoami/avatar.jpg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24pt' height='24pt' viewBox='0 0 24 24' version='1.1'%3E%3Cg id='surface1035795'%3E%3Cpath style=' stroke:none;fill-rule:nonzero;fill:rgb(80%25,80%25,80%25);fill-opacity:1;' d='M 4 4 C 2.90625 4 2 4.90625 2 6 L 2 18 C 2 19.09375 2.90625 20 4 20 L 20 20 C 21.09375 20 22 19.09375 22 18 L 22 6 C 22 4.90625 21.09375 4 20 4 Z M 4 6 L 20 6 L 20 18 L 4 18 Z M 4 6 '/%3E%3C/g%3E%3C/svg%3E%0A" alt="dshcao" class="lazyload whoami__image"/>
+             
+    
+  </div>
+  <div class="whoami__contents">
+    <div class="whoami__written-by">
+      作者
+    </div>
+    <div class="whoami__title">
+      dshcao
+    </div>
+    <div class="whoami__desc">
+      Android Developer      
+    </div>
+    <div class="whoami__social">
+      
+      
+      <a href="mailto:513996717@qq.com" title="email" aria-label="email">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg>
+      </a>
+      
+      
+      
+      
+      
+      <a href="https://github.com/dshcao" title="github" aria-label="github">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 24 24" version="1.1">
+<g id="surface3680">
+<path fill="currentColor" d="M 10.898438 2.101562 C 6.300781 2.601562 2.601562 6.300781 2.101562 10.800781 C 1.601562 15.5 4.300781 19.699219 8.398438 21.300781 C 8.699219 21.398438 9 21.199219 9 20.800781 L 9 19.199219 C 9 19.199219 8.601562 19.300781 8.101562 19.300781 C 6.699219 19.300781 6.101562 18.101562 6 17.398438 C 5.898438 17 5.699219 16.699219 5.398438 16.398438 C 5.101562 16.300781 5 16.300781 5 16.199219 C 5 16 5.300781 16 5.398438 16 C 6 16 6.5 16.699219 6.699219 17 C 7.199219 17.800781 7.800781 18 8.101562 18 C 8.5 18 8.800781 17.898438 9 17.800781 C 9.101562 17.101562 9.398438 16.398438 10 16 C 7.699219 15.5 6 14.199219 6 12 C 6 10.898438 6.5 9.800781 7.199219 9 C 7.101562 8.800781 7 8.300781 7 7.601562 C 7 7.199219 7 6.601562 7.300781 6 C 7.300781 6 8.699219 6 10.101562 7.300781 C 10.601562 7.101562 11.300781 7 12 7 C 12.699219 7 13.398438 7.101562 14 7.300781 C 15.300781 6 16.800781 6 16.800781 6 C 17 6.601562 17 7.199219 17 7.601562 C 17 8.398438 16.898438 8.800781 16.800781 9 C 17.5 9.800781 18 10.800781 18 12 C 18 14.199219 16.300781 15.5 14 16 C 14.601562 16.5 15 17.398438 15 18.300781 L 15 20.898438 C 15 21.199219 15.300781 21.5 15.699219 21.398438 C 19.398438 19.898438 22 16.300781 22 12.101562 C 22 6.101562 16.898438 1.398438 10.898438 2.101562 Z M 10.898438 2.101562 "/>
+</g>
+</svg>
+
+      </a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <a href="https://stackoverflow.com/users/12583274/dshcao" title="stack-overflow" aria-label="stack-overflow">
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="25" height="25"><path fill="currentColor" d="M 9.914063 0.71875 L 9.085938 1.28125 L 11.894531 5.367188 L 12.71875 4.800781 Z M 7.695313 2.453125 L 7.039063 3.207031 L 10.917969 6.582031 L 11.574219 5.828125 Z M 6.226563 4.804688 L 5.773438 5.695313 L 10.210938 7.953125 L 10.664063 7.0625 Z M 5.363281 7.140625 L 5.136719 8.109375 L 9.976563 9.242188 L 10.203125 8.265625 Z M 3 9 L 3 14 L 12 14 L 12 9 L 11 9 L 11 13 L 4 13 L 4 9 Z M 5.03125 9.25 L 4.96875 10.25 L 9.972656 10.566406 L 10.035156 9.570313 Z M 5 11 L 5 12 L 10 12 L 10 11 Z"/></svg>
+      </a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+  </div>
+</section>
+<hr class="hr-slash whoami-hr" />
+
+    <section class="related">
+    
+    
+    <h1 class="related__title">
+      <hr class="hr-dots"/>
+      <div>
+        相关内容
+      </div>
+      <hr class="hr-dots"/>
+    </h1>
+    <ul class="related-ul">
+        
+        <li>
+          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-pulllayout/" class="related__link">自定义View-PullLayout</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/" class="related__link">Android-多进程意义及Binder</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/jvmdalvikart/" class="related__link">JVM/Dalvik/ART</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/" class="related__link">Android-事件分发机制</a>
+        </li>
+        
+    </ul>
+    
+  </section>
+    <div class="grow"></div>
+<nav class="pagination-single">
+  
+    <a href="https://dshcao.github.io/zh/posts/android-ffmpeg%E4%BD%BF%E7%94%A8/" class="pagination-single__left">
+      <div class="pagination-single__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
+      </div>
+      <div class="pagination-single__left-title">Android-FFmpeg使用</div>      
+    </a>
+  
+  <div class="grow"></div>
+  
+    <a href="https://dshcao.github.io/zh/posts/android-arouter%E5%8E%9F%E7%90%86%E7%AE%80%E6%9E%90/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">Android-ARouter原理简析</div>
+      <div class="pagination-single__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
+      </div>
+    </a>
+  
+</nav>
+    
+  
+    
+<div id="vcomments"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script>
+  new Valine({
+      el: '#vcomments' ,
+      appId: '26IJaKoF5dnnKNBiQRI3Ovw8-MdYXbMMI',
+      appKey: 'coAossMXBdLt88uP5QzSexla',
+      notify:  false ,
+      verify:  false ,
+      avatar:'mm',
+      placeholder: '说点什么吧...',
+      visitor:  false 
+  });
+</script>
+  
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+  
+  <div class="pswp__bg"></div>
+
+  
+  <div class="pswp__scroll-wrap">
+
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+
+    
+    <div class="pswp__ui pswp__ui--hidden">
+
+      <div class="pswp__top-bar">
+
+        
+
+        <div class="pswp__counter"></div>
+
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+        <button class="pswp__button pswp__button--share" title="Share"></button>
+
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+        
+        
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div>
+      </div>
+
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+    <div class="hide">
+    
+
+<div class="search">
+  <span class="icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+  </span>
+  <input id="search" aria-label="Site Search" class="input" type="text" placeholder="搜索" autocomplete="off">
+  <div id="search-results" class="dropdown">
+    <div id="search-menu" class="dropdown-menu" role="menu">
+    </div>
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</main>
+
+
+<aside class="main-side">
+  
+
+
+<section class="sidebar">
+  <div class="toc__flexbox" data-position="fixed">
+    <h6 class="toc__title">目录</h6>
+    
+      <label class="switch">
+        <input id="toggle-toc" aria-label="Toggle TOC" type="checkbox" checked>
+        <span class="slider round"></span>
+      </label>
+    
+  </div>
+  <div class="toc">
+    <ul id="toc"></ul>
+  </div>
+</section>
+
+
+
+</aside>
+
+<script>
+  enquire.register("screen and (max-width: 769px)", {
+    match: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "hide";
+      }
+    },
+    unmatch: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main-main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "main-side";
+      }
+      document.getElementsByClassName('navbar__burger')[0].classList.remove('is-active');
+      document.getElementsByClassName('navbar__menu')[0].classList.remove('is-active');
+      document.getElementsByClassName('mobile-search')[0].classList.add('hide');
+    },
+    setup: function () { },
+    deferSetup: true,
+    destroy: function () { },
+  });
+</script>
+
+
+
+
+<script defer src="/js/jquery.min.0925e8ad7bd971391a8b1e98be8e87a6971919eb5b60c196485941c3c1df089a.js"></script>
+
+<script defer src="/js/enquire.min.72cb9edeb1ca1b92f5bf9df8d31a1ecd1e423d0b5e0f48a2a208b020dd5053fa.js"></script>
+
+<script defer src="/js/clipboard.min.1626706afc88d95ebe1173b553ec732c6dc82a576989315fdf5e7779af738a44.js"></script>
+
+<script defer src="/js/lazysizes.min.31dd6a2d3a1ec0f78a8df007535cf23f03aeb5c70f026e6d6a19dac3b3acc340.js"></script>
+
+<script defer src="/js/zzo.min.31d5b7d503557f488cc17574468cbc03fca4e45f61c15080d29bff7e38043ec8.js"></script>
+
+
+  
+  <script defer src="/lib/photoswipe/photoswipe.min.78fc260a16dbbd76ec3b4da56ccdc7a076d21d31c501e0a17a4175c4a25d95ea.js"></script>
+  
+  <script defer src="/lib/photoswipe/photoswipe-ui-default.min.50a9333a7ff0d660714662cb1ab49ec81e1ed716eba78c729600166f7338da95.js"></script>
+  
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css">
+  
+  <link rel="stylesheet" href="/lib/photoswipe/custom-skin.min.css">
+
+
+
+  
+  <script defer src="/js/jquery.toc.min.376e1b5d343786c1978dbad9ea7a0e23088947732993a91dcbad995883c96ceb.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  window.onload = function() {
+    
+    (function () {
+      document.querySelectorAll('.chroma > table')
+        .forEach((element) => {
+          const sub = element.querySelector('code[data-lang]');
+          if (sub) {
+            $(element).closest('div.chroma').attr('data-lang', mapLang(sub.getAttribute('data-lang')));
+          }
+        }
+      );
+    })();
+
+    (function () {
+      document.querySelectorAll('.single__contents > pre > code')
+        .forEach((element) => {
+          if (!$(element).attr('data-lang')) {
+            $(element).parent().wrap('<div data-lang="Code" class="language-code"></div>');
+          }
+        });
+    })();
+
+    function mapLang(name) {
+      return {
+        coffeescript: 'CoffeeScript',
+        cpp: 'C++',
+        cs: 'C#',
+        css: 'CSS',
+        html: 'HTML',
+        http: 'HTTP',
+        js: 'JavaScript',
+        json: 'JSON',
+        objectivec: 'Objective-C',
+        php: 'PHP',
+        sql: 'SQL',
+        toml: 'TOML',
+        ts: 'TypeScript',
+        typescript: 'TypeScript',
+        xml: 'XML',
+        yaml: 'YAML',
+      }[name] || name.toUpperCase();
+    }
+
+    
+    runSearch();
+
+    
+    
+    
+    var enableBusuanzi = JSON.parse("false");
+    var busuanziPagePV = JSON.parse("true");
+    
+    if (enableBusuanzi && busuanziPagePV) {      
+      $('#busuanzi_value_page_pv').digits();
+    }    
+
+    var navbar = $('.navbar');
+
+    
+    
+    var enableToc = JSON.parse("true");
+    
+    if (enableToc) {
+      $("#toc").toc({ content: ".single__contents", headings: "h1,h2,h3,h4" });
+      $('#toc > li').each(function () {
+        $(this).find('ul').css('display', 'none');
+      });
+      $('#toc a').each(function () {
+        $(this).click(function () {
+          navbar.removeClass('navbar--show');
+          navbar.removeClass('navbar--hide');
+          navbar.addClass('navbar--hide');
+
+          $(".single__contents :header").each(function () {
+            $('.toc a').removeClass('active');
+          });
+          $(this).addClass('active');
+
+          $('#toc > li').each(function () {
+            $(this).find('ul').css('display', 'none');
+          });
+          $(this).next().css('display', 'block');
+          $(this).parents('ul').css('display', 'block');
+        });
+      });
+
+      
+      $("#toggle-toc").change(function () {
+        if (this.checked) {
+          $('.toc').fadeIn(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main-main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'fixed');
+        } else {
+          $('.toc').fadeOut(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'absolute');
+        }
+      });
+    }    
+
+    
+    var text, clip = new ClipboardJS('.anchor');
+    var headers = $('.single__contents :header').not('h6').not('h5');
+    headers.append(function (index, html) {
+      var element = $(this);
+      var url = encodeURI(document.location.origin + document.location.pathname);
+      var link = url + "#" + element[0].id;
+      return " <span class='anchor hide' data-clipboard-text='" + link + "' style='position: relative;'>" +
+        "<span style='font-size: 1rem; position: absolute; right: -2rem; top: 50%; transform: translateY(-50%)'>🔗</span>" +
+        "</span>"
+        ;
+    });
+    headers.on('mouseenter', function () {
+      $(this).find('.anchor').attr('class', 'anchor');
+    });
+    headers.on('mouseleave', function () {
+      $(this).find('.anchor').attr('class', 'anchor hide');
+    });
+
+    $(".anchor").on('mouseleave', function (e) {
+      $(this).attr('aria-label', null).removeClass('tooltipped tooltipped-s tooltipped-w');
+    });
+
+    clip.on('success', function (e) {
+      e.clearSelection();
+      $(e.trigger).attr('aria-label', 'Link copied to clipboard!').addClass('tooltipped tooltipped-s');
+    });
+    
+    $('.language-code').each(function (i, node) {
+      $(node).append('<span class="copy-to-clipboard" title="Copy to clipboard"/>');
+    });
+
+    
+    var clipInit = false;
+    $('pre.chroma code, .language-code code').each(function () {
+      var code = $(this),
+        text = code.text();
+
+      if (text.length > 30) {
+        if (!clipInit) {
+          var text, clip = new ClipboardJS('.copy-to-clipboard', {
+            text: function (trigger) {
+              console.log();
+              if ($(trigger).prev().find('code').length > 1) {                
+                text = $(trigger).prev().find(`code[class^="language-"]`).text();
+              } else {
+                text = $(trigger).prev().find('code').text();
+              }
+               
+              return text.replace(/^\$\s/gm, '');
+            }
+          });
+
+          var inPre;
+          clip.on('success', function (e) {
+            e.clearSelection();
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+          });
+
+          clip.on('error', function (e) {
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', fallbackMessage(e.action)).addClass('tooltipped tooltipped-w');
+            $(document).one('copy', function () {
+              $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+            });
+          });
+
+          clipInit = true;
+        }
+
+        var notAllowedClass = ['language-mermaid', 'language-viz', 'language-wave', 'language-chart', 'language-msc', 'language-flowchart'];
+        var isNotAllowedIncluded = false;
+        var curClassName = code.attr('class');
+
+        for (let str of notAllowedClass) {
+          if (curClassName && curClassName.startsWith(str)) {
+            isNotAllowedIncluded = true;
+            break;
+          } 
+        }
+        
+        if (!isNotAllowedIncluded) {
+          if (curClassName) {
+            code.closest('div.chroma').append('<span class="copy-to-clipboard" title="Copy to clipboard" />');
+          }         
+        }        
+      }
+    });
+
+    
+    
+    var enablePhotoSwipe = JSON.parse("true");
+    
+    if (enablePhotoSwipe) {
+      var pswpElement = $('.pswp')[0];
+      var imgElements = $('.single__contents').find('img');
+      var items = [];
+
+      imgElements.each(function (i, v) {
+        $(this).click(function (e) {
+          initGallery(i);
+        });
+        $(this).css('cursor', 'pointer');
+        items.push({
+          src: v['src'],
+          w: 0,
+          h: 0,
+          title: filename(v['src']),
+        });
+      });
+
+      function filename(str) {
+        var s = str.replace(/\\/g, '/');
+        s = s.substring(s.lastIndexOf('/') + 1);
+        return str ? s.replace(/[?#].+$/, '') : s.split('.')[0];
+      }
+
+      function initGallery(index) {
+        var options = { index: index };
+        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.listen('imageLoadComplete', function (index, item) {
+          if (item.h < 1 || item.w < 1) {
+            let img = new Image();
+            img.onload = () => {
+              item.w = img.width;
+              item.h = img.height;
+              gallery.invalidateCurrItems();
+              gallery.updateSize(true);
+            }
+            img.src = item.src;
+          }
+        });
+        gallery.init();
+      }
+    }
+
+    
+    
+    var lib = JSON.parse("null");
+
+    if (lib && lib.includes('mermaid')) {
+      
+      var themeVariant = localStorage.getItem('theme') || JSON.parse("\"dark\"");
+
+      if (themeVariant === "dark" || themeVariant === "hacker") {
+        mermaid.initialize({ theme: 'dark' });
+      } else {
+        mermaid.initialize({ theme: 'default' });
+      }
+      
+      let mermaids = [];
+      [].push.apply(mermaids, document.getElementsByClassName('language-mermaid'));
+      for (i = 0; i < mermaids.length; i++) {
+        $(mermaids[i]).unwrap('pre');
+        $(mermaids[i]).replaceWith(function () {
+          return $("<div />").append($(this).contents()).addClass('mermaid').css('padding', '34px 4px 6px');
+        });
+      }
+    }
+
+    
+    if (lib && lib.includes('katex')) {
+      var mathElements = document.getElementsByClassName('math');
+      var options = [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ];
+
+      renderMathInElement(document.querySelector('.single__contents'), options);
+    }
+
+    
+    if (lib && lib.includes('flowchartjs')) {
+      
+      var options = JSON.parse("{\"arrow-end\":\"block\",\"element-color\":\"black\",\"fill\":\"white\",\"flowstate\":{\"approved\":{\"fill\":\"#58C4A3\",\"font-size\":12,\"no-text\":\"n/a\",\"yes-text\":\"APPROVED\"},\"current\":{\"fill\":\"yellow\",\"font-color\":\"red\",\"font-weight\":\"bold\"},\"future\":{\"fill\":\"#FFFF99\"},\"invalid\":{\"fill\":\"#444444\"},\"past\":{\"fill\":\"#CCCCCC\",\"font-size\":12},\"rejected\":{\"fill\":\"#C45879\",\"font-size\":12,\"no-text\":\"REJECTED\",\"yes-text\":\"n/a\"},\"request\":{\"fill\":\"blue\"}},\"font-color\":\"black\",\"font-size\":14,\"line-color\":\"black\",\"line-length\":50,\"line-width\":3,\"no-text\":\"no\",\"scale\":1,\"symbols\":{\"end\":{\"class\":\"end-element\"},\"start\":{\"element-color\":\"green\",\"fill\":\"yellow\",\"font-color\":\"red\"}},\"text-margin\":10,\"x\":0,\"y\":0,\"yes-text\":\"yes\"}");
+
+      var flowchartPrefix = "language-flowchart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + flowchartPrefix + "]"), function(x){
+          x.style.display = 'none'
+          x.parentNode.style.backgroundColor = "transparent"
+          jsonContent = x.innerText;
+
+          node0 = document.createElement('div');
+          node0.id = 'flowchart' + index;
+          x.parentNode.insertBefore(node0, x);
+
+          var diagram = flowchart.parse(jsonContent);
+          diagram.drawSVG("flowchart"+index, options);
+
+          index +=1;
+      });      
+    }
+
+    
+    if (lib && lib.includes('mathjax')) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: false,
+          packages: { '[+]': ['noerrors'] }
+        },
+        loader: {
+          load: ['[tex]/noerrors']
+        },
+      };
+    }
+
+    
+    if (lib && lib.includes('msc')) {
+      
+      var options = JSON.parse("{\"theme\":\"hand\"}");    
+
+      var index = 0;
+      var chartPrefix = "language-msc";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'msc' + index;
+        x.parentNode.insertBefore(node0, x);
+        var diagram = Diagram.parse(jsonContent);
+        diagram.drawSVG("msc" + index, options);
+        index += 1;
+      });
+    }
+
+    
+    if (lib && lib.includes('chart')) {
+      var borderColor = "#666";
+      var bgColor = "#ddd";
+      var borderWidth = 2;
+
+      Chart.defaults.global.elements.rectangle.borderWidth = borderWidth;
+      Chart.defaults.global.elements.rectangle.borderColor = borderColor;
+      Chart.defaults.global.elements.rectangle.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.line.borderWidth = borderWidth;
+      Chart.defaults.global.elements.line.borderColor = borderColor;
+      Chart.defaults.global.elements.line.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.point.borderWidth = borderWidth;
+      Chart.defaults.global.elements.point.borderColor = borderColor;
+      Chart.defaults.global.elements.point.backgroundColor = bgColor;
+
+      var chartPrefix = "language-chart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('canvas');
+        node0.height = 200;
+        node0.style.height = 200;
+        node0.id = 'myChart' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        var ctx = document.getElementById('myChart' + index).getContext('2d');
+        var myChart = new Chart(ctx, source);
+        index += 1;
+      });            
+    }
+
+    
+    if (lib && lib.includes('wavedrom')) {
+      var wavePrefix = "language-wave";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + wavePrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'WaveDrom_Display_' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        WaveDrom.RenderWaveForm(index, source, "WaveDrom_Display_");
+        index += 1;
+      });
+    }
+
+    
+    if (lib && lib.includes('viz')) {
+      var vizPrefix = "language-viz-";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + vizPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        var engine;
+        x.getAttribute("class").split(" ").forEach(function (cls) {
+          if (cls.startsWith(vizPrefix)) {
+            engine = cls.substr(vizPrefix.length);
+          }
+        });
+        var viz = new Viz();
+        viz.renderSVGElement(x.innerText, { engine: engine })
+          .then(function (element) {
+            element.style.width = "100%";
+            x.parentNode.insertBefore(element, x);
+          })
+      });
+    }
+  }
+</script>
+
+
+            
+            <footer class="footer">
+    
+<div class="dropdown">
+  <button class="dropdown-trigger" aria-label="Select Theme Button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M12.65 15.67c.14-.36.05-.77-.23-1.05l-2.09-2.06.03-.03c1.74-1.94 2.98-4.17 3.71-6.53h1.94c.54 0 .99-.45.99-.99v-.02c0-.54-.45-.99-.99-.99H10V3c0-.55-.45-1-1-1s-1 .45-1 1v1H1.99c-.54 0-.99.45-.99.99 0 .55.45.99.99.99h10.18C11.5 7.92 10.44 9.75 9 11.35c-.81-.89-1.49-1.86-2.06-2.88-.16-.29-.45-.47-.78-.47-.69 0-1.13.75-.79 1.35.63 1.13 1.4 2.21 2.3 3.21L3.3 16.87c-.4.39-.4 1.03 0 1.42.39.39 1.02.39 1.42 0L9 14l2.02 2.02c.51.51 1.38.32 1.63-.35zM17.5 10c-.6 0-1.14.37-1.35.94l-3.67 9.8c-.24.61.22 1.26.87 1.26.39 0 .74-.24.88-.61l.89-2.39h4.75l.9 2.39c.14.36.49.61.88.61.65 0 1.11-.65.88-1.26l-3.67-9.8c-.22-.57-.76-.94-1.36-.94zm-1.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+  </button>
+  <div class="dropdown-content">
+    
+    
+    
+      
+      
+        
+      
+        
+        
+          
+            
+              <a href="https://dshcao.github.io/zh/posts/android-drawondraw/" data-lang="zh" class="dropdown-item is-active">中文</a>
+            
+          
+        
+      
+    
+  </div>
+</div>
+
+    
+<div class="footer__social">
+  <div class="social">
+    
+      
+      <a href="mailto:513996717@qq.com" title="email" aria-label="email">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg>
+      </a>
+            
+    
+            
+    
+      
+      <a href="https://github.com/dshcao" title="github" aria-label="github">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 24 24" version="1.1">
+<g id="surface3680">
+<path fill="currentColor" d="M 10.898438 2.101562 C 6.300781 2.601562 2.601562 6.300781 2.101562 10.800781 C 1.601562 15.5 4.300781 19.699219 8.398438 21.300781 C 8.699219 21.398438 9 21.199219 9 20.800781 L 9 19.199219 C 9 19.199219 8.601562 19.300781 8.101562 19.300781 C 6.699219 19.300781 6.101562 18.101562 6 17.398438 C 5.898438 17 5.699219 16.699219 5.398438 16.398438 C 5.101562 16.300781 5 16.300781 5 16.199219 C 5 16 5.300781 16 5.398438 16 C 6 16 6.5 16.699219 6.699219 17 C 7.199219 17.800781 7.800781 18 8.101562 18 C 8.5 18 8.800781 17.898438 9 17.800781 C 9.101562 17.101562 9.398438 16.398438 10 16 C 7.699219 15.5 6 14.199219 6 12 C 6 10.898438 6.5 9.800781 7.199219 9 C 7.101562 8.800781 7 8.300781 7 7.601562 C 7 7.199219 7 6.601562 7.300781 6 C 7.300781 6 8.699219 6 10.101562 7.300781 C 10.601562 7.101562 11.300781 7 12 7 C 12.699219 7 13.398438 7.101562 14 7.300781 C 15.300781 6 16.800781 6 16.800781 6 C 17 6.601562 17 7.199219 17 7.601562 C 17 8.398438 16.898438 8.800781 16.800781 9 C 17.5 9.800781 18 10.800781 18 12 C 18 14.199219 16.300781 15.5 14 16 C 14.601562 16.5 15 17.398438 15 18.300781 L 15 20.898438 C 15 21.199219 15.300781 21.5 15.699219 21.398438 C 19.398438 19.898438 22 16.300781 22 12.101562 C 22 6.101562 16.898438 1.398438 10.898438 2.101562 Z M 10.898438 2.101562 "/>
+</g>
+</svg>
+
+      </a>
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+      
+      <a href="https://stackoverflow.com/users/12583274/dshcao" title="stack-overflow" aria-label="stack-overflow">
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32"><path fill="currentColor" d="M 9.914063 0.71875 L 9.085938 1.28125 L 11.894531 5.367188 L 12.71875 4.800781 Z M 7.695313 2.453125 L 7.039063 3.207031 L 10.917969 6.582031 L 11.574219 5.828125 Z M 6.226563 4.804688 L 5.773438 5.695313 L 10.210938 7.953125 L 10.664063 7.0625 Z M 5.363281 7.140625 L 5.136719 8.109375 L 9.976563 9.242188 L 10.203125 8.265625 Z M 3 9 L 3 14 L 12 14 L 12 9 L 11 9 L 11 13 L 4 13 L 4 9 Z M 5.03125 9.25 L 4.96875 10.25 L 9.972656 10.566406 L 10.035156 9.570313 Z M 5 11 L 5 12 L 10 12 L 10 11 Z"/></svg>
+      </a>
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+    
+  <a href="https://dshcao.github.io/zh/posts/android-drawondraw//index.xml" type="application/rss+xml" title="rss" aria-label="RSS Feed Link">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle fill="currentColor" cx="6.18" cy="17.82" r="2.18"/><path fill="currentColor" d="M5.59 10.23c-.84-.14-1.59.55-1.59 1.4 0 .71.53 1.28 1.23 1.4 2.92.51 5.22 2.82 5.74 5.74.12.7.69 1.23 1.4 1.23.85 0 1.54-.75 1.41-1.59-.68-4.2-3.99-7.51-8.19-8.18zm-.03-5.71C4.73 4.43 4 5.1 4 5.93c0 .73.55 1.33 1.27 1.4 6.01.6 10.79 5.38 11.39 11.39.07.73.67 1.28 1.4 1.28.84 0 1.5-.73 1.42-1.56-.73-7.34-6.57-13.19-13.92-13.92z"/></svg>
+  </a>
+
+  </div>
+</div>
+
+    
+<div id="gtt">
+  <div class="gtt">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M8.12 14.71L12 10.83l3.88 3.88c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L12.7 8.71c-.39-.39-1.02-.39-1.41 0L6.7 13.3c-.39.39-.39 1.02 0 1.41.39.38 1.03.39 1.42 0z"/></svg>
+  </div>
+</div>
+
+    <hr />
+
+    
+    <div class="footer__poweredby">
+    
+
+                
+            <p class="caption">
+                ©2020, All Rights Reserved
+            </p>
+        
+        <p class="caption">Powered by <a href="https://gohugo.io/" rel="noreferrer">Hugo</a> and the <a href="https://github.com/zzossig/hugo-theme-zzo" rel="noreferrer">Zzo theme</a></p>
+    </div>
+        
+</footer>
+        </div>    
+    </div>
+</body>
+
+</html>

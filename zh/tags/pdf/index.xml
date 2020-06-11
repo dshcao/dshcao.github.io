@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>pdf on dshcao blog</title>
+    <link>https://dshcao.github.io/zh/tags/pdf/</link>
+    <description>Recent content in pdf on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <managingEditor>513996717@qq.com (dshcao)</managingEditor>
+    <webMaster>513996717@qq.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Fri, 11 Oct 2019 10:33:41 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/zh/tags/pdf/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>Android-添加pdf功能</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E6%B7%BB%E5%8A%A0pdf%E5%8A%9F%E8%83%BD/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E6%B7%BB%E5%8A%A0pdf%E5%8A%9F%E8%83%BD/</guid>
+        <description>Android SDK自带PdfDocument，详见参考PdfDocument 功能相对简单 iText 适用java iTextG iText的Android版本，iText几乎</description>
+      </item>
+      
+    
+  </channel>
+</rss>

@@ -9,12 +9,21 @@
     <managingEditor>513996717@qq.com (dshcao)</managingEditor>
     <webMaster>513996717@qq.com (dshcao)</webMaster>
     <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
-    <lastBuildDate>Fri, 27 Dec 2019 10:33:41 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 20 May 2020 10:33:41 +0900</lastBuildDate>
     
         <atom:link href="https://dshcao.github.io/zh/categories/android/index.xml" rel="self" type="application/rss+xml" />
     
     
     
+      
+      <item>
+        <title>Android-OkHttp分析</title>
+        <link>https://dshcao.github.io/zh/posts/android-okhttp%E5%88%86%E6%9E%90/</link>
+        <pubDate>Wed, 20 May 2020 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-okhttp%E5%88%86%E6%9E%90/</guid>
+        <description>前言 源码分析部分基于 OkHttp4.7.2。 Spdy 一种开放的网络传输协议，由Google开发的基于传输控制协议（TCP）的应用层协议。HTTP/</description>
+      </item>
       
       <item>
         <title>自定义view-ImageCropView</title>
@@ -134,6 +143,15 @@
       </item>
       
       <item>
+        <title>Android App优化-Apk瘦身</title>
+        <link>https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-apk%E7%98%A6%E8%BA%AB/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-apk%E7%98%A6%E8%BA%AB/</guid>
+        <description>APK体积优化 svg/vector替换套图小图标 使用SVG替代简单的小图标及图标套图 SVG：可缩放矢量图，不会因为缩放导致图片质量下降。常用</description>
+      </item>
+      
+      <item>
         <title>Android-App启动流程</title>
         <link>https://dshcao.github.io/zh/posts/android-app%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -143,12 +161,30 @@
       </item>
       
       <item>
+        <title>Android-App适配</title>
+        <link>https://dshcao.github.io/zh/posts/android-app%E9%80%82%E9%85%8D/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-app%E9%80%82%E9%85%8D/</guid>
+        <description>屏幕适配 首先我们需要明白几个概念： 分辨率 屏幕像素点总数(如：1080x1920) 屏幕尺寸 手机屏幕对角线英寸(inch)单位的位物理尺寸(如：</description>
+      </item>
+      
+      <item>
         <title>Android-APT</title>
         <link>https://dshcao.github.io/zh/posts/android-apt/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-apt/</guid>
         <description>APT(Annotation Processor Tool) 注解处理器(APT)它是Java提供的帮我们处理注解的。要实现我们自己的处理注解的逻辑就需要继承Processor接口。 1 2 3 4 5 6 7</description>
+      </item>
+      
+      <item>
+        <title>Android-draw&amp;onDraw</title>
+        <link>https://dshcao.github.io/zh/posts/android-drawondraw/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-drawondraw/</guid>
+        <description>前言 Android应用将经过测量、布局、绘制的surface缓存数据通过SurfaceFlinger渲染到显示屏幕上，通过Android的刷</description>
       </item>
       
       <item>
@@ -170,6 +206,42 @@
       </item>
       
       <item>
+        <title>Android-FFmpeg编译及数据结构分析</title>
+        <link>https://dshcao.github.io/zh/posts/android-ffmpeg4.x%E7%BC%96%E8%AF%91/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg4.x%E7%BC%96%E8%AF%91/</guid>
+        <description>FFmpeg简介 以下翻译自官网About FFmpeg libavutil FFmpeg公共的工具函数以及数据结构库，其中包括随机数生成器、AVFrame等。 libavcodec 用于音视频编</description>
+      </item>
+      
+      <item>
+        <title>Android-ffplay解析</title>
+        <link>https://dshcao.github.io/zh/posts/android-ffplay%E8%A7%A3%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ffplay%E8%A7%A3%E6%9E%90/</guid>
+        <description>首先移植到Android，在SDL2源码的Android项目(android-project)中添加编译好的ffmpeg的so。 然后复制co</description>
+      </item>
+      
+      <item>
+        <title>Android-Glide分析</title>
+        <link>https://dshcao.github.io/zh/posts/android-glide%E5%88%86%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-glide%E5%88%86%E6%9E%90/</guid>
+        <description>前言 本节源码分析基于 Glide 4.11.0 Glide优势 Glide的常见用法 源码解析 Glide缓存又两类四种： 内存缓存 活动缓存(ActiveResource)</description>
+      </item>
+      
+      <item>
+        <title>Android-Gradle应用</title>
+        <link>https://dshcao.github.io/zh/posts/android-gradle%E5%BA%94%E7%94%A8/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-gradle%E5%BA%94%E7%94%A8/</guid>
+        <description>Gradle插件开发 开发Gradle插件的三种方式 直接写在build.gradle中，适合简单逻辑，只对该build.gradle可见 在项目</description>
+      </item>
+      
+      <item>
         <title>Android-JNI&amp;NDK</title>
         <link>https://dshcao.github.io/zh/posts/android-jnindk/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -188,6 +260,15 @@
       </item>
       
       <item>
+        <title>Android-Retrofit分析</title>
+        <link>https://dshcao.github.io/zh/posts/android-retrofit%E5%88%86%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-retrofit%E5%88%86%E6%9E%90/</guid>
+        <description>前言 官方介绍：A type-safe HTTP client for Android and Java. Retrofit是通过动态代理实现对OkHttp封装实现面向接口编程的经典网络库。并通过附加库(转换器和适配器</description>
+      </item>
+      
+      <item>
         <title>Android-VR&amp;AR</title>
         <link>https://dshcao.github.io/zh/posts/android-vrarmr/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -203,6 +284,24 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</guid>
         <description>View mAttachInfo初始化 查看View源码可以知道mAttachInfo是在dispatchAttachedToWindow中赋值的 View#dispatchAttachedToWindow 1</description>
+      </item>
+      
+      <item>
+        <title>Android-多进程意义及Binder</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/</guid>
+        <description>进程 什么是进程 Android进程分类 Android中有五大进程： 前台进程 当前正与用户交互的进程 可见进程 在屏幕中显示，但处于不可交互状态，如s</description>
+      </item>
+      
+      <item>
+        <title>Android-添加pdf功能</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E6%B7%BB%E5%8A%A0pdf%E5%8A%9F%E8%83%BD/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E6%B7%BB%E5%8A%A0pdf%E5%8A%9F%E8%83%BD/</guid>
+        <description>Android SDK自带PdfDocument，详见参考PdfDocument 功能相对简单 iText 适用java iTextG iText的Android版本，iText几乎</description>
       </item>
       
       <item>
@@ -257,6 +356,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-%E6%8F%92%E4%BB%B6%E5%8C%96/</guid>
         <description>开源插件化框架 VirtualAPK、DroidPlugin、RePlugin Hook 实现Hook的技术：1.反射 2.动态代理 查找Hook点的原则 尽</description>
+      </item>
+      
+      <item>
+        <title>Android浏览器-编译Chromium</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E7%BC%96%E8%AF%91chromium/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E7%BC%96%E8%AF%91chromium/</guid>
+        <description>安装depot_tools git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git 报错： fatal: unable to access &#39;https://chromium.googlesource.com/chromium/tools/depot_tools.git/&#39;: Failed to connect to chromium.googlesource.com port 443: Operation timed out 这是由于terminal没有走代理，需要配置代理http监听端口号por</description>
       </item>
       
       <item>
@@ -338,6 +446,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</guid>
         <description>Java内存模型 Java内存模型主要目标：定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的</description>
+      </item>
+      
+      <item>
+        <title>模版</title>
+        <link>https://dshcao.github.io/zh/posts/java-jvm/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-jvm/</guid>
+        <description>CMS 新生代：复制 JVM 内存分区 JVM在执行Java程序的过程中会把它管理的内存分为：方法区（运行时常量池）、堆、程序计数器、虚拟机栈、本地方法栈、</description>
       </item>
       
       <item>

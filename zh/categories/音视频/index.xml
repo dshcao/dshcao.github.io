@@ -35,6 +35,15 @@
       </item>
       
       <item>
+        <title>Android-FFmpeg编译及数据结构分析</title>
+        <link>https://dshcao.github.io/zh/posts/android-ffmpeg4.x%E7%BC%96%E8%AF%91/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-ffmpeg4.x%E7%BC%96%E8%AF%91/</guid>
+        <description>FFmpeg简介 以下翻译自官网About FFmpeg libavutil FFmpeg公共的工具函数以及数据结构库，其中包括随机数生成器、AVFrame等。 libavcodec 用于音视频编</description>
+      </item>
+      
+      <item>
         <title>Android-音视频基础知识(一)</title>
         <link>https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>

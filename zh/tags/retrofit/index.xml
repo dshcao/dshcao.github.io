@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>retrofit on dshcao blog</title>
+    <link>https://dshcao.github.io/zh/tags/retrofit/</link>
+    <description>Recent content in retrofit on dshcao blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <managingEditor>513996717@qq.com (dshcao)</managingEditor>
+    <webMaster>513996717@qq.com (dshcao)</webMaster>
+    <copyright>&amp;copy;{year}, All Rights Reserved</copyright>
+    <lastBuildDate>Wed, 20 May 2020 10:33:41 +0900</lastBuildDate>
+    
+        <atom:link href="https://dshcao.github.io/zh/tags/retrofit/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+      
+      <item>
+        <title>Android-OkHttp分析</title>
+        <link>https://dshcao.github.io/zh/posts/android-okhttp%E5%88%86%E6%9E%90/</link>
+        <pubDate>Wed, 20 May 2020 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-okhttp%E5%88%86%E6%9E%90/</guid>
+        <description>前言 源码分析部分基于 OkHttp4.7.2。 Spdy 一种开放的网络传输协议，由Google开发的基于传输控制协议（TCP）的应用层协议。HTTP/</description>
+      </item>
+      
+      <item>
+        <title>Android-Retrofit分析</title>
+        <link>https://dshcao.github.io/zh/posts/android-retrofit%E5%88%86%E6%9E%90/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-retrofit%E5%88%86%E6%9E%90/</guid>
+        <description>前言 官方介绍：A type-safe HTTP client for Android and Java. Retrofit是通过动态代理实现对OkHttp封装实现面向接口编程的经典网络库。并通过附加库(转换器和适配器</description>
+      </item>
+      
+    
+  </channel>
+</rss>
