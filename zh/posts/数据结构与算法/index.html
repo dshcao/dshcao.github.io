@@ -405,7 +405,7 @@
     <h2 class="single__title">数据结构与算法</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 10月 11日 · ☕1 min read
+  🕓 2019年 10月 11日 · ☕6 min read
   
 </div>
       <div class="single__tags caption">
@@ -437,6 +437,9 @@
 <p>程序 = 数据结构 + 算法<br />
 似乎数据结构和算法是两码事，但实际有时候数据结构和算法联系非常亲密，可以说有了这种数据结构才有了这种算法或者说有了这种算法的诉求才设计出的这种数据结构。</p>
 <h2 id="heading-1">数据结构</h2>
+<p>数据项 一个数据元素可以有若干数据项组成<br />
+数据对象 有相同性质的数据元素的集合，是数据的子集<br />
+数据结构 相互之间存在一种或多种特定关系的数据元素的集合</p>
 <h3 id="java">Java数据结构</h3>
 <ul>
 <li>
@@ -462,6 +465,476 @@
 <p>红黑树</p>
 </li>
 </ul>
+<h2 id="heading-2">算法</h2>
+<h3 id="heading-3">查找算法</h3>
+<h4 id="heading-4">动态查找和静态查找</h4>
+<p><strong>动态查找</strong> 查找表中有插入和删除操作<br />
+<strong>静态查找</strong> 查找表中无插入和删除操作</p>
+<h4 id="heading-5">有序查找和无序查找</h4>
+<p><strong>有序查找</strong> 被查找数列必须为有序数列<br />
+<strong>无序查找</strong> 被查找数列有序无序均可</p>
+<p>顺序查找(线性查找)<br />
+二分查找<br />
+插值查找</p>
+<h3 id="heading-6">排序悬法</h3>
+<h4 id="heading-7">选择排序</h4>
+<p>时间复杂度O(n<sup>2</sup>)</p>
+<p>每次遍历剩余数据，依次查找最值<br />
+比如：遍历数组，按从小到大排序</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">selection_sort</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[</span><span class="p">]</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">minIndex</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">j</span><span class="o">+</span><span class="o">+</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">minIndex</span><span class="p">]</span><span class="p">)</span><span class="p">{</span>
+                <span class="n">minIndex</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">,</span> <span class="n">arr</span><span class="p">[</span><span class="n">minIndex</span><span class="p">]</span><span class="p">)</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>遍历过程中其实我们不但知道最小值，也知道最大值，所以这里其实可以做一些改进：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">selection_sort</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[</span><span class="p">]</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">minIndex</span> <span class="o">=</span> <span class="n">left</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">maxIndex</span> <span class="o">=</span> <span class="n">right</span><span class="p">;</span>
+        <span class="c1">// 在每一轮查找时, 要保证arr[minIndex] &lt;= arr[maxIndex]
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">minIndex</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">maxIndex</span><span class="p">]</span><span class="p">)</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">minIndex</span><span class="p">]</span><span class="p">,</span> <span class="n">arr</span><span class="p">[</span><span class="n">maxIndex</span><span class="p">]</span><span class="p">)</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">minIndex</span><span class="p">]</span><span class="p">)</span>
+                <span class="n">minIndex</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">maxIndex</span><span class="p">]</span><span class="p">)</span>
+                <span class="n">maxIndex</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+
+        <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">left</span><span class="p">]</span><span class="p">,</span> <span class="n">arr</span><span class="p">[</span><span class="n">minIndex</span><span class="p">]</span><span class="p">)</span><span class="p">;</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">right</span><span class="p">]</span><span class="p">,</span> <span class="n">arr</span><span class="p">[</span><span class="n">maxIndex</span><span class="p">]</span><span class="p">)</span><span class="p">;</span>
+
+        <span class="n">left</span><span class="o">+</span><span class="o">+</span><span class="p">;</span>
+        <span class="n">right</span><span class="o">-</span><span class="o">-</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="heading-8">插入排序</h4>
+<p>时间复杂度O(n<sup>2</sup>)~O(n)，当需要排序的集合是有序的集合时插入排序的时间复杂度将变成O(n)。<br />
+插入排序是将当前位置元素依次和前面元素比较，比如对一个数组按从小到大排序，加入数组是<code>[7,3,8,6,9,2]</code>，那么从第二个位置和前面的数据比较，3比7小，3和7交换位置，数组变成<code>[3,7,8,6,9,2]</code>再从第三个位置和前面两个数字，8比7大，不交换位置，再从第四个位置开始和前面三个数字依次比较，6比8小，6和8交换位置变成<code>[3,7,6,8,9,2]</code>，6再和7比较，6比7小，6和7交换位置变成<code>[3,6,7,8,9,2]</code>，6再和3比较，6比3大，此轮比较完成，再从第四个位置和前面数字比较，依次类推。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">insertion_sort</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[</span><span class="p">]</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// 写法1
+</span><span class="c1"></span>        <span class="k">for</span><span class="p">(</span> <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="p">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">;</span> <span class="n">j</span> <span class="o">-</span><span class="o">-</span> <span class="p">)</span><span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="p">)</span><span class="p">{</span>
+                <span class="n">swap</span><span class="p">(</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">,</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span><span class="p">;</span><span class="c1">//swap（相当于三次赋值）
+</span><span class="c1"></span>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 写法2 一次赋值替换swap
+</span><span class="c1"></span>        <span class="n">T</span> <span class="n">e</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">j</span><span class="p">;</span> <span class="c1">// j保存元素e应该插入的位置
+</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="p">;</span> <span class="n">j</span><span class="o">-</span><span class="o">-</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">e</span><span class="p">)</span><span class="p">{</span>
+                <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>插入排序排序相较于由于可以提前结束第二层循环效率有所提升，尤其是对于近乎有序的集合排序效果更明显。</p>
+<h4 id="heading-9">希尔排序</h4>
+<p>希尔排序是插入排序的延伸</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">shell_sort</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[</span><span class="p">]</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">h</span> <span class="o">&lt;</span> <span class="n">len</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="c1">// 计算 increment sequence: 1, 4, 13, 40, 121, 364, 1093...
+</span><span class="c1"></span>    <span class="k">while</span> <span class="p">(</span><span class="n">h</span> <span class="o">&gt;</span><span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="c1">// h-sort the array
+</span><span class="c1"></span>        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">h</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// 对 arr[i], arr[i-h], arr[i-2*h], arr[i-3*h]... 使用插入排序
+</span><span class="c1"></span>            <span class="n">T</span> <span class="n">e</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;</span><span class="o">=</span> <span class="n">h</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">e</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">h</span><span class="p">]</span><span class="p">;</span> <span class="n">j</span> <span class="o">-</span><span class="o">=</span> <span class="n">h</span><span class="p">)</span>
+                <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">h</span><span class="p">]</span><span class="p">;</span>
+            <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">h</span> <span class="o">/</span><span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="heading-10">冒泡排序</h4>
+<p>冒泡排序整体没有插入排序效率高</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">bubble_sort</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[</span><span class="p">]</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// // 写法一
+</span><span class="c1"></span>    <span class="c1">// bool swapped;
+</span><span class="c1"></span>    <span class="c1">// do{
+</span><span class="c1"></span>    <span class="c1">//     swapped = false;
+</span><span class="c1"></span>    <span class="c1">//     for( int i = 1 ; i &lt; len ; i ++ )
+</span><span class="c1"></span>    <span class="c1">//         if( arr[i-1] &gt; arr[i] ){
+</span><span class="c1"></span>    <span class="c1">//             swap( arr[i-1] , arr[i] );
+</span><span class="c1"></span>    <span class="c1">//             swapped = true;
+</span><span class="c1"></span>
+    <span class="c1">//         }
+</span><span class="c1"></span>    <span class="c1">//     // 优化, 每一趟Bubble Sort都将最大的元素放在了最后的位置
+</span><span class="c1"></span>    <span class="c1">//     // 所以下一次排序, 最后的元素可以不再考虑
+</span><span class="c1"></span>    <span class="c1">//     len --;
+</span><span class="c1"></span>    <span class="c1">// }while(swapped);
+</span><span class="c1"></span>
+    <span class="c1">//写法二
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">newn</span><span class="p">;</span> <span class="c1">// 使用newn进行优化
+</span><span class="c1"></span>    <span class="k">do</span> <span class="p">{</span>
+        <span class="n">newn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">swap</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="p">,</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">)</span><span class="p">;</span>
+
+                <span class="c1">// 记录最后一次的交换位置,在此之后的元素在下一轮扫描中均不考虑
+</span><span class="c1"></span>                <span class="n">newn</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="n">len</span> <span class="o">=</span> <span class="n">newn</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">newn</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="heading-11">归并排序</h4>
+<p>时间复杂度O(nlogn))<br />
+归并排序会现将数据集合不断分拆成小的数据集合然后给小的数据集合排序，然后再将小的数据集合不断合并后排序。归并排序是空间换时间的排序算法。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span><span class="lnt">90
+</span><span class="lnt">91
+</span><span class="lnt">92
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">merge_sort</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span><span class="n">arr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
+<span class="c1">//    int l = 0;
+</span><span class="c1"></span><span class="c1">//    int r = len - 1;
+</span><span class="c1"></span><span class="c1">//    if (l &gt;= r)
+</span><span class="c1"></span><span class="c1">//        return;
+</span><span class="c1"></span><span class="c1">//
+</span><span class="c1"></span><span class="c1">//    int mid = (l + r) / 2;
+</span><span class="c1"></span><span class="c1">//    merge1(arr, l, mid);
+</span><span class="c1"></span><span class="c1">//    merge1(arr, mid + 1, r);
+</span><span class="c1"></span><span class="c1">//    merge1(arr, l, mid, r);
+</span><span class="c1"></span>
+
+    <span class="c1">// 对于小数组, 使用插入排序优化
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span> <span class="o">+</span><span class="o">=</span> <span class="mi">16</span><span class="p">)</span>
+        <span class="n">insertionSort</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">15</span><span class="p">,</span> <span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
+
+    <span class="c1">//为了避免层数过多，以至少16个元素为一组
+</span><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">sz</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="n">sz</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">sz</span> <span class="o">+</span><span class="o">=</span> <span class="n">sz</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span> <span class="o">-</span> <span class="n">sz</span><span class="p">;</span> <span class="n">i</span> <span class="o">+</span><span class="o">=</span> <span class="n">sz</span> <span class="o">+</span> <span class="n">sz</span><span class="p">)</span>
+            <span class="c1">// 对于arr[mid] &lt;= arr[mid+1]的情况,不进行merge
+</span><span class="c1"></span>            <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">sz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">sz</span><span class="p">]</span><span class="p">)</span>
+                <span class="n">__mergeBUO</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">sz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">std</span><span class="o">:</span><span class="o">:</span><span class="n">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">sz</span> <span class="o">+</span> <span class="n">sz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">merge1</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span><span class="n">arr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+<span class="c1">//* VS不支持动态长度数组, 即不能使用 T aux[r-l+1]的方式申请aux的空间
+</span><span class="c1"></span>    <span class="c1">//* 使用VS的同学, 请使用new的方式申请aux空间
+</span><span class="c1"></span>    <span class="c1">//* 使用new申请空间, 不要忘了在__merge函数的最后, delete掉申请的空间:)
+</span><span class="c1"></span>    <span class="n">T</span> <span class="n">aux</span><span class="p">[</span><span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="p">;</span>
+    <span class="c1">//T *aux = new T[r-l+1];
+</span><span class="c1"></span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span><span class="o">=</span> <span class="n">r</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">)</span>
+        <span class="n">aux</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">;</span>
+
+    <span class="c1">// 初始化，i指向左半部分的起始索引位置l；j指向右半部分起始索引位置mid+1
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">l</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span><span class="o">=</span> <span class="n">r</span><span class="p">;</span> <span class="n">k</span><span class="o">+</span><span class="o">+</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="n">mid</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// 如果左半部分元素已经全部处理完毕
+</span><span class="c1"></span>            <span class="n">arr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">aux</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span><span class="p">;</span>
+            <span class="n">j</span><span class="o">+</span><span class="o">+</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// 如果右半部分元素已经全部处理完毕
+</span><span class="c1"></span>            <span class="n">arr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">aux</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span><span class="p">;</span>
+            <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">aux</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aux</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// 左半部分所指元素 &lt; 右半部分所指元素
+</span><span class="c1"></span>            <span class="n">arr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">aux</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span><span class="p">;</span>
+            <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>  <span class="c1">// 左半部分所指元素 &gt;= 右半部分所指元素
+</span><span class="c1"></span>            <span class="n">arr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">aux</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span><span class="p">;</span>
+            <span class="n">j</span><span class="o">+</span><span class="o">+</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 优化的自底向上的归并排序中, merge函数并没有改变
+</span><span class="c1"></span><span class="c1">// 将arr[l...mid]和arr[mid+1...r]两部分进行归并
+</span><span class="c1"></span><span class="c1">//归并优化 自底向上 好处是不管见index 可用于非数组排序
+</span><span class="c1"></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">mergeBUO</span><span class="p">(</span><span class="n">T</span> <span class="n">arr</span><span class="p">[</span><span class="p">]</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">mid</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="c1">//* VS不支持动态长度数组, 即不能使用 T aux[r-l+1]的方式申请aux的空间
+</span><span class="c1"></span>    <span class="c1">//* 使用VS的同学, 请使用new的方式申请aux空间
+</span><span class="c1"></span>    <span class="c1">//* 使用new申请空间, 不要忘了在__merge函数的最后, delete掉申请的空间:)
+</span><span class="c1"></span>    <span class="n">T</span> <span class="n">aux</span><span class="p">[</span><span class="n">r</span> <span class="o">-</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="p">;</span>
+    <span class="c1">//T *aux = new T[r-l+1];
+</span><span class="c1"></span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span><span class="o">=</span> <span class="n">r</span><span class="p">;</span> <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">)</span>
+        <span class="n">aux</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="p">;</span>
+
+    <span class="c1">// 初始化，i指向左半部分的起始索引位置l；j指向右半部分起始索引位置mid+1
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">l</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span><span class="o">=</span> <span class="n">r</span><span class="p">;</span> <span class="n">k</span><span class="o">+</span><span class="o">+</span><span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="n">mid</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// 如果左半部分元素已经全部处理完毕
+</span><span class="c1"></span>            <span class="n">arr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">aux</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span><span class="p">;</span>
+            <span class="n">j</span><span class="o">+</span><span class="o">+</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// 如果右半部分元素已经全部处理完毕
+</span><span class="c1"></span>            <span class="n">arr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">aux</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span><span class="p">;</span>
+            <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">aux</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">aux</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// 左半部分所指元素 &lt; 右半部分所指元素
+</span><span class="c1"></span>            <span class="n">arr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">aux</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span><span class="p">;</span>
+            <span class="n">i</span><span class="o">+</span><span class="o">+</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>  <span class="c1">// 左半部分所指元素 &gt;= 右半部分所指元素
+</span><span class="c1"></span>            <span class="n">arr</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">aux</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">l</span><span class="p">]</span><span class="p">;</span>
+            <span class="n">j</span><span class="o">+</span><span class="o">+</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">//delete[] aux;
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>面试题：<br />
+<strong>合并两个有序数组并排序</strong></p>
+<h4 id="heading-12">快速排序</h4>
+<p>选一个中间数P，以这个中间数为分界将数据集合分成两部分：小于P的部分，大于P的部分</p>
 
     </article>
     
