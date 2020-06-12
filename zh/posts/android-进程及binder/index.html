@@ -1165,7 +1165,7 @@ IBinder是火车票，内核空间是火车，Proxy是进车站，Stub是出车�
 </div>
 </div><p>ActivityManagerService.publishService-&gt;publishServiceLocked，在publishServiceLocked有如下一行代码<code>c.conn.connected(r.name, service, false);</code>，这里的c.conn即是前面的IServiceConnection对象，最终是通过客户端的ServiceConnection的onServiceConnected返回给客户端</p>
 <h3 id="aidl-3">AIDL通信图解</h3>
-<p><img src="https://upload-images.jianshu.io/upload_images/3162899-8f01668ae649c7d0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="AIDL通信详细.png" /></p>
+<p><img src="../../../images/AIDL%E9%80%9A%E4%BF%A1%E8%AF%A6%E7%BB%86.png" alt="AIDL通信详细.png" /></p>
 <h3 id="heading-3">总结</h3>
 <p>IBinder通信过程跨进程6次</p>
 <ol>
@@ -1270,7 +1270,11 @@ IBinder是火车票，内核空间是火车，Proxy是进车站，Stub是出车�
         </li>
         
         <li>
-          <a href="/zh/posts/android-app%E4%BC%98%E5%8C%96-apk%E7%98%A6%E8%BA%AB/" class="related__link">Android App优化-Apk瘦身</a>
+          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-pulllayout/" class="related__link">自定义View-PullLayout</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/" class="related__link">Android打包流程</a>
         </li>
         
         <li>
@@ -1278,11 +1282,7 @@ IBinder是火车票，内核空间是火车，Proxy是进车站，Stub是出车�
         </li>
         
         <li>
-          <a href="/zh/posts/android-app-bundle/" class="related__link">Android AppBundle</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/android-sparsearray%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="related__link">SparseArray源码解析</a>
+          <a href="/zh/posts/android-%E7%83%AD%E6%9B%B4%E6%96%B0/" class="related__link">Android-热更新</a>
         </li>
         
     </ul>

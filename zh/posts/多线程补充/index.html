@@ -405,7 +405,7 @@
     <h2 class="single__title">多线程详解补充</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 10月 11日 · ☕10 min read
+  🕓 2019年 10月 11日 · ☕11 min read
   
 </div>
       <div class="single__tags caption">
@@ -445,7 +445,7 @@
 <h2 id="volatilesemaphoreatomicxxx"><code>volatile</code>/<code>Semaphore</code>/<code>AtomicXXX</code></h2>
 <p>两者本质上不是同一类东西</p>
 <ul>
-<li><code>volatile</code> Java关键字 声明某个变量值的一致性(内存同步)，但不保证原子操作，对赋值操作可以保证原子性。如：a=10，不能保证a++操作的原子性，因为a++其实是a=a+1的语法糖，a=a+1在内存中其实是分两步的：temp=a+1 a=temp。对于复杂对象的赋值操作原子性，如：User user=user1;User user=new User;,但不能保证对user.name属性操作的原子性.即可以看作只能赋值操作原子性。volatile 声明某个变量值的一致性(内存同步)，但不保证原子操作</li>
+<li><code>volatile</code> Java关键字，volatile的关键语义：1.防止CPU指令重排序，2.被 volatile 修饰的变量对所有线程都是可见的。 volatile声明某个变量值的一致性(内存同步)，但不保证原子操作，对赋值操作可以保证原子性。如：a=10，不能保证a++操作的原子性，因为a++其实是a=a+1的语法糖，a=a+1在内存中其实是分两步的：temp=a+1 a=temp。对于复杂对象的赋值操作原子性，如：User user=user1;User user=new User;,但不能保证对user.name属性操作的原子性.即可以看作只能赋值操作原子性。volatile 声明某个变量值的一致性(内存同步)，但不保证原子操作</li>
 <li><code>Semaphore</code> 控制同时访问某个特定资源或者某个操作的操作数量</li>
 <li><code>AtomicXXX</code> Java库实现 可以保证a++操作的原子性</li>
 </ul>
@@ -707,11 +707,12 @@ put/take 添加元素/取出元素 当队列满/空时会阻塞put/take</p>
 </li>
 <li>
 <p>ArrayBlockingQueue<br />
-基于数组的阻塞队列，初始化需要指定固定大小</p>
+基于数组的阻塞队列，初始化需要指定固定大小，此队列按 FIFO(先进先出)原则对元素进行排序。</p>
 </li>
 <li>
 <p>LinkedBlockingQueue<br />
-基于链表实现的阻塞队列，初始化可以指定大小，也可以不指定。</p>
+基于链表实现的阻塞队列，初始化可以指定大小，也可以不指定。此队列按 FIFO (先进先出) 排序元素，吞 量通常要高于ArrayBlockingQueue。<br />
+Executors.newFixedThreadPool()和 Executors.newSingleThreadExecutor使用了这个队列</p>
 </li>
 <li>
 <p>LinkedBlockingDeque</p>
@@ -727,10 +728,21 @@ put/take 添加元素/取出元素 当队列满/空时会阻塞put/take</p>
 </li>
 <li>
 <p>SynchronousQueue<br />
-无容量的队列</p>
+无容量的队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于LinkedBlockingQueue。<br />
+Executors.newCachedThreadPool使用了这个队列</p>
+</li>
+<li>
+<p>PriorityBlockingQueue<br />
+一个具有优先级的无限阻塞队列。</p>
 </li>
 <li>
 <p>LinkedTransferQueue</p>
+</li>
+<li>
+<p>CopyOnWriteArrayList</p>
+</li>
+<li>
+<p>ConcurrentHashMap</p>
 </li>
 </ul>
 <h2 id="-">多线程的经典场景-生产者消费者模式实现</h2>
@@ -861,15 +873,15 @@ put/take 添加元素/取出元素 当队列满/空时会阻塞put/take</p>
     <ul class="related-ul">
         
         <li>
+          <a href="/zh/posts/android-%E7%BC%96%E8%AF%91chromium/" class="related__link">Android浏览器-编译Chromium</a>
+        </li>
+        
+        <li>
           <a href="/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="related__link">多线程详解</a>
         </li>
         
         <li>
-          <a href="/zh/posts/java-jvm/" class="related__link">模版</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/android-%E7%BC%96%E8%AF%91chromium/" class="related__link">Android浏览器-编译Chromium</a>
+          <a href="/zh/posts/java-jvm/" class="related__link">Java-JVM</a>
         </li>
         
     </ul>

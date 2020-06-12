@@ -517,6 +517,8 @@ TCP/IP五层分别是：</p>
 </ol>
 <h2 id="uriurl">URI和URL</h2>
 <p>URI(Uniform Resource Identifier) 统一资源标识符，用于标识某一互联网资源的字符串。<br />
+URI的格式如下：<br />
+[协议名] : //[用户名]:[密码]@[服务器地址]:[服务器端口号]/[路径]?[查询字符串]#[片段ID<br />
 URL(Uniform Resource Locator)统一资源定位符，因特网的万维网服务程序上用于指定信息位置的表示方法。</p>
 <p>可以认为URL是URI特例、子集。</p>
 <h2 id="mac-ip-">MAC地址 IP地址 端口号</h2>
@@ -609,13 +611,15 @@ MSS：最大分段大小，是在单个分段中TCP愿意接受的数据的字�
 客户端向服务端 发送一个SYN数据包，SYN位置为1，SYN数据包包含一个随机数J。</p>
 <!-- 客户端将SYN数据包的序号设定为随机数J。 -->
 <p>Client -&gt; Server  SYN=1，seq=J(系统生成的随机数)</p>
+<p>客户端进入SYN_SEND状态。</p>
 <p>seq为什么必须是随机数？想象一下如果在第一次握手后网络意外断开然后重新连接再次握手，如果是固定的一个序列数那就没法判断之前第一次握手的数据包到底是哪一次的。</p>
 </li>
 <li>
 <p>针对客户端的SYN的确认应答并请求建立连接<br><br />
-服务端收到SYN数据包并确认合法后想客户端发送一个SYN-ACK数据包，SYN位和ACK位置为1，SYN-ACK数据包包含一个随机产生的序号K，另外作为对客户端请求建立连接的确认应答，确认应答码ack=J+1</p>
+服务端收到SYN数据包并确认合法后想客户端发送一个SYN-ACK数据包，SYN位和ACK位置为1，SYN-ACK数据包包含一个随机产生的序号K，另外作为对客户端请求建立连接的确认应答，确认应答码ack=J+1。</p>
 <p>Server-&gt;Client SYN=1，ACK=1，ack=J+1，seq=K</p>
 <p>其中ack=J+1是向客户端表示服务端确实收到客户端的seq且无误</p>
+<p>服务端进入SYN_RECV状态。</p>
 </li>
 <li>
 <p>针对服务端的SYN的确认应答<br><br />
@@ -623,6 +627,7 @@ MSS：最大分段大小，是在单个分段中TCP愿意接受的数据的字�
 <!-- 客户端将ACK数据包的序号设定为J+1， -->
 <p>Server-&gt;Client ACK=1，ack=K+1</p>
 <p>其中ack=K+1是向服务端表示客户端确实收到服务端的seq且无误，第三次握手是可以同时携带数据的</p>
+<p>客户端和服务端进入ESTABLISHED状态</p>
 </li>
 </ol>
 <h4 id="-syn">三次握手漏洞 SYN洪泛攻击</h4>
@@ -825,11 +830,15 @@ MSS：最大分段大小，是在单个分段中TCP愿意接受的数据的字�
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/java-%E8%8C%83%E5%9E%8B%E4%B8%8E%E5%8F%8D%E5%B0%84/" class="related__link">Java范型与反射</a>
+          <a href="/zh/posts/java-hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="related__link">HashMap源码分析</a>
         </li>
         
         <li>
-          <a href="/zh/posts/java-hashmap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="related__link">HashMap源码分析</a>
+          <a href="/zh/posts/jvmdalvikart/" class="related__link">JVM/Dalvik/ART</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/" class="related__link">RxJava2源码及使用</a>
         </li>
         
         <li>
@@ -837,11 +846,7 @@ MSS：最大分段大小，是在单个分段中TCP愿意接受的数据的字�
         </li>
         
         <li>
-          <a href="/zh/posts/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="related__link">设计模式</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/java-threadlocal%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="related__link">Java ThreadLocal源码解析</a>
+          <a href="/zh/posts/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/" class="related__link">动态代理</a>
         </li>
         
     </ul>

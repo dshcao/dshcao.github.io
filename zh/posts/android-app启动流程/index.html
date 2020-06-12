@@ -413,7 +413,7 @@
     </div>    
     <article class="single__contents">
       <h2 id="android">Android启动流程</h2>
-<p><img src="https://upload-images.jianshu.io/upload_images/3162899-7056121935077315.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Android系统启动简图.png" /></p>
+<p><img src="../../../images/Android%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8%E7%AE%80%E5%9B%BE.png" alt="Android系统启动简图.png" /></p>
 <h3 id="romram">ROM/RAM</h3>
 <p>ROM(Read-Only Memory)<br />
 RAM(Random Access Memory)</p>
@@ -683,7 +683,7 @@ SystemServiceManager是一个专门用于启动管理(继承自)SystemService(�
 </div>
 </div><h3 id="app">App启动</h3>
 <p>经过上面的步骤，系统已经启动完成，各种系统服务也已经启动好，环境已经就绪。于是你点击了桌面应用图标启动一个应用程序。Launcher进程会想SystemServer进程中的AMS发起请求启动应用程序，AMS会向Zygote进程请求创建应用程序进程，Zygote进程接收到请求fork一个应用程序进程。当应用进程准备好后，AMS会想应用进程请求创建根Activity，最终执行到ActivityThread#ApplicationThread创建启动根Activity。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/3162899-e18d89ad6ab8c286.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="应用程序启动时序图.png" /></p>
+<p><img src="../../../images/App%E5%90%AF%E5%8A%A8%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="App启动时序图.png" /></p>
 
     </article>
     

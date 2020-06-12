@@ -521,6 +521,15 @@
       </item>
       
       <item>
+        <title>Java-JVM</title>
+        <link>https://dshcao.github.io/zh/posts/java-jvm/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-jvm/</guid>
+        <description>CMS 新生代：复制 JVM 内存分区 JVM在执行Java程序的过程中会把它管理的内存分为：方法区（运行时常量池）、堆、程序计数器、虚拟机栈、本地方法栈、</description>
+      </item>
+      
+      <item>
         <title>Java注解详解</title>
         <link>https://dshcao.github.io/zh/posts/java-%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -626,15 +635,6 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</guid>
         <description>前言 程序 = 数据结构 + 算法 似乎数据结构和算法是两码事，但实际有时候数据结构和算法联系非常亲密，可以说有了这种数据结构才有了这种算法或者说有了这</description>
-      </item>
-      
-      <item>
-        <title>模版</title>
-        <link>https://dshcao.github.io/zh/posts/java-jvm/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/java-jvm/</guid>
-        <description>CMS 新生代：复制 JVM 内存分区 JVM在执行Java程序的过程中会把它管理的内存分为：方法区（运行时常量池）、堆、程序计数器、虚拟机栈、本地方法栈、</description>
       </item>
       
       <item>
