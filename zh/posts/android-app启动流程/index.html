@@ -682,7 +682,7 @@ SystemServiceManager是一个专门用于启动管理(继承自)SystemService(�
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="app">App启动</h3>
-<p>经过上面的步骤，系统已经启动完成，各种系统服务也已经启动好，环境已经就绪。于是你点击了桌面应用图标启动一个应用程序。Launcher进程会想SystemServer进程中的AMS发起请求启动应用程序，AMS会向Zygote进程请求创建应用程序进程，Zygote进程接收到请求fork一个应用程序进程。当应用进程准备好后，AMS会想应用进程请求创建根Activity，最终执行到ActivityThread#ApplicationThread创建启动根Activity。</p>
+<p>经过上面的步骤，系统已经启动完成，各种系统服务也已经启动好，环境已经就绪。于是你点击了桌面应用图标启动一个应用程序。Launcher进程会想SystemServer进程中的AMS发起请求启动应用程序，AMS会向Zygote进程请求(这一步是通过Socket通信)创建应用程序进程，Zygote进程接收到请求fork一个应用程序进程。当应用进程准备好后请求AMS创建根Activity，AMS会响应用进程请求创建根Activity，最终执行到ActivityThread#ApplicationThread创建启动根Activity。</p>
 <p><img src="../../../images/App%E5%90%AF%E5%8A%A8%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="App启动时序图.png" /></p>
 
     </article>

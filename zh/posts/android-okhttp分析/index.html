@@ -782,7 +782,7 @@ RealCall#getResponseWithInterceptorChain</p>
 </div>
 </div><p>上面源码可以看出interceptors和networkInterceptors的主要区别是执行时机不行。</p>
 <h3 id="heading-1">五大默认拦截器及用户拦截器</h3>
-<p><a href="../../../OkHttp%E6%8B%A6%E6%88%AA%E5%99%A8%E8%B4%A3%E4%BB%BB%E9%93%BE.png">OkHttp拦截器责任链.png</a></p>
+<p><img src="../../../images/OkHttp%E6%8B%A6%E6%88%AA%E5%99%A8%E8%B4%A3%E4%BB%BB%E9%93%BE.png" alt="OkHttp拦截器责任链" /></p>
 <p>拦截器接口内部又一个Chain接口，Chain有一个实现类RealInterceptorChain，每个网络请求都会实例化一个自己的RealInterceptorChain对象，RealInterceptorChain内部有一个拦截器List集合存放了本地网络请求的所有拦截器对象，请求过程中RealInterceptorChain负责以责任链的模式依次调用拦截器。</p>
 <h4 id="heading-2">默认拦截器</h4>
 <p><strong>RetryAndFollowUpInterceptor</strong> 重试重定向拦截器<br />
@@ -1484,15 +1484,15 @@ Http连接底层是Socket连接，OkHttp的连接池缓存的就是Socket连接�
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/" class="related__link">Jetpack-Room&amp;LiveData&amp;ViewModel详解</a>
-        </li>
-        
-        <li>
           <a href="/zh/posts/renderscript%E4%BD%BF%E7%94%A8/" class="related__link">Android RenderScript使用</a>
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-jobservice/" class="related__link">Jetpack-JobService详解</a>
+          <a href="/zh/posts/jetpack-lifecycles/" class="related__link">Jetpack-Lifecycles</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/jetpack-workmanager/" class="related__link">Jetpack-WorkManager详解</a>
         </li>
         
     </ul>
