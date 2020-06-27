@@ -405,7 +405,7 @@
     <h2 class="single__title">Java-JVM</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 10月 11日 · ☕7 min read
+  🕓 2019年 10月 11日 · ☕11 min read
   
 </div>
       <div class="single__tags caption">
@@ -424,12 +424,14 @@
 </div>
     </div>    
     <article class="single__contents">
-      <p>CMS 新生代：复制</p>
+      <!-- 
+Java的解释执行是栈(操作数栈)，C/C++的运算则是在寄存器中。寄存器是一个硬件，速度更快。因此C/C++移植性差，Java移植性更好。 -->
+<!-- CMS 新生代：复制 -->
 <h2 id="jvm-">JVM 内存分区</h2>
 <p>JVM在执行Java程序的过程中会把它管理的内存分为：方法区（运行时常量池）、堆、程序计数器、虚拟机栈、本地方法栈、直接内存。<br />
 其中类中声明的成员变量(无论基本类型还是引用类型，无论是引用本身还是值)都存储在堆中，类中声明的静态变量(static修饰)和常量(final修饰)储存在方法区。<br />
-在方法中声明的基本变量(无论是引用本身还是值)都存储在(虚拟机)栈中，声明的引用类型的引用存储在(虚拟机)栈中，值则存储在堆中。<br />
-<br>其中方法区和堆是所有线程共享的内存，程序计数器、虚拟机栈、本地方法栈则是线程私有的内存，即每个线程都有自己的程序计数器、虚拟机栈、本地方法栈。</p>
+在方法中声明的基本变量(无论是引用本身还是值)都存储在(虚拟机)栈中，声明的引用类型的引用存储在(虚拟机)栈中，值则存储在堆中。</p>
+<p>其中方法区和堆是所有线程共享的内存，程序计数器、虚拟机栈、本地方法栈则是线程私有的内存，即每个线程都有自己的程序计数器、虚拟机栈、本地方法栈。</p>
 <h3 id="heading">直接内存</h3>
 <p>直接内存并不是虚拟机运行时数据区的一部分，也不是Java虚拟机规范中定义的内存区域。直接内存由操作系统管理。<br />
 使用Unsafe和NIO中的ByteBuffer.allocateDirect()创建直接内存。<br />
@@ -447,17 +449,39 @@ Java使用直接内存：</p>
 <li>静态变量</li>
 <li>即时编译器编译后的代码(运行时编译的)</li>
 </ul>
-<h3 id="heading-2">堆</h3>
+<p>JDK7及以前方法区使用的是永久代(PermGen)的实现，JDK8及以后使用的是元空(Metaspace)的实现。元空间可以使用机器内存，默认不受限制。而永久代则是受限的，可能会产生OOM。</p>
+<h4 id="heading-2">常量池</h4>
+<p>常量池位于方法区，常量池分两种：</p>
+<ol>
+<li>静态常量池
+<ul>
+<li>字面量<br />
+如：<code>String s=&quot;aaa&quot;;</code>，&ldquo;aaa&quot;即是字面量</li>
+<li>符号引用<br />
+类、方法的信息，比如类的全限定名：java.lang.String</li>
+</ul>
+</li>
+<li>运行时常量池</li>
+</ol>
+<p>在JDK8中运行时的常量池的字符串部分是放在堆中的。</p>
+<p><strong>方法区类卸载的时机</strong><br />
+当满足以下三个条件时类变成可回收状态。</p>
+<ol>
+<li>类所有的实例都被回收</li>
+<li>加载该类的ClassLoader被回收</li>
+<li>该类没有被其他任何地方引用。</li>
+</ol>
+<h3 id="heading-3">堆</h3>
 <p>JVM堆的大小可以使用-Xmx(堆最大上限) -Xms(堆初始内存大小)设置<br />
 JVM堆中存放：</p>
 <ul>
-<li>对象实例（几乎所有）</li>
+<li>对象实例（几乎所有）<br />
+为什么是几乎所有不是全部？见<a href="#">逃逸分析</a>部分。</li>
 <li>数组</li>
 </ul>
-<p>堆被JVM进一步划分为：<br />
-JVM对划分为新生代和老年代，一般设置为1:2</p>
+<p>Java堆是一块连续的内存空间，堆被JVM进一步划分为新生代和老年代，一般设置为1:2。</p>
 <ol>
-<li>新生代(PS YoungGen)<br />
+<li>新生代(PSYoungGen)<br />
 可以使用-Xmn设置新生代大小，如：-Xmn20m 设置新生代为20M。<br />
 新生代内又分为Eden/From Survivor/To Survivor，在Hotspot中比例一般是8:1:1。可以使用-XX:SurvivorRatio设置，缺省为8。
 <ul>
@@ -468,31 +492,70 @@ JVM对划分为新生代和老年代，一般设置为1:2</p>
 </li>
 <li>老年代(ParOldGen)</li>
 </ol>
-<p>Java对象内存分配原则：</p>
+<h3 id="heading-4">程序计数器</h3>
+<p>指向当前线程正在执行的字节码指令的地址。程序计数器是JVM中唯一不会OOM的区域。</p>
+<h3 id="heading-5">虚拟机栈</h3>
+<p>虚拟机栈中存放的是一个一个的栈帧。栈帧包含：局部变量表、操作数栈、动态链接、完成出口。虚拟机栈的大小是受限的，默认值取决于平台，一般是1M，可以通过-Xss来设置。</p>
+<h4 id="heading-6">栈帧</h4>
+<p>JVM中一个栈帧对应一个方法的调用信息。栈帧包含以下四部分：<br />
+<strong>局部变量表</strong> &ndash; 用于存放八大基本数据类型和对象的引用<br />
+<strong>操作数栈</strong> &ndash; 存放方法的执行、操作的一块临时空间。比如a+b的操作，操作数栈会先读取a，压入局部变量表，再读取b，压入局部变量表，然后执行+操作时从局部变量表中变量a、b读取到操作数栈，然后将ab出栈并执行+操作得到结果c，然后将c压入局部变量表。<br />
+我们常说的JVM是基于栈的指的即是Java的解释执行是在操作数栈完成的。<br />
+<strong>动态链接</strong> &ndash; 存放编译时不能确定方法入口的方法的地址，需要在运行时来保证方法调用的正确性。如：多态方法、native方法。当线程中调用到native方法时JVM不会在为其在虚拟机栈中创建栈帧，而是存储动态链接并直接调用native方法。<br />
+<strong>完成出口</strong> &ndash; 也叫方法出口/返回地址。</p>
+<h3 id="heading-7">本地方法栈</h3>
+<p>本地方法栈保存native方法信息，当一个JVM创建的线程调用native方法后，JVM不再为其虚拟机中创建栈帧，JVM只是简单的动态链接并直接调用native方法。程序计数器也不会去记录。<br />
+虚拟机规范中并没有强制规定本地方法栈的实现，各版本虚拟机也是自由实现，HotSpot则是将本地方法栈和虚拟机栈合二为一了。</p>
+<h2 id="jmmjava-memory-model">JMM(Java Memory model)</h2>
+<p>JMM，Java内存模型。CPU计算a+b，CPU执行指令(这里是+指令)是很快的，大部分时间耗费在将内存中的a和b读取到CPU上，所以现代计算机出现了高级缓存这一概念来解决这一问题。一般计算机有三级高级缓存，以及缓存速度更高，接近CPU，容量也最小，三级缓存速度相对最低，容量也最大。为了充分利用高速缓存，Java提出了JMM概念。JMM模型将内存分为主内存和工作内存，主内存主要包括通常意义的内存(RAM)，工作内存主要包括CPU寄存器和三级高速缓存。但这不是绝对的，主内存也可能包含<br />
+CPU寄存器和三级高速缓存部分，只是大部分的主内存是在RAM，同样的工作内存也可能包含RAM部分，但大部分是在CPU寄存器和三级高速缓存。<br />
+每个线程都有自己的工作内存，是独享的，线程间的工作内存是相互隔离的，线程不允许直接访问主内存。</p>
+<h2 id="jvm">JVM中的对象</h2>
+<h3 id="jvm-1">JVM对象内存布局</h3>
+<ol>
+<li>对象头(Header) 对象自身的运行时数据(如锁状态标识、哈希码、GC分代年龄、线程持有的锁、偏向线程ID、偏向时间戳等)、类型指针及对象为数组时记录数组长度的数据</li>
+<li>实例数据(Instance Data) 程序代码中定义的各种类型的字段内容</li>
+<li>对齐填充 JVM中为了内存划分的便捷性所有对象必须是8字节的整数倍</li>
+</ol>
+<h3 id="jvm-2">JVM创建一个对象的过程</h3>
+<ol>
+<li>类加载</li>
+<li>检查加载<br />
+当new对象时，会先检查是否已加载了类信息，如果未加载，则先去执行类加载步骤。</li>
+<li>分配内存<br />
+内存分配方式有两种：指针碰撞和空闲链表。JVM中内存的分配也是多线程的。JVM应对多线程分配内存的并发问题使用了：CAS失败重试及本地线程分配缓冲(TLAB)两种方式。本地线程分配缓冲是给分配线程各自分配一块堆空间(一般在Eden区，占Eden空间的1%)，这样相互之间不会产生竞争。</li>
+<li>内存空间初始化<br />
+比如将没有赋值的int变量初始化为零值</li>
+<li>设置<br />
+对象头的设置。</li>
+<li>对象初始化<br />
+调用构造方法执行初始化逻辑。</li>
+</ol>
+<h3 id="jvm-3">JVM对象内存分配原则：</h3>
 <ul>
 <li>优先在新生代Eden空间中分配</li>
 <li>大对象直接进入老年代</li>
 <li>长期存活的对象进入老年代<br />
 当存活(对象头信息中记录)达到一定年龄（一般为15）会将对象转移到老年代</li>
 <li>动态年龄判断<br />
-当复制过程中内存不足(如To Survivor空间不足以存放所有对象)时，不管对象年龄是否达到要求年龄(比如15)都会转移到老年代。</li>
-<li>需要有空间分配担保(老年代做分配担保)</li>
+当复制过程中内存不足(如To Survivor空间不足以存放所有对象)时，不管对象年龄是否达到要求(15)年龄都会转移到老年代。</li>
+<li>老年代做分配担保<br />
+当将对象从新生代移动到老年代时乐观认为老年代空间足够，先不要触发GC，当老年代确实空间不足时触发Full GC。</li>
 </ul>
-<h2 id="java">Java声明一个变量的过程</h2>
+<h3 id="jvm-4">JVM对象分配策略</h3>
 <ol>
-<li>检查加载 类信息等</li>
-<li>分配内存</li>
-<li>内存空间初始化</li>
-<li>设置</li>
-<li>对象初始化</li>
+<li>逃逸分析是否可以栈上分配对象</li>
+<li>根据JVM对象内存分配原则分配</li>
 </ol>
-<h2 id="java-1">Java对象内存布局</h2>
+<h3 id="jvm-5">JVM对象的访问定位</h3>
+<p>JVM规范中访问对象有两种方式：</p>
 <ol>
-<li>对象头(Header) 对象自身的运行时数据(如锁和hashcode等)和类型指针</li>
-<li>实例数据(Instance Data) 程序代码中定义的各种类型的字段内容</li>
-<li>对齐填充 JVM中为了内存划分的便捷性所有对象必须是8字节的整数倍</li>
+<li>句柄<br />
+句柄方式中，JVM堆中有一个句柄池，引用通过指向句柄池中的某个句柄(句柄中包含一个对象实例指针和一个对象类型指针)间接指向对象实例数据和方法区中的对象类型数据。句柄的好处是对象地址改变不用修改引用指向的地址，坏处也显而易见。</li>
+<li>直接指针<br />
+主流JVM，如Hotspot使用的方式。对象引用直接指向对象实例数据，对象实例头中有指向对象类型的指针。</li>
 </ol>
-<h2 id="java-2">Java对象的生命周期</h2>
+<h3 id="jvm-6">JVM对象的生命周期</h3>
 <ol>
 <li>创建阶段(Created)</li>
 <li>应用阶段(In Use)</li>
@@ -502,7 +565,7 @@ JVM对划分为新生代和老年代，一般设置为1:2</p>
 <li>终结阶段(Finalized)</li>
 <li>对象空间重分配阶段(De-allocated)</li>
 </ol>
-<h2 id="java-3">Java类的生命周期</h2>
+<h3 id="java">Java类的生命周期</h3>
 <ol>
 <li><strong>加载</strong><br />
 加载阶段JVM主要完成三件事：1.通过类的全限定名获取类的二进制字节流 2.将字节流所代表的静态存储结构转化为方法区的运行时数据结构 3.在Java堆中生成一个代表这个类的Class对象作为方法区类数据的访问入口</li>
@@ -513,7 +576,7 @@ JVM对划分为新生代和老年代，一般设置为1:2</p>
 <li><strong>使用</strong></li>
 <li><strong>卸载</strong></li>
 </ol>
-<h2 id="heading-3">逃逸分析</h2>
+<h3 id="heading-8">逃逸分析</h3>
 <p>逃逸分析是目前JVM中比较前沿的优化技术，它不是直接的优化手段而是为其他优化手段提供依据的分析技术。逃逸分析的基本行为就是分析对象动态作用域。<br />
 -XX:+DoEscapeAnalysis：启用逃逸分析(默认打开)<br />
 -XX:+EliminateAllocations：标量替换(默认打开)<br />
@@ -545,16 +608,18 @@ JVM对划分为新生代和老年代，一般设置为1:2</p>
 </div>
 </div><p>如果开启逃逸分析p对象可能会被分配到栈上，逃逸分析优化认为p对象不会被其他线程或外部变量使用，没必须要分配在共享区堆上。栈内存不需要垃圾回收，执行完毕自动出栈释放内存。</p>
 <h2 id="gc">GC</h2>
-<p>GC的对象主要是共享的对象，如：堆、方法区、元空间，主要是堆。一般是内存不足时触发GC，发生在新生代的GC称为Minor GC，发生在老年代的GC称为Full GC<br />
-GC判断对象是否存活有两种方式：</p>
+<p>GC的对象主要是共享的对象，如：堆、方法区、元空间，主要是堆。一般是内存不足时触发GC，发生在新生代的GC称为Minor GC，发生在老年代的GC称为Full GC</p>
+<!-- Major GC或 -->
+<p>GC判断对象是否存活有两种方式：</p>
 <ol>
 <li>引用计数<br />
 JVM早期使用的算法。即每次对象被引用，该对象的引用计数+1，这种设计相对简单，但引用计数很难判断相互引用(A引用B，B引用A)的的情况对象是否应该回收。<br />
-PHP还在使用这种方式。</li>
+PHP/Python还在使用这种方式。</li>
 <li>可达性分析<br />
+主流JVM中使用的方式。<br />
 是否可以到达GC Roots。Java中可作为GC Roots的对象包括：
 <ul>
-<li>方法区中类静态属性的对象和常量的对象</li>
+<li>方法区中静态变量和常量的对象</li>
 <li>虚拟机栈(本地变量表)中的对象
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -582,14 +647,27 @@ PHP还在使用这种方式。</li>
 </ol>
 <h3 id="gc-1">GC回收算法</h3>
 <ol>
-<li>复制算法<br />
-研究表明98%的内存对象是朝生夕死的(这也是为什么一般新生代的Eden：From Survivor：To Survivor=8:1:1)，所以并不需要按1:1划分内存，而是将内存划分为一块较大的内存Eden空间和两块Survivor空间。当内存回收时将Eden和其中一块Survivor(此时称做From Survivor)空间存活的对象复制到另一块Survivor(此时称做To Survivor)空间，最后清理掉Eden和From Survivor空间。</li>
-<li>标记-清除算法</li>
-<li>标记-整理算法</li>
+<li>复制算法(Coping)<br />
+实现简单，运行高效，没有内存碎片，但空间利用率只有一半。<br />
+新生代使用的GC算法<br />
+研究表明98%的内存对象是朝生夕死的(这也是为什么一般新生代的Eden：From Survivor：To Survivor=8:1:1)，所以并不需要按1:1划分内存，而是将内存划分为一块较大的内存Eden空间和两块Survivor空间。当内存回收时将Eden和其中一块Survivor(此时称做From Survivor)空间存活的对象复制到另一块Survivor(此时称做To Survivor)空间，最后清理掉Eden和From Survivor空间。每次对象被复制到From或To区，对象年龄+1。当From或To区空间不足时将对象直接移动到老年代。</li>
+<li>标记-清除算法(Mark-Sweep)<br />
+执行效率不稳定，内存碎片导致提前GC。</li>
+<li>标记-整理算法(Mark-Compact)<br />
+针对标记-清除算法碎片的问题，提出了标记-整理算法。标记-整理算法的会有对象的移动、引用更新、用户线程暂停，但没有内存碎片。</li>
 </ol>
 <p>一般虚拟机的回收并不使用某个单一算法，而是多种算法一起使用。一般新生代回收器使用复制算法，老年代回收器使用标记-清除或标记整理算法。</p>
-<h3 id="cmsg1">CMS&amp;G1回收器</h3>
-<h2 id="heading-4">引用类型</h2>
+<h3 id="gc-2">GC收集器</h3>
+<p><img src="../../../images/GC%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8.png" alt="GC垃圾收集器" /></p>
+<ul>
+<li>单线程垃圾收集器</li>
+<li>多线程并行垃圾收集器</li>
+<li>多线程并发垃圾回收器</li>
+</ul>
+<h4 id="cmsg1">CMS和G1垃圾收集器</h4>
+<p>CMS的缺点：<br />
+CPU敏感、浮动垃圾、内存碎片。</p>
+<h2 id="heading-9">引用类型</h2>
 <p>Java引用分为四种类型：</p>
 <ol>
 <li>强引用<br />
@@ -604,7 +682,7 @@ GC时如果发现一个对象只有弱引用指向该对象则回收该对象。
 </ul>
 </li>
 <li>虚引用(PhantomReference)<br />
-随时可能被回收，回收时会通知。虚引用配合引用队列(ReferenceQueue)，当垃圾回收器回收对象时或者通知。虚引用的get永远返回的是null。当一个对象准备回收时如果它还有虚引用，那么它的徐引用会被放到与之关联的引用队列。所以可以判断引用队列如果有这个对象的虚引用则表示该对象要被回收了。
+随时可能被回收，回收时会通知。虚引用配合引用队列(ReferenceQueue)，当垃圾回收器回收对象时或者通知。虚引用的get永远返回的是null。当一个对象准备回收时如果它还有虚引用，那么它的虚引用会被放到与之关联的引用队列。所以可以判断引用队列如果有这个对象的虚引用则表示该对象要被回收了。
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -631,11 +709,8 @@ GC时如果发现一个对象只有弱引用指向该对象则回收该对象。
 </div>
 </div></li>
 </ol>
-<h2 id="cascompare-and-swap">CAS(Compare And Swap)</h2>
-<p>CAS是指在内存分配时会将记录旧值并和内存中的值比较，只有相同时才会给内存赋值，这样保证线程安全性。比如分配内存是会检查分配的内存是不是null，运行过程中检查内存值是不是和旧值相同。</p>
-<h3 id="aba">ABA</h3>
-<p>如果在这段期间它的值曾经被改成了 B，然后又改回 A，那 CAS 操作就会误认为它从来没有被修改过。这个漏洞称为 CAS 操<br />
-作的&quot;ABA&quot;问题</p>
+<!-- ### finalize
+对象回收时调用，只能执行一次，优先级低有不确定性 -->
 <p>内存分配中的指针碰撞和空闲链表及并发下的CAS 失败重试</p>
 <p><a href="https://blog.csdn.net/zhaohong_bo/article/details/89419480">https://blog.csdn.net/zhaohong_bo/article/details/89419480</a></p>
 <p><a href="https://www.jianshu.com/p/825cca41d962">软引用、弱引用、虚引用-他们的特点及应用场景</a></p>
@@ -731,15 +806,23 @@ GC时如果发现一个对象只有弱引用指向该对象则回收该对象。
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/" class="related__link">多线程详解补充</a>
+          <a href="/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="related__link">多线程详解</a>
         </li>
         
         <li>
-          <a href="/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/" class="related__link">多线程详解</a>
+          <a href="/zh/posts/android-chromium%E7%BC%96%E8%AF%91/" class="related__link">Android浏览器-编译Chromium</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-%E7%BC%96%E8%AF%91chromium/" class="related__link">Android浏览器-编译Chromium</a>
+          <a href="/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/" class="related__link">多线程详解补充</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-context/" class="related__link">Android-Context</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8Bjuc%E4%B8%80/" class="related__link">Java-多线程之JUC(一)</a>
         </li>
         
     </ul>
@@ -748,11 +831,11 @@ GC时如果发现一个对象只有弱引用指向该对象则回收该对象。
     <div class="grow"></div>
 <nav class="pagination-single">
   
-    <a href="https://dshcao.github.io/zh/posts/java-%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/" class="pagination-single__left">
+    <a href="https://dshcao.github.io/zh/posts/java-string/" class="pagination-single__left">
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
       </div>
-      <div class="pagination-single__left-title">Java注解详解</div>      
+      <div class="pagination-single__left-title">Java-String</div>      
     </a>
   
   <div class="grow"></div>

@@ -174,7 +174,7 @@
 <link rel="stylesheet" href="/css/main.min.css">
 
 
-    <meta name="description" content="SJVM/Dalvik/ART理解" />
+    <meta name="description" content="JVM/Dalvik/ART理解" />
 <meta name="keywords" content="">
 <meta name="created" content="2019-10-11T10:33:41&#43;0900">
 <meta name="modified" content="2019-10-11T10:33:41&#43;0900">
@@ -204,7 +204,7 @@
     "datePublished": "2019-10-11T10:33:41+09:00",
     "dateModified": "2019-10-11T10:33:41+09:00",
     "url" : "https://dshcao.github.io/zh/posts/jvmdalvikart/",
-    "description": "SJVM/Dalvik/ART理解",
+    "description": "JVM/Dalvik/ART理解",
     "keywords": ["android","java"],
     "mainEntityOfPage": {
       "@type": "WebPage",
@@ -472,7 +472,7 @@ art 优化生成的可执行二进制码文件，主要是apk启动的热点函�
 JVM在运行的时候为每一个类装载字节码</p>
 <h3 id="dalvik">Dalvik</h3>
 <ul>
-<li>基于寄存器的虚拟机,即Dalvik VM的指令集是基于寄存器的。相对于堆栈模式加载速度更快</li>
+<li>基于寄存器(并非CPU寄存器，而是虚拟寄存器)的虚拟机,即Dalvik VM(的指令集)是基于寄存器(指令集)的。相对于堆栈模式加载速度更快</li>
 <li>将java源文件编译成class字节码文件，再由dex.bat编译成一个dex文件(后来因为65535问题有了MultiDex方案，将原来的一个dex拆分为多个dex文件)运行在虚拟机上</li>
 <li>Dalvik下应用需要解释执行，常用热点代码在运行时通过即时编译器(JIT)将字节码转换成机器码</li>
 <li>相比JVM，Dalvik更适合低内存低cpu运行</li>
@@ -591,15 +591,15 @@ Android 8.0提供，用于加载内存中的dex文件。</li>
         </li>
         
         <li>
-          <a href="/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/" class="related__link">Android-多进程意义及Binder</a>
+          <a href="/zh/posts/java-threadlocal%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="related__link">Java ThreadLocal源码解析</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-app-bundle/" class="related__link">Android AppBundle</a>
+          <a href="/zh/posts/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%ACioc/" class="related__link">依赖注入和控制反转(IoC)</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-app%E9%80%82%E9%85%8D/" class="related__link">Android-App适配</a>
+          <a href="/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/" class="related__link">Android-音视频基础知识(一)</a>
         </li>
         
         <li>

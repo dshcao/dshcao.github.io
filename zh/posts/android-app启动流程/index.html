@@ -682,7 +682,7 @@ SystemServiceManager是一个专门用于启动管理(继承自)SystemService(�
 </code></pre></td></tr></table>
 </div>
 </div><h3 id="app">App启动</h3>
-<p>经过上面的步骤，系统已经启动完成，各种系统服务也已经启动好，环境已经就绪。于是你点击了桌面应用图标启动一个应用程序。Launcher进程会想SystemServer进程中的AMS发起请求启动应用程序，AMS会向Zygote进程请求(这一步是通过Socket通信)创建应用程序进程，Zygote进程接收到请求fork一个应用程序进程。当应用进程准备好后请求AMS创建根Activity，AMS会响应用进程请求创建根Activity，最终执行到ActivityThread#ApplicationThread创建启动根Activity。</p>
+<p>经过上面的步骤，系统已经启动完成，各种系统服务也已经启动好，环境已经就绪。于是你点击了桌面应用图标启动一个应用程序。Launcher进程会想SystemServer进程中的AMS发起请求启动应用程序，AMS会向Zygote进程请求(这一步是通过Socket通信)创建应用程序进程，Zygote进程接收到请求fork一个应用程序进程。当应用进程准备好后请求AMS创建根Activity，AMS会用进程请求创建根Activity，最终执行到ActivityThread#ApplicationThread创建启动根Activity。</p>
 <p><img src="../../../images/App%E5%90%AF%E5%8A%A8%E6%97%B6%E5%BA%8F%E5%9B%BE.png" alt="App启动时序图.png" /></p>
 
     </article>
@@ -779,8 +779,8 @@ SystemServiceManager是一个专门用于启动管理(继承自)SystemService(�
   
   <div class="grow"></div>
   
-    <a href="https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-apk%E7%98%A6%E8%BA%AB/" class="pagination-single__right">      
-      <div class="pagination-single__right-title">Android App优化-Apk瘦身</div>
+    <a href="https://dshcao.github.io/zh/posts/android-systemserverservicemanager/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">Android ServiceManager&amp;SystemServer</div>
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
       </div>

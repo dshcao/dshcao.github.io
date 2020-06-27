@@ -152,6 +152,15 @@
       </item>
       
       <item>
+        <title>Android AMS</title>
+        <link>https://dshcao.github.io/zh/posts/android-wms/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-wms/</guid>
+        <description>前言 WMS和AMS一样运行在SystemServer进程中。WMS控制所有Window的显示、隐藏以及显示的位置。 WindowManager&amp;amp;PhoneWindowManager&amp;amp;WindowManagerService 两者关系和Activit</description>
+      </item>
+      
+      <item>
         <title>Android AppBundle</title>
         <link>https://dshcao.github.io/zh/posts/android-app-bundle/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -167,6 +176,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-apk%E7%98%A6%E8%BA%AB/</guid>
         <description>APK体积优化 svg/vector替换套图小图标 使用SVG替代简单的小图标及图标套图 SVG：可缩放矢量图，不会因为缩放导致图片质量下降。常用</description>
+      </item>
+      
+      <item>
+        <title>Android ServiceManager&amp;SystemServer</title>
+        <link>https://dshcao.github.io/zh/posts/android-systemserverservicemanager/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-systemserverservicemanager/</guid>
+        <description>前言 SystemServer是系统进程，SystemServer负责启动很多系统服务，App通过Binder跨进程通信使用这些系统服务，Se</description>
       </item>
       
       <item>
@@ -203,6 +221,33 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-arouter%E5%8E%9F%E7%90%86%E7%AE%80%E6%9E%90/</guid>
         <description>前言 阿里ARouter是组件开发所需的路由框架。由于组件开发中的类(尤其是Activity)不能直接相互引用，无法使用通常的跳转方式。 隐式跳</description>
+      </item>
+      
+      <item>
+        <title>Android-Binder机制(一)</title>
+        <link>https://dshcao.github.io/zh/posts/android-binder%E6%9C%BA%E5%88%B6%E4%B8%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-binder%E6%9C%BA%E5%88%B6%E4%B8%80/</guid>
+        <description>前沿 Android Binder是在OpneBinder上的定制实现。Binder是Android系统中大量使用的IPC（Inter-process com</description>
+      </item>
+      
+      <item>
+        <title>Android-Bitmap缓存与复用及长图加载</title>
+        <link>https://dshcao.github.io/zh/posts/android-bitmap%E7%BC%93%E5%AD%98%E4%B8%8E%E5%A4%8D%E7%94%A8%E5%8F%8A%E9%95%BF%E5%9B%BE%E5%8A%A0%E8%BD%BD/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-bitmap%E7%BC%93%E5%AD%98%E4%B8%8E%E5%A4%8D%E7%94%A8%E5%8F%8A%E9%95%BF%E5%9B%BE%E5%8A%A0%E8%BD%BD/</guid>
+        <description>bitmap.getPixels(); bitmap.getRowBytes(); bitmap.getByteCount(); bitmap.getAllocationByteCount(); 图像基础知识 ARGB_8888 RGB_565 Bitmap API解析 Bitmap BitmapFactory BitmapFactory.Options inPreferredConfig 设置图片解码后的像素格式，如：ARGB8888、RGB565 inSampleSize 设置图片采样率进行图片缩放显示，比</description>
+      </item>
+      
+      <item>
+        <title>Android-Context</title>
+        <link>https://dshcao.github.io/zh/posts/android-context/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-context/</guid>
+        <description>前言 Context 抽象基类 ContextImpl Context功能真正的实现类 ContextWraper 看名字就知道ContextWraper虽然继承自Context，但其实它并没有做很多事情，主</description>
       </item>
       
       <item>
@@ -296,6 +341,15 @@
       </item>
       
       <item>
+        <title>Android-MediaCodec</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E4%B9%8Bmediacodec/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E4%B9%8Bmediacodec/</guid>
+        <description>前言 API介绍 MediaFormat 配置类，略。 MediaCodec createEncoderByType(type) &amp;ndash; 创建一个将输入数据编码成type类型的编码器。 常见type类型： MediaFormat.MIMETYPE_VIDEO_AVC //H264 MediaFormat.MIMETYPE_AUDIO_AAC //AAC createDecoderByType(type) &amp;ndash; 创建用来解码type类型数据的</description>
+      </item>
+      
+      <item>
         <title>Android-MVC、MVP及MVVM</title>
         <link>https://dshcao.github.io/zh/posts/android-mvcmvp%E5%8F%8Amvvm/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -314,6 +368,15 @@
       </item>
       
       <item>
+        <title>Android-Surface详解</title>
+        <link>https://dshcao.github.io/zh/posts/android-surface%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-surface%E8%AF%A6%E8%A7%A3/</guid>
+        <description>占坑，敬请期待&amp;hellip; SurfaceView 子线程绘制 双缓冲模式 SurfaceView有两个缓冲区：前台缓冲区和后台缓冲区。在后台线程绘制并将绘制数据缓</description>
+      </item>
+      
+      <item>
         <title>Android-VR&amp;AR</title>
         <link>https://dshcao.github.io/zh/posts/android-vrarmr/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -323,12 +386,21 @@
       </item>
       
       <item>
-        <title>Android-事件分发机制</title>
-        <link>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</link>
+        <title>Android-WebView使用</title>
+        <link>https://dshcao.github.io/zh/posts/android-webview%E4%BD%BF%E7%94%A8/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</guid>
-        <description>View mAttachInfo初始化 查看View源码可以知道mAttachInfo是在dispatchAttachedToWindow中赋值的 View#dispatchAttachedToWindow 1</description>
+        <guid>https://dshcao.github.io/zh/posts/android-webview%E4%BD%BF%E7%94%A8/</guid>
+        <description>占坑，敬请期待&amp;hellip; 前言 Android4.4以前采用的是WebKit内核，Android4.4及以后采用的是chromium内核。</description>
+      </item>
+      
+      <item>
+        <title>Android-增量更新实现</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0%E5%AE%9E%E7%8E%B0/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0%E5%AE%9E%E7%8E%B0/</guid>
+        <description>占坑，敬请期待&amp;hellip;</description>
       </item>
       
       <item>
@@ -359,6 +431,15 @@
       </item>
       
       <item>
+        <title>Android-音视频之RTMP</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E4%B9%8Brtmp/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E4%B9%8Brtmp/</guid>
+        <description>占坑，敬请期待&amp;hellip; rtmp是基于TCP的应用层协议 ffmpeg也rtmp实现，但只能rtmp://域名/to/path，不能rt</description>
+      </item>
+      
+      <item>
         <title>Android-音视频基础知识(一)</title>
         <link>https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%80/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -369,20 +450,20 @@
       
       <item>
         <title>Android四大组件-Activity/Fragment</title>
-        <link>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</link>
+        <link>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</guid>
+        <guid>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</guid>
         <description>Activity 生命周期 当用户打开新的Activity的时候或者切换到桌面的时候回调onPause-onStop，但是如果此Activity是透明主题，那</description>
       </item>
       
       <item>
         <title>Android四大组件-Service</title>
-        <link>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</link>
+        <link>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</guid>
-        <description>前言 Service Service默认运行在主线程，并不运行在单独线程，因此在Service执行耗时操作容易引起ANR。 IntentService 可用于执行后台耗时的任务，任务执</description>
+        <guid>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</guid>
+        <description>前言 Service Service默认运行在主线程，并不运行在单独线程，因此在Service执行耗时操作容易引起ANR。 只有在内存过低且必须回收系统资源以</description>
       </item>
       
       <item>
@@ -396,10 +477,10 @@
       
       <item>
         <title>Android打包流程</title>
-        <link>https://dshcao.github.io/zh/posts/android-%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/</link>
+        <link>https://dshcao.github.io/zh/posts/android-app%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/</guid>
+        <guid>https://dshcao.github.io/zh/posts/android-app%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/</guid>
         <description>前言 说打包流程前我们先了解几个名词和概念 AAPT(Android Asset Packing Tool) AAPT是一种编译工具，用于Android Studio和Android Gradle Plugin 编译打包应用资源A</description>
       </item>
       
@@ -414,10 +495,10 @@
       
       <item>
         <title>Android浏览器-编译Chromium</title>
-        <link>https://dshcao.github.io/zh/posts/android-%E7%BC%96%E8%AF%91chromium/</link>
+        <link>https://dshcao.github.io/zh/posts/android-chromium%E7%BC%96%E8%AF%91/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-%E7%BC%96%E8%AF%91chromium/</guid>
+        <guid>https://dshcao.github.io/zh/posts/android-chromium%E7%BC%96%E8%AF%91/</guid>
         <description>安装depot_tools git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git 报错： fatal: unable to access &#39;https://chromium.googlesource.com/chromium/tools/depot_tools.git/&#39;: Failed to connect to chromium.googlesource.com port 443: Operation timed out 这是由于terminal没有走代理，需要配置代理http监听端口号por</description>
       </item>
       
@@ -449,12 +530,30 @@
       </item>
       
       <item>
+        <title>Android组件化</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E7%BB%84%E4%BB%B6%E5%8C%96/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E7%BB%84%E4%BB%B6%E5%8C%96/</guid>
+        <description>将配置抽出来，在config.gradle中配置，在工程build.gradle中添加apply from: &amp;ldquo;config.gradle&amp;</description>
+      </item>
+      
+      <item>
         <title>ANR分析</title>
         <link>https://dshcao.github.io/zh/posts/anr%E5%88%86%E6%9E%90/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/anr%E5%88%86%E6%9E%90/</guid>
         <description></description>
+      </item>
+      
+      <item>
+        <title>C&amp;C&#43;&#43;基础</title>
+        <link>https://dshcao.github.io/zh/posts/cc&#43;&#43;%E5%9F%BA%E7%A1%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/cc&#43;&#43;%E5%9F%BA%E7%A1%80/</guid>
+        <description>C/C++编译过程 编译过程分四个阶段： 预处理 处理#include和#define等。将#include包含的.h文件插入到#include所</description>
       </item>
       
       <item>
@@ -490,7 +589,25 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/java-jvm/</guid>
-        <description>CMS 新生代：复制 JVM 内存分区 JVM在执行Java程序的过程中会把它管理的内存分为：方法区（运行时常量池）、堆、程序计数器、虚拟机栈、本地方法栈、</description>
+        <description>JVM 内存分区 JVM在执行Java程序的过程中会把它管理的内存分为：方法区（运行时常量池）、堆、程序计数器、虚拟机栈、本地方法栈、直接内存。 其中</description>
+      </item>
+      
+      <item>
+        <title>Java-String</title>
+        <link>https://dshcao.github.io/zh/posts/java-string/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-string/</guid>
+        <description>占坑，敬请期待&amp;hellip; 1 2 3 4 5 6 7 8 9 10 11 12 //先去字符串常量池中查看是否有&amp;#34;ab&amp;#34;，如果有，返回&amp;#34;ab&amp;</description>
+      </item>
+      
+      <item>
+        <title>Java-多线程之JUC(一)</title>
+        <link>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8Bjuc%E4%B8%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8Bjuc%E4%B8%80/</guid>
+        <description>JUC JUC是Java中的一个规范，实现主要位于java.util.concurrent包下。AtomicXXX、Lock、BlockingQu</description>
       </item>
       
       <item>
@@ -500,6 +617,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/java-%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/</guid>
         <description>前言 Java注解是JDK5提供的，用于为代码提供元数据。注解不直接影响代码执行。 注解也是接口类型。即反射时：annotationClass.</description>
+      </item>
+      
+      <item>
+        <title>Java线程池详解</title>
+        <link>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8B%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8B%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%AF%A6%E8%A7%A3/</guid>
+        <description>简介 Java自带线程池 newCachedThreadPool 不固定线程数量(最大支持Integer.MAX_VALUE)的可缓存线程池 线程数无限制(Integer.MAX_VA</description>
       </item>
       
       <item>
@@ -539,6 +665,24 @@
       </item>
       
       <item>
+        <title>Linux命令详解</title>
+        <link>https://dshcao.github.io/zh/posts/linux%E5%91%BD%E4%BB%A4%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/linux%E5%91%BD%E4%BB%A4%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E8%AF%A6%E8%A7%A3/</guid>
+        <description>占坑，敬请期待&amp;hellip; 权限 ls -l drwxr-xr-x 5 dscao staff 160 12 27 07:00 blog -rw-r--r-- 1 dscao staff 26044 8 16 2019 package-lock.json ... drwxr-xr-x 5 dscao staff 160 12 27 07:00 blog的含义是：当前staff用户组的用户ds</description>
+      </item>
+      
+      <item>
+        <title>macOs使用Charles抓包App网络请求</title>
+        <link>https://dshcao.github.io/zh/posts/macos%E4%BD%BF%E7%94%A8charles%E6%8A%93%E5%8C%85app%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/macos%E4%BD%BF%E7%94%A8charles%E6%8A%93%E5%8C%85app%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82/</guid>
+        <description>安装 Charles4.5.6&amp;amp;macOS10.14.5，安装-&amp;gt;找注册账号或破解 配置 Help -&amp;gt; SSL Proxying -&amp;gt; Install Charles Root Certificate然而</description>
+      </item>
+      
+      <item>
         <title>RxJava2源码及使用</title>
         <link>https://dshcao.github.io/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -575,20 +719,29 @@
       </item>
       
       <item>
-        <title>多线程详解</title>
-        <link>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</link>
+        <title>压缩原理及Gzip、7zip</title>
+        <link>https://dshcao.github.io/zh/posts/%E5%8E%8B%E7%BC%A9%E5%8E%9F%E7%90%86%E5%8F%8Agzip7zip/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</guid>
+        <guid>https://dshcao.github.io/zh/posts/%E5%8E%8B%E7%BC%A9%E5%8E%9F%E7%90%86%E5%8F%8Agzip7zip/</guid>
+        <description>占坑，敬请期待&amp;hellip;</description>
+      </item>
+      
+      <item>
+        <title>多线程详解</title>
+        <link>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</guid>
         <description>前置知识 线程是CPU调度的最小单位。 进程是系统进行程序资源分配的最小单位，线程之间共享所在进程的资源。 一个进程至少有一个线程，一个线程必须依</description>
       </item>
       
       <item>
         <title>多线程详解补充</title>
-        <link>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</link>
+        <link>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</guid>
+        <guid>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</guid>
         <description>Java内存模型 Java内存模型主要目标：定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的</description>
       </item>
       
@@ -599,6 +752,33 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</guid>
         <description>前言 程序 = 数据结构 + 算法 似乎数据结构和算法是两码事，但实际有时候数据结构和算法联系非常亲密，可以说有了这种数据结构才有了这种算法或者说有了这</description>
+      </item>
+      
+      <item>
+        <title>模版</title>
+        <link>https://dshcao.github.io/zh/posts/android-recyclerview/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-recyclerview/</guid>
+        <description>简介 ListView的局限性： 只有纵向列表一种布局 没有支持动画的API 没有强制实现ViewHolder 性能不如RecyclerView Rec</description>
+      </item>
+      
+      <item>
+        <title>算法-二分搜索树</title>
+        <link>https://dshcao.github.io/zh/posts/%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91/</guid>
+        <description>占坑，敬请期待&amp;hellip;</description>
+      </item>
+      
+      <item>
+        <title>算法-堆排序</title>
+        <link>https://dshcao.github.io/zh/posts/%E7%AE%97%E6%B3%95-%E5%A0%86%E6%8E%92%E5%BA%8F/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/%E7%AE%97%E6%B3%95-%E5%A0%86%E6%8E%92%E5%BA%8F/</guid>
+        <description>O(nlogn) 二叉堆 二叉堆是一个完全二叉树 最大二叉堆 堆中某个节点的值总是不大于其父节点的值 最小二叉堆 堆中某个节点的值总是不小于其父节点的值</description>
       </item>
       
       <item>
@@ -671,6 +851,31 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/</guid>
         <description>前置知识 Bezier曲线是用一系列点控制曲线状态的，主要分为： 数据点 确定曲线的起始和结束位置 控制点 确定曲线的弯曲程度 其中数据点又叫锚点，只有</description>
+      </item>
+      
+      <item>
+        <title></title>
+        <link>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</guid>
+        <description>s&amp;mdash;
+title: &amp;ldquo;Android-事件分发机制&amp;rdquo;
+date: 2019-10-11T10:33:41+09:00
+description: &amp;ldquo;Android-事件分发机制详解&amp;rdquo;
+tags: [
+&amp;ldquo;android&amp;rdquo;
+]
+series: [
+&amp;ldquo;android&amp;rdquo;,&amp;ldquo;自定义view&amp;rdquo;
+]
+categories: [
+&amp;ldquo;android&amp;rdquo;
+] View mAttachInfo初始化 查看View源码可以知道mAttachInfo是在dispatchAttachedToWindow中赋值的
+View#dispatchAttachedToWindow
+1 2 3 4 5 6 7  @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.P) void dispatchAttachedToWindow(AttachInfo info, int visibility) { mAttachInfo = info; ... onAttachedToWindow(); ... }   继续追踪可以知道View的dispatchAttachedToWindow是在ViewGroup的dispatchAttachedToWindow调用的。
+ViewGroup#dispatchAttachedToWindow
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21  @Override @UnsupportedAppUsage void dispatchAttachedToWindow(AttachInfo info, int visibility) { mGroupFlags |= FLAG_PREVENT_DISPATCH_ATTACHED_TO_WINDOW; super.</description>
       </item>
       
     

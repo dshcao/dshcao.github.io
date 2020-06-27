@@ -18,20 +18,20 @@
       
       <item>
         <title>Android四大组件-Activity/Fragment</title>
-        <link>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</link>
+        <link>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</guid>
+        <guid>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</guid>
         <description>Activity 生命周期 当用户打开新的Activity的时候或者切换到桌面的时候回调onPause-onStop，但是如果此Activity是透明主题，那</description>
       </item>
       
       <item>
         <title>Android四大组件-Service</title>
-        <link>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</link>
+        <link>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</guid>
-        <description>前言 Service Service默认运行在主线程，并不运行在单独线程，因此在Service执行耗时操作容易引起ANR。 IntentService 可用于执行后台耗时的任务，任务执</description>
+        <guid>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</guid>
+        <description>前言 Service Service默认运行在主线程，并不运行在单独线程，因此在Service执行耗时操作容易引起ANR。 只有在内存过低且必须回收系统资源以</description>
       </item>
       
     

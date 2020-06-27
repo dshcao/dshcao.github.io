@@ -134,6 +134,15 @@
       </item>
       
       <item>
+        <title>Android AMS</title>
+        <link>https://dshcao.github.io/zh/posts/android-wms/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-wms/</guid>
+        <description>前言 WMS和AMS一样运行在SystemServer进程中。WMS控制所有Window的显示、隐藏以及显示的位置。 WindowManager&amp;amp;PhoneWindowManager&amp;amp;WindowManagerService 两者关系和Activit</description>
+      </item>
+      
+      <item>
         <title>Android AppBundle</title>
         <link>https://dshcao.github.io/zh/posts/android-app-bundle/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -149,6 +158,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-apk%E7%98%A6%E8%BA%AB/</guid>
         <description>APK体积优化 svg/vector替换套图小图标 使用SVG替代简单的小图标及图标套图 SVG：可缩放矢量图，不会因为缩放导致图片质量下降。常用</description>
+      </item>
+      
+      <item>
+        <title>Android ServiceManager&amp;SystemServer</title>
+        <link>https://dshcao.github.io/zh/posts/android-systemserverservicemanager/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-systemserverservicemanager/</guid>
+        <description>前言 SystemServer是系统进程，SystemServer负责启动很多系统服务，App通过Binder跨进程通信使用这些系统服务，Se</description>
       </item>
       
       <item>
@@ -176,6 +194,33 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-apt/</guid>
         <description>APT(Annotation Processor Tool) 注解处理器(APT)它是Java提供的帮我们处理注解的。要实现我们自己的处理注解的逻辑就需要继承Processor接口。 1 2 3 4 5 6 7</description>
+      </item>
+      
+      <item>
+        <title>Android-Binder机制(一)</title>
+        <link>https://dshcao.github.io/zh/posts/android-binder%E6%9C%BA%E5%88%B6%E4%B8%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-binder%E6%9C%BA%E5%88%B6%E4%B8%80/</guid>
+        <description>前沿 Android Binder是在OpneBinder上的定制实现。Binder是Android系统中大量使用的IPC（Inter-process com</description>
+      </item>
+      
+      <item>
+        <title>Android-Bitmap缓存与复用及长图加载</title>
+        <link>https://dshcao.github.io/zh/posts/android-bitmap%E7%BC%93%E5%AD%98%E4%B8%8E%E5%A4%8D%E7%94%A8%E5%8F%8A%E9%95%BF%E5%9B%BE%E5%8A%A0%E8%BD%BD/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-bitmap%E7%BC%93%E5%AD%98%E4%B8%8E%E5%A4%8D%E7%94%A8%E5%8F%8A%E9%95%BF%E5%9B%BE%E5%8A%A0%E8%BD%BD/</guid>
+        <description>bitmap.getPixels(); bitmap.getRowBytes(); bitmap.getByteCount(); bitmap.getAllocationByteCount(); 图像基础知识 ARGB_8888 RGB_565 Bitmap API解析 Bitmap BitmapFactory BitmapFactory.Options inPreferredConfig 设置图片解码后的像素格式，如：ARGB8888、RGB565 inSampleSize 设置图片采样率进行图片缩放显示，比</description>
+      </item>
+      
+      <item>
+        <title>Android-Context</title>
+        <link>https://dshcao.github.io/zh/posts/android-context/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-context/</guid>
+        <description>前言 Context 抽象基类 ContextImpl Context功能真正的实现类 ContextWraper 看名字就知道ContextWraper虽然继承自Context，但其实它并没有做很多事情，主</description>
       </item>
       
       <item>
@@ -278,12 +323,21 @@
       </item>
       
       <item>
-        <title>Android-事件分发机制</title>
-        <link>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</link>
+        <title>Android-WebView使用</title>
+        <link>https://dshcao.github.io/zh/posts/android-webview%E4%BD%BF%E7%94%A8/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</guid>
-        <description>View mAttachInfo初始化 查看View源码可以知道mAttachInfo是在dispatchAttachedToWindow中赋值的 View#dispatchAttachedToWindow 1</description>
+        <guid>https://dshcao.github.io/zh/posts/android-webview%E4%BD%BF%E7%94%A8/</guid>
+        <description>占坑，敬请期待&amp;hellip; 前言 Android4.4以前采用的是WebKit内核，Android4.4及以后采用的是chromium内核。</description>
+      </item>
+      
+      <item>
+        <title>Android-增量更新实现</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0%E5%AE%9E%E7%8E%B0/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0%E5%AE%9E%E7%8E%B0/</guid>
+        <description>占坑，敬请期待&amp;hellip;</description>
       </item>
       
       <item>
@@ -324,28 +378,28 @@
       
       <item>
         <title>Android四大组件-Activity/Fragment</title>
-        <link>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</link>
+        <link>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</guid>
+        <guid>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/</guid>
         <description>Activity 生命周期 当用户打开新的Activity的时候或者切换到桌面的时候回调onPause-onStop，但是如果此Activity是透明主题，那</description>
       </item>
       
       <item>
         <title>Android四大组件-Service</title>
-        <link>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</link>
+        <link>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</guid>
-        <description>前言 Service Service默认运行在主线程，并不运行在单独线程，因此在Service执行耗时操作容易引起ANR。 IntentService 可用于执行后台耗时的任务，任务执</description>
+        <guid>https://dshcao.github.io/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/</guid>
+        <description>前言 Service Service默认运行在主线程，并不运行在单独线程，因此在Service执行耗时操作容易引起ANR。 只有在内存过低且必须回收系统资源以</description>
       </item>
       
       <item>
         <title>Android打包流程</title>
-        <link>https://dshcao.github.io/zh/posts/android-%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/</link>
+        <link>https://dshcao.github.io/zh/posts/android-app%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/</guid>
+        <guid>https://dshcao.github.io/zh/posts/android-app%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/</guid>
         <description>前言 说打包流程前我们先了解几个名词和概念 AAPT(Android Asset Packing Tool) AAPT是一种编译工具，用于Android Studio和Android Gradle Plugin 编译打包应用资源A</description>
       </item>
       
@@ -360,10 +414,10 @@
       
       <item>
         <title>Android浏览器-编译Chromium</title>
-        <link>https://dshcao.github.io/zh/posts/android-%E7%BC%96%E8%AF%91chromium/</link>
+        <link>https://dshcao.github.io/zh/posts/android-chromium%E7%BC%96%E8%AF%91/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-%E7%BC%96%E8%AF%91chromium/</guid>
+        <guid>https://dshcao.github.io/zh/posts/android-chromium%E7%BC%96%E8%AF%91/</guid>
         <description>安装depot_tools git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git 报错： fatal: unable to access &#39;https://chromium.googlesource.com/chromium/tools/depot_tools.git/&#39;: Failed to connect to chromium.googlesource.com port 443: Operation timed out 这是由于terminal没有走代理，需要配置代理http监听端口号por</description>
       </item>
       
@@ -400,7 +454,16 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/java-jvm/</guid>
-        <description>CMS 新生代：复制 JVM 内存分区 JVM在执行Java程序的过程中会把它管理的内存分为：方法区（运行时常量池）、堆、程序计数器、虚拟机栈、本地方法栈、</description>
+        <description>JVM 内存分区 JVM在执行Java程序的过程中会把它管理的内存分为：方法区（运行时常量池）、堆、程序计数器、虚拟机栈、本地方法栈、直接内存。 其中</description>
+      </item>
+      
+      <item>
+        <title>Java-多线程之JUC(一)</title>
+        <link>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8Bjuc%E4%B8%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8Bjuc%E4%B8%80/</guid>
+        <description>JUC JUC是Java中的一个规范，实现主要位于java.util.concurrent包下。AtomicXXX、Lock、BlockingQu</description>
       </item>
       
       <item>
@@ -419,6 +482,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/jvmdalvikart/</guid>
         <description>前置知识 Android中每个应用都对应一个单独的虚拟机，独立运行 JIT&amp;amp;AOT JIT，Just-in-time，即时编译，运行时动态编译。在运行时将频繁</description>
+      </item>
+      
+      <item>
+        <title>macOs使用Charles抓包App网络请求</title>
+        <link>https://dshcao.github.io/zh/posts/macos%E4%BD%BF%E7%94%A8charles%E6%8A%93%E5%8C%85app%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/macos%E4%BD%BF%E7%94%A8charles%E6%8A%93%E5%8C%85app%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82/</guid>
+        <description>安装 Charles4.5.6&amp;amp;macOS10.14.5，安装-&amp;gt;找注册账号或破解 配置 Help -&amp;gt; SSL Proxying -&amp;gt; Install Charles Root Certificate然而</description>
       </item>
       
       <item>
@@ -441,20 +513,29 @@
       
       <item>
         <title>多线程详解</title>
-        <link>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</link>
+        <link>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</guid>
+        <guid>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</guid>
         <description>前置知识 线程是CPU调度的最小单位。 进程是系统进行程序资源分配的最小单位，线程之间共享所在进程的资源。 一个进程至少有一个线程，一个线程必须依</description>
       </item>
       
       <item>
         <title>多线程详解补充</title>
-        <link>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</link>
+        <link>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</guid>
+        <guid>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</guid>
         <description>Java内存模型 Java内存模型主要目标：定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的</description>
+      </item>
+      
+      <item>
+        <title>模版</title>
+        <link>https://dshcao.github.io/zh/posts/android-recyclerview/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-recyclerview/</guid>
+        <description>简介 ListView的局限性： 只有纵向列表一种布局 没有支持动画的API 没有强制实现ViewHolder 性能不如RecyclerView Rec</description>
       </item>
       
       <item>

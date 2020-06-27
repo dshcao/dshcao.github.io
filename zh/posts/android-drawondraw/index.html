@@ -708,29 +708,29 @@ Region.Op.REPLACE 只取第二个Region部分</p>
 <!-- 需要指出的是Canvas的matrix是从view传递过来的，所以onDraw设置canvas.setMatrix后下次还需要重新设置。因为view的matrix并未改变。 -->
 <h3 id="api-3">API解析</h3>
 <ul>
-<li>isHardwareAccelerated() canvas 是否使用了硬件加速 4.0后默认开启硬件加速。可以通过view.setLayerType(View.LAYER_TYPE_SOFTWARE,null)关闭view硬件加速</li>
-<li>setBitmap(Bitmap bitmap) 重置之前的所有状态然后绘制bitmap。在API26之前，当前矩阵和剪辑堆栈被保留。bitmap:必须是可变的，即bitmap.isMutable=true</li>
-<li>setMatrix(Matrix matrix) 使用指定矩阵替换当前矩阵。如果matrix是null，则当前矩阵会被重置为单位矩阵。官方建议使用concat(Matrix)/scale(float, float)/translate(float, float)/rotate(float)代替此方法</li>
-<li>drawBitmap(bitmap, src, dst, paint) src：需要绘制bitmap的区域(部分)，可以裁剪图片。 dst：需要绘制到canvas哪个区域</li>
-<li>drawBitmap(bitmap, left, top, paint) left:绘制bitmap（在canvas）的左边起始位置 top：绘制bitmap（在canvas）的上边起始位置</li>
-<li>drawBitmap(bitmap, matrix, paint) 使用指定matrix绘制bitmap</li>
-<li>drawBitmapMesh(@NonNull Bitmap bitmap, int meshWidth, int meshHeight,float[] verts, int vertOffset, int[] colors, int colorOffset,Paint paint) <br>使用网格绘制bitmap meshWidth:横向网格数或网格列数 meshHeight：纵向网格数或网格行数 verts：顶点数，两个一对表示一个定点的x,y值，verts的大小至少是(meshWidth+1) * (meshHeight+1) * 2 + vertOffset vertOffset：绘制前要跳过的顶点元素数 colors:可能为空。指定每个顶点处的颜色，该颜色与在相应单元格内的位图颜色叠加。如果不为空，则数组中必须至少有（meshWidth+1）*（meshHeight+1）+colorOffset值 colorOffset：绘制前要跳过的颜色元素数</li>
-<li>drawPath(path, paint) 绘制path，path是被填充还是绘制边宽依赖paint的Style</li>
-<li>drawRGB(r, g, b) 使用srcover porterduff模式，用指定的RGB颜色填充整个画布的位图（仅限于当前clip区域）</li>
-<li>drawARGB(a, r, g, b) 使用srcover porterduff模式，用指定的ARGB颜色填充整个画布的位图（仅限于当前clip区域）</li>
-<li>drawColor(int color, PorterDuff.Mode mode) 用指定的颜色和porterduff xfermode填充整个画布的位图（仅限于当前clip区域）</li>
-<li>drawColor(int color, BlendMode mode) 用指定的颜色和blendmode填充整个画布的位图（仅限于当前clip区域）</li>
-<li>drawArc(oval, startAngle, sweepAngle, useCenter, paint) oval:扇形椭圆区域 startAngle：开始角度(x正轴是0度)；sweepAngle：startAngle开始顺时针方向的角度 useCenter：是否包含椭圆区域中心，false则只绘制扇形两点相连的区域 true会绘制扇形亮点分别与椭圆区域中心相连的区域</li>
-<li>drawCircle(cx, cy, radius, paint) 不解释。</li>
-<li>drawOval(RectF oval, Paint paint) 不解释。</li>
-<li>drawRect(RectF rect, Paint paint) 不解释。</li>
-<li>ddrawRoundRect(RectF rect, float rx, float ry, Paint paint) 不解释。</li>
-<li>drawDoubleRoundRect(RectF outer, float[] outerRadii,RectF inner, float[] innerRadii, Paint paint)</li>
-<li>drawLine() 绘制一条直线</li>
-<li>drawLines(float[] pts, int offset, int count,Paint paint) offset:绘制前从pts跳过的个数 count：从offset绘制的个数</li>
-<li>drawPoints(float[] pts, int offset, int count,Paint paint) 类比drawLines</li>
-<li>drawPicture(Picture picture, RectF dst) 绘制Picture。Picture的作用是提高绘制效率，比如你用canvas连续绘制多个几个图形不如先在Picture上绘制连续的多个几何图形，在使用canvas绘制picture，这样效率更高。</li>
-<li>drawText(CharSequence text, int start, int end, float x, float y, Paint paint) <br> start:要绘制的文本中第一个字符的索引 end:要绘制的文本中最后一个字符的索引，不包含end x：文本绘制位置的原点x坐标 y：文本绘制位置的原点y坐标</li>
+<li><strong>isHardwareAccelerated()</strong> canvas 是否使用了硬件加速 4.0后默认开启硬件加速。可以通过view.setLayerType(View.LAYER_TYPE_SOFTWARE,null)关闭view硬件加速</li>
+<li><strong>setBitmap(Bitmap bitmap)</strong> 重置之前的所有状态然后绘制bitmap。在API26之前，当前矩阵和剪辑堆栈被保留。bitmap:必须是可变的，即bitmap.isMutable=true</li>
+<li><strong>setMatrix(Matrix matrix)</strong> 使用指定矩阵替换当前矩阵。如果matrix是null，则当前矩阵会被重置为单位矩阵。官方建议使用concat(Matrix)/scale(float, float)/translate(float, float)/rotate(float)代替此方法</li>
+<li><strong>drawBitmap(bitmap, src, dst, paint)</strong> src：需要绘制bitmap的区域(部分)，可以裁剪图片。 dst：需要绘制到canvas哪个区域</li>
+<li><strong>drawBitmap(bitmap, left, top, paint)</strong> left:绘制bitmap（在canvas）的左边起始位置 top：绘制bitmap（在canvas）的上边起始位置</li>
+<li><strong>drawBitmap(bitmap, matrix, paint)</strong> 使用指定matrix绘制bitmap</li>
+<li><strong>drawBitmapMesh(@NonNull Bitmap bitmap, int meshWidth, int meshHeight,float[] verts, int vertOffset, int[] colors, int colorOffset,Paint paint)</strong> <br>使用网格绘制bitmap meshWidth:横向网格数或网格列数 meshHeight：纵向网格数或网格行数 verts：顶点数，两个一对表示一个定点的x,y值，verts的大小至少是(meshWidth+1) * (meshHeight+1) * 2 + vertOffset vertOffset：绘制前要跳过的顶点元素数 colors:可能为空。指定每个顶点处的颜色，该颜色与在相应单元格内的位图颜色叠加。如果不为空，则数组中必须至少有（meshWidth+1）*（meshHeight+1）+colorOffset值 colorOffset：绘制前要跳过的颜色元素数</li>
+<li><strong>drawPath(path, paint)</strong> 绘制path，path是被填充还是绘制边宽依赖paint的Style</li>
+<li><strong>drawRGB(r, g, b)</strong> 使用srcover porterduff模式，用指定的RGB颜色填充整个画布的位图（仅限于当前clip区域）</li>
+<li><strong>drawARGB(a, r, g, b)</strong> 使用srcover porterduff模式，用指定的ARGB颜色填充整个画布的位图（仅限于当前clip区域）</li>
+<li><strong>drawColor(int color, PorterDuff.Mode mode)</strong> 用指定的颜色和porterduff xfermode填充整个画布的位图（仅限于当前clip区域）</li>
+<li><strong>drawColor(int color, BlendMode mode)</strong> 用指定的颜色和blendmode填充整个画布的位图（仅限于当前clip区域）</li>
+<li><strong>drawArc(oval, startAngle, sweepAngle, useCenter, paint)</strong> oval:扇形椭圆区域 startAngle：开始角度(x正轴是0度)；sweepAngle：startAngle开始顺时针方向的角度 useCenter：是否包含椭圆区域中心，false则只绘制扇形两点相连的区域 true会绘制扇形亮点分别与椭圆区域中心相连的区域</li>
+<li><strong>drawCircle(cx, cy, radius, paint)</strong> 不解释。</li>
+<li><strong>drawOval(RectF oval, Paint paint)</strong> 不解释。</li>
+<li><strong>drawRect(RectF rect, Paint paint)</strong> 不解释。</li>
+<li><strong>ddrawRoundRect(RectF rect, float rx, float ry, Paint paint)</strong> 不解释。</li>
+<li><strong>drawDoubleRoundRect(RectF outer, float[] outerRadii,RectF inner, float[] innerRadii, Paint paint)</strong></li>
+<li><strong>drawLine()</strong> 绘制一条直线</li>
+<li><strong>drawLines(float[] pts, int offset, int count,Paint paint)</strong> offset:绘制前从pts跳过的个数 count：从offset绘制的个数</li>
+<li><strong>drawPoints(float[] pts, int offset, int count,Paint paint)</strong> 类比drawLines</li>
+<li><strong>drawPicture(Picture picture, RectF dst)</strong> 绘制Picture。Picture的作用是提高绘制效率，比如你用canvas连续绘制多个几个图形不如先在Picture上绘制连续的多个几何图形，在使用canvas绘制picture，这样效率更高。</li>
+<li><strong>drawText(CharSequence text, int start, int end, float x, float y, Paint paint)</strong> <br> start:要绘制的文本中第一个字符的索引 end:要绘制的文本中最后一个字符的索引，不包含end x：文本绘制位置的原点x坐标 y：文本绘制位置的原点y坐标</li>
 <li>drawTextOnPath(String text, Path path, float hOffset, float vOffset, Paint paint) <br> 沿path绘制文字，paint的Align决定了沿path何处开始绘制文本 hOffset：沿路径绘制文本的水平偏移量 vOffset：沿路径绘制文本的纵向偏移量</li>
 <li>drawTextRun(CharSequence text, int start, int end, int contextStart,int contextEnd, float x, float y, boolean isRtl, Paint paint) <br>绘制文本，和drawText的区别是增加了文字上下文支持。什么是文字上下文？在一些文字中，比如阿拉伯文字，一个文字单独写和这个文字与某些其他文字一起写时写法是不一样的，我们熟悉的汉字和英文是没有这种情况的。知道这些我们应该知道contextStart和contextEnd的意义了。0 &lt;= contextStart &lt;= start &lt;= end &lt;= contextEnd&lt;= text.length</li>
 <li>drawTextRun(MeasuredText text, int start, int end, int contextStart,int contextEnd, float x, float y, boolean isRtl, Paint paint) <br> MeasuredTexts是Android Q增加的用于处理文字的类。具体看文档</li>
@@ -965,23 +965,23 @@ Region.Op.REPLACE 只取第二个Region部分</p>
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
-        </li>
-        
-        <li>
           <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-pulllayout/" class="related__link">自定义View-PullLayout</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/" class="related__link">Android打包流程</a>
+          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-glide%E5%88%86%E6%9E%90/" class="related__link">Android-Glide分析</a>
+          <a href="/zh/posts/android-systemserverservicemanager/" class="related__link">Android ServiceManager&amp;SystemServer</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-sparsearray%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="related__link">SparseArray源码解析</a>
+          <a href="/zh/posts/jetpack-camerax/" class="related__link">Jetpack-CameraX</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/macos%E4%BD%BF%E7%94%A8charles%E6%8A%93%E5%8C%85app%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82/" class="related__link">macOs使用Charles抓包App网络请求</a>
         </li>
         
     </ul>
@@ -999,8 +999,8 @@ Region.Op.REPLACE 只取第二个Region部分</p>
   
   <div class="grow"></div>
   
-    <a href="https://dshcao.github.io/zh/posts/android-arouter%E5%8E%9F%E7%90%86%E7%AE%80%E6%9E%90/" class="pagination-single__right">      
-      <div class="pagination-single__right-title">Android-ARouter原理简析</div>
+    <a href="https://dshcao.github.io/zh/posts/android-context/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">Android-Context</div>
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
       </div>

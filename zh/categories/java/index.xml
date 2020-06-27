@@ -17,6 +17,15 @@
     
       
       <item>
+        <title>Android-Context</title>
+        <link>https://dshcao.github.io/zh/posts/android-context/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-context/</guid>
+        <description>前言 Context 抽象基类 ContextImpl Context功能真正的实现类 ContextWraper 看名字就知道ContextWraper虽然继承自Context，但其实它并没有做很多事情，主</description>
+      </item>
+      
+      <item>
         <title>Android-Gradle应用</title>
         <link>https://dshcao.github.io/zh/posts/android-gradle%E5%BA%94%E7%94%A8/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -27,10 +36,10 @@
       
       <item>
         <title>Android浏览器-编译Chromium</title>
-        <link>https://dshcao.github.io/zh/posts/android-%E7%BC%96%E8%AF%91chromium/</link>
+        <link>https://dshcao.github.io/zh/posts/android-chromium%E7%BC%96%E8%AF%91/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-%E7%BC%96%E8%AF%91chromium/</guid>
+        <guid>https://dshcao.github.io/zh/posts/android-chromium%E7%BC%96%E8%AF%91/</guid>
         <description>安装depot_tools git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git 报错： fatal: unable to access &#39;https://chromium.googlesource.com/chromium/tools/depot_tools.git/&#39;: Failed to connect to chromium.googlesource.com port 443: Operation timed out 这是由于terminal没有走代理，需要配置代理http监听端口号por</description>
       </item>
       
@@ -58,7 +67,16 @@
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/java-jvm/</guid>
-        <description>CMS 新生代：复制 JVM 内存分区 JVM在执行Java程序的过程中会把它管理的内存分为：方法区（运行时常量池）、堆、程序计数器、虚拟机栈、本地方法栈、</description>
+        <description>JVM 内存分区 JVM在执行Java程序的过程中会把它管理的内存分为：方法区（运行时常量池）、堆、程序计数器、虚拟机栈、本地方法栈、直接内存。 其中</description>
+      </item>
+      
+      <item>
+        <title>Java-多线程之JUC(一)</title>
+        <link>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8Bjuc%E4%B8%80/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8Bjuc%E4%B8%80/</guid>
+        <description>JUC JUC是Java中的一个规范，实现主要位于java.util.concurrent包下。AtomicXXX、Lock、BlockingQu</description>
       </item>
       
       <item>
@@ -68,6 +86,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/java-%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/</guid>
         <description>前言 Java注解是JDK5提供的，用于为代码提供元数据。注解不直接影响代码执行。 注解也是接口类型。即反射时：annotationClass.</description>
+      </item>
+      
+      <item>
+        <title>Java线程池详解</title>
+        <link>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8B%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%AF%A6%E8%A7%A3/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B9%8B%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%AF%A6%E8%A7%A3/</guid>
+        <description>简介 Java自带线程池 newCachedThreadPool 不固定线程数量(最大支持Integer.MAX_VALUE)的可缓存线程池 线程数无限制(Integer.MAX_VA</description>
       </item>
       
       <item>
@@ -117,20 +144,29 @@
       
       <item>
         <title>多线程详解</title>
-        <link>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</link>
+        <link>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</guid>
+        <guid>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AF%A6%E8%A7%A3/</guid>
         <description>前置知识 线程是CPU调度的最小单位。 进程是系统进行程序资源分配的最小单位，线程之间共享所在进程的资源。 一个进程至少有一个线程，一个线程必须依</description>
       </item>
       
       <item>
         <title>多线程详解补充</title>
-        <link>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</link>
+        <link>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</guid>
+        <guid>https://dshcao.github.io/zh/posts/java-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%A1%A5%E5%85%85/</guid>
         <description>Java内存模型 Java内存模型主要目标：定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的</description>
+      </item>
+      
+      <item>
+        <title>模版</title>
+        <link>https://dshcao.github.io/zh/posts/android-recyclerview/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-recyclerview/</guid>
+        <description>简介 ListView的局限性： 只有纵向列表一种布局 没有支持动画的API 没有强制实现ViewHolder 性能不如RecyclerView Rec</description>
       </item>
       
       <item>
