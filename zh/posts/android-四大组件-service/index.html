@@ -405,7 +405,7 @@
     <h2 class="single__title">Android四大组件-Service</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 10月 11日 · ☕4 min read
+  🕓 2019年 10月 11日 · ☕5 min read
   
 </div>
       <div class="single__tags caption">
@@ -438,6 +438,18 @@
 <p>Service默认运行在主线程，并不运行在单独线程，因此在Service执行耗时操作容易引起ANR。<br />
 只有在内存过低且必须回收系统资源以供拥有用户焦点的 Activity 使用时，Android 系统才会停止服务。如果将服务绑定到拥有用户焦点的 Activity，则它其不太可能会终止；如果将服务声明为在前台运行，则其几乎永远不会终止。如果服务已启动并长时间运行，则系统逐渐降低其在后台任务列表中的位置，而服务被终止的概率也会大幅提升—如果服务是启动服务，则您必须将其设计为能够妥善处理系统执行的重启。如果系统终止服务，则其会在资源可用时立即重启服务，但这还取决于您从 onStartCommand() 返回的值。</p>
 <p>如果服务同时处理多个对 onStartCommand() 的请求，则您不应在处理完一个启动请求之后停止服务，因为您可能已收到新的启动请求（在第一个请求结束时停止服务会终止第二个请求）。为避免此问题，您可以使用 stopSelf(int) 确保服务停止请求始终基于最近的启动请求。换言之，在调用 stopSelf(int) 时，您需传递与停止请求 ID 相对应的启动请求 ID（传递给 onStartCommand() 的 startId）。此外，如果服务在您能够调用 stopSelf(int) 之前收到新启动请求，则 ID 不匹配，服务也不会停止。</p>
+<p><strong><code>onLowMemory</code></strong> - 当整个系统的内存不足时调用此函数，并且主动运行的进程应该减少它们的内存使用量。虽然调用此函数的确切点没有定义，但通常在所有后台进程都被终止时回调。</p>
+<p><strong><code>onTrimMemory(level)</code></strong><br />
+<strong>level</strong>：</p>
+<ul>
+<li><code>TRIM_MEMORY_COMPLETE</code> 进程接近后台LRU列表的末尾，如果不能很快找到更多内存，当前进程将被终止。</li>
+<li><code>TRIM_MEMORY_MODERATE</code> 进程位于后台LRU列表的中间，当内存进一步不足时当前进程可能会被清理掉。释放内存可以帮助系统保持列表中稍后运行的其他进程，以获得更好的总体性能。</li>
+<li><code>TRIM_MEMORY_BACKGROUND</code> 当前进程已进入LRU列表，当内存进一步不足时当前进程可能会被清理掉。此时应该释放资源保证内存的充足以便当前进程不被杀死继续保留在内存中，这样当用户重新返回当前进程的应用程序，应用程序的资源可以高效、快速地重新构建。而不是等待内存不足导致应用程序进程被杀死清理掉，当用户重新返回当前进程的应用程序需要重新启动。</li>
+<li><code>TRIM_MEMORY_UI_HIDDEN</code> 当前进程的UI已经隐藏不再显示了(比如用户点击了Home/Back键)，此时当前进程应该释放一些资源。</li>
+<li><code>TRIM_MEMORY_RUNNING_CRITICAL</code> 当前进程不是可被回收后台进程，但系统内存已经严重不足，将无法保持任何后台进程的运行，当前进程应该尽可能释放非关键资源以供其他地方使用。接下来会调用<code>onLowMemory</code>来报告后台不能保留任何内容。</li>
+<li><code>TRIM_MEMORY_RUNNING_LOW</code> 当前进程不是可被回收后台进程，但系统内存已经不足，当前进程应该释放不需要的资源以供其他地方使用。</li>
+<li><code>TRIM_MEMORY_RUNNING_MODERATE</code> 当前进程不是可被回收后台进程，但系统内存有些紧张，当前进程可能需要释放一些不需要的资源以供其他地方使用。</li>
+</ul>
 <h3 id="servicestartservicebindservice">Service启动的两种方式startService和bindService</h3>
 <p><img src="../../../images/service_lifecycle.png" alt="Service生命周期" /></p>
 <p><strong>startService</strong> &ndash; 服务会在后台无限期运行。因此需要自己调用 stopSelf() 或 stopService() 来停止服务。</p>
@@ -583,19 +595,19 @@ onCreate只会首次创建时调用一次，onBind首次调用bindService启动�
         </li>
         
         <li>
-          <a href="/zh/posts/android-binder%E6%9C%BA%E5%88%B6%E4%B8%80/" class="related__link">Android-Binder机制(一)</a>
-        </li>
-        
-        <li>
           <a href="/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/" class="related__link">RxJava2源码及使用</a>
         </li>
         
         <li>
-          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
+          <a href="/zh/posts/android-jnindk/" class="related__link">Android-JNI&amp;NDK</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-drawondraw/" class="related__link">Android-draw&amp;onDraw</a>
+          <a href="/zh/posts/jvmdalvikart/" class="related__link">JVM/Dalvik/ART</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-binder%E6%9C%BA%E5%88%B6%E4%B8%80/" class="related__link">Android-Binder机制(一)</a>
         </li>
         
     </ul>

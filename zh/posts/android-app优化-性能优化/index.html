@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Android App优化-安装包优化 – dshcao blog</title>
+    
+
+
+<script defer src="/js/fuse.min.94c78ad70b02749822921660cf4e9f0b3701bc0680c421afb784a78228de0275.js"></script>
+
+<script>
+  
+  var runSearch = function() {
+    
+        var baseurl = "https:\/\/dshcao.github.io\/\/zh";
+    
+    
+    var searchResults = null;
+    var searchMenu = null;
+    var fuse = null;
+
+    function endsWith(str, suffix) {
+      return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
+
+    function initFuse() {
+      if (!endsWith(baseurl, "/")) {
+        baseurl = baseurl + '/';
+      };
+
+      $.ajax({
+        type: "GET",
+        url: baseurl + "index.json",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+      })
+        .done(function (index) {
+          fuse = new Fuse(index, {
+            keys: ['title', 'description', 'content']
+          });
+        })
+        .fail(function (jqxhr, textStatus, error) {
+          var err = textStatus + ", " + error;
+          console.error("Error getting Hugo index file:", err);
+        });
+    }
+
+    function renderSearchResults(results) {
+      searchResults = document.getElementById('search-results');
+      searchMenu = document.getElementById('search-menu');
+      searchResults.setAttribute('class', 'dropdown is-active');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'dropdown-content search-content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.setAttribute('class', 'dropdown-item');
+          item.innerHTML = `<div class="menu-item"><div class="menu-item__title">📄 ${result.title}</div><div class="menu-item__desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        item.setAttribute('class', 'dropdown-item');
+        item.innerText = 'No results found';
+        content.appendChild(item);
+      }
+
+      while (searchMenu.hasChildNodes()) {
+        searchMenu.removeChild(
+          searchMenu.lastChild
+        );
+      }
+      searchMenu.appendChild(content);
+    }
+
+    function renderSearchResultsMobile(results) {
+      searchResults = document.getElementById('search-mobile-results');
+
+      var content = document.createElement('div');
+      content.setAttribute('class', 'mobile-search__content');
+
+      if (results.length > 0) {
+        results.forEach(function (result) {
+          var item = document.createElement('a');
+          item.setAttribute('href', result.uri);
+          item.innerHTML = `<div class="mobile-search__item"><div class="mobile-search__item--title">📄 ${result.title}</div><div class="mobile-search__item--desc">${result.description ? result.description : result.content}</div></div>`;
+          content.appendChild(item);
+        });
+      } else {
+        var item = document.createElement('span');
+        content.appendChild(item);
+      }
+
+      $('#search-mobile-results').empty();
+      searchResults.appendChild(content);
+    }
+
+    initFuse();
+
+    $("#search").on('input', function (e) {
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+
+      if ($(window).width() < 770) {
+        return null;
+      } 
+
+      var results = fuse.search(e.target.value);
+      renderSearchResults(results);
+    });
+
+    $('#search').on('blur', function () {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      setTimeout(function () {
+        $('#search-results').attr('class', 'dropdown');
+      }, 100);
+    });
+
+    $('#search').on('click', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      if (!e.target.value) {
+        $('#search-results').attr('class', 'dropdown');
+        return null;
+      }
+      var results = fuse.search(e.target.value);
+      renderSearchResults(results);
+    });
+
+    $('#search').on('keydown', function (e) {
+      if ($(window).width() < 770) {
+        return null;
+      }
+      var items = $('#search-menu .dropdown-item');
+      var activeIndex = $('#search-menu .dropdown-item.is-active').index();
+
+      items.removeClass('is-active');
+      if (e.key === 'ArrowDown') {
+        items.eq(activeIndex + 1).addClass('is-active');
+      } else if (e.key === 'ArrowUp') {
+        items.eq(activeIndex - 1).addClass('is-active');
+      } else if (e.key === 'Enter') {
+        var currentItemLink = items.eq(activeIndex).attr('href');
+        if (currentItemLink) {
+          location.href = currentItemLink;
+        }
+      }
+    });
+
+    $("#search-mobile").on('input', function(e) {
+      if (!e.target.value) {
+        $('#search-mobile-results').empty();
+        return null;
+      }
+
+      var results = fuse.search(e.target.value);
+      renderSearchResultsMobile(results);
+    });
+  }
+</script>    
+    
+
+
+<link rel="stylesheet" href="/css/main.min.css">
+
+
+    <meta name="description" content="Android App优化" />
+<meta name="keywords" content="">
+<meta name="created" content="2019-10-11T10:33:41&#43;0900">
+<meta name="modified" content="2019-10-11T10:33:41&#43;0900">
+
+
+<meta property="og:site_name" content="dshcao blog">
+<meta property="og:title" content="Android App优化-安装包优化">
+<meta property="og:url" content="https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+<meta property="og:type" content="article">
+
+<meta name="generator" content="Hugo 0.61.0" />
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/logo.svg" sizes="any" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.json">
+
+
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "headline": "Android App优化-安装包优化",
+    "datePublished": "2019-10-11T10:33:41+09:00",
+    "dateModified": "2019-10-11T10:33:41+09:00",
+    "url" : "https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/",
+    "description": "Android App优化",
+    "keywords": ["android"],
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://dshcao.github.io/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "dshcao blog",
+      "url": "https://dshcao.github.io/"
+    }
+  }
+</script>
+
+    
+
+
+
+
+
+    
+</head>
+
+<body id="root" class="theme__dark">
+    <script>
+        var localTheme = localStorage.getItem('theme');
+        if (localTheme) {
+            document.getElementById('root').className = `theme__${localTheme}`;
+        }        
+    </script>    
+    
+    <div id="body">
+        
+        <div class="container wrapper">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar__brand">
+    
+    <a href="/zh/" title="Home" rel="home" class="navbar__logo-link">
+      <img data-src="/logo.png" src="data:image/svg+xml,%0A%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' width='48px' height='48px'%3E%3Cpath fill='%2337474f' d='M24.648,4l0.29,0.002c0.52,0.008,1.23,0.109,1.857,0.198c0.314,0.045,0.616,0.088,0.883,0.119 c0.164,0.024,0.715,0.227,1.043,0.348C29.468,4.941,32,6.875,32,6.875L31,5c0,0,1.563,0.445,2.125,0.875C34.247,6.733,34.354,7,35,7 h0.375L35,6c0.375,0.19,1.78,1.289,1.968,1.541L37,7.583l0.036,0.039c1.411,1.495,2.095,2.462,2.595,3.169 c0.339,0.48,0.945,0.822,1.243,1.21C41.225,12.454,42,14,42,14v-0.998c0,0,0.776,1.029,1.25,2.373C44,17.5,44,19,44,19 s-0.25-0.625-1-0.875C43,19,44,21,44,24.002v6c-0.74,0.57-0.989,1.443-1.214,2.386c-0.328,1.372-0.605,2.294-1.444,2.593L41,35.002 l-0.08,0.277c-0.533,0.662-0.994,1.351-1.439,2.018c-1.446,2.163-2.495,3.705-4.481,3.705c-1.041,0-2.044,0.167-2.441,0.559 C32.128,41.987,32,42.662,32,43.002c-1.012,0.377-2.167,1-8,1c-5,0-9.4-1.756-12.262-4.545c-0.965-0.785-2.272-1.669-2.857-2.273 C6.976,35.593,6.047,33.058,6,33.002c1.184,0.985,5.245,4.636,7.091,4.636l0,0C13.301,37.416,12,35.684,12,35.002 C13.429,37.162,17.405,40,23,40c4.125,0,3.892-0.73,6-1c4.875-0.625,7.492-5.439,8.214-6.816c0.05-0.096,0.202-1.02,0.24-1.092 c0.368-0.376,0.463-1.167,0.607-2.371C38.17,27.815,39,26.75,39,25.625S38,24,38,24s0-3-0.625-5.375 C37.25,18.151,36.738,16.409,34,13v1.002c-2.125-1.127-3.668-2.545-4.125-2.752C28.435,10.599,26.831,10,25,10c-4,0-4.625,1-8,2 c0,0,1.25,0,2,0c0,0-1.867,1.445-3,2.125c-1.875,1.125-4,5.034-4,7.875c0,3-2.485,4-4,4c-2.453,0-4-2-4-4 c0-1.133,0.45-2.5,0.886-3.425c0.411-0.873,0.799-1.697,0.795-2.581c0.031-0.106,0.274-0.383,0.435-0.566 c0.466-0.531,1.083-1.234,1.224-2.252c1.106-0.927,3.13-3.015,3.155-3.041c0.162-0.171,0.324-0.304,0.511-0.457 c0.324-0.265,0.728-0.594,1.221-1.205l0.423-0.525c0.798-0.428,2.222-1.035,2.776-1.271c0.342-0.146,0.602-0.258,0.716-0.313 L19.75,5.75C19.966,5.75,20,5.238,20,5c0-0.227,0.106-0.198,0.324-0.273C22.139,4.099,22.799,4,24.648,4L24.648,4'/%3E%3C/svg%3E" alt="Home" class="lazyload navbar__logo">
+    </a>
+    
+    <a href="/zh/" title="Home" rel="home" class="navbar__title-link">
+      <h6 class="navbar__title">dshcao blog</h6>
+    </a>    
+  </div>
+  
+  
+<div class="theme-mobile">
+  <div class="dropdown">
+    <button class="dropdown-trigger navbar__slide-down" aria-label="Invert Colors" style="">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" d="M24 0H0v24h24V0z"/><path fill="currentColor" d="M6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31l-4.95-4.95c-.39-.39-1.02-.39-1.41 0L6.34 7.93zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>      
+    </button>
+    <div class="dropdown-content select-theme">
+      
+        
+        <a href="#" class="dropdown-item select-theme__item is-active">
+          dark
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          light
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          hacker
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          solarized
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          custom
+        </a>
+        
+      
+    </div>
+  </div>
+</div>
+
+  
+<div id="mobileSearchBtn" class="mobile-search__btn">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+</div>
+
+<div id="search-mobile-container" class="mobile-search hide">
+  <div class="mobile-search__top">
+    <input id="search-mobile" type="text" aria-label="Mobile Search" placeholder="搜索" class="mobile-search__top--input"/>
+    <div id="search-mobile-close" class="mobile-search__top--icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path opacity=".87" fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.59-13L12 10.59 8.41 7 7 8.41 10.59 12 7 15.59 8.41 17 12 13.41 15.59 17 17 15.59 13.41 12 17 8.41z"/></svg>
+    </div>
+  </div>
+  <div id="search-mobile-results" class="mobile-search__body">
+    
+  </div>
+</div>
+
+  
+  <a role="button" class="navbar__burger" aria-label="menu" aria-expanded="false">
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+    <span aria-hidden="true"></span>
+  </a>  
+
+  <div class="navbar__menu">
+    
+<div class="theme">
+  <div class="dropdown">
+    <button class="dropdown-trigger navbar__slide-down" aria-label="Select Theme Button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="none" d="M24 0H0v24h24V0z"/><path fill="currentColor" d="M6.34 7.93c-3.12 3.12-3.12 8.19 0 11.31C7.9 20.8 9.95 21.58 12 21.58s4.1-.78 5.66-2.34c3.12-3.12 3.12-8.19 0-11.31l-4.95-4.95c-.39-.39-1.02-.39-1.41 0L6.34 7.93zM12 19.59c-1.6 0-3.11-.62-4.24-1.76C6.62 16.69 6 15.19 6 13.59s.62-3.11 1.76-4.24L12 5.1v14.49z"/></svg>      
+    </button>
+    <div class="dropdown-content select-theme">
+      
+        
+        <a href="#" class="dropdown-item select-theme__item is-active">
+          dark
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          light
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          hacker
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          solarized
+        </a>
+        
+        <a href="#" class="dropdown-item select-theme__item ">
+          custom
+        </a>
+        
+      
+    </div>
+  </div>
+</div>
+
+    
+    <a href="/zh/archive" class="navbar__menu-item navbar__slide-down">存档</a>
+    
+    
+    <a href="/zh/posts" class="navbar__menu-item navbar__slide-down">文章</a>
+    
+    
+    <a href="/zh/pt" class="navbar__menu-item navbar__slide-down">展厅</a>
+    
+    
+    <a href="/zh/notes" class="navbar__menu-item navbar__slide-down">随笔</a>
+    
+    
+    <a href="/zh/about" class="navbar__menu-item navbar__slide-down">关于</a>
+    
+    
+  </div>
+</nav>
+            
+            
+
+
+<script src="/js/enquire.min.72cb9edeb1ca1b92f5bf9df8d31a1ecd1e423d0b5e0f48a2a208b020dd5053fa.js"></script>
+
+<main class="main-main">
+  
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+  <ol>
+    
+  
+  
+  
+  
+  
+  <li >    
+    
+      <a href="https://dshcao.github.io/zh/">dshcao blog</a>            
+        
+  </li>
+  
+  
+  <li >    
+    
+      <a href="https://dshcao.github.io/zh/posts/">文章</a>
+        
+  </li>
+  
+  
+  <li  class="is-active" >    
+    
+      <a href="https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Android App优化-安装包优化</a>
+        
+  </li>
+  
+  </ol>
+  
+</nav>
+  
+  <div class="single">
+    <h2 class="single__title">Android App优化-安装包优化</h2>
+    <div class="single__meta">
+      <div class="single__infos">
+  🕓 2019年 10月 11日 · ☕21 min read
+  
+</div>
+      <div class="single__tags caption">
+
+  
+    🏷️
+  
+  
+  <li>
+    <a href="/zh/tags/android" class="single__tag">
+      #android
+    </a>
+  </li>
+    
+
+</div>
+    </div>    
+    <article class="single__contents">
+      <h2 id="heading">前言</h2>
+<p>既然是性能优化，首先明确优化的方向在哪。<br />
+在Android App中首先最重要的是不能Crash，不能ANR，其次不能卡顿，再其次是耗电，再其次是Apk包大小。这一篇我们聊聊Crash、ANR和卡顿的优化问题。</p>
+<h2 id="anrapplication-not-responding">ANR(Application Not Responding)</h2>
+<h3 id="anr">ANR定义</h3>
+<p>ANR(Application Not Responding)<br />
+在Android系统中，ANR是四大组件的超时引起的：</p>
+<ol>
+<li>Service 超时引起的ANR<br />
+前台Service：SERVICE_TIMEOUT = 20s<br />
+后台Service：SERVICE_BACKGROUND_TIMEOUT = 200s</li>
+<li>BroadcastReceiver 超时引起的ANR<br />
+前台广播：BROADCAST_FG_TIMEOUT = 10s<br />
+后台广播：BROADCAST_BG_TIMEOUT = 60s</li>
+<li>ContentProvider 超时引起的ANR<br />
+CONTENT_PROVIDER_PUBLISH_TIMEOUT = 10s</li>
+<li>Activity界面交互中InputDispatching 输入事件超时引起的ANR <!-- KeyDispatchTimeout --><br />
+输入事件包括按键和触摸事件在分发时超过超过5s即判定为ANR，输入事件超时引起的ANR和其它稍有不同，对于输入事件即便执行超过5s只要用户后续没有再产生输入事件就不会产生ANR。</li>
+</ol>
+<p>从上面可以看出ANR也分前台ANR和后台ANR：<br><br />
+<strong>前台ANR</strong>用户能感知，比如拥有前台可见的activity的进程，或者拥 有前台通知的fg-service的进程，此时发生ANR对用户体验影响比较 大，需要弹框让用户决定是否退出还是等待<br />
+<strong>后台ANR</strong>只抓取发生无响应进程的trace，也不会收集CPU信息， 并且会在后台直接杀掉该无响应的进程，不会弹框提示用户</p>
+<ol>
+<li>对于Service当超过一定时间未执行相应操作来触发移除延时消息就会出发ANR</li>
+<li>对于BroadcastReceiver，有序广播的总执行时间超过 2 * receiver个数 * timeout时间 触发ANR，有序广播某一个receiver执行过程超过timeout时长出发ANR。</li>
+<li>对于ContentProvider在进程启动时publish过程可能产生的ANR，系统会直接kill进程并清理相应信息而不会弹出ANR对话框。</li>
+<li>对于Service、BroadcastReceiver,、输入事件发生ANR之后，最终都会调用 AMS.appNotResponding;</li>
+</ol>
+<h3 id="anr-1">ANR执行流程</h3>
+<p>1.发生ANR -&gt; 2.进程接收异常终止信号，开始写入进程ANR信息 -&gt; 3.弹出ANR提示框(不同厂商Rom表现不一)</p>
+<h3 id="anr-2">ANR分析</h3>
+<p>traces文件和CPU使用情况信息保存到dropbox，即data/system/dropbox目录data/anr/traces.txt<br />
+分析是否有耗时的message,binder调用，锁的竞争，CPU资源的抢占</p>
+<p>当发生ANR时可以在Logcat中输入ActivityManager Tag过滤错误信息，在最后通常有一行：<br />
+<code>14% TOTAL: 13% user + 0.6% kernel</code><br />
+<code>user</code>表示用户占用CPU，kernel表示内核占用的CPU，有时可能还有<code>0.2% iowait</code>，iowait表示I/O操作。</p>
+<h4 id="tracestxt">traces.txt分析</h4>
+<h3 id="anr-3">如何避免ANR发生</h3>
+<ol>
+<li>主线程尽量只做UI相关的操作,避免耗时操作，比如过度复杂的UI绘 制，网络操作，文件IO操作;</li>
+<li>避免主线程跟工作线程发生锁的竞争，减少系统耗时binder的调用， 谨慎使用sharePreference，注意主线程执行provider query操作</li>
+</ol>
+<h3 id="anr-4">ANR优化方案</h3>
+<p>ANR解决套路</p>
+<ol>
+<li>adb pull data/anr/traces.txt</li>
+<li>详细分析原因：CPU、I/O、锁</li>
+</ol>
+<p>线上ANR方案：<br />
+通过FileOberver监控文本变化，但高版本有权限问题，监控不到<br />
+我们可以使用ANR-WatchDog监控组件</p>
+<p>ANR-WatchDog原理及实战</p>
+<ol>
+<li>非侵入式的ANR监控组件</li>
+</ol>
+<h2 id="crash">Crash优化</h2>
+<p>Crash的原因大概有几种：内存溢出、代码编写问题、WebView问题。</p>
+<h3 id="heading-1">内存溢出</h3>
+<p>导致内存溢出的原因又很多方面，如：</p>
+<ul>
+<li><strong>内存抖动</strong></li>
+<li><strong>内存泄漏</strong></li>
+<li><strong>加载大内存对象</strong> 如加载未处理过的大图。</li>
+</ul>
+<h4 id="heading-2">内存抖动</h4>
+<p>频繁创建对象导致GC频繁的一种内存现象。当创建对象过于频繁，GC不及时时可能会导致内存溢出。<br>为了防止内存抖动，应注意：</p>
+<ul>
+<li>避免循环中创建对象</li>
+<li>避免循环调用的方法(onDraw)中创建对象</li>
+<li>允许复用的情况下使用对象池进行缓存，比如：Handler的message单链表(obtain)</li>
+</ul>
+<h4 id="heading-3">内存泄漏</h4>
+<ul>
+<li><strong>集合问题</strong> 使用集合时只有添加没有删除元素，比如EventBus</li>
+<li><strong>静态成员</strong>/<strong>单例</strong> 作为GCRoot持有短生命周期对象(如：Activity)导致其无法释放</li>
+<li><strong>未关闭释放资源</strong> 如FileOutputStream未close</li>
+<li><strong>非静态内部类</strong> 如Handler postDelay一个匿名Runnable，退出Activity时消息没有处理完。</li>
+<li><strong>系统Bug</strong>  WebView、InputMethodManager</li>
+</ul>
+<h2 id="heading-4">卡顿优化</h2>
+<p>卡顿大概有两种原因：内存抖动和消息堵塞</p>
+<p>卡顿单点问题监测方案</p>
+<ol>
+<li>自动化卡顿方案并不能满足所有场景要求</li>
+<li>体系化的监测方案提前暴漏问题</li>
+<li>单点问题：主线程IPC、DB</li>
+</ol>
+<p>Application onCreate并非只调用一次，这和你的app有多少进程有关，android中四大组件都是可以设置单独进程的，如果有三个进程就会被调用三次，所以onCreate的初始化需要判断是否是主进程</p>
+<p>SparseArray性能高的原理</p>
+<p>res下图片文件的大小和Android加载到内存成为bitmap对象大小是两码事</p>
+<p>res下图片文件的大小指的是以某种格式压缩后的大小。<br />
+加载到内存成为bitmap的大小只和图片的图片的宽高和格式(ARGB888或RGB565等)有关。<br />
+一个是解码前的文件，一个是解码后的bitmap对象，同样的bitmap对象经过不同算法压缩大小肯定不一样。</p>
+<p>同样的图片，放在drawable-hdpi和放在drawable-xxhdpi下加载到内存是不一样的。如果手机像素密度匹配drawable-xxhdpi，如果drawable-xxhdpi没有相应的图片，Andrid会加载drawable-hdpi中相应的图片，但会相应进行缩放。比如drawable-hdpi图片是ARGB-110x132，而手机匹配的是drawable-xxhdpi，Android会将图片是放大，比如：ARGB_8888-960x720&ndash;&gt;ARGB_8888-1920x1440，即加载到内存的bitmap对象所占内存会相应放大，占用更多内存。</p>
+<p>BitmapFactory.Options<br />
+outWidth:<br />
+位图的结果宽度。<br />
+如果injustdecodebunds设置为false，则这将是应用任何缩放后输出位图的宽度。<br />
+如果为true，它将是输入图像的宽度，而不考虑缩放。</p>
+<p>hprof-conv -z in.hprof out.hprof</p>
+<h2 id="heading-5">性能优化中的常见问题</h2>
+<h3 id="crash-1">Crash</h3>
+<p>ANR也算是Crash。</p>
+<h4 id="javacrash">Java层Crash</h4>
+<p>Java层Crash是Java代码出现未捕获的异常导致程序崩溃</p>
+<h4 id="nativecrash">Native层Crash</h4>
+<p>Native层Crash一般是Native代码中访问了非法地址，也可能是地址对齐问题或者程序主动Abort，这些都会产生相应的Signal信号导致程序异常退出。</p>
+<h3 id="heading-6">如何收集线上异常信息</h3>
+<p>大公司一般都会做自己的这部分功能，中小公司则可以使用第三方的服务，比如：阿里的友盟、腾讯的Bugly、网易的云捕、Google的Firebase等。</p>
+<h2 id="heading-7">冷启动</h2>
+<p>clickevent-IPC-Process.start-ActivityThread</p>
+<p>1.启动app-2.加载空白window-3.创建进程-4.创建Application-5.启动祝线程-6.创建MainActivity-7.加载布局-8.布置屏幕-9.首帧绘制</p>
+<p>123 是系统行为无法干预</p>
+<p>App启动主要经过如下几个流程<br />
+Launch the process.<br />
+Initialize the objects.<br />
+Create and initialize the activity.<br />
+Inflate the layout.<br />
+Draw your application for the first time.</p>
+<p>在performResumeActivity 中进行了onResume的回调，在wm.addView 中进行了绘制，因此onResume的方法是在绘制之前，在onResume中做一些耗时操作都会影响启动时间。</p>
+<h2 id="heading-8">热启动</h2>
+<h2 id="heading-9">温启动</h2>
+<h2 id="heading-10">启动优化</h2>
+<p>优化Application和Activity的生命周期，避免耗时操作<br />
+启动时间测量：</p>
+<ol>
+<li>
+<p>adb命令</p>
+<pre><code>am start -W com.osshare.dsh/.ui.MainActivity
+</code></pre><p>thistime:最后一个Activity启动耗时<br />
+totaltime:所有Activity启动耗时<br />
+waittime: AMS启动Activity的总耗时<br />
+另外执行adb logcat -s ActivityManager | grep &ldquo;Displayed&quot;也可以查看启动Activity的时间</p>
+<p>adb命令方式并非严谨和精确的时间</p>
+</li>
+<li>
+<p>手动打点<br />
+启动开始/结束埋点<br />
+onWindowsFocusChanged 首帧时间/首次绘制时间，我们结束埋点应该是真实数据展示<br />
+所以我们埋点开始应是attachBaseContext我们能接受到的最早回调<br />
+结束点应该是viewTreeObserver.addOnDrawListener<br />
+手动埋点的启动时间更精确严谨</p>
+</li>
+<li>
+<p>知道总时间还要知道所有方法消耗的时间<br />
+常规方式：手动埋点 1.侵入性强 2.工作量大<br />
+AOP:针对同一类问题的同意处理，无侵入性<br />
+JoinPoints 函数运行时的执行点，可以作为切面的地方，如函数调用，执行，获取设置变量，类初始化<br />
+PointCut 带条件的JoinPoints<br />
+Advice 一种hook，要插入代码的地方 Before: PointCut之前执行 After:PointCut之后执行 Arund:PointCut之前之后执行</p>
+</li>
+</ol>
+<p>具体优化：<br />
+设置AppTheme.Launcher</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;style</span> <span class="na">name=</span><span class="s">&#34;AppTheme.Launcher&#34;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;item</span> <span class="na">name=</span><span class="s">&#34;android:windowBackground&#34;</span><span class="nt">&gt;</span>@drawable/img_launcher<span class="nt">&lt;/item&gt;</span>
+<span class="nt">&lt;/style&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>设置drawable</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span class="nt">&lt;layer-list</span> <span class="na">xmlns:android=</span><span class="s">&#34;http://schemas.android.com/apk/res/android&#34;</span>
+    <span class="na">android:opacity=</span><span class="s">&#34;opaque&#34;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;item</span> <span class="na">android:drawable=</span><span class="s">&#34;@color/white&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;item</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;bitmap</span>
+            <span class="na">android:gravity=</span><span class="s">&#34;center&#34;</span>
+            <span class="na">android:src=</span><span class="s">&#34;@drawable/bitmap&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/item&gt;</span>
+
+<span class="nt">&lt;/layer-list&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>AndroidManifest中splashActivity设置theme为AppTheme.Launcher<br />
+但需要注意这里需要在splashActivity的super.onCreate(savedInstanceState)之前设置会我们真正的AppTheme</p>
+<h3 id="heading-11">常规启动异步优化</h3>
+<p>子线程分担主线程任务，并行减少时间</p>
+<ol>
+<li>不符合异步要求<br />
+创造满足异步要求的条件或者放弃异步优化</li>
+<li>需要在某个阶段完成<br />
+实际过程中可能有些必须放主线程完成或者说后面Activity马上要用到。我们可以使用CountDownLatch。仍然把初始化任务放在子线程，但是CountDownLatch计数，在oncreate结束位置latch.await()等待计数归0</li>
+<li>区分cpu密集型任务和i/o密集型任务</li>
+</ol>
+<h3 id="heading-12">加强启动异步优化</h3>
+<p>常规异步优化代码不优雅，依赖关系不好处理，维护成本高<br />
+可以编写一个启动器，每一个初始化是一个任务，任务中标明依赖任务和是主线程执行还是可以异步线程执行，然后拓扑排序任务成一个有向无环图，按照顺序执行<br />
+另外还可以使用IdleHandler</p>
+<h2 id="traceview">traceview使用</h2>
+<p>Debug.startMethodTracing<br />
+Debug.stopMethodTracing(&ldquo;filename&rdquo;)<br />
+文件在Android/data/package/filename.trace</p>
+<ul>
+<li>CallChart<br />
+系统API 是橙色<br />
+系统第三方api是蓝色<br />
+开发者或引用的第三方lib是绿色</li>
+<li>Top Down<br />
+方法执行时间<br />
+total = self + children</li>
+<li>Wall Clock Time 代码执行时间</li>
+<li>Thread Time 线程/cpu执行时间</li>
+</ul>
+<p>缺点：<br />
+traceview运行时开销严重，整体会变慢，带偏我们优化方向</p>
+<h2 id="systrace">systrace</h2>
+<p>可以结合Android内核数据生成html报告<br />
+api18可用，可以使用TraceCompat<br />
+使用方式<br />
+代码加入<br />
+TraceCompat.beginSection(&quot;&quot;)<br />
+TraceCompat.endSection()<br />
+执行命令<br />
+命令python systrace.py -t -10 [option] [categories]</p>
+<p>walltime 代码执行时间<br />
+cputime 代码消耗cpu时间<br />
+我们重点优化的应该是cputime，提高cpu利用率，即cputime<br />
+比如：多线程锁冲突<br />
+systrace开销小，直观反应cpu利用率</p>
+<p>启动优化总方针 异步 延迟 懒加载<br />
+另外可以在attachBaseContext中返回application 不用其他地方再获取直接使用<br />
+提前异步加载sp</p>
+<p>启动阶段不启动子进程</p>
+<ol>
+<li>子进程会共享cpu资源，导致主进程cpu紧张</li>
+<li>注意启动顺序，app onCreate之前是ContentProvider</li>
+<li>类加载优化 提前异步类加载 因为类加载有校验和优化的过程
+<ol>
+<li>Class.forName()只会加载类本身及其静态变量的引用类</li>
+<li>new实例，可以额外加载类成员变量</li>
+<li>如何判断类需要提前加载 替换系统classloader,在loadclass打log</li>
+</ol>
+</li>
+</ol>
+<p>启动阶段抑制gc<br />
+cpu锁频 拉升cpu频率，做更多的事，因为系统可能只在启动是锁屏很短的时间我们可以延长这个时间 但会消耗更多电量</p>
+<h2 id="heading-13">内存优化</h2>
+<p>内存抖动 锯齿装、gc导致卡顿<br />
+内存泄漏 可用内存减少，频繁gc<br />
+内存溢出 oom 程序异常<br />
+工具 Memory Profile /Memory Analyzer /LeakCanary<br />
+Memory Profile<br />
+方便直观<br />
+线下使用<br />
+Memory Analyzer<br />
+强大的java heap分析工具，查找内存泄漏及内存占用<br />
+生成整体报告，分析问题等<br />
+线下深入使用<br />
+LeakCanary<br />
+自动内存泄漏检测<br />
+线下集成，线上会导致消耗内存增加</p>
+<p>Java内存分配<br />
+方法区 类信息 静态变量 所有线程共享<br />
+虚拟机栈 为java变量和堆中对象的引用<br />
+本地方法栈 为native方法服务的<br />
+堆： 所有线程共享，存放对象<br />
+程序计数器：记录程序运行到第几行</p>
+<p>java内存回收算法</p>
+<ol>
+<li>标记清除算法<br />
+标记所有要清除的对象<br />
+同一回收所有被标记的对象</li>
+<li>复制算法<br />
+实现简单运行高效<br />
+浪费一半空间，代价大</li>
+<li>标记整理算法<br />
+标记过程与标记清除算法一样<br />
+存活对象往一端移动<br />
+清理其余内存<br />
+避免了标记清除算法的内存碎片，避免复制算法的空间浪费</li>
+<li>分代收集算法<br />
+结合多种收集算法优势<br />
+新生代对象存活率低，复制<br />
+老年代对象存活率高，标记整理</li>
+</ol>
+<p>Android内存管理机制</p>
+<ol>
+<li>内存弹性分配，分配值与最大值受具体设备影响</li>
+<li>OOM场景：1.手机内存不足2.超过分配给app的最大内存</li>
+<li>Dalvil仅固定一种回收算法，ART回收算法可运行期选择，如app前台时响应速度更重要，选择简单的标记清除算法，后台时选择标记整理算法</li>
+<li>ART具备内存整理能力，减少内存空洞</li>
+<li>Low Memory Killer机制 前台进程 可见进程 服务进程 后台进程 空进程</li>
+</ol>
+<p>内存抖动解决：<br />
+定义：内存频繁分配和回收导致内存不稳定<br />
+表现：频繁GC，内存曲线呈锯齿状<br />
+危害：卡顿，OOM。因为频繁创建对象导致内存不足及碎片，不连续的内存碎片导致无法被分配产生OOM<br />
+内存抖动可以通过Memory Profile record录制一端内存查看具体原因</p>
+<p>内存泄漏<br />
+定义：内存中存在已经没有用的对象<br />
+表现：内存抖动，可用内存逐渐减少<br />
+危害：内存不足，频繁GC，OOM<br />
+Memory profile只能提供一个简单的分析，可以使用Memory Analyzer(MAT)确认问题<br />
+先将Android生成的.hprof转换成标砖prof文件<br />
+cd到sdk/platform-tools目录下，运行：<br />
+hprof-conv /Users/dscao/Documents/memory-20200421T154412.hprof /Users/dscao/Documents/memory-xxxxxx.hprof<br />
+转换</p>
+<p>ARTHook</p>
+<ol>
+<li>运行时插桩</li>
+<li>性能分析<br />
+Epic是一个虚拟机层面，以Java Method为粒度的运行时Hook框架，支持Android4.0-9.0<br />
+比如检测图片相对ImageView是否尺寸过大。利用Epic Hook ImageView的setImageBitmap方法。<br />
+无侵入性，通用型比较强，但兼容性问题大不能线上使用</li>
+</ol>
+<p>如果一个HashMap只存两三个对象而创建HashMap不指定大小可能会浪费空间。</p>
+<h3 id="heading-14">线上内存监控方案，线上主要是内存泄漏</h3>
+<p>使用Debug.dumpHprofData<br />
+设定场景(如：占用内存超过最大内存的80%)线上Dump：Debug.dumpHprofData(fileName)<br />
+然后回传hprof文件，然后使用MAT(Memory Analyzer Tool)分析</p>
+<ol>
+<li>随着用户使用时间内存对象比较多，dump文件太大，不过可以裁剪</li>
+<li>由于文件比较大，回传失败几率高，分析困难</li>
+</ol>
+<p>使用Leak Canary<br />
+这种方式需要预设泄漏怀疑点，发现泄漏时回传</p>
+<ol>
+<li>不适合所有情况，必须预设怀疑点</li>
+<li>分析比较耗时也容易OOM</li>
+</ol>
+<p>针对需要预设怀疑点的问题&ndash;&gt;自动找怀疑点，谁占用内存大就怀疑谁<br />
+针对比较耗时&ndash;&gt;阅读源码发现是因为Leak Canary会分析预设对象的每一个对象，我们可以只分析Retain size比较大的对象<br />
+针对容易OOM&ndash;&gt;因为Leak Canary会将内存堆栈生成的文件全部映射到内存当中，比较占内存，我们可以对象裁剪不全部加载到内存</p>
+<h3 id="heading-15">线上监控完整方案</h3>
+<ol>
+<li>待机内存 重点模块内存 OOM率</li>
+<li>整体及重点模块GC次数、GC时间</li>
+<li>增强Leak Canary自动化内存泄漏分析</li>
+</ol>
+<p>线上优化大方向</p>
+<ol>
+<li>内存泄漏</li>
+<li>内存抖动</li>
+<li>bitmap<br />
+优化细节<br />
+LargeHeap属性 开启后可以申请最大内存增加<br />
+onTirmMemory 低内存回调是做处理，比如强制清除所有图片，关闭子界面<br />
+使用优化过的集合SparseArray<br />
+谨慎使用SharedPreference，因为第一次加载SharedPreference会将SharedPreference存储全部加载到内存，如果SharedPreference存储过多会占用更多内存<br />
+谨慎使用外部第三方库<br />
+业务架构合理设计</li>
+</ol>
+<p>面试：你的内存优化是怎么做的</p>
+<ol>
+<li>分析现状，确认问题</li>
+<li>针对性的优化</li>
+<li>效率提升</li>
+</ol>
+<p>内存优化最大感受<br />
+磨刀不误砍柴功<br />
+技术优化必须结合业务代码<br />
+系统化完善解决方案</p>
+<p>如何检测所有不合理的地方</p>
+<ol>
+<li>ARTHook</li>
+<li>重点强调ARTHook和其他方案的区别 ARTHook的优点</li>
+</ol>
+<h3 id="heading-16">绘制优化</h3>
+<p>绘制原理<br />
+CPU负责计算显示内容<br />
+GPU负责栅格化(UI元素绘制到屏幕上)<br />
+优化工具</p>
+<ol>
+<li>Systrace 1.关注Frames2.正常绿色原点，黄色或红色则会丢帧 3.Alerts栏</li>
+<li>Layout Inspector<br />
+android studio自带工具，查看视图层次结构<br />
+使用：Tools-&gt;Layout Inspector 选择需要检测的进程</li>
+<li>Choreographer<br />
+获取FPS，线上使用，具备实时性<br />
+api16后使用<br />
+Choreographer.getInstance().postFrameCallback {  }</li>
+</ol>
+<p>布局加载原理<br />
+LayoutInflater.Factory是LayoutInflater创建view的一个Hook。可以用来定制View创建过程。如：全局替换TextView为自定义View<br />
+LayoutInflater.Factory2继承自Factory，多了一个参数parent</p>
+<p>优化获取界面布局耗时<br />
+AOP setContentView<br />
+ARTHook setContentView<br />
+另外可以使用LayoutInflaterCompat.setFactory2()获取每个控件加载时间</p>
+<p>加载布局慢：</p>
+<ol>
+<li>布局文件读取慢 I/O过程</li>
+<li>创建View慢，使用了反射，比new慢三倍</li>
+</ol>
+<p>AsyncLayoutInflater<br />
+工作线程加载布局，回调主线程<br />
+不能设置LayoutInflater.Factory/LayoutInflater.Factory2，可以自定义一个AsyncLayoutInflater解决</p>
+<h3 id="heading-17">布局加载优化实战</h3>
+<p>AsyncLayoutInflater只是缓解。<br />
+X2C:APT编译期将XML编译成java代码，即保留了XML优点又解决性能问题<br />
+X2C问题：部分XML布局属性Java不支持，失去了系统兼容(AppCompat)</p>
+<p>使用ConstraintLayout减少层级</p>
+<p>避免过渡绘制<br />
+避免层级叠加<br />
+自定义view使用clipRect屏蔽被覆盖view复制</p>
+<p>使用megre Viewstub onDraw避免创建大对象和耗时操作 textview优化</p>
+<p>指标fps 加载时间 布局层级</p>
+<h3 id="heading-18">卡顿问题</h3>
+<p>卡顿问题难在哪？</p>
+<ol>
+<li>产生原因错综复杂：代码 内存 绘制 I/O</li>
+<li>不易复现：当时场景强相关<br />
+调试工具<br />
+CPU Profiler</li>
+<li>图形的形式展示执行时间调用栈</li>
+<li>信息全面，包含所有线程</li>
+<li>运行时开销严重，整体都会变慢<br />
+Debug.startMethodTracing<br />
+Debug.stopMethodTracing(&ldquo;filename&rdquo;)<br />
+systrace<br />
+监控和跟踪api调用，线程运行情况<br />
+api18可用，可以使用TraceCompat<br />
+TraceCompat.beginSection(&quot;&quot;)<br />
+TraceCompat.endSection()<br />
+轻量开销小，直观反应cpu利用率</li>
+</ol>
+<p>StrictMode<br />
+严苛模式，Android提供的一种运行时检测机制，方便强大，容易被忽视<br />
+包含线程策略和虚拟机策略检测<br />
+线程策略：1.自定义的耗时调用detectCustomSlowCalls 2.磁盘读取操作detectDiskReads 3.网络操作detectNetwork<br />
+虚拟机策略：1.Activity泄漏detectActivityLeaks  2.Sqlite对象泄漏detectLeakedSqlLiteObjects 3.检测实例数量setClassInstanceLimit</p>
+<h3 id="heading-19">自动化卡顿检测及优化</h3>
+<p>以上卡顿优化方案只能线下针对分析，线上及测试环节需要自动化检测方案</p>
+<ol>
+<li>
+<p>自动卡顿检测方案原理<br />
+消息处理机制，一个线程只有一个Looper<br />
+Looper中的mLogging在每个message处理前后都会被调用<br />
+主线程出现卡顿一定是在dispatchMessage执行耗时操作</p>
+</li>
+<li>
+<p>具体实现<br />
+Looper.getMainLooper().setMessageLogging(printer)设置自己的logging Printer<br />
+匹配&raquo;&raquo;&gt; Dispatching，阀值时间后执行任务(获取堆栈)<br />
+匹配&laquo;&laquo;&lt; Finished，任务启动之前取消掉</p>
+</li>
+<li>
+<p>AndroidPerformanceMonitor实战<br />
+非侵入式的性能监控组件，通知形式弹出卡顿信息，该库依赖blockcanary-android<br />
+方便精准，定位到代码某一行<br />
+不足：<br />
+确实卡顿了，但卡顿堆栈可能不准确<br />
+和OOM一样，最后的堆栈是表象，不是真正问题<br />
+优化：获取监控周期内的多个堆栈而不仅仅是最后一个堆栈，但会导致海量卡顿堆栈处理，高频卡顿上报量太大，服务端有压力。分析：一个卡顿多个堆栈大概率有重复，可以对一个卡顿堆栈进行hash排重，找出重复的堆栈，这样可以极大减少堆栈展示量同时更搞笑找到卡顿堆栈</p>
+</li>
+<li>
+<p>问题及优化</p>
+</li>
+</ol>
+<p>卡顿监控纬度 1.IPC 2.I/O、DB 3.View绘制</p>
+<p>IPC问题监测</p>
+<ol>
+<li>
+<p>监测指标<br />
+IPC调用类型<br />
+调用次数及耗时<br />
+调用堆栈、发生线程</p>
+</li>
+<li>
+<p>IPC监测</p>
+<p>adb命令<br />
+adb shell am trace-ipc start<br />
+adb shell am trace-ipc stop &ndash;dump-file /data/local/tmp/ipc-trace.txt<br />
+adb pull /data/local/tmp/ipc-trace.txt<br />
+ARTHook<br />
+因为ipc最终都会走到BinderProxy，可以使用ARTHook hook BinderProxy中的方法<br />
+开发阶段利用ARTHook hook相关操作暴漏分析问题</p>
+</li>
+</ol>
+<p>界面秒开实现</p>
+<ol>
+<li>提前获取数据</li>
+<li>Systrace 前面的优雅异步方案 优雅延迟方案</li>
+<li>异步inflate、X2C、绘制优化</li>
+<li>使用onCreate-onWindowFoucalsChanged计算页面打开耗时，onWindowFoucalsChanged可能不是太精确，可以使用特定方法<br />
+Lancet<br />
+轻量Android AOP框架<br />
+编译速度块，支持增量编译<br />
+API简单，没有任何多余代码插入APK<br />
+@Proxy 通常用于对系统Api的Hook<br />
+@Insert 通常用于操作app与library的类<br />
+使用Lancet hook onCreate-onWindowFoucalsChanged两个方法统计秒开率</li>
+</ol>
+<p>界面秒开监控纬度<br />
+1.总体耗时 2.生命周期耗时 3.生命周期间隔耗时</p>
+<p>耗时盲区监控背景<br />
+盲区1.生命周期间隔<br />
+盲区2.onResume到Feed展示的间隔<br />
+比如：postMessage很可能在Feed之前执行，这样就延迟了Feed展示的时间<br />
+耗时盲区监控难点</p>
+<ol>
+<li>只知道盲区时间，不清楚具体在做什么</li>
+<li>线上盲区无从可查<br />
+耗时盲区监控线下方案</li>
+<li>TraceView<br />
+特别适合一段时间内的盲区监控<br />
+线程具体做了什么一目了然<br />
+耗时盲区监控线上方案</li>
+<li>使用同一Handler，定制具体方法，即：sendMessageAtTime，因为最终都会走这个方法</li>
+<li>定制gradle插件，编译器动态替换项目中所有Handler为同一Handler，这种只能监控自己的message，不能监控系统message</li>
+</ol>
+<p>卡顿优化模拟面试</p>
+<ol>
+<li>你是怎么做卡顿优化的<br />
+第一阶段：系统工具定位解决<br />
+第二阶段：自动化卡顿方案及优化<br />
+第三阶段：线上监控及线下监测工具建设</li>
+<li>怎么自动化的获取卡顿信息的<br />
+来自Android的消息日志机制mLogging.println，经过实战发现这种获得的堆栈信息不是准确的，有可能卡顿已经过去，执行到了主线程的位置<br />
+我们换成了高频采集去除重复堆栈</li>
+<li>卡顿的一整套解决方案是如何做的<br />
+线下和线上工具结合<br />
+特定难题突破：单点问题 盲区监控</li>
+</ol>
+<p>Android 线程调度原理剖析</p>
+<ol>
+<li>线程调度原理<br />
+任何时刻只有一个线程占用CPU处于运行状态<br />
+多线程并发 轮流获取CPU使用权<br />
+JVM负责线程调度：按照特定机制分配CPU使用权<br />
+线程调度模型：
+<ol>
+<li>分时调度模型 轮流获取均分CPU时间</li>
+<li>抢占式调度模型：优先级高的采用，JVM采用</li>
+</ol>
+</li>
+<li>Android 线程调度
+<ol>
+<li>nice值<br />
+process中定义，值越小优先级越高，默认是Process.THREAD_PRIORITY_DEFAULT 0</li>
+<li>cgroup<br />
+更严格的群组调度策略，如：类似后台线程组，前台线程组。保证前台线程获取更多CPU<br />
+线程优先级具有继承性，比如在UI线程中创建的线程具有和UI线程一样的优先级</li>
+</ol>
+</li>
+</ol>
+<p>HandlerThread<br />
+自带消息循环的线程，串行执行，长时间运行，不断从队列中获取任务<br />
+IntentService<br />
+继承Service内部创建HandlerThread<br />
+异步，不占用主线程<br />
+是个service优先级较高不易被kill</p>
+<p>线程池：<br />
+易复用 减少频繁创建销毁时间<br />
+功能强大 定时 任务队列 并发控制</p>
+<p>RxJava</p>
+<p>Android线程优化实战<br />
+禁用new Thread<br />
+提供基础线程池供各个业务使用，避免各个业务维护自己一套线程池，线程太多</p>
+<p>线程使用准则<br />
+根据任务类型选择合适的异步方式<br />
+对于优先级低长时间执行可以选择HandlerThread<br />
+创建线程必须命名 避免异常难以查找问题，运行期可以使用Thread.currentThread.setName修改名字<br />
+使用AOP监控关键异步任务<br />
+重视优先级设置，优先级可以多次设置</p>
+<p>锁定线程创建背景</p>
+<ol>
+<li>项目变大之后收敛线程</li>
+<li>项目源码、第三方库、aar中都有创建线程</li>
+<li>避免恶化的监控防御手段</li>
+</ol>
+<p>分析：<br />
+创建线程的位置获取堆栈<br />
+所有异步方式都会走new Thread<br />
+使用Hook线程构造方法</p>
+<p>统一线程库要注意：1.区分任务类型 I/O、CPU密集型 2.I/O密集型不消耗CPU，核心池可以很大 CPU密集型核心池大小和CPU核心数相关。类似于RxJava</p>
+<p>面试 线程使用为什么会遇到问题<br />
+主线程卡顿 异步任务非常耗时<br />
+如何优化线程使用<br />
+线程收敛，使用统一线程库，并区分任务类别</p>
+<h3 id="heading-20">网络优化</h3>
+<ol>
+<li>流量优化</li>
+<li>网络质量 请求速度 成功率</li>
+<li>公司带宽 服务器数 CDN</li>
+<li>耗电</li>
+</ol>
+<p>优化工具</p>
+<ol>
+<li>Network Profiler<br />
+实时显示网络活动 发送接受数据及连接数<br />
+需要开启高级分析<br />
+只支持HttpUrlConnection和Okhttp</li>
+<li>抓包工具<br />
+Charles Fiddler Wireshark TcpDump<br />
+Charles<br />
+断点功能<br />
+Map Local<br />
+弱网环境模拟</li>
+<li>Stetho<br />
+强大的应用调试桥，链接Android和Chrome<br />
+网络监控 视图查看 数据库查看 命令行扩展等</li>
+</ol>
+<p>流量消耗测试方案</p>
+<ol>
+<li>设置-&gt;流量管理</li>
+<li>抓包工具：只允许本App联网</li>
+<li>可以解决大部分问题，但线上环境线下可能遇不到<br />
+线上流量获取方案<br />
+TrafficStats:API18以上重启以来的流量统计<br />
+TrafficStats.getUidRxBytes(uid) 指定uid的接收流量<br />
+TrafficStats.getTotalTxBytes() 总发送流量</li>
+</ol>
+<p>NetworkStatsManager<br />
+API23之后流量统计<br />
+可获取指定时间间隔内的流量消耗<br />
+可获取不同网络类型下的消耗</p>
+<p><a href="https://github.com.tiann/epic">https://github.com.tiann/epic</a></p>
+<p><a href="https://developer.android.google.cn/studio/intro">https://developer.android.google.cn/studio/intro</a></p>
+<p><a href="https://github.com/ganyao114/SandHook">https://github.com/ganyao114/SandHook</a><br />
+<a href="https://github.com/ElderDrivers/EdXposed">https://github.com/ElderDrivers/EdXposed</a><br />
+<a href="https://github.com/PAGalaxyLab/YAHFA">https://github.com/PAGalaxyLab/YAHFA</a></p>
+<p><a href="">面试专题3.31-如何排除应用崩溃的原因 Android如何排除应用崩溃的原因.md</a></p>
+
+    </article>
+    
+    
+<div class="whoami__gutter"></div>
+<hr class="hr-slash whoami-hr"/>
+<section class="whoami">  
+  <div class="whoami__image-wrapper">
+    
+    
+      
+        <img data-src="/images/whoami/avatar.jpg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='24pt' height='24pt' viewBox='0 0 24 24' version='1.1'%3E%3Cg id='surface1035795'%3E%3Cpath style=' stroke:none;fill-rule:nonzero;fill:rgb(80%25,80%25,80%25);fill-opacity:1;' d='M 4 4 C 2.90625 4 2 4.90625 2 6 L 2 18 C 2 19.09375 2.90625 20 4 20 L 20 20 C 21.09375 20 22 19.09375 22 18 L 22 6 C 22 4.90625 21.09375 4 20 4 Z M 4 6 L 20 6 L 20 18 L 4 18 Z M 4 6 '/%3E%3C/g%3E%3C/svg%3E%0A" alt="dshcao" class="lazyload whoami__image"/>
+             
+    
+  </div>
+  <div class="whoami__contents">
+    <div class="whoami__written-by">
+      作者
+    </div>
+    <div class="whoami__title">
+      dshcao
+    </div>
+    <div class="whoami__desc">
+      Android Developer      
+    </div>
+    <div class="whoami__social">
+      
+      
+      <a href="mailto:513996717@qq.com" title="email" aria-label="email">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg>
+      </a>
+      
+      
+      
+      
+      
+      <a href="https://github.com/dshcao" title="github" aria-label="github">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewBox="0 0 24 24" version="1.1">
+<g id="surface3680">
+<path fill="currentColor" d="M 10.898438 2.101562 C 6.300781 2.601562 2.601562 6.300781 2.101562 10.800781 C 1.601562 15.5 4.300781 19.699219 8.398438 21.300781 C 8.699219 21.398438 9 21.199219 9 20.800781 L 9 19.199219 C 9 19.199219 8.601562 19.300781 8.101562 19.300781 C 6.699219 19.300781 6.101562 18.101562 6 17.398438 C 5.898438 17 5.699219 16.699219 5.398438 16.398438 C 5.101562 16.300781 5 16.300781 5 16.199219 C 5 16 5.300781 16 5.398438 16 C 6 16 6.5 16.699219 6.699219 17 C 7.199219 17.800781 7.800781 18 8.101562 18 C 8.5 18 8.800781 17.898438 9 17.800781 C 9.101562 17.101562 9.398438 16.398438 10 16 C 7.699219 15.5 6 14.199219 6 12 C 6 10.898438 6.5 9.800781 7.199219 9 C 7.101562 8.800781 7 8.300781 7 7.601562 C 7 7.199219 7 6.601562 7.300781 6 C 7.300781 6 8.699219 6 10.101562 7.300781 C 10.601562 7.101562 11.300781 7 12 7 C 12.699219 7 13.398438 7.101562 14 7.300781 C 15.300781 6 16.800781 6 16.800781 6 C 17 6.601562 17 7.199219 17 7.601562 C 17 8.398438 16.898438 8.800781 16.800781 9 C 17.5 9.800781 18 10.800781 18 12 C 18 14.199219 16.300781 15.5 14 16 C 14.601562 16.5 15 17.398438 15 18.300781 L 15 20.898438 C 15 21.199219 15.300781 21.5 15.699219 21.398438 C 19.398438 19.898438 22 16.300781 22 12.101562 C 22 6.101562 16.898438 1.398438 10.898438 2.101562 Z M 10.898438 2.101562 "/>
+</g>
+</svg>
+
+      </a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <a href="https://stackoverflow.com/users/12583274/dshcao" title="stack-overflow" aria-label="stack-overflow">
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="25" height="25"><path fill="currentColor" d="M 9.914063 0.71875 L 9.085938 1.28125 L 11.894531 5.367188 L 12.71875 4.800781 Z M 7.695313 2.453125 L 7.039063 3.207031 L 10.917969 6.582031 L 11.574219 5.828125 Z M 6.226563 4.804688 L 5.773438 5.695313 L 10.210938 7.953125 L 10.664063 7.0625 Z M 5.363281 7.140625 L 5.136719 8.109375 L 9.976563 9.242188 L 10.203125 8.265625 Z M 3 9 L 3 14 L 12 14 L 12 9 L 11 9 L 11 13 L 4 13 L 4 9 Z M 5.03125 9.25 L 4.96875 10.25 L 9.972656 10.566406 L 10.035156 9.570313 Z M 5 11 L 5 12 L 10 12 L 10 11 Z"/></svg>
+      </a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </div>
+  </div>
+</section>
+<hr class="hr-slash whoami-hr" />
+
+    <section class="related">
+    
+    
+    <h1 class="related__title">
+      <hr class="hr-dots"/>
+      <div>
+        相关内容
+      </div>
+      <hr class="hr-dots"/>
+    </h1>
+    <ul class="related-ul">
+        
+        <li>
+          <a href="/zh/posts/android-wms/" class="related__link">Android AMS</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/" class="related__link">Android四大组件-Activity/Fragment</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-jnindk/" class="related__link">Android-JNI&amp;NDK</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-%E7%83%AD%E6%9B%B4%E6%96%B0/" class="related__link">Android-热更新</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-drawondraw/" class="related__link">Android-draw&amp;onDraw</a>
+        </li>
+        
+    </ul>
+    
+  </section>
+    <div class="grow"></div>
+<nav class="pagination-single">
+  
+    <a href="https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E8%80%97%E7%94%B5%E4%BC%98%E5%8C%96/" class="pagination-single__left">
+      <div class="pagination-single__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
+      </div>
+      <div class="pagination-single__left-title">Android App优化-耗电优化</div>      
+    </a>
+  
+  <div class="grow"></div>
+  
+    <a href="https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E5%AD%98%E5%82%A8%E4%BC%98%E5%8C%96/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">Android App优化-存储优化</div>
+      <div class="pagination-single__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
+      </div>
+    </a>
+  
+</nav>
+    
+  
+    
+<div id="vcomments"></div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+<script>
+  new Valine({
+      el: '#vcomments' ,
+      appId: '26IJaKoF5dnnKNBiQRI3Ovw8-MdYXbMMI',
+      appKey: 'coAossMXBdLt88uP5QzSexla',
+      notify:  false ,
+      verify:  false ,
+      avatar:'mm',
+      placeholder: '说点什么吧...',
+      visitor:  false 
+  });
+</script>
+  
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+  
+  <div class="pswp__bg"></div>
+
+  
+  <div class="pswp__scroll-wrap">
+
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+
+    
+    <div class="pswp__ui pswp__ui--hidden">
+
+      <div class="pswp__top-bar">
+
+        
+
+        <div class="pswp__counter"></div>
+
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+        <button class="pswp__button pswp__button--share" title="Share"></button>
+
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+        
+        
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div>
+      </div>
+
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+      </button>
+
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+      </button>
+
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+    <div class="hide">
+    
+
+<div class="search">
+  <span class="icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path d="M15.5 14h-.79l-.28-.27c1.2-1.4 1.82-3.31 1.48-5.34-.47-2.78-2.79-5-5.59-5.34-4.23-.52-7.79 3.04-7.27 7.27.34 2.8 2.56 5.12 5.34 5.59 2.03.34 3.94-.28 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+  </span>
+  <input id="search" aria-label="Site Search" class="input" type="text" placeholder="搜索" autocomplete="off">
+  <div id="search-results" class="dropdown">
+    <div id="search-menu" class="dropdown-menu" role="menu">
+    </div>
+  </div>
+</div>
+
+
+    </div>
+  </div>
+</main>
+
+
+<aside class="main-side">
+  
+
+
+<section class="sidebar">
+  <div class="toc__flexbox" data-position="fixed">
+    <h6 class="toc__title">目录</h6>
+    
+      <label class="switch">
+        <input id="toggle-toc" aria-label="Toggle TOC" type="checkbox" checked>
+        <span class="slider round"></span>
+      </label>
+    
+  </div>
+  <div class="toc">
+    <ul id="toc"></ul>
+  </div>
+</section>
+
+
+
+</aside>
+
+<script>
+  enquire.register("screen and (max-width: 769px)", {
+    match: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "hide";
+      }
+    },
+    unmatch: function () {
+      if (document.getElementsByTagName('main')[0]) {
+        document.getElementsByTagName('main')[0].className = "main-main";
+      }
+      if (document.getElementsByTagName('aside')[0]) {
+        document.getElementsByTagName('aside')[0].className = "main-side";
+      }
+      document.getElementsByClassName('navbar__burger')[0].classList.remove('is-active');
+      document.getElementsByClassName('navbar__menu')[0].classList.remove('is-active');
+      document.getElementsByClassName('mobile-search')[0].classList.add('hide');
+    },
+    setup: function () { },
+    deferSetup: true,
+    destroy: function () { },
+  });
+</script>
+
+
+
+
+<script defer src="/js/jquery.min.0925e8ad7bd971391a8b1e98be8e87a6971919eb5b60c196485941c3c1df089a.js"></script>
+
+<script defer src="/js/enquire.min.72cb9edeb1ca1b92f5bf9df8d31a1ecd1e423d0b5e0f48a2a208b020dd5053fa.js"></script>
+
+<script defer src="/js/clipboard.min.1626706afc88d95ebe1173b553ec732c6dc82a576989315fdf5e7779af738a44.js"></script>
+
+<script defer src="/js/lazysizes.min.31dd6a2d3a1ec0f78a8df007535cf23f03aeb5c70f026e6d6a19dac3b3acc340.js"></script>
+
+<script defer src="/js/zzo.min.31d5b7d503557f488cc17574468cbc03fca4e45f61c15080d29bff7e38043ec8.js"></script>
+
+
+  
+  <script defer src="/lib/photoswipe/photoswipe.min.78fc260a16dbbd76ec3b4da56ccdc7a076d21d31c501e0a17a4175c4a25d95ea.js"></script>
+  
+  <script defer src="/lib/photoswipe/photoswipe-ui-default.min.50a9333a7ff0d660714662cb1ab49ec81e1ed716eba78c729600166f7338da95.js"></script>
+  
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css">
+  
+  <link rel="stylesheet" href="/lib/photoswipe/custom-skin.min.css">
+
+
+
+  
+  <script defer src="/js/jquery.toc.min.376e1b5d343786c1978dbad9ea7a0e23088947732993a91dcbad995883c96ceb.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  window.onload = function() {
+    
+    (function () {
+      document.querySelectorAll('.chroma > table')
+        .forEach((element) => {
+          const sub = element.querySelector('code[data-lang]');
+          if (sub) {
+            $(element).closest('div.chroma').attr('data-lang', mapLang(sub.getAttribute('data-lang')));
+          }
+        }
+      );
+    })();
+
+    (function () {
+      document.querySelectorAll('.single__contents > pre > code')
+        .forEach((element) => {
+          if (!$(element).attr('data-lang')) {
+            $(element).parent().wrap('<div data-lang="Code" class="language-code"></div>');
+          }
+        });
+    })();
+
+    function mapLang(name) {
+      return {
+        coffeescript: 'CoffeeScript',
+        cpp: 'C++',
+        cs: 'C#',
+        css: 'CSS',
+        html: 'HTML',
+        http: 'HTTP',
+        js: 'JavaScript',
+        json: 'JSON',
+        objectivec: 'Objective-C',
+        php: 'PHP',
+        sql: 'SQL',
+        toml: 'TOML',
+        ts: 'TypeScript',
+        typescript: 'TypeScript',
+        xml: 'XML',
+        yaml: 'YAML',
+      }[name] || name.toUpperCase();
+    }
+
+    
+    runSearch();
+
+    
+    
+    
+    var enableBusuanzi = JSON.parse("false");
+    var busuanziPagePV = JSON.parse("true");
+    
+    if (enableBusuanzi && busuanziPagePV) {      
+      $('#busuanzi_value_page_pv').digits();
+    }    
+
+    var navbar = $('.navbar');
+
+    
+    
+    var enableToc = JSON.parse("true");
+    
+    if (enableToc) {
+      $("#toc").toc({ content: ".single__contents", headings: "h1,h2,h3,h4" });
+      $('#toc > li').each(function () {
+        $(this).find('ul').css('display', 'none');
+      });
+      $('#toc a').each(function () {
+        $(this).click(function () {
+          navbar.removeClass('navbar--show');
+          navbar.removeClass('navbar--hide');
+          navbar.addClass('navbar--hide');
+
+          $(".single__contents :header").each(function () {
+            $('.toc a').removeClass('active');
+          });
+          $(this).addClass('active');
+
+          $('#toc > li').each(function () {
+            $(this).find('ul').css('display', 'none');
+          });
+          $(this).next().css('display', 'block');
+          $(this).parents('ul').css('display', 'block');
+        });
+      });
+
+      
+      $("#toggle-toc").change(function () {
+        if (this.checked) {
+          $('.toc').fadeIn(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main-main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'fixed');
+        } else {
+          $('.toc').fadeOut(200);
+          $('main').removeClass('main-main').removeClass('main').addClass('main');
+          $('side').removeClass('main-side');
+          $('.toc__flexbox').attr('data-position', 'absolute');
+        }
+      });
+    }    
+
+    
+    var text, clip = new ClipboardJS('.anchor');
+    var headers = $('.single__contents :header').not('h6').not('h5');
+    headers.append(function (index, html) {
+      var element = $(this);
+      var url = encodeURI(document.location.origin + document.location.pathname);
+      var link = url + "#" + element[0].id;
+      return " <span class='anchor hide' data-clipboard-text='" + link + "' style='position: relative;'>" +
+        "<span style='font-size: 1rem; position: absolute; right: -2rem; top: 50%; transform: translateY(-50%)'>🔗</span>" +
+        "</span>"
+        ;
+    });
+    headers.on('mouseenter', function () {
+      $(this).find('.anchor').attr('class', 'anchor');
+    });
+    headers.on('mouseleave', function () {
+      $(this).find('.anchor').attr('class', 'anchor hide');
+    });
+
+    $(".anchor").on('mouseleave', function (e) {
+      $(this).attr('aria-label', null).removeClass('tooltipped tooltipped-s tooltipped-w');
+    });
+
+    clip.on('success', function (e) {
+      e.clearSelection();
+      $(e.trigger).attr('aria-label', 'Link copied to clipboard!').addClass('tooltipped tooltipped-s');
+    });
+    
+    $('.language-code').each(function (i, node) {
+      $(node).append('<span class="copy-to-clipboard" title="Copy to clipboard"/>');
+    });
+
+    
+    var clipInit = false;
+    $('pre.chroma code, .language-code code').each(function () {
+      var code = $(this),
+        text = code.text();
+
+      if (text.length > 30) {
+        if (!clipInit) {
+          var text, clip = new ClipboardJS('.copy-to-clipboard', {
+            text: function (trigger) {
+              console.log();
+              if ($(trigger).prev().find('code').length > 1) {                
+                text = $(trigger).prev().find(`code[class^="language-"]`).text();
+              } else {
+                text = $(trigger).prev().find('code').text();
+              }
+               
+              return text.replace(/^\$\s/gm, '');
+            }
+          });
+
+          var inPre;
+          clip.on('success', function (e) {
+            e.clearSelection();
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+          });
+
+          clip.on('error', function (e) {
+            inPre = $(e.trigger).parent().prop('tagName') == 'PRE';
+            $(e.trigger).attr('aria-label', fallbackMessage(e.action)).addClass('tooltipped tooltipped-w');
+            $(document).one('copy', function () {
+              $(e.trigger).attr('aria-label', 'Copied to clipboard!').addClass('tooltipped tooltipped-w');
+            });
+          });
+
+          clipInit = true;
+        }
+
+        var notAllowedClass = ['language-mermaid', 'language-viz', 'language-wave', 'language-chart', 'language-msc', 'language-flowchart'];
+        var isNotAllowedIncluded = false;
+        var curClassName = code.attr('class');
+
+        for (let str of notAllowedClass) {
+          if (curClassName && curClassName.startsWith(str)) {
+            isNotAllowedIncluded = true;
+            break;
+          } 
+        }
+        
+        if (!isNotAllowedIncluded) {
+          if (curClassName) {
+            code.closest('div.chroma').append('<span class="copy-to-clipboard" title="Copy to clipboard" />');
+          }         
+        }        
+      }
+    });
+
+    
+    
+    var enablePhotoSwipe = JSON.parse("true");
+    
+    if (enablePhotoSwipe) {
+      var pswpElement = $('.pswp')[0];
+      var imgElements = $('.single__contents').find('img');
+      var items = [];
+
+      imgElements.each(function (i, v) {
+        $(this).click(function (e) {
+          initGallery(i);
+        });
+        $(this).css('cursor', 'pointer');
+        items.push({
+          src: v['src'],
+          w: 0,
+          h: 0,
+          title: filename(v['src']),
+        });
+      });
+
+      function filename(str) {
+        var s = str.replace(/\\/g, '/');
+        s = s.substring(s.lastIndexOf('/') + 1);
+        return str ? s.replace(/[?#].+$/, '') : s.split('.')[0];
+      }
+
+      function initGallery(index) {
+        var options = { index: index };
+        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.listen('imageLoadComplete', function (index, item) {
+          if (item.h < 1 || item.w < 1) {
+            let img = new Image();
+            img.onload = () => {
+              item.w = img.width;
+              item.h = img.height;
+              gallery.invalidateCurrItems();
+              gallery.updateSize(true);
+            }
+            img.src = item.src;
+          }
+        });
+        gallery.init();
+      }
+    }
+
+    
+    
+    var lib = JSON.parse("null");
+
+    if (lib && lib.includes('mermaid')) {
+      
+      var themeVariant = localStorage.getItem('theme') || JSON.parse("\"dark\"");
+
+      if (themeVariant === "dark" || themeVariant === "hacker") {
+        mermaid.initialize({ theme: 'dark' });
+      } else {
+        mermaid.initialize({ theme: 'default' });
+      }
+      
+      let mermaids = [];
+      [].push.apply(mermaids, document.getElementsByClassName('language-mermaid'));
+      for (i = 0; i < mermaids.length; i++) {
+        $(mermaids[i]).unwrap('pre');
+        $(mermaids[i]).replaceWith(function () {
+          return $("<div />").append($(this).contents()).addClass('mermaid').css('padding', '34px 4px 6px');
+        });
+      }
+    }
+
+    
+    if (lib && lib.includes('katex')) {
+      var mathElements = document.getElementsByClassName('math');
+      var options = [
+        { left: "$$", right: "$$", display: true },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ];
+
+      renderMathInElement(document.querySelector('.single__contents'), options);
+    }
+
+    
+    if (lib && lib.includes('flowchartjs')) {
+      
+      var options = JSON.parse("{\"arrow-end\":\"block\",\"element-color\":\"black\",\"fill\":\"white\",\"flowstate\":{\"approved\":{\"fill\":\"#58C4A3\",\"font-size\":12,\"no-text\":\"n/a\",\"yes-text\":\"APPROVED\"},\"current\":{\"fill\":\"yellow\",\"font-color\":\"red\",\"font-weight\":\"bold\"},\"future\":{\"fill\":\"#FFFF99\"},\"invalid\":{\"fill\":\"#444444\"},\"past\":{\"fill\":\"#CCCCCC\",\"font-size\":12},\"rejected\":{\"fill\":\"#C45879\",\"font-size\":12,\"no-text\":\"REJECTED\",\"yes-text\":\"n/a\"},\"request\":{\"fill\":\"blue\"}},\"font-color\":\"black\",\"font-size\":14,\"line-color\":\"black\",\"line-length\":50,\"line-width\":3,\"no-text\":\"no\",\"scale\":1,\"symbols\":{\"end\":{\"class\":\"end-element\"},\"start\":{\"element-color\":\"green\",\"fill\":\"yellow\",\"font-color\":\"red\"}},\"text-margin\":10,\"x\":0,\"y\":0,\"yes-text\":\"yes\"}");
+
+      var flowchartPrefix = "language-flowchart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + flowchartPrefix + "]"), function(x){
+          x.style.display = 'none'
+          x.parentNode.style.backgroundColor = "transparent"
+          jsonContent = x.innerText;
+
+          node0 = document.createElement('div');
+          node0.id = 'flowchart' + index;
+          x.parentNode.insertBefore(node0, x);
+
+          var diagram = flowchart.parse(jsonContent);
+          diagram.drawSVG("flowchart"+index, options);
+
+          index +=1;
+      });      
+    }
+
+    
+    if (lib && lib.includes('mathjax')) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: false,
+          packages: { '[+]': ['noerrors'] }
+        },
+        loader: {
+          load: ['[tex]/noerrors']
+        },
+      };
+    }
+
+    
+    if (lib && lib.includes('msc')) {
+      
+      var options = JSON.parse("{\"theme\":\"hand\"}");    
+
+      var index = 0;
+      var chartPrefix = "language-msc";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'msc' + index;
+        x.parentNode.insertBefore(node0, x);
+        var diagram = Diagram.parse(jsonContent);
+        diagram.drawSVG("msc" + index, options);
+        index += 1;
+      });
+    }
+
+    
+    if (lib && lib.includes('chart')) {
+      var borderColor = "#666";
+      var bgColor = "#ddd";
+      var borderWidth = 2;
+
+      Chart.defaults.global.elements.rectangle.borderWidth = borderWidth;
+      Chart.defaults.global.elements.rectangle.borderColor = borderColor;
+      Chart.defaults.global.elements.rectangle.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.line.borderWidth = borderWidth;
+      Chart.defaults.global.elements.line.borderColor = borderColor;
+      Chart.defaults.global.elements.line.backgroundColor = bgColor;
+
+      Chart.defaults.global.elements.point.borderWidth = borderWidth;
+      Chart.defaults.global.elements.point.borderColor = borderColor;
+      Chart.defaults.global.elements.point.backgroundColor = bgColor;
+
+      var chartPrefix = "language-chart";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + chartPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('canvas');
+        node0.height = 200;
+        node0.style.height = 200;
+        node0.id = 'myChart' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        var ctx = document.getElementById('myChart' + index).getContext('2d');
+        var myChart = new Chart(ctx, source);
+        index += 1;
+      });            
+    }
+
+    
+    if (lib && lib.includes('wavedrom')) {
+      var wavePrefix = "language-wave";
+      var index = 0;
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + wavePrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        jsonContent = x.innerText;
+        node0 = document.createElement('div');
+        node0.id = 'WaveDrom_Display_' + index;
+        source = JSON.parse(jsonContent);
+        x.parentNode.insertBefore(node0, x);
+        WaveDrom.RenderWaveForm(index, source, "WaveDrom_Display_");
+        index += 1;
+      });
+    }
+
+    
+    if (lib && lib.includes('viz')) {
+      var vizPrefix = "language-viz-";
+      Array.prototype.forEach.call(document.querySelectorAll("[class^=" + vizPrefix + "]"), function (x) {
+        x.style.display = 'none'
+        x.parentNode.style.backgroundColor = "transparent"
+        var engine;
+        x.getAttribute("class").split(" ").forEach(function (cls) {
+          if (cls.startsWith(vizPrefix)) {
+            engine = cls.substr(vizPrefix.length);
+          }
+        });
+        var viz = new Viz();
+        viz.renderSVGElement(x.innerText, { engine: engine })
+          .then(function (element) {
+            element.style.width = "100%";
+            x.parentNode.insertBefore(element, x);
+          })
+      });
+    }
+  }
+</script>
+
+
+            
+            <footer class="footer">
+    
+<div class="dropdown">
+  <button class="dropdown-trigger" aria-label="Select Theme Button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M12.65 15.67c.14-.36.05-.77-.23-1.05l-2.09-2.06.03-.03c1.74-1.94 2.98-4.17 3.71-6.53h1.94c.54 0 .99-.45.99-.99v-.02c0-.54-.45-.99-.99-.99H10V3c0-.55-.45-1-1-1s-1 .45-1 1v1H1.99c-.54 0-.99.45-.99.99 0 .55.45.99.99.99h10.18C11.5 7.92 10.44 9.75 9 11.35c-.81-.89-1.49-1.86-2.06-2.88-.16-.29-.45-.47-.78-.47-.69 0-1.13.75-.79 1.35.63 1.13 1.4 2.21 2.3 3.21L3.3 16.87c-.4.39-.4 1.03 0 1.42.39.39 1.02.39 1.42 0L9 14l2.02 2.02c.51.51 1.38.32 1.63-.35zM17.5 10c-.6 0-1.14.37-1.35.94l-3.67 9.8c-.24.61.22 1.26.87 1.26.39 0 .74-.24.88-.61l.89-2.39h4.75l.9 2.39c.14.36.49.61.88.61.65 0 1.11-.65.88-1.26l-3.67-9.8c-.22-.57-.76-.94-1.36-.94zm-1.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+  </button>
+  <div class="dropdown-content">
+    
+    
+    
+      
+      
+        
+      
+        
+        
+          
+            
+              <a href="https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" data-lang="zh" class="dropdown-item is-active">中文</a>
+            
+          
+        
+      
+    
+  </div>
+</div>
+
+    
+<div class="footer__social">
+  <div class="social">
+    
+      
+      <a href="mailto:513996717@qq.com" title="email" aria-label="email">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25c-.25-.16-.4-.43-.4-.72 0-.67.73-1.07 1.3-.72L12 11l6.7-4.19c.57-.35 1.3.05 1.3.72 0 .29-.15.56-.4.72z"/></svg>
+      </a>
+            
+    
+            
+    
+      
+      <a href="https://github.com/dshcao" title="github" aria-label="github">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 24 24" version="1.1">
+<g id="surface3680">
+<path fill="currentColor" d="M 10.898438 2.101562 C 6.300781 2.601562 2.601562 6.300781 2.101562 10.800781 C 1.601562 15.5 4.300781 19.699219 8.398438 21.300781 C 8.699219 21.398438 9 21.199219 9 20.800781 L 9 19.199219 C 9 19.199219 8.601562 19.300781 8.101562 19.300781 C 6.699219 19.300781 6.101562 18.101562 6 17.398438 C 5.898438 17 5.699219 16.699219 5.398438 16.398438 C 5.101562 16.300781 5 16.300781 5 16.199219 C 5 16 5.300781 16 5.398438 16 C 6 16 6.5 16.699219 6.699219 17 C 7.199219 17.800781 7.800781 18 8.101562 18 C 8.5 18 8.800781 17.898438 9 17.800781 C 9.101562 17.101562 9.398438 16.398438 10 16 C 7.699219 15.5 6 14.199219 6 12 C 6 10.898438 6.5 9.800781 7.199219 9 C 7.101562 8.800781 7 8.300781 7 7.601562 C 7 7.199219 7 6.601562 7.300781 6 C 7.300781 6 8.699219 6 10.101562 7.300781 C 10.601562 7.101562 11.300781 7 12 7 C 12.699219 7 13.398438 7.101562 14 7.300781 C 15.300781 6 16.800781 6 16.800781 6 C 17 6.601562 17 7.199219 17 7.601562 C 17 8.398438 16.898438 8.800781 16.800781 9 C 17.5 9.800781 18 10.800781 18 12 C 18 14.199219 16.300781 15.5 14 16 C 14.601562 16.5 15 17.398438 15 18.300781 L 15 20.898438 C 15 21.199219 15.300781 21.5 15.699219 21.398438 C 19.398438 19.898438 22 16.300781 22 12.101562 C 22 6.101562 16.898438 1.398438 10.898438 2.101562 Z M 10.898438 2.101562 "/>
+</g>
+</svg>
+
+      </a>
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+      
+      <a href="https://stackoverflow.com/users/12583274/dshcao" title="stack-overflow" aria-label="stack-overflow">
+        <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32"><path fill="currentColor" d="M 9.914063 0.71875 L 9.085938 1.28125 L 11.894531 5.367188 L 12.71875 4.800781 Z M 7.695313 2.453125 L 7.039063 3.207031 L 10.917969 6.582031 L 11.574219 5.828125 Z M 6.226563 4.804688 L 5.773438 5.695313 L 10.210938 7.953125 L 10.664063 7.0625 Z M 5.363281 7.140625 L 5.136719 8.109375 L 9.976563 9.242188 L 10.203125 8.265625 Z M 3 9 L 3 14 L 12 14 L 12 9 L 11 9 L 11 13 L 4 13 L 4 9 Z M 5.03125 9.25 L 4.96875 10.25 L 9.972656 10.566406 L 10.035156 9.570313 Z M 5 11 L 5 12 L 10 12 L 10 11 Z"/></svg>
+      </a>
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+            
+    
+    
+  <a href="https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96//index.xml" type="application/rss+xml" title="rss" aria-label="RSS Feed Link">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle fill="currentColor" cx="6.18" cy="17.82" r="2.18"/><path fill="currentColor" d="M5.59 10.23c-.84-.14-1.59.55-1.59 1.4 0 .71.53 1.28 1.23 1.4 2.92.51 5.22 2.82 5.74 5.74.12.7.69 1.23 1.4 1.23.85 0 1.54-.75 1.41-1.59-.68-4.2-3.99-7.51-8.19-8.18zm-.03-5.71C4.73 4.43 4 5.1 4 5.93c0 .73.55 1.33 1.27 1.4 6.01.6 10.79 5.38 11.39 11.39.07.73.67 1.28 1.4 1.28.84 0 1.5-.73 1.42-1.56-.73-7.34-6.57-13.19-13.92-13.92z"/></svg>
+  </a>
+
+  </div>
+</div>
+
+    
+<div id="gtt">
+  <div class="gtt">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M8.12 14.71L12 10.83l3.88 3.88c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L12.7 8.71c-.39-.39-1.02-.39-1.41 0L6.7 13.3c-.39.39-.39 1.02 0 1.41.39.38 1.03.39 1.42 0z"/></svg>
+  </div>
+</div>
+
+    <hr />
+
+    
+    <div class="footer__poweredby">
+    
+
+                
+            <p class="caption">
+                ©2020, All Rights Reserved
+            </p>
+        
+        <p class="caption">Powered by <a href="https://gohugo.io/" rel="noreferrer">Hugo</a> and the <a href="https://github.com/zzossig/hugo-theme-zzo" rel="noreferrer">Zzo theme</a></p>
+    </div>
+        
+</footer>
+        </div>    
+    </div>
+</body>
+
+</html>
