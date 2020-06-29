@@ -18,12 +18,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/android/</loc>
+    <loc>https://dshcao.github.io/zh/tags/android/</loc>
     <lastmod>2020-05-20T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/android/</loc>
+    <loc>https://dshcao.github.io/zh/categories/android/</loc>
     <lastmod>2020-05-20T10:33:41+09:00</lastmod>
   </url>
   
@@ -128,12 +128,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/animation/</loc>
+    <loc>https://dshcao.github.io/zh/tags/animation/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/animation/</loc>
+    <loc>https://dshcao.github.io/zh/categories/animation/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
@@ -163,12 +163,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/jetpack/</loc>
+    <loc>https://dshcao.github.io/zh/series/jetpack/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/series/jetpack/</loc>
+    <loc>https://dshcao.github.io/zh/tags/jetpack/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
@@ -198,17 +198,17 @@
   </url>
   
   <url>
+    <loc>https://dshcao.github.io/zh/categories/kotlin/</loc>
+    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://dshcao.github.io/zh/tags/kotlin/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://dshcao.github.io/zh/series/kotlin/</loc>
-    <lastmod>2019-12-23T12:00:06+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://dshcao.github.io/zh/categories/kotlin/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
@@ -238,12 +238,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/%E7%94%9F%E6%B4%BB/</loc>
+    <loc>https://dshcao.github.io/zh/series/%E7%94%9F%E6%B4%BB/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/series/%E7%94%9F%E6%B4%BB/</loc>
+    <loc>https://dshcao.github.io/zh/tags/%E7%94%9F%E6%B4%BB/</loc>
     <lastmod>2019-12-23T12:00:06+09:00</lastmod>
   </url>
   
@@ -593,12 +593,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/c/c&#43;&#43;/</loc>
+    <loc>https://dshcao.github.io/zh/tags/c/c&#43;&#43;/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/c/c&#43;&#43;/</loc>
+    <loc>https://dshcao.github.io/zh/categories/c/c&#43;&#43;/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -643,17 +643,17 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/java/</loc>
-    <lastmod>2019-10-11T10:33:41+09:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://dshcao.github.io/zh/series/java/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://dshcao.github.io/zh/categories/java/</loc>
+    <lastmod>2019-10-11T10:33:41+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/tags/java/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -728,12 +728,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/ndk/</loc>
+    <loc>https://dshcao.github.io/zh/series/ndk/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/series/ndk/</loc>
+    <loc>https://dshcao.github.io/zh/categories/ndk/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -748,12 +748,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/series/rxjava/</loc>
+    <loc>https://dshcao.github.io/zh/tags/rxjava/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/rxjava/</loc>
+    <loc>https://dshcao.github.io/zh/series/rxjava/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -778,12 +778,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/%E5%85%B6%E4%BB%96/</loc>
+    <loc>https://dshcao.github.io/zh/categories/%E5%85%B6%E4%BB%96/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/%E5%85%B6%E4%BB%96/</loc>
+    <loc>https://dshcao.github.io/zh/tags/%E5%85%B6%E4%BB%96/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -793,12 +793,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/%E5%8D%8F%E7%A8%8B/</loc>
+    <loc>https://dshcao.github.io/zh/tags/%E5%8D%8F%E7%A8%8B/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/%E5%8D%8F%E7%A8%8B/</loc>
+    <loc>https://dshcao.github.io/zh/categories/%E5%8D%8F%E7%A8%8B/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -808,12 +808,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/series/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/</loc>
+    <loc>https://dshcao.github.io/zh/tags/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/</loc>
+    <loc>https://dshcao.github.io/zh/series/%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -853,12 +853,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
+    <loc>https://dshcao.github.io/zh/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
+    <loc>https://dshcao.github.io/zh/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -878,11 +878,6 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/%E7%83%AD%E6%9B%B4%E6%96%B0/</loc>
-    <lastmod>2019-10-11T10:33:41+09:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://dshcao.github.io/zh/series/%E7%83%AD%E6%9B%B4%E6%96%B0/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
@@ -893,12 +888,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/series/%E7%9B%B4%E6%92%AD/</loc>
+    <loc>https://dshcao.github.io/zh/categories/%E7%83%AD%E6%9B%B4%E6%96%B0/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/%E7%9B%B4%E6%92%AD/</loc>
+    <loc>https://dshcao.github.io/zh/series/%E7%9B%B4%E6%92%AD/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -908,12 +903,17 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/%E7%AE%97%E6%B3%95/</loc>
+    <loc>https://dshcao.github.io/zh/tags/%E7%9B%B4%E6%92%AD/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://dshcao.github.io/zh/tags/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2019-10-11T10:33:41+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://dshcao.github.io/zh/categories/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -943,12 +943,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</loc>
+    <loc>https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</loc>
+    <loc>https://dshcao.github.io/zh/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
@@ -998,12 +998,12 @@
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/</loc>
+    <loc>https://dshcao.github.io/zh/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   
   <url>
-    <loc>https://dshcao.github.io/zh/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/</loc>
+    <loc>https://dshcao.github.io/zh/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/</loc>
     <lastmod>2019-10-11T10:33:41+09:00</lastmod>
   </url>
   

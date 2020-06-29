@@ -499,9 +499,10 @@ CONTENT_PROVIDER_PUBLISH_TIMEOUT = 10s</li>
 <ul>
 <li><strong>集合问题</strong> 使用集合时只有添加没有删除元素，比如EventBus</li>
 <li><strong>静态成员</strong>/<strong>单例</strong> 作为GCRoot持有短生命周期对象(如：Activity)导致其无法释放</li>
-<li><strong>未关闭释放资源</strong> 如FileOutputStream未close</li>
+<li><strong>未关闭释放资源</strong> 网络、文件流等未关闭。如FileOutputStream未close</li>
 <li><strong>非静态内部类</strong> 如Handler postDelay一个匿名Runnable，退出Activity时消息没有处理完。</li>
 <li><strong>系统Bug</strong>  WebView、InputMethodManager</li>
+<li><strong>其他</strong> Activity中手动注册广播未调用<code>unregisterReceiver(receiver)</code>， Service执行完未<code>stopSelf()</code>，第三方框架如EventBus未调用<code>unregister(subscriber)</code>解除注册</li>
 </ul>
 <h2 id="heading-4">卡顿优化</h2>
 <p>卡顿大概有两种原因：内存抖动和消息堵塞</p>
@@ -1151,11 +1152,7 @@ API23之后流量统计<br />
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/android-wms/" class="related__link">Android AMS</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-activityfragment/" class="related__link">Android四大组件-Activity/Fragment</a>
+          <a href="/zh/posts/android-%E6%8F%92%E4%BB%B6%E5%8C%96/" class="related__link">Android插件化</a>
         </li>
         
         <li>
@@ -1163,7 +1160,11 @@ API23之后流量统计<br />
         </li>
         
         <li>
-          <a href="/zh/posts/android-%E7%83%AD%E6%9B%B4%E6%96%B0/" class="related__link">Android-热更新</a>
+          <a href="/zh/posts/jetpack-camerax/" class="related__link">Jetpack-CameraX</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/android-app%E4%BC%98%E5%8C%96-apk%E7%98%A6%E8%BA%AB/" class="related__link">Android App优化-Apk瘦身</a>
         </li>
         
         <li>
