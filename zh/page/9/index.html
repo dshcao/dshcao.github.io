@@ -417,6 +417,30 @@
     
     <div class="summary-classic__content">
       <header>
+        <h5 class="title h5"><a href='https://dshcao.github.io/zh/notes/android/%E9%9A%8F%E8%AE%B0/'> 随记</a> </h5>
+        <h6 class="subtitle caption">🕓 2017年 10月 11日 &middot ☕2 min read
+        </h6>
+      </header>
+      <div>
+        <div class="summary-classic__text p2">
+          
+          小知识点
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+</article>
+
+        
+        
+  <article class="summary-classic">
+  <div class="summary-classic__flex-box">
+    
+    
+    <div class="summary-classic__content">
+      <header>
         <h5 class="title h5"><a href='https://dshcao.github.io/zh/notes/java/note-1/'> Note-1</a> </h5>
         <h6 class="subtitle caption">🕓 2016年 10月 09日 &middot ☕1 min read
         </h6>
@@ -585,30 +609,14 @@
     
     <div class="summary-classic__content">
       <header>
-        <h5 class="title h5"><a href='https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/'> </a> </h5>
-        <h6 class="subtitle caption">🕓 0001年 01月 01日 &middot ☕20 min read
+        <h5 class="title h5"><a href='https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/'> Android App性能优化</a> </h5>
+        <h6 class="subtitle caption">🕓 0001年 01月 01日 &middot ☕21 min read
         </h6>
       </header>
       <div>
         <div class="summary-classic__text p2">
           
-          s&mdash;
-title: &ldquo;Android-事件分发机制&rdquo;
-date: 2019-10-11T10:33:41+09:00
-description: &ldquo;Android-事件分发机制详解&rdquo;
-tags: [
-&ldquo;android&rdquo;
-]
-series: [
-&ldquo;android&rdquo;,&ldquo;自定义view&rdquo;
-]
-categories: [
-&ldquo;android&rdquo;
-] View mAttachInfo初始化 查看View源码可以知道mAttachInfo是在dispatchAttachedToWindow中赋值的
-View#dispatchAttachedToWindow
-1 2 3 4 5 6 7  @UnsupportedAppUsage(maxTargetSdk = Build.VERSION_CODES.P) void dispatchAttachedToWindow(AttachInfo info, int visibility) { mAttachInfo = info; ... onAttachedToWindow(); ... }   继续追踪可以知道View的dispatchAttachedToWindow是在ViewGroup的dispatchAttachedToWindow调用的。
-ViewGroup#dispatchAttachedToWindow
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21  @Override @UnsupportedAppUsage void dispatchAttachedToWindow(AttachInfo info, int visibility) { mGroupFlags |= FLAG_PREVENT_DISPATCH_ATTACHED_TO_WINDOW; super.
+          Android App优化
           
         </div>
       </div>
@@ -892,7 +900,7 @@ ViewGroup#dispatchAttachedToWindow
                         android
                     </span>
                     <span class="taxo__num">
-                        50
+                        51
                     </span>
                 </a>
             </span>
@@ -1543,7 +1551,7 @@ ViewGroup#dispatchAttachedToWindow
                         android
                     </span>
                     <span class="taxo__num">
-                        65
+                        66
                     </span>
                 </a>
             </span>
@@ -1830,7 +1838,7 @@ ViewGroup#dispatchAttachedToWindow
                         android
                     </span>
                     <span class="taxo__num">
-                        9
+                        10
                     </span>
                 </a>
             </span>
@@ -2077,7 +2085,7 @@ ViewGroup#dispatchAttachedToWindow
                         自定义view
                     </span>
                     <span class="taxo__num">
-                        4
+                        5
                     </span>
                 </a>
             </span>

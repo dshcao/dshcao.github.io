@@ -170,15 +170,6 @@
       </item>
       
       <item>
-        <title>Android App优化-安装包优化</title>
-        <link>https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</guid>
-        <description>前言 既然是性能优化，首先明确优化的方向在哪。 在Android App中首先最重要的是不能Crash，不能ANR，其次不能卡顿，再其次是耗电，再</description>
-      </item>
-      
-      <item>
         <title>Android App优化-耗电优化</title>
         <link>https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E8%80%97%E7%94%B5%E4%BC%98%E5%8C%96/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -293,6 +284,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-webview%E4%BD%BF%E7%94%A8/</guid>
         <description>占坑，敬请期待&amp;hellip; 前言 Android4.4以前采用的是WebKit内核，Android4.4及以后采用的是chromium内核。</description>
+      </item>
+      
+      <item>
+        <title>Android-事件分发机制</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</guid>
+        <description>View mAttachInfo初始化 查看View源码可以知道mAttachInfo是在dispatchAttachedToWindow中赋值的 View#dispatchAttachedToWindow 1</description>
       </item>
       
       <item>
@@ -464,6 +464,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/</guid>
         <description>前置知识 Bezier曲线是用一系列点控制曲线状态的，主要分为： 数据点 确定曲线的起始和结束位置 控制点 确定曲线的弯曲程度 其中数据点又叫锚点，只有</description>
+      </item>
+      
+      <item>
+        <title>Android App性能优化</title>
+        <link>https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</link>
+        <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-app%E4%BC%98%E5%8C%96-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</guid>
+        <description>前言 既然是性能优化，首先明确优化的方向在哪。 在Android App中首先最重要的是不能Crash，不能ANR，其次不能卡顿，再其次是耗电，再</description>
       </item>
       
     

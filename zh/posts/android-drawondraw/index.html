@@ -754,7 +754,7 @@ Region.Op.REPLACE 只取第二个Region部分</p>
 <li>getSaveCount() 等于save()调用次数-restore()调用次数</li>
 <li>restore() 返回最近一次save()的状态，删除最近一次save()之后对matrix/clip状态的所有修改。restore()调用次数不应该多于save()次数。</li>
 <li>restoreToCount(int saveCount) 返回指定的某次save()状态。restore()是返回最近一次save()状态；restoreToCount(int saveCount)返回指定的save()=saveCount的状态</li>
-<li>quickReject(RectF rect, EdgeType type) 如果指定的rect区域在被当前矩阵变换后完全位于当前剪辑之外，则返回true。调用此函数以检查要绘制的区域是否被剪裁掉。EdgeType.BW(Black-and-White)：非抗锯齿 EdgeType.AA(Antialiased):抗拒次，表示实际检测区域是rect的抗锯齿区域，即比rect范围大。</li>
+<li>quickReject(RectF rect, EdgeType type) 如果指定的rect区域在被当前矩阵变换后完全位于当前剪辑之外，则返回true。调用此函数以检查要绘制的区域是否被剪裁掉。EdgeType.BW(Black-and-White)：非抗锯齿 EdgeType.AA(Antialiased):抗锯齿，表示实际检测区域是rect的抗锯齿区域，即比rect范围大。</li>
 <li>quickReject(Path path, EdgeType type) 如果指定的path区域在被当前矩阵变换后完全位于当前剪辑之外，则返回true。调用此函数以检查要绘制的区域是否被剪裁掉。</li>
 <li>disableZ() <br>禁用Z轴支持（比如：translationZ），防止在此点之后绘制的任何rendernode被可视地重新排序或渲染阴影。这不受任何ave()或restore()调用的影响，因为它不被视为当前矩阵或剪辑的一部分</li>
 <li>enableZ() <br>启用Z轴支持</li>
@@ -965,11 +965,11 @@ Region.Op.REPLACE 只取第二个Region部分</p>
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
+          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-pulllayout/" class="related__link">自定义View-PullLayout</a>
         </li>
         
         <li>
-          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-pulllayout/" class="related__link">自定义View-PullLayout</a>
+          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
         </li>
         
         <li>
@@ -977,11 +977,11 @@ Region.Op.REPLACE 只取第二个Region部分</p>
         </li>
         
         <li>
-          <a href="/zh/posts/android-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6-service/" class="related__link">Android四大组件-Service</a>
+          <a href="/zh/posts/android-glide%E5%88%86%E6%9E%90/" class="related__link">Android-Glide分析</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-mvcmvp%E5%8F%8Amvvm/" class="related__link">Android-MVC、MVP及MVVM</a>
+          <a href="/zh/posts/android-retrofit%E5%88%86%E6%9E%90/" class="related__link">Android-Retrofit分析</a>
         </li>
         
     </ul>

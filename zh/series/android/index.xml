@@ -71,6 +71,15 @@
       </item>
       
       <item>
+        <title>Android-事件分发机制</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%9C%BA%E5%88%B6/</guid>
+        <description>View mAttachInfo初始化 查看View源码可以知道mAttachInfo是在dispatchAttachedToWindow中赋值的 View#dispatchAttachedToWindow 1</description>
+      </item>
+      
+      <item>
         <title>Android-增量更新实现</title>
         <link>https://dshcao.github.io/zh/posts/android-%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0%E5%AE%9E%E7%8E%B0/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
