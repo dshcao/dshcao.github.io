@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Android-多进程意义及Binder – dshcao blog</title>
+    <title>Android-进程及Binder – dshcao blog</title>
     
 
 
@@ -174,14 +174,14 @@
 <link rel="stylesheet" href="/css/main.min.css">
 
 
-    <meta name="description" content="Android多进程及Binder机制" />
+    <meta name="description" content="Android-进程及Binder" />
 <meta name="keywords" content="">
 <meta name="created" content="2019-10-11T10:33:41&#43;0900">
 <meta name="modified" content="2019-10-11T10:33:41&#43;0900">
 
 
 <meta property="og:site_name" content="dshcao blog">
-<meta property="og:title" content="Android-多进程意义及Binder">
+<meta property="og:title" content="Android-进程及Binder">
 <meta property="og:url" content="https://dshcao.github.io/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/">
 <meta property="og:type" content="article">
 
@@ -200,11 +200,11 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "headline": "Android-多进程意义及Binder",
+    "headline": "Android-进程及Binder",
     "datePublished": "2019-10-11T10:33:41+09:00",
     "dateModified": "2019-10-11T10:33:41+09:00",
     "url" : "https://dshcao.github.io/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/",
-    "description": "Android多进程及Binder机制",
+    "description": "Android-进程及Binder",
     "keywords": ["android"],
     "mainEntityOfPage": {
       "@type": "WebPage",
@@ -393,7 +393,7 @@
   
   <li  class="is-active" >    
     
-      <a href="https://dshcao.github.io/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/">Android-多进程意义及Binder</a>
+      <a href="https://dshcao.github.io/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/">Android-进程及Binder</a>
         
   </li>
   
@@ -402,7 +402,7 @@
 </nav>
   
   <div class="single">
-    <h2 class="single__title">Android-多进程意义及Binder</h2>
+    <h2 class="single__title">Android-进程及Binder</h2>
     <div class="single__meta">
       <div class="single__infos">
   🕓 2019年 10月 11日 · ☕13 min read
@@ -1266,7 +1266,11 @@ IBinder是火车票，内核空间是火车，Proxy是进车站，Stub是出车�
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/android-app%E4%BC%98%E5%8C%96-%E8%80%97%E7%94%B5%E4%BC%98%E5%8C%96/" class="related__link">Android App优化-耗电优化</a>
+          <a href="/zh/posts/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/" class="related__link">贝塞尔曲线(Bezier curve)</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/%E7%9B%B4%E6%92%AD-%E9%87%87%E5%BD%95%E6%91%84%E5%83%8F%E5%A4%B4/" class="related__link">Android直播-采录摄像头</a>
         </li>
         
         <li>
@@ -1274,15 +1278,11 @@ IBinder是火车票，内核空间是火车，Proxy是进车站，Stub是出车�
         </li>
         
         <li>
-          <a href="/zh/posts/%E8%87%AA%E5%AE%9A%E4%B9%89view-measurelayoutdraw/" class="related__link">自定义View-measure&amp;layout</a>
+          <a href="/zh/posts/android-app%E9%80%82%E9%85%8D/" class="related__link">Android-App适配</a>
         </li>
         
         <li>
-          <a href="/zh/posts/android-%E6%B7%BB%E5%8A%A0pdf%E5%8A%9F%E8%83%BD/" class="related__link">Android-添加pdf功能</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/android-app%E6%89%93%E5%8C%85%E6%B5%81%E7%A8%8B/" class="related__link">Android打包流程</a>
+          <a href="/zh/posts/android-jnindk/" class="related__link">Android-JNI&amp;NDK</a>
         </li>
         
     </ul>
@@ -1291,17 +1291,17 @@ IBinder是火车票，内核空间是火车，Proxy是进车站，Stub是出车�
     <div class="grow"></div>
 <nav class="pagination-single">
   
-    <a href="https://dshcao.github.io/zh/posts/android-%E6%B7%BB%E5%8A%A0pdf%E5%8A%9F%E8%83%BD/" class="pagination-single__left">
+    <a href="https://dshcao.github.io/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E4%B9%8Brtmp/" class="pagination-single__left">
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
       </div>
-      <div class="pagination-single__left-title">Android-添加pdf功能</div>      
+      <div class="pagination-single__left-title">Android-音视频之RTMP</div>      
     </a>
   
   <div class="grow"></div>
   
-    <a href="https://dshcao.github.io/zh/posts/android-%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0%E5%AE%9E%E7%8E%B0/" class="pagination-single__right">      
-      <div class="pagination-single__right-title">Android-增量更新实现</div>
+    <a href="https://dshcao.github.io/zh/posts/android-%E7%83%AD%E6%9B%B4%E6%96%B0/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">Android-热更新</div>
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
       </div>

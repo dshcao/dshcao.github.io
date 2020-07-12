@@ -296,6 +296,15 @@
       </item>
       
       <item>
+        <title>Android-getSystemService</title>
+        <link>https://dshcao.github.io/zh/posts/android-getsystemservice/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-getsystemservice/</guid>
+        <description>Activity#getSystemService(name) 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 @Override public Object getSystemService(@ServiceName @NonNull String name) { if (getBaseContext() == null) { throw new IllegalStateException( &amp;#34;System services not available to Activities before onCreate()&amp;#34;); } if (WINDOW_SERVICE.equals(name)) { return mWindowManager; } else if (SEARCH_SERVICE.equals(name)) { ensureSearchManager(); return mSearchManager; } return super.getSystemService(name); } 1 2 3 4 5 6 7 8 9 10 11 12</description>
+      </item>
+      
+      <item>
         <title>Android-Glide分析</title>
         <link>https://dshcao.github.io/zh/posts/android-glide%E5%88%86%E6%9E%90/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -377,15 +386,6 @@
       </item>
       
       <item>
-        <title>Android-多进程意义及Binder</title>
-        <link>https://dshcao.github.io/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/</link>
-        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
-        <author>513996717@qq.com (dshcao)</author>
-        <guid>https://dshcao.github.io/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/</guid>
-        <description>进程 什么是进程 Android进程分类 Android中有五大进程： 前台进程 当前正与用户交互的进程 可见进程 在屏幕中显示，但处于不可交互状态，如s</description>
-      </item>
-      
-      <item>
         <title>Android-添加pdf功能</title>
         <link>https://dshcao.github.io/zh/posts/android-%E6%B7%BB%E5%8A%A0pdf%E5%8A%9F%E8%83%BD/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
@@ -401,6 +401,15 @@
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-%E7%83%AD%E6%9B%B4%E6%96%B0/</guid>
         <description>热修复方案介绍 AndFix Native层函数指针替换，即时生效 QQ控件超级补丁 类加载/multidex，重启生效 Robust 字节码插桩/Instant Run 即时生效</description>
+      </item>
+      
+      <item>
+        <title>Android-进程及Binder</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E8%BF%9B%E7%A8%8B%E5%8F%8Abinder/</guid>
+        <description>进程 什么是进程 Android进程分类 Android中有五大进程： 前台进程 当前正与用户交互的进程 可见进程 在屏幕中显示，但处于不可交互状态，如s</description>
       </item>
       
       <item>

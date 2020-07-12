@@ -405,7 +405,7 @@
     <h2 class="single__title">Android App性能优化</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 0001年 01月 01日 · ☕21 min read
+  🕓 0001年 01月 01日 · ☕22 min read
   
 </div>
       <div class="single__tags caption">
@@ -506,6 +506,8 @@ CONTENT_PROVIDER_PUBLISH_TIMEOUT = 10s</li>
 </ul>
 <h2 id="heading-4">卡顿优化</h2>
 <p>卡顿大概有两种原因：内存抖动和消息堵塞</p>
+<p>谨慎创建对象，避免在循环中创建对象</p>
+<p>避免onDraw中创建对象</p>
 <p>卡顿单点问题监测方案</p>
 <ol>
 <li>自动化卡顿方案并不能满足所有场景要求</li>
@@ -524,17 +526,21 @@ outWidth:<br />
 位图的结果宽度。<br />
 如果injustdecodebunds设置为false，则这将是应用任何缩放后输出位图的宽度。<br />
 如果为true，它将是输入图像的宽度，而不考虑缩放。</p>
-<p>hprof-conv -z in.hprof out.hprof</p>
-<h2 id="heading-5">性能优化中的常见问题</h2>
+<h3 id="heading-5">内存分析</h3>
+<p>Profiler -&gt; MEMORY -&gt; Dump Java heap<br />
+分析</p>
+<p>还可以将Dump的.hprof文件导入MAT分析，但MAT不能直接打开Dump的.hprof文件，需要使用SDK/platform-tools下的hprof-conv转换：<br />
+hprof-conv -z in.hprof out.hprof</p>
+<h2 id="heading-6">性能优化中的常见问题</h2>
 <h3 id="crash-1">Crash</h3>
 <p>ANR也算是Crash。</p>
 <h4 id="javacrash">Java层Crash</h4>
 <p>Java层Crash是Java代码出现未捕获的异常导致程序崩溃</p>
 <h4 id="nativecrash">Native层Crash</h4>
 <p>Native层Crash一般是Native代码中访问了非法地址，也可能是地址对齐问题或者程序主动Abort，这些都会产生相应的Signal信号导致程序异常退出。</p>
-<h3 id="heading-6">如何收集线上异常信息</h3>
+<h3 id="heading-7">如何收集线上异常信息</h3>
 <p>大公司一般都会做自己的这部分功能，中小公司则可以使用第三方的服务，比如：阿里的友盟、腾讯的Bugly、网易的云捕、Google的Firebase等。</p>
-<h2 id="heading-7">冷启动</h2>
+<h2 id="heading-8">冷启动</h2>
 <p>clickevent-IPC-Process.start-ActivityThread</p>
 <p>1.启动app-2.加载空白window-3.创建进程-4.创建Application-5.启动祝线程-6.创建MainActivity-7.加载布局-8.布置屏幕-9.首帧绘制</p>
 <p>123 是系统行为无法干预</p>
@@ -545,9 +551,9 @@ Create and initialize the activity.<br />
 Inflate the layout.<br />
 Draw your application for the first time.</p>
 <p>在performResumeActivity 中进行了onResume的回调，在wm.addView 中进行了绘制，因此onResume的方法是在绘制之前，在onResume中做一些耗时操作都会影响启动时间。</p>
-<h2 id="heading-8">热启动</h2>
-<h2 id="heading-9">温启动</h2>
-<h2 id="heading-10">启动优化</h2>
+<h2 id="heading-9">热启动</h2>
+<h2 id="heading-10">温启动</h2>
+<h2 id="heading-11">启动优化</h2>
 <p>优化Application和Activity的生命周期，避免耗时操作<br />
 启动时间测量：</p>
 <ol>
@@ -622,7 +628,7 @@ Advice 一种hook，要插入代码的地方 Before: PointCut之前执行 After:
 </div>
 </div><p>AndroidManifest中splashActivity设置theme为AppTheme.Launcher<br />
 但需要注意这里需要在splashActivity的super.onCreate(savedInstanceState)之前设置会我们真正的AppTheme</p>
-<h3 id="heading-11">常规启动异步优化</h3>
+<h3 id="heading-12">常规启动异步优化</h3>
 <p>子线程分担主线程任务，并行减少时间</p>
 <ol>
 <li>不符合异步要求<br />
@@ -631,7 +637,7 @@ Advice 一种hook，要插入代码的地方 Before: PointCut之前执行 After:
 实际过程中可能有些必须放主线程完成或者说后面Activity马上要用到。我们可以使用CountDownLatch。仍然把初始化任务放在子线程，但是CountDownLatch计数，在oncreate结束位置latch.await()等待计数归0</li>
 <li>区分cpu密集型任务和i/o密集型任务</li>
 </ol>
-<h3 id="heading-12">加强启动异步优化</h3>
+<h3 id="heading-13">加强启动异步优化</h3>
 <p>常规异步优化代码不优雅，依赖关系不好处理，维护成本高<br />
 可以编写一个启动器，每一个初始化是一个任务，任务中标明依赖任务和是主线程执行还是可以异步线程执行，然后拓扑排序任务成一个有向无环图，按照顺序执行<br />
 另外还可以使用IdleHandler</p>
@@ -683,7 +689,7 @@ systrace开销小，直观反应cpu利用率</p>
 </ol>
 <p>启动阶段抑制gc<br />
 cpu锁频 拉升cpu频率，做更多的事，因为系统可能只在启动是锁屏很短的时间我们可以延长这个时间 但会消耗更多电量</p>
-<h2 id="heading-13">内存优化</h2>
+<h2 id="heading-14">内存优化</h2>
 <p>内存抖动 锯齿装、gc导致卡顿<br />
 内存泄漏 可用内存减少，频繁gc<br />
 内存溢出 oom 程序异常<br />
@@ -753,7 +759,7 @@ Epic是一个虚拟机层面，以Java Method为粒度的运行时Hook框架，�
 无侵入性，通用型比较强，但兼容性问题大不能线上使用</li>
 </ol>
 <p>如果一个HashMap只存两三个对象而创建HashMap不指定大小可能会浪费空间。</p>
-<h3 id="heading-14">线上内存监控方案，线上主要是内存泄漏</h3>
+<h3 id="heading-15">线上内存监控方案，线上主要是内存泄漏</h3>
 <p>使用Debug.dumpHprofData<br />
 设定场景(如：占用内存超过最大内存的80%)线上Dump：Debug.dumpHprofData(fileName)<br />
 然后回传hprof文件，然后使用MAT(Memory Analyzer Tool)分析</p>
@@ -770,7 +776,7 @@ Epic是一个虚拟机层面，以Java Method为粒度的运行时Hook框架，�
 <p>针对需要预设怀疑点的问题&ndash;&gt;自动找怀疑点，谁占用内存大就怀疑谁<br />
 针对比较耗时&ndash;&gt;阅读源码发现是因为Leak Canary会分析预设对象的每一个对象，我们可以只分析Retain size比较大的对象<br />
 针对容易OOM&ndash;&gt;因为Leak Canary会将内存堆栈生成的文件全部映射到内存当中，比较占内存，我们可以对象裁剪不全部加载到内存</p>
-<h3 id="heading-15">线上监控完整方案</h3>
+<h3 id="heading-16">线上监控完整方案</h3>
 <ol>
 <li>待机内存 重点模块内存 OOM率</li>
 <li>整体及重点模块GC次数、GC时间</li>
@@ -804,7 +810,7 @@ onTirmMemory 低内存回调是做处理，比如强制清除所有图片，关�
 <li>ARTHook</li>
 <li>重点强调ARTHook和其他方案的区别 ARTHook的优点</li>
 </ol>
-<h3 id="heading-16">绘制优化</h3>
+<h3 id="heading-17">绘制优化</h3>
 <p>绘制原理<br />
 CPU负责计算显示内容<br />
 GPU负责栅格化(UI元素绘制到屏幕上)<br />
@@ -834,7 +840,7 @@ ARTHook setContentView<br />
 <p>AsyncLayoutInflater<br />
 工作线程加载布局，回调主线程<br />
 不能设置LayoutInflater.Factory/LayoutInflater.Factory2，可以自定义一个AsyncLayoutInflater解决</p>
-<h3 id="heading-17">布局加载优化实战</h3>
+<h3 id="heading-18">布局加载优化实战</h3>
 <p>AsyncLayoutInflater只是缓解。<br />
 X2C:APT编译期将XML编译成java代码，即保留了XML优点又解决性能问题<br />
 X2C问题：部分XML布局属性Java不支持，失去了系统兼容(AppCompat)</p>
@@ -844,7 +850,7 @@ X2C问题：部分XML布局属性Java不支持，失去了系统兼容(AppCompat
 自定义view使用clipRect屏蔽被覆盖view复制</p>
 <p>使用megre Viewstub onDraw避免创建大对象和耗时操作 textview优化</p>
 <p>指标fps 加载时间 布局层级</p>
-<h3 id="heading-18">卡顿问题</h3>
+<h3 id="heading-19">卡顿问题</h3>
 <p>卡顿问题难在哪？</p>
 <ol>
 <li>产生原因错综复杂：代码 内存 绘制 I/O</li>
@@ -868,7 +874,7 @@ TraceCompat.endSection()<br />
 包含线程策略和虚拟机策略检测<br />
 线程策略：1.自定义的耗时调用detectCustomSlowCalls 2.磁盘读取操作detectDiskReads 3.网络操作detectNetwork<br />
 虚拟机策略：1.Activity泄漏detectActivityLeaks  2.Sqlite对象泄漏detectLeakedSqlLiteObjects 3.检测实例数量setClassInstanceLimit</p>
-<h3 id="heading-19">自动化卡顿检测及优化</h3>
+<h3 id="heading-20">自动化卡顿检测及优化</h3>
 <p>以上卡顿优化方案只能线下针对分析，线上及测试环节需要自动化检测方案</p>
 <ol>
 <li>
@@ -1017,7 +1023,7 @@ IntentService<br />
 主线程卡顿 异步任务非常耗时<br />
 如何优化线程使用<br />
 线程收敛，使用统一线程库，并区分任务类别</p>
-<h3 id="heading-20">网络优化</h3>
+<h3 id="heading-21">网络优化</h3>
 <ol>
 <li>流量优化</li>
 <li>网络质量 请求速度 成功率</li>
@@ -1160,15 +1166,15 @@ API23之后流量统计<br />
         </li>
         
         <li>
+          <a href="/zh/posts/jetpack-workmanager/" class="related__link">Jetpack-WorkManager详解</a>
+        </li>
+        
+        <li>
+          <a href="/zh/posts/kotlin-%E8%AF%AD%E6%B3%95/" class="related__link">Kotlin语法</a>
+        </li>
+        
+        <li>
           <a href="/zh/posts/jetpack-lifecycles/" class="related__link">Jetpack-Lifecycles</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/android-handler%E8%A7%A3%E6%9E%90/" class="related__link">Android源码解析-Handler</a>
-        </li>
-        
-        <li>
-          <a href="/zh/posts/jetpack-navigation/" class="related__link">Jetpack-Navigation详解</a>
         </li>
         
     </ul>

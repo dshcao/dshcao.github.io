@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Jetpack-Room&amp;LiveData&amp;ViewModel详解 – dshcao blog</title>
+    <title>Android-性能优化之Sytrace – dshcao blog</title>
     
 
 
@@ -174,21 +174,21 @@
 <link rel="stylesheet" href="/css/main.min.css">
 
 
-    <meta name="description" content="Jetpack-Room&amp;LiveData&amp;ViewModel详解" />
+    <meta name="description" content="Android-性能优化之Sytrace" />
 <meta name="keywords" content="">
-<meta name="created" content="2019-12-23T12:00:06&#43;0900">
-<meta name="modified" content="2019-12-23T12:00:06&#43;0900">
-<meta name="author" content="dshcao">
+<meta name="created" content="2019-10-11T10:33:41&#43;0900">
+<meta name="modified" content="2019-10-11T10:33:41&#43;0900">
+
 
 <meta property="og:site_name" content="dshcao blog">
-<meta property="og:title" content="Jetpack-Room&amp;LiveData&amp;ViewModel详解">
-<meta property="og:url" content="https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/">
+<meta property="og:title" content="Android-性能优化之Sytrace">
+<meta property="og:url" content="https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bsytrace/">
 <meta property="og:type" content="article">
 
 <meta name="generator" content="Hugo 0.61.0" />
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="theme-color" content="#ffffff">
-<link rel="canonical" href="https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/">
+<link rel="canonical" href="https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bsytrace/">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -200,16 +200,12 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "headline": "Jetpack-Room\u0026LiveData\u0026ViewModel详解",
-    "datePublished": "2019-12-23T12:00:06+09:00",
-    "dateModified": "2019-12-23T12:00:06+09:00",
-    "url" : "https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/",
-    "description": "Jetpack-Room\u0026LiveData\u0026ViewModel详解",
-    "keywords": ["android","jetpack"],
-    "author": {
-      "@type": "Person",
-      "name": "dshcao"
-    },
+    "headline": "Android-性能优化之Sytrace",
+    "datePublished": "2019-10-11T10:33:41+09:00",
+    "dateModified": "2019-10-11T10:33:41+09:00",
+    "url" : "https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bsytrace/",
+    "description": "Android-性能优化之Sytrace",
+    "keywords": [""],
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://dshcao.github.io/"
@@ -397,7 +393,7 @@
   
   <li  class="is-active" >    
     
-      <a href="https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/">Jetpack-Room&amp;LiveData&amp;ViewModel详解</a>
+      <a href="https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bsytrace/">Android-性能优化之Sytrace</a>
         
   </li>
   
@@ -406,65 +402,51 @@
 </nav>
   
   <div class="single">
-    <h2 class="single__title">Jetpack-Room&amp;LiveData&amp;ViewModel详解</h2>
+    <h2 class="single__title">Android-性能优化之Sytrace</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 12月 23日 · ☕1 min read
+  🕓 2019年 10月 11日 · ☕4 min read
   
 </div>
       <div class="single__tags caption">
 
   
-    🏷️
-  
-  
-  <li>
-    <a href="/zh/tags/android" class="single__tag">
-      #android
-    </a>
-  </li>
-    
-
-  
-  
-  <li>
-    <a href="/zh/tags/jetpack" class="single__tag">
-      #jetpack
-    </a>
-  </li>
     
 
 </div>
     </div>    
     <article class="single__contents">
-      <h2 id="room">Room升级</h2>
-<p>当数据表结构变化时如何直接修改version会导致数据库数据被清空</p>
+      <h2 id="systrace">Systrace实现原理</h2>
+<p>Systrace是Android4.1引入的性能分析工具。Google在Android系统源码中大量加入Trace埋点(traceBegin和Trace.traceEnd)。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="k">return</span> <span class="n">Room</span><span class="o">.</span><span class="na">databaseBuilder</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">AppDatabase</span><span class="o">:</span><span class="o">:</span><span class="n">class</span><span class="o">.</span><span class="na">java</span><span class="o">,</span> <span class="s">&#34;dsh&#34;</span><span class="o">)</span><span class="o">.</span><span class="na">allowMainThreadQueries</span><span class="o">(</span><span class="o">)</span><span class="o">.</span><span class="na">addMigrations</span><span class="o">(</span><span class="n">Migration1000To1001</span><span class="o">(</span><span class="o">)</span><span class="o">)</span><span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="o">)</span>
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">traceBegin</span><span class="o">(</span><span class="kt">long</span> <span class="n">traceTag</span><span class="o">,</span> <span class="n">String</span> <span class="n">methodName</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isTagEnabled</span><span class="o">(</span><span class="n">traceTag</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">nativeTraceBegin</span><span class="o">(</span><span class="n">traceTag</span><span class="o">,</span> <span class="n">methodName</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 
-
-<span class="kd">class</span> <span class="nc">Migration1000To1001</span> <span class="o">:</span> <span class="n">Migration</span><span class="o">(</span><span class="n">1000</span><span class="o">,</span> <span class="n">1001</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">override</span> <span class="n">fun</span> <span class="nf">migrate</span><span class="o">(</span><span class="n">database</span><span class="o">:</span> <span class="n">SupportSQLiteDatabase</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">database</span><span class="o">.</span><span class="na">execSQL</span><span class="o">(</span><span class="s">&#34;alter table user add column vip integer not null default 0&#34;</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">traceEnd</span><span class="o">(</span><span class="kt">long</span> <span class="n">traceTag</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isTagEnabled</span><span class="o">(</span><span class="n">traceTag</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">nativeTraceEnd</span><span class="o">(</span><span class="n">traceTag</span><span class="o">)</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>这样就不会升级时就不会清空数据库数据</p>
-<p>屏幕旋转过程中会回调<br />
-onRetainNonConfigurationInstance<br />
-getLastNonConfigurationInstance</p>
+</div><p>例如在<code>Choreographer#doFrame</code>中：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -490,35 +472,188 @@ getLastNonConfigurationInstance</p>
 </span><span class="lnt">21
 </span><span class="lnt">22
 </span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">final</span> <span class="n">Object</span> <span class="nf">onRetainNonConfigurationInstance</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">Object</span> <span class="n">custom</span> <span class="o">=</span> <span class="n">onRetainCustomNonConfigurationInstance</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kt">void</span> <span class="nf">doFrame</span><span class="o">(</span><span class="kt">long</span> <span class="n">frameTimeNanos</span><span class="o">,</span> <span class="kt">int</span> <span class="n">frame</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">.</span><span class="o">.</span><span class="o">.</span>
 
-    <span class="n">ViewModelStore</span> <span class="n">viewModelStore</span> <span class="o">=</span> <span class="n">mViewModelStore</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">viewModelStore</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// No one called getViewModelStore(), so see if there was an existing
-</span><span class="c1"></span>        <span class="c1">// ViewModelStore from our last NonConfigurationInstance
-</span><span class="c1"></span>        <span class="n">NonConfigurationInstances</span> <span class="n">nc</span> <span class="o">=</span>
-                <span class="o">(</span><span class="n">NonConfigurationInstances</span><span class="o">)</span> <span class="n">getLastNonConfigurationInstance</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">nc</span> <span class="o">!</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">viewModelStore</span> <span class="o">=</span> <span class="n">nc</span><span class="o">.</span><span class="na">viewModelStore</span><span class="o">;</span>
-        <span class="o">}</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="c1">//Trace埋点
+</span><span class="c1"></span>        <span class="n">Trace</span><span class="o">.</span><span class="na">traceBegin</span><span class="o">(</span><span class="n">Trace</span><span class="o">.</span><span class="na">TRACE_TAG_VIEW</span><span class="o">,</span> <span class="s">&#34;Choreographer#doFrame&#34;</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">AnimationUtils</span><span class="o">.</span><span class="na">lockAnimationClock</span><span class="o">(</span><span class="n">frameTimeNanos</span> <span class="o">/</span> <span class="n">TimeUtils</span><span class="o">.</span><span class="na">NANOS_PER_MS</span><span class="o">)</span><span class="o">;</span>
+
+        <span class="n">mFrameInfo</span><span class="o">.</span><span class="na">markInputHandlingStart</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">doCallbacks</span><span class="o">(</span><span class="n">Choreographer</span><span class="o">.</span><span class="na">CALLBACK_INPUT</span><span class="o">,</span> <span class="n">frameTimeNanos</span><span class="o">)</span><span class="o">;</span>
+
+        <span class="n">mFrameInfo</span><span class="o">.</span><span class="na">markAnimationsStart</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">doCallbacks</span><span class="o">(</span><span class="n">Choreographer</span><span class="o">.</span><span class="na">CALLBACK_ANIMATION</span><span class="o">,</span> <span class="n">frameTimeNanos</span><span class="o">)</span><span class="o">;</span>
+
+        <span class="n">mFrameInfo</span><span class="o">.</span><span class="na">markPerformTraversalsStart</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">doCallbacks</span><span class="o">(</span><span class="n">Choreographer</span><span class="o">.</span><span class="na">CALLBACK_TRAVERSAL</span><span class="o">,</span> <span class="n">frameTimeNanos</span><span class="o">)</span><span class="o">;</span>
+
+        <span class="n">doCallbacks</span><span class="o">(</span><span class="n">Choreographer</span><span class="o">.</span><span class="na">CALLBACK_COMMIT</span><span class="o">,</span> <span class="n">frameTimeNanos</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+        <span class="n">AnimationUtils</span><span class="o">.</span><span class="na">unlockAnimationClock</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="c1">//Trace埋点
+</span><span class="c1"></span>        <span class="n">Trace</span><span class="o">.</span><span class="na">traceEnd</span><span class="o">(</span><span class="n">Trace</span><span class="o">.</span><span class="na">TRACE_TAG_VIEW</span><span class="o">)</span><span class="o">;</span>
     <span class="o">}</span>
 
-    <span class="k">if</span> <span class="o">(</span><span class="n">viewModelStore</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span> <span class="o">&amp;</span><span class="o">&amp;</span> <span class="n">custom</span> <span class="o">=</span><span class="o">=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">DEBUG_FRAMES</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">long</span> <span class="n">endNanos</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
+        <span class="n">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="n">TAG</span><span class="o">,</span> <span class="s">&#34;Frame &#34;</span> <span class="o">+</span> <span class="n">frame</span> <span class="o">+</span> <span class="s">&#34;: Finished, took &#34;</span>
+                <span class="o">+</span> <span class="o">(</span><span class="n">endNanos</span> <span class="o">-</span> <span class="n">startNanos</span><span class="o">)</span> <span class="o">*</span> <span class="n">0</span><span class="o">.</span><span class="na">000001f</span> <span class="o">+</span> <span class="s">&#34; ms, latency &#34;</span>
+                <span class="o">+</span> <span class="o">(</span><span class="n">startNanos</span> <span class="o">-</span> <span class="n">frameTimeNanos</span><span class="o">)</span> <span class="o">*</span> <span class="n">0</span><span class="o">.</span><span class="na">000001f</span> <span class="o">+</span> <span class="s">&#34; ms.&#34;</span><span class="o">)</span><span class="o">;</span>
     <span class="o">}</span>
-
-    <span class="n">NonConfigurationInstances</span> <span class="n">nci</span> <span class="o">=</span> <span class="k">new</span> <span class="n">NonConfigurationInstances</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
-    <span class="n">nci</span><span class="o">.</span><span class="na">custom</span> <span class="o">=</span> <span class="n">custom</span><span class="o">;</span>
-    <span class="n">nci</span><span class="o">.</span><span class="na">viewModelStore</span> <span class="o">=</span> <span class="n">viewModelStore</span><span class="o">;</span>
-    <span class="k">return</span> <span class="n">nci</span><span class="o">;</span>
 <span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>这也是ViewModel包装后的数据可以在屏幕旋转过程依然可以正常的原因<br />
-当Activity或Fragment onDestroy时ViewModel会被datch</p>
+</div><p>我们也可以在我们项目中加入Trace埋点。traceBegin和traceEnd并未对开发者开放，我们只能调用beginSection和endSection。主要区别是系统开放给我们的beginSection和endSection是不能自定义tag的，只能使用固定tag：TRACE_TAG_APP。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">beginSection</span><span class="o">(</span><span class="nd">@NonNull</span> <span class="n">String</span> <span class="n">sectionName</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isTagEnabled</span><span class="o">(</span><span class="n">TRACE_TAG_APP</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">sectionName</span><span class="o">.</span><span class="na">length</span><span class="o">(</span><span class="o">)</span> <span class="o">&gt;</span> <span class="n">MAX_SECTION_NAME_LEN</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalArgumentException</span><span class="o">(</span><span class="s">&#34;sectionName is too long&#34;</span><span class="o">)</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">nativeTraceBegin</span><span class="o">(</span><span class="n">TRACE_TAG_APP</span><span class="o">,</span> <span class="n">sectionName</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">endSection</span><span class="o">(</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">isTagEnabled</span><span class="o">(</span><span class="n">TRACE_TAG_APP</span><span class="o">)</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">nativeTraceEnd</span><span class="o">(</span><span class="n">TRACE_TAG_APP</span><span class="o">)</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到无论是哪种方式都调用了nativeTraceBegin和nativeTraceEnd。在<code>frameworks/base/core/jni</code>目录下找到<br />
+<strong><code>android_os_Trace.cpp</code></strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c++" data-lang="c++"><span class="k">static</span> <span class="kt">void</span> <span class="nf">android_os_Trace_nativeTraceBegin</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="n">jclass</span> <span class="n">clazz</span><span class="p">,</span>
+        <span class="n">jlong</span> <span class="n">tag</span><span class="p">,</span> <span class="n">jstring</span> <span class="n">nameStr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">ScopedStringChars</span> <span class="n">jchars</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">nameStr</span><span class="p">)</span><span class="p">;</span>
+    <span class="n">String8</span> <span class="n">utf8Chars</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">char16_t</span><span class="o">*</span><span class="o">&gt;</span><span class="p">(</span><span class="n">jchars</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">,</span> <span class="n">jchars</span><span class="p">.</span><span class="n">size</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
+    <span class="n">sanitizeString</span><span class="p">(</span><span class="n">utf8Chars</span><span class="p">)</span><span class="p">;</span>
+
+    <span class="n">ALOGV</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">%s: %</span><span class="s">&#34;</span> <span class="n">PRId64</span> <span class="sa"></span><span class="s">&#34;</span><span class="s"> %s</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">__FUNCTION__</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">utf8Chars</span><span class="p">.</span><span class="n">string</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
+    <span class="n">atrace_begin</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="n">utf8Chars</span><span class="p">.</span><span class="n">string</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">android_os_Trace_nativeTraceEnd</span><span class="p">(</span><span class="n">JNIEnv</span><span class="o">*</span> <span class="n">env</span><span class="p">,</span> <span class="n">jclass</span> <span class="n">clazz</span><span class="p">,</span>
+        <span class="n">jlong</span> <span class="n">tag</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="n">ALOGV</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">%s: %</span><span class="s">&#34;</span> <span class="n">PRId64</span><span class="p">,</span> <span class="n">__FUNCTION__</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span><span class="p">;</span>
+    <span class="n">atrace_end</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="systrace-1">Systrace具体分析</h2>
+<h3 id="systrace-2">Systrace信息收集</h3>
+<p><code>python systrace.py -t -10 [option] [categories]</code></p>
+<p>Chrome打开收集的trace.html。</p>
+<h3 id="heading">卡顿分析</h3>
+<p>在左侧找到Frames-UI Thread对应显示：<br />
+最上面的 圆圈+F 即是一帧的绘制。正常情况F的圆圈应该是绿色。如果页面是一直刷新(比如有动画)的情况下两个F中间应该是均匀的间隔16.6ms，否则两个F之间可能并不均匀，这涉及到Android的刷新机制。<br />
+圆圈+F之下紧挨着的横向分段的色条是Thread Timeslice，不同的颜色表示UI线程该时间段的状态，可以点击色条查看：<br />
+绿色代表UI线程状态：Running<br />
+蓝色代表UI线程状态：Runnable<br />
+白色代表UI线程状态：Sleeping<br />
+点击一个</p>
+<pre><code>Running process:	android.systemu (pid 4972)
+Running thread:	UI Thread
+State:	Runnable
+Start:	13,650.922 ms //Runnable状态开始时间
+Duration:  0.126 ms   //Runnable状态持续时间
+On CPU:
+Running instead:  DispSync //UI处于Runnable状态这段时间运行是是DispSync线程
+</code></pre><p>如果一个帧的绘制超过16.6ms F的圆圈则会显示为橙色或红色。此时点击圈F可以清除看到详细信息。<br />
+橙色的圈F：</p>
+<pre><code>Alert	Scheduling delay
+Running	  15.353 ms //UI线程处于运行态的时长
+Sleeping	2.700 ms //UI线程处于睡眠态的时长
+Not scheduled, but runnable	 1.105 ms //UI线程处于就绪态的时长
+Blocking I/O delay	0.719 ms //UI线程被I/O阻塞的时长
+Frame Description	
+Work to produce this frame was descheduled for several milliseconds, contributing to jank. Ensure that code on the UI thread doesn't block on work being done on other threads, and that background threads (doing e.g. network or bitmap loading) are running at android.os.Process#THREAD_PRIORITY_BACKGROUND or lower so they are less likely to interrupt the UI thread. These background threads should show up with a priority number of 130 or higher in the scheduling section under the Kernel process.
+</code></pre><p>红色圈F：</p>
+<pre><code>//第一部分是measure/layout消耗的时长
+Alert              Expensive measure/layout pass
+Time spent	   5.545 ms
+measure	took       2.54ms
+layout	took       3.00ms
+Frame Description	
+Measure/Layout took a significant time, contributing to jank. Avoid triggering layout during animations.
+Video Link	Android Performance Patterns: Invalidations, Layouts, and Performance
+
+//第二部分是Frame整体的描述
+Alert                         Scheduling delay
+Running	                      57.305 ms
+Not scheduled, but runnable   6.140 ms
+Sleeping	              1.831 ms
+Frame Description	
+Work to produce this frame was descheduled for several milliseconds, contributing to jank. Ensure that code on the UI thread doesn't block on work being done on other threads, and that background threads (doing e.g. network or bitmap loading) are running at android.os.Process#THREAD_PRIORITY_BACKGROUND or lower so they are less likely to interrupt the UI thread. These background threads should show up with a priority number of 130 or higher in the scheduling section under the Kernel process.
+</code></pre><p>表示UI线程状态的色条下面则列出了对应时间段运行的方法，点击响应方法会列出详细信息，这里我点击 <strong><code>Choreographer#doFrame</code></strong>，列出的信息如下：</p>
+<pre><code>Title	
+Choreographer#doFrame 🔍
+Category	android
+User Friendly Category	other
+Start	1,610.064 ms  //方法开始时间
+Wall Duration	3.960 ms //方法运行的总时间，包括运行自身代码和调用其他方法的时间
+Self Time	0.149 ms //运行自己的代码所消耗的时间
+Description	
+Choreographer executes frame callbacks for inputs, animations, and rendering traversals. When this work is done, a frame will be presented to the user.
+Doc Link	Choreographer documentation
+
+</code></pre><p>根据响应的线程执行时间判断时间都消耗在哪了，哪里耗时比较长，然后做响应的优化。</p>
+<h3 id="heading-1">其他分析</h3>
+<p>Systrace并不是只能在Frame这里做卡顿分析。</p>
+<p>更多细节请参考<a href="#2">Systrace 概览</a></p>
+<ul>
+<li><a href="https://developer.android.google.cn/studio/profile/systrace?hl=zh_cn">Systrace 概览</a></li>
+</ul>
 
     </article>
     
@@ -611,23 +746,23 @@ getLastNonConfigurationInstance</p>
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/jetpack-jobservice/" class="related__link">Jetpack-JobService详解</a>
+          <a href="/zh/posts/%E7%AE%97%E6%B3%95-%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E6%A0%91/" class="related__link">算法-二分搜索树</a>
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-lifecycles/" class="related__link">Jetpack-Lifecycles</a>
+          <a href="/zh/posts/linux%E5%91%BD%E4%BB%A4%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E8%AF%A6%E8%A7%A3/" class="related__link">Linux命令详解</a>
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-workmanager/" class="related__link">Jetpack-WorkManager详解</a>
+          <a href="/zh/posts/android-%E5%B1%8F%E5%B9%95%E5%88%B7%E6%96%B0%E6%9C%BA%E5%88%B6/" class="related__link">Android屏幕刷新机制</a>
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-navigation/" class="related__link">Jetpack-Navigation详解</a>
+          <a href="/zh/posts/%E5%8E%8B%E7%BC%A9%E5%8E%9F%E7%90%86%E5%8F%8Agzip7zip/" class="related__link">压缩原理及Gzip、7zip</a>
         </li>
         
         <li>
-          <a href="/zh/posts/jetpack-camerax/" class="related__link">Jetpack-CameraX</a>
+          <a href="/zh/posts/%E7%BC%93%E5%AD%98%E5%8F%8Alru%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="related__link">缓存及LRU源码解析</a>
         </li>
         
     </ul>
@@ -636,17 +771,17 @@ getLastNonConfigurationInstance</p>
     <div class="grow"></div>
 <nav class="pagination-single">
   
-    <a href="https://dshcao.github.io/zh/posts/jetpack-workmanager/" class="pagination-single__left">
+    <a href="https://dshcao.github.io/zh/posts/android-%E6%B7%BB%E5%8A%A0pdf%E5%8A%9F%E8%83%BD/" class="pagination-single__left">
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
       </div>
-      <div class="pagination-single__left-title">Jetpack-WorkManager详解</div>      
+      <div class="pagination-single__left-title">Android-添加pdf功能</div>      
     </a>
   
   <div class="grow"></div>
   
-    <a href="https://dshcao.github.io/zh/posts/jetpack-navigation/" class="pagination-single__right">      
-      <div class="pagination-single__right-title">Jetpack-Navigation详解</div>
+    <a href="https://dshcao.github.io/zh/posts/android-%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0%E5%AE%9E%E7%8E%B0/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">Android-增量更新实现</div>
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
       </div>
@@ -1287,7 +1422,7 @@ getLastNonConfigurationInstance</p>
         
           
             
-              <a href="https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3/" data-lang="zh" class="dropdown-item is-active">中文</a>
+              <a href="https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bsytrace/" data-lang="zh" class="dropdown-item is-active">中文</a>
             
           
         
@@ -1348,7 +1483,7 @@ getLastNonConfigurationInstance</p>
             
     
     
-  <a href="https://dshcao.github.io/zh/posts/jetpack-roomlivedataviewmodel%E8%AF%A6%E8%A7%A3//index.xml" type="application/rss+xml" title="rss" aria-label="RSS Feed Link">
+  <a href="https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bsytrace//index.xml" type="application/rss+xml" title="rss" aria-label="RSS Feed Link">
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle fill="currentColor" cx="6.18" cy="17.82" r="2.18"/><path fill="currentColor" d="M5.59 10.23c-.84-.14-1.59.55-1.59 1.4 0 .71.53 1.28 1.23 1.4 2.92.51 5.22 2.82 5.74 5.74.12.7.69 1.23 1.4 1.23.85 0 1.54-.75 1.41-1.59-.68-4.2-3.99-7.51-8.19-8.18zm-.03-5.71C4.73 4.43 4 5.1 4 5.93c0 .73.55 1.33 1.27 1.4 6.01.6 10.79 5.38 11.39 11.39.07.73.67 1.28 1.4 1.28.84 0 1.5-.73 1.42-1.56-.73-7.34-6.57-13.19-13.92-13.92z"/></svg>
   </a>
 
