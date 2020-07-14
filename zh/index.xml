@@ -494,12 +494,21 @@
       </item>
       
       <item>
+        <title>Android-性能优化之MAT</title>
+        <link>https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bmat/</link>
+        <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
+        <author>513996717@qq.com (dshcao)</author>
+        <guid>https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bmat/</guid>
+        <description>前言 MAT用来查看dump的内存文件xxx.hprof，可以选择排除软/弱/虚引用。还可以对比某个操作前和操作后的两个.hprof文件内存的</description>
+      </item>
+      
+      <item>
         <title>Android-性能优化之Sytrace</title>
         <link>https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bsytrace/</link>
         <pubDate>Fri, 11 Oct 2019 10:33:41 +0900</pubDate>
         <author>513996717@qq.com (dshcao)</author>
         <guid>https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bsytrace/</guid>
-        <description>Systrace实现原理 Systrace是Android4.1引入的性能分析工具。Google在Android系统源码中大量加入Trace埋</description>
+        <description>前言 Systrace一般用来用来检测卡顿 Systrace实现原理 Systrace是Android4.1引入的性能分析工具。Google在An</description>
       </item>
       
       <item>

@@ -9,7 +9,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/android/",
+	"uri": "https://dshcao.github.io/zh/tags/android/",
 	"title": "android",
 	"tags": [],
 	"categories": [],
@@ -18,7 +18,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/android/",
+	"uri": "https://dshcao.github.io/zh/categories/android/",
 	"title": "android",
 	"tags": [],
 	"categories": [],
@@ -81,15 +81,6 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
-	"title": "自定义view",
-	"tags": [],
-	"categories": [],
-	"series": [],
-	"description": "",
-	"content": ""
-},
-{
 	"uri": "https://dshcao.github.io/zh/tags/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
 	"title": "自定义view",
 	"tags": [],
@@ -100,6 +91,15 @@
 },
 {
 	"uri": "https://dshcao.github.io/zh/categories/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
+	"title": "自定义view",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/series/%E8%87%AA%E5%AE%9A%E4%B9%89view/",
 	"title": "自定义view",
 	"tags": [],
 	"categories": [],
@@ -153,7 +153,7 @@
 	"content": "前言 Handler使Android中非常重要的组成部门，很多地方包括系统服务也大量用到Handler这一机制。Handler让我们的开发难度大大降低，几乎看不到多线程死锁问题。\nHandler常见问题  Handler使用不当导致内存泄漏 在子线程创建Handler需要为该Handler准备Looper(调用Looper.prepare()、Looper.loop())，在主线程则不需要(系统帮我们做了) Handler处理消息过程中页面可能已销毁，此时页面控件已经不在，此时更新控件可能空指针异常。  Handler机制源码解析 Handler机制涉及到:Handler、Looper、MessageQueue、Message、ThreadLocal\nHandler  Handler(Looper, Callback, boolean) hide方法，最后一个参数是设置分发的是否是异步消息 1 2 3 4 5 6  public Handler(@NonNull Looper looper, @Nullable Callback callback, boolean async) { mLooper = looper; mQueue = looper.mQueue; mCallback = callback; mAsynchronous = async; }    sendMessage(Message) 发送一个消息 sendMessageDelayed(Message, long) 发送一个延迟消息 sendMessageAtTime(Message, long) 发送一个在指定时间点分发的消息 sendMessageAtFrontOfQueue(Message) 在消息队列队首插入一个消息(消息的when=0，即分发时间是当前时间。) sendEmptyMessage(int) 发送一个空消息 sendEmptyMessageDelayed(int, long) 发送一个延迟空消息 sendEmptyMessageAtTime(int, long) 发送一个在指定时间点分发的空消息 enqueueMessage(MessageQueue, Message,long) 将消息入队。这里有亮点需要注意：1.msg.target = this; 2.msg.setAsynchronous(true); 1 2 3 4 5 6 7 8 9 10 11 12 13  private boolean enqueueMessage(@NonNull MessageQueue queue, @NonNull Message msg,long uptimeMillis) { //为msg设置target，我们一般编程发送消息都会走到这里，即我们所发送的消息都会有target  //这是和后面介绍的屏障消息的重要区别。  msg.target = this; msg.workSourceUid = ThreadLocalWorkSource.getUid(); //如果创建的Handler是异步Handler，那么其发送的所有消息都将是异步消息  //创建异步Handler在API28才对开发者开放。  if (mAsynchronous) { msg.setAsynchronous(true); } return queue.enqueueMessage(msg, uptimeMillis); }    hasMessages(int, Object) 知否存在指定的消息 removeMessages(int, Object) 移除指定消息 hasCallbacks(Runnable) 是否存在指定callback的消息 removeCallbacks(Runnable, Object) 移除指定队列消息包含callback且obj=Object的消息，若Object==null，则不对比Message的obj。 post(Runnable) 发送一个callback消息 postAtFrontOfQueue(Runnable) 类似post。  Message Message分为两类：同步消息、异步消息。异步消息优先级高于同步消息。在屏障消息机制下异步消息会优先于同步消息执行。所谓屏障消息是一种特殊(target==null)的消息，用于保证异步消息的优先执行。屏障消息的本质就是告诉MessageQueue#next操作我这个队列中有异步消息，你快去循环出来优先执行。\nMessage#what 识别message的标识，相当于id。\nMessage#arg1/Message#arg2 arg1和arg2是data的低成本替代品，当只需要几个整形参数时，可以使用arg1和arg2替代data\nMessage#obj 发接收/处理方的任意对象，但当是跨进程发送消息时：Android2.2以后必须是Parcelable的，Android2.2以前不支持使用此字段快进程。\nMessage#replyTo 当使用Messenger跨进程通信时可以使用replyTo回复消息。\nMessage#when 基于SystemClock#uptimeMillis的时间，是Message被分发(dispatchMessage)的时间。\nMessage#data Message携带数据\nMessage#target 发送(sendMessage)这个Message的Handler\nMessage#callback 只能在Messenger.obtain时设置，当dispatchMessage时如果Message有callback则不再走handleMessage。\nMessage#obtain() 复用sPool对象，避免频繁创建销毁对象增加GC压力。sPool是一个Message链表的第一个元素，默认长度MAX_POOL_SIZE(50)。每当调用obtain()时若sPool不为null(链表有元素)，则复用sPool对象，并修改sPool链表长度减1。\nMessage#recycle()/Message#recycleUnchecked() 每当调用该方法则检查sPool链表是否达到最大长度MAX_POOL_SIZE，如果未达到则将当前Message重置并加入到sPool链表(复用池)中。\nMessage#.isAsynchronous() 是否是异步消息，API22后用户可获取，之前未对开发者开放\nMessage#.setAsynchronous(async) 设置是否是异步消息，API22后用户可设置，之前未对开发者开放\nLooper 为什么Looper.myLooper可以获取当前线程的Looper或者说Looper如何与Thread关联的呢？首先我们查看Looper.myLooper是如何获取当前线程的Looper的\n1 2 3  public static @Nullable Looper myLooper() { return sThreadLocal.get(); }   原来是通过sThreadLocal获取的。sThreadLocal可以存放获取绑定到当前线程的数据，你不往里放它自己肯定是没有的，既然是存放获取绑定到当前线程的数据肯定是在当前线程存放的，很容易想到Looper.prepare()和Looper.loop()两个方法，查看Looper.prepare()源码\n1 2 3 4 5 6 7 8 9 10  public static void prepare() { prepare(true); } private static void prepare(boolean quitAllowed) { if (sThreadLocal.get() != null) { throw new RuntimeException(\u0026#34;Only one Looper may be created per thread\u0026#34;); } sThreadLocal.set(new Looper(quitAllowed)); }   正中所想。\n那Looper.loop()这个方法是做什么用的呢？\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48  public static void loop() { final Looper me = myLooper(); if (me == null) { throw new RuntimeException(\u0026#34;No Looper; Looper.prepare() wasn\u0026#39;t called on this thread.\u0026#34;); } final MessageQueue queue = me.mQueue; ... for (;;) { Message msg = queue.next(); // 从消息队列取Message对象，如果没取到则阻塞在这  if (msg == null) {//MessageQueue已退出，即调用了quit()或quitSafely()  return; } ... final Observer observer = sObserver; Object token = null; if (observer != null) { token = observer.messageDispatchStarting(); } try { msg.target.dispatchMessage(msg);//分发消息  if (observer != null) { observer.messageDispatched(token, msg); } dispatchEnd = needEndTime ? SystemClock.uptimeMillis() : 0; } catch (Exception exception) { if (observer != null) { observer.dispatchingThrewException(token, msg, exception); } throw exception; } finally { ThreadLocalWorkSource.restore(origWorkSource); if (traceTag != 0) { Trace.traceEnd(traceTag); } } ... msg.recycleUnchecked();//复用消息  } } public void quit() { mQueue.quit(false); } public void quitSafely() { mQueue.quit(true); }   从源码可以看出loop()方法主要做了三件事：从MessageQueue取消息、调用dispatchMessage分发取出的消息、复用分发后的消息。\nMessageQueue MessageQueue是一个存放一个有序(以Message的when排序)的Message的队列。从上面Looper源码分析来看，我们有几个问题：1.queue.next()既然是阻塞的为什么没有导致ANR？2.quit()和quitSafely()最终是怎么实现退出loop循环的？从loop方法看似乎是让MessageQueue的next方法取出一个null的Message对象。\n在回答这两个问题前我们需要先了解什么是屏障消息。屏障消息即时一个target==null的特殊消息(正常我们调用sendMessage发送消息系统会自动帮我们设定非空target)。系统如何发布一个屏障消息：\nMessageQueue#postSyncBarrier\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31  public int postSyncBarrier() { return postSyncBarrier(SystemClock.uptimeMillis()); } private int postSyncBarrier(long when) { // Enqueue a new sync barrier token.  // We don\u0026#39;t need to wake the queue because the purpose of a barrier is to stall it.  synchronized (this) { final int token = mNextBarrierToken++; final Message msg = Message.obtain(); msg.markInUse(); msg.when = when; msg.arg1 = token; Message prev = null; Message p = mMessages; if (when != 0) { while (p != null \u0026amp;\u0026amp; p.when \u0026lt;= when) { prev = p; p = p.next; } } if (prev != null) { // invariant: p == prev.next  msg.next = p; prev.next = msg; } else { msg.next = p; mMessages = msg; } return token; } }   当然这是只有系统才可以使用的API，没有对开发者开放。\n现在我们先看第二个问题：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61  void quit(boolean safe) { if (!mQuitAllowed) { throw new IllegalStateException(\u0026#34;Main thread not allowed to quit.\u0026#34;); } synchronized (this) { if (mQuitting) { return; } mQuitting = true; if (safe) { removeAllFutureMessagesLocked(); } else { removeAllMessagesLocked(); } // We can assume mPtr != 0 because mQuitting was previously false.  nativeWake(mPtr); } } //重置复用消息，然后将所有mMessages链表Message对象置为null private void removeAllMessagesLocked() { Message p = mMessages; while (p != null) { Message n = p.next; p.recycleUnchecked(); p = n; } mMessages = null; } //检查mMessages的when是否小于等于当前时间，如果是标明mMessages这个消息已经分发/正在出去并且可能正在使用，如果粗暴的将mMessages重置然后置为null，可能导致程序异常；如果mMessages的when大于当前时间说明尚未分发，可以放心回收。 private void removeAllFutureMessagesLocked() { final long now = SystemClock.uptimeMillis(); Message p = mMessages; if (p != null) { if (p.when \u0026gt; now) { removeAllMessagesLocked(); } else {//mMessages.when\u0026lt;=now  Message n; for (;;) { n = p.next;//跳过mMessages从mMessages的下个元素开始  if (n == null) { return; } if (n.when \u0026gt; now) { break; } p = n; } p.next = null; do { p = n; n = p.next; p.recycleUnchecked(); } while (n != null); } } }   从上面代码可以看出Looper.quit()和Looper.quitSafely()的主要区别是判断了mMessages链表的首元素的when，即是否已分发，分发出去的消息可能正在使用不能回收，强制回收可能消息行为改变(recycleUnchecked后mMessages = null前)或导致空指针异常。\n再来看MessageQueue#next()\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98  Message next() { final long ptr = mPtr; if (ptr == 0) {//mPtr为0表示已调用quit退出或者当前MessageQueue已没有被其他任何对象引用(调用了finalize()方法)等待被GC回收状态  return null; } int pendingIdleHandlerCount = -1; // -1 only during first iteration  int nextPollTimeoutMillis = 0; for (;;) { if (nextPollTimeoutMillis != 0) { Binder.flushPendingCommands(); } nativePollOnce(ptr, nextPollTimeoutMillis);//会调用到linux的epoll_wait，阻塞指定时间(nextPollTimeoutMillis)并释放时间片  synchronized (this) { // Try to retrieve the next message. Return if found.  final long now = SystemClock.uptimeMillis(); Message prevMsg = null; Message msg = mMessages; if (msg != null \u0026amp;\u0026amp; msg.target == null) {//同步屏障消息  // Stalled by a barrier. Find the next asynchronous message in the queue.  do { prevMsg = msg; msg = msg.next; } while (msg != null \u0026amp;\u0026amp; !msg.isAsynchronous()); } if (msg != null) { if (now \u0026lt; msg.when) {//消息未到分发时间，设置一个超时唤醒时间。  nextPollTimeoutMillis = (int) Math.min(msg.when - now, Integer.MAX_VALUE); } else {//有消息需要分发，执行正常流程  mBlocked = false; if (prevMsg != null) { prevMsg.next = msg.next; } else { mMessages = msg.next; } msg.next = null; if (DEBUG) Log.v(TAG, \u0026#34;Returning message: \u0026#34; + msg); msg.markInUse(); return msg; } } else {// mMessages链表中没有消息  nextPollTimeoutMillis = -1; } //------------只有没有消息时才会执行到下面的代码-------------------//  if (mQuitting) {//退出  dispose(); return null; } // If first time idle, then get the number of idlers to run.  // Idle handles only run if the queue is empty or if the first message  // in the queue (possibly a barrier) is due to be handled in the future.  if (pendingIdleHandlerCount \u0026lt; 0 \u0026amp;\u0026amp; (mMessages == null || now \u0026lt; mMessages.when)) { pendingIdleHandlerCount = mIdleHandlers.size(); } //如果没有IdleHandler需要运行  if (pendingIdleHandlerCount \u0026lt;= 0) { //标识当前处于阻塞状态，用于enqueueMessage唤醒mPtr(nativeWake(mPtr))，即唤醒next执行，取消阻塞重新争抢时间片。  mBlocked = true; continue; } if (mPendingIdleHandlers == null) { mPendingIdleHandlers = new IdleHandler[Math.max(pendingIdleHandlerCount, 4)]; } mPendingIdleHandlers = mIdleHandlers.toArray(mPendingIdleHandlers); } for (int i = 0; i \u0026lt; pendingIdleHandlerCount; i++) { final IdleHandler idler = mPendingIdleHandlers[i]; mPendingIdleHandlers[i] = null; // release the reference to the handler  boolean keep = false; try { keep = idler.queueIdle(); } catch (Throwable t) { Log.wtf(TAG, \u0026#34;IdleHandler threw exception\u0026#34;, t); } if (!keep) { synchronized (this) { mIdleHandlers.remove(idler); } } } //重置需要执行的IdelHandler  pendingIdleHandlerCount = 0; //执行IdelHandler时可能队列已有了新消息，因此将nextPollTimeoutMillis设置为0重新检查。  nextPollTimeoutMillis = 0; } }   其他 IdleHandler 在MessageQueue的小节通过分析源码我们了解到IdleHandler，它会在无消息空闲状态下触发执行，这是一种很好的优化方法。比如用来优化App的启动。\nThreadLocal ThreadLocal是一个线程隔离的工具类，详细请见另一篇Java-ThreadLocal源码解析\nHandler机制大致流程(不严谨的流程) Looper.prepare()-\u0026gt;Looper.loop()-\u0026gt;MessageQueue.next-\u0026gt;Handler.dispatchMessage-\u0026gt;Message.callback/Handler.handlerMessage\nHandler、Looper、MessageQueue对应关系 一个线程对应一个Looper，多个Handler\n一个Looper对应一个MessageQueue，多个Handler\n一个MessageQueue对应一个线程，一个Looper，多个Handler。\nHandler机制原理 内存共享，使用MessageQueue/Message这一线程独有的内存对象实现线程间通信。\n"
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/animation/",
+	"uri": "https://dshcao.github.io/zh/categories/animation/",
 	"title": "animation",
 	"tags": [],
 	"categories": [],
@@ -162,7 +162,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/animation/",
+	"uri": "https://dshcao.github.io/zh/tags/animation/",
 	"title": "animation",
 	"tags": [],
 	"categories": [],
@@ -216,7 +216,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/jetpack/",
+	"uri": "https://dshcao.github.io/zh/tags/jetpack/",
 	"title": "jetpack",
 	"tags": [],
 	"categories": [],
@@ -225,7 +225,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/jetpack/",
+	"uri": "https://dshcao.github.io/zh/series/jetpack/",
 	"title": "jetpack",
 	"tags": [],
 	"categories": [],
@@ -279,7 +279,7 @@
 	"content": "谷歌使用Room数据库保存任务及Alarm来保证\nWorkManager是一定会执行的，最小间隔是15min\n"
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/kotlin/",
+	"uri": "https://dshcao.github.io/zh/tags/kotlin/",
 	"title": "kotlin",
 	"tags": [],
 	"categories": [],
@@ -288,7 +288,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/kotlin/",
+	"uri": "https://dshcao.github.io/zh/series/kotlin/",
 	"title": "kotlin",
 	"tags": [],
 	"categories": [],
@@ -342,15 +342,6 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/%E7%94%9F%E6%B4%BB/",
-	"title": "生活",
-	"tags": [],
-	"categories": [],
-	"series": [],
-	"description": "",
-	"content": ""
-},
-{
 	"uri": "https://dshcao.github.io/zh/categories/%E7%94%9F%E6%B4%BB/",
 	"title": "生活",
 	"tags": [],
@@ -361,6 +352,15 @@
 },
 {
 	"uri": "https://dshcao.github.io/zh/tags/%E7%94%9F%E6%B4%BB/",
+	"title": "生活",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/series/%E7%94%9F%E6%B4%BB/",
 	"title": "生活",
 	"tags": [],
 	"categories": [],
@@ -792,13 +792,22 @@
 	"content": "占坑，敬请期待\u0026hellip;\n"
 },
 {
+	"uri": "https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bmat/",
+	"title": "Android-性能优化之MAT",
+	"tags": [""],
+	"categories": [],
+	"series": [],
+	"description": "Android-性能优化之MAT",
+	"content": "前言 MAT用来查看dump的内存文件xxx.hprof，可以选择排除软/弱/虚引用。还可以对比某个操作前和操作后的两个.hprof文件内存的差异，比如某个类的对象增加了多少、减少了多少\n Systrace 概览  "
+},
+{
 	"uri": "https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bsytrace/",
 	"title": "Android-性能优化之Sytrace",
 	"tags": [""],
 	"categories": [],
 	"series": [],
 	"description": "Android-性能优化之Sytrace",
-	"content": "Systrace实现原理 Systrace是Android4.1引入的性能分析工具。Google在Android系统源码中大量加入Trace埋点(traceBegin和Trace.traceEnd)。\n1 2 3 4 5 6 7 8 9 10 11  public static void traceBegin(long traceTag, String methodName) { if (isTagEnabled(traceTag)) { nativeTraceBegin(traceTag, methodName); } } public static void traceEnd(long traceTag) { if (isTagEnabled(traceTag)) { nativeTraceEnd(traceTag); } }   例如在Choreographer#doFrame中：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31  void doFrame(long frameTimeNanos, int frame) { ... try { //Trace埋点  Trace.traceBegin(Trace.TRACE_TAG_VIEW, \u0026#34;Choreographer#doFrame\u0026#34;); AnimationUtils.lockAnimationClock(frameTimeNanos / TimeUtils.NANOS_PER_MS); mFrameInfo.markInputHandlingStart(); doCallbacks(Choreographer.CALLBACK_INPUT, frameTimeNanos); mFrameInfo.markAnimationsStart(); doCallbacks(Choreographer.CALLBACK_ANIMATION, frameTimeNanos); mFrameInfo.markPerformTraversalsStart(); doCallbacks(Choreographer.CALLBACK_TRAVERSAL, frameTimeNanos); doCallbacks(Choreographer.CALLBACK_COMMIT, frameTimeNanos); } finally { AnimationUtils.unlockAnimationClock(); //Trace埋点  Trace.traceEnd(Trace.TRACE_TAG_VIEW); } if (DEBUG_FRAMES) { final long endNanos = System.nanoTime(); Log.d(TAG, \u0026#34;Frame \u0026#34; + frame + \u0026#34;: Finished, took \u0026#34; + (endNanos - startNanos) * 0.000001f + \u0026#34; ms, latency \u0026#34; + (startNanos - frameTimeNanos) * 0.000001f + \u0026#34; ms.\u0026#34;); } }   我们也可以在我们项目中加入Trace埋点。traceBegin和traceEnd并未对开发者开放，我们只能调用beginSection和endSection。主要区别是系统开放给我们的beginSection和endSection是不能自定义tag的，只能使用固定tag：TRACE_TAG_APP。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14  public static void beginSection(@NonNull String sectionName) { if (isTagEnabled(TRACE_TAG_APP)) { if (sectionName.length() \u0026gt; MAX_SECTION_NAME_LEN) { throw new IllegalArgumentException(\u0026#34;sectionName is too long\u0026#34;); } nativeTraceBegin(TRACE_TAG_APP, sectionName); } } public static void endSection() { if (isTagEnabled(TRACE_TAG_APP)) { nativeTraceEnd(TRACE_TAG_APP); } }   可以看到无论是哪种方式都调用了nativeTraceBegin和nativeTraceEnd。在frameworks/base/core/jni目录下找到\nandroid_os_Trace.cpp\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16  static void android_os_Trace_nativeTraceBegin(JNIEnv* env, jclass clazz, jlong tag, jstring nameStr) { ScopedStringChars jchars(env, nameStr); String8 utf8Chars(reinterpret_cast\u0026lt;const char16_t*\u0026gt;(jchars.get()), jchars.size()); sanitizeString(utf8Chars); ALOGV(\u0026#34;%s: %\u0026#34; PRId64 \u0026#34;%s\u0026#34;, __FUNCTION__, tag, utf8Chars.string()); atrace_begin(tag, utf8Chars.string()); } static void android_os_Trace_nativeTraceEnd(JNIEnv* env, jclass clazz, jlong tag) { ALOGV(\u0026#34;%s: %\u0026#34; PRId64, __FUNCTION__, tag); atrace_end(tag); }   Systrace具体分析 Systrace信息收集 python systrace.py -t -10 [option] [categories]\nChrome打开收集的trace.html。\n卡顿分析 在左侧找到Frames-UI Thread对应显示：\n最上面的 圆圈+F 即是一帧的绘制。正常情况F的圆圈应该是绿色。如果页面是一直刷新(比如有动画)的情况下两个F中间应该是均匀的间隔16.6ms，否则两个F之间可能并不均匀，这涉及到Android的刷新机制。\n圆圈+F之下紧挨着的横向分段的色条是Thread Timeslice，不同的颜色表示UI线程该时间段的状态，可以点击色条查看：\n绿色代表UI线程状态：Running\n蓝色代表UI线程状态：Runnable\n白色代表UI线程状态：Sleeping\n点击一个\nRunning process:\tandroid.systemu (pid 4972) Running thread:\tUI Thread State:\tRunnable Start:\t13,650.922 ms //Runnable状态开始时间 Duration: 0.126 ms //Runnable状态持续时间 On CPU: Running instead: DispSync //UI处于Runnable状态这段时间运行是是DispSync线程 如果一个帧的绘制超过16.6ms F的圆圈则会显示为橙色或红色。此时点击圈F可以清除看到详细信息。\n橙色的圈F：\nAlert\tScheduling delay Running\t15.353 ms //UI线程处于运行态的时长 Sleeping\t2.700 ms //UI线程处于睡眠态的时长 Not scheduled, but runnable\t1.105 ms //UI线程处于就绪态的时长 Blocking I/O delay\t0.719 ms //UI线程被I/O阻塞的时长 Frame Description\tWork to produce this frame was descheduled for several milliseconds, contributing to jank. Ensure that code on the UI thread doesn't block on work being done on other threads, and that background threads (doing e.g. network or bitmap loading) are running at android.os.Process#THREAD_PRIORITY_BACKGROUND or lower so they are less likely to interrupt the UI thread. These background threads should show up with a priority number of 130 or higher in the scheduling section under the Kernel process. 红色圈F：\n//第一部分是measure/layout消耗的时长 Alert Expensive measure/layout pass Time spent\t5.545 ms measure\ttook 2.54ms layout\ttook 3.00ms Frame Description\tMeasure/Layout took a significant time, contributing to jank. Avoid triggering layout during animations. Video Link\tAndroid Performance Patterns: Invalidations, Layouts, and Performance //第二部分是Frame整体的描述 Alert Scheduling delay Running\t57.305 ms Not scheduled, but runnable 6.140 ms Sleeping\t1.831 ms Frame Description\tWork to produce this frame was descheduled for several milliseconds, contributing to jank. Ensure that code on the UI thread doesn't block on work being done on other threads, and that background threads (doing e.g. network or bitmap loading) are running at android.os.Process#THREAD_PRIORITY_BACKGROUND or lower so they are less likely to interrupt the UI thread. These background threads should show up with a priority number of 130 or higher in the scheduling section under the Kernel process. 表示UI线程状态的色条下面则列出了对应时间段运行的方法，点击响应方法会列出详细信息，这里我点击 Choreographer#doFrame，列出的信息如下：\nTitle\tChoreographer#doFrame 🔍 Category\tandroid User Friendly Category\tother Start\t1,610.064 ms //方法开始时间 Wall Duration\t3.960 ms //方法运行的总时间，包括运行自身代码和调用其他方法的时间 Self Time\t0.149 ms //运行自己的代码所消耗的时间 Description\tChoreographer executes frame callbacks for inputs, animations, and rendering traversals. When this work is done, a frame will be presented to the user. Doc Link\tChoreographer documentation 根据响应的线程执行时间判断时间都消耗在哪了，哪里耗时比较长，然后做响应的优化。\n其他分析 Systrace并不是只能在Frame这里做卡顿分析。\n更多细节请参考Systrace 概览\n Systrace 概览  "
+	"content": "前言 Systrace一般用来用来检测卡顿\nSystrace实现原理 Systrace是Android4.1引入的性能分析工具。Google在Android系统源码中大量加入Trace埋点(traceBegin和Trace.traceEnd)。\n1 2 3 4 5 6 7 8 9 10 11  public static void traceBegin(long traceTag, String methodName) { if (isTagEnabled(traceTag)) { nativeTraceBegin(traceTag, methodName); } } public static void traceEnd(long traceTag) { if (isTagEnabled(traceTag)) { nativeTraceEnd(traceTag); } }   例如在Choreographer#doFrame中：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31  void doFrame(long frameTimeNanos, int frame) { ... try { //Trace埋点  Trace.traceBegin(Trace.TRACE_TAG_VIEW, \u0026#34;Choreographer#doFrame\u0026#34;); AnimationUtils.lockAnimationClock(frameTimeNanos / TimeUtils.NANOS_PER_MS); mFrameInfo.markInputHandlingStart(); doCallbacks(Choreographer.CALLBACK_INPUT, frameTimeNanos); mFrameInfo.markAnimationsStart(); doCallbacks(Choreographer.CALLBACK_ANIMATION, frameTimeNanos); mFrameInfo.markPerformTraversalsStart(); doCallbacks(Choreographer.CALLBACK_TRAVERSAL, frameTimeNanos); doCallbacks(Choreographer.CALLBACK_COMMIT, frameTimeNanos); } finally { AnimationUtils.unlockAnimationClock(); //Trace埋点  Trace.traceEnd(Trace.TRACE_TAG_VIEW); } if (DEBUG_FRAMES) { final long endNanos = System.nanoTime(); Log.d(TAG, \u0026#34;Frame \u0026#34; + frame + \u0026#34;: Finished, took \u0026#34; + (endNanos - startNanos) * 0.000001f + \u0026#34; ms, latency \u0026#34; + (startNanos - frameTimeNanos) * 0.000001f + \u0026#34; ms.\u0026#34;); } }   我们也可以在我们项目中加入Trace埋点。traceBegin和traceEnd并未对开发者开放，我们只能调用beginSection和endSection。主要区别是系统开放给我们的beginSection和endSection是不能自定义tag的，只能使用固定tag：TRACE_TAG_APP。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14  public static void beginSection(@NonNull String sectionName) { if (isTagEnabled(TRACE_TAG_APP)) { if (sectionName.length() \u0026gt; MAX_SECTION_NAME_LEN) { throw new IllegalArgumentException(\u0026#34;sectionName is too long\u0026#34;); } nativeTraceBegin(TRACE_TAG_APP, sectionName); } } public static void endSection() { if (isTagEnabled(TRACE_TAG_APP)) { nativeTraceEnd(TRACE_TAG_APP); } }   可以看到无论是哪种方式都调用了nativeTraceBegin和nativeTraceEnd。在frameworks/base/core/jni目录下找到\nandroid_os_Trace.cpp\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16  static void android_os_Trace_nativeTraceBegin(JNIEnv* env, jclass clazz, jlong tag, jstring nameStr) { ScopedStringChars jchars(env, nameStr); String8 utf8Chars(reinterpret_cast\u0026lt;const char16_t*\u0026gt;(jchars.get()), jchars.size()); sanitizeString(utf8Chars); ALOGV(\u0026#34;%s: %\u0026#34; PRId64 \u0026#34;%s\u0026#34;, __FUNCTION__, tag, utf8Chars.string()); atrace_begin(tag, utf8Chars.string()); } static void android_os_Trace_nativeTraceEnd(JNIEnv* env, jclass clazz, jlong tag) { ALOGV(\u0026#34;%s: %\u0026#34; PRId64, __FUNCTION__, tag); atrace_end(tag); }   Systrace具体分析 Systrace信息收集 python systrace.py -t -10 [option] [categories]\nChrome打开收集的trace.html。\n卡顿分析 在左侧找到Frames-UI Thread对应显示：\n最上面的 圆圈+F 即是一帧的绘制。正常情况F的圆圈应该是绿色。如果页面是一直刷新(比如有动画)的情况下两个F中间应该是均匀的间隔16.6ms，否则两个F之间可能并不均匀，这涉及到Android的刷新机制。\n圆圈+F之下紧挨着的横向分段的色条是Thread Timeslice，不同的颜色表示UI线程该时间段的状态，可以点击色条查看：\n绿色代表UI线程状态：Running\n蓝色代表UI线程状态：Runnable\n白色代表UI线程状态：Sleeping\n点击一个\nRunning process:\tandroid.systemu (pid 4972) Running thread:\tUI Thread State:\tRunnable Start:\t13,650.922 ms //Runnable状态开始时间 Duration: 0.126 ms //Runnable状态持续时间 On CPU: Running instead: DispSync //UI处于Runnable状态这段时间运行是是DispSync线程 如果一个帧的绘制超过16.6ms F的圆圈则会显示为橙色或红色。此时点击圈F可以清除看到详细信息。\n橙色的圈F：\nAlert\tScheduling delay Running\t15.353 ms //UI线程处于运行态的时长 Sleeping\t2.700 ms //UI线程处于睡眠态的时长 Not scheduled, but runnable\t1.105 ms //UI线程处于就绪态的时长 Blocking I/O delay\t0.719 ms //UI线程被I/O阻塞的时长 Frame Description\tWork to produce this frame was descheduled for several milliseconds, contributing to jank. Ensure that code on the UI thread doesn't block on work being done on other threads, and that background threads (doing e.g. network or bitmap loading) are running at android.os.Process#THREAD_PRIORITY_BACKGROUND or lower so they are less likely to interrupt the UI thread. These background threads should show up with a priority number of 130 or higher in the scheduling section under the Kernel process. 红色圈F：\n//第一部分是measure/layout消耗的时长 Alert Expensive measure/layout pass Time spent\t5.545 ms measure\ttook 2.54ms layout\ttook 3.00ms Frame Description\tMeasure/Layout took a significant time, contributing to jank. Avoid triggering layout during animations. Video Link\tAndroid Performance Patterns: Invalidations, Layouts, and Performance //第二部分是Frame整体的描述 Alert Scheduling delay Running\t57.305 ms Not scheduled, but runnable 6.140 ms Sleeping\t1.831 ms Frame Description\tWork to produce this frame was descheduled for several milliseconds, contributing to jank. Ensure that code on the UI thread doesn't block on work being done on other threads, and that background threads (doing e.g. network or bitmap loading) are running at android.os.Process#THREAD_PRIORITY_BACKGROUND or lower so they are less likely to interrupt the UI thread. These background threads should show up with a priority number of 130 or higher in the scheduling section under the Kernel process. 表示UI线程状态的色条下面则列出了对应时间段运行的方法，点击响应方法会列出详细信息，这里我点击 Choreographer#doFrame，列出的信息如下：\nTitle\tChoreographer#doFrame 🔍 Category\tandroid User Friendly Category\tother Start\t1,610.064 ms //方法开始时间 Wall Duration\t3.960 ms //方法运行的总时间，包括运行自身代码和调用其他方法的时间 Self Time\t0.149 ms //运行自己的代码所消耗的时间 Description\tChoreographer executes frame callbacks for inputs, animations, and rendering traversals. When this work is done, a frame will be presented to the user. Doc Link\tChoreographer documentation 根据响应的线程执行时间判断时间都消耗在哪了，哪里耗时比较长，然后做响应的优化。\n其他分析 Systrace并不是只能在Frame这里做卡顿分析。\n更多细节请参考Systrace 概览\n Systrace 概览  "
 },
 {
 	"uri": "https://dshcao.github.io/zh/posts/android-%E6%B7%BB%E5%8A%A0pdf%E5%8A%9F%E8%83%BD/",
@@ -1017,7 +1026,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/c/c++/",
+	"uri": "https://dshcao.github.io/zh/series/c/c++/",
 	"title": "c/c++",
 	"tags": [],
 	"categories": [],
@@ -1026,7 +1035,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/c/c++/",
+	"uri": "https://dshcao.github.io/zh/tags/c/c++/",
 	"title": "c/c++",
 	"tags": [],
 	"categories": [],
@@ -1107,6 +1116,15 @@
 	"content": "以JDK8源码分析\n前言 HashMap是结合数组和链表，以Key-Value形式存储的集合。HashMap中有三个个概念：负载因子(loadFactor)、容量和阀值。默认阀值是0.75，阀值=当前容量*负载因子，如果元素个数超过这个阀值则HashMap容量翻倍。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51  public class HashMap\u0026lt;K,V\u0026gt; extends AbstractMap\u0026lt;K,V\u0026gt; implements Map\u0026lt;K,V\u0026gt;, Cloneable, Serializable { ... static class Node\u0026lt;K,V\u0026gt; implements Map.Entry\u0026lt;K,V\u0026gt; { final int hash; final K key; V value; Node\u0026lt;K,V\u0026gt; next; Node(int hash, K key, V value, Node\u0026lt;K,V\u0026gt; next) { this.hash = hash; this.key = key; this.value = value; this.next = next; } public final K getKey() { return key; } public final V getValue() { return value; } public final String toString() { return key + \u0026#34;=\u0026#34; + value; } public final int hashCode() { return Objects.hashCode(key) ^ Objects.hashCode(value); } public final V setValue(V newValue) { V oldValue = value; value = newValue; return oldValue; } public final boolean equals(Object o) { if (o == this) return true; if (o instanceof Map.Entry) { Map.Entry\u0026lt;?,?\u0026gt; e = (Map.Entry\u0026lt;?,?\u0026gt;)o; if (Objects.equals(key, e.getKey()) \u0026amp;\u0026amp; Objects.equals(value, e.getValue())) return true; } return false; } } static final int hash(Object key) { int h; return (key == null) ? 0 : (h = key.hashCode()) ^ (h \u0026gt;\u0026gt;\u0026gt; 16); } transient Node\u0026lt;K,V\u0026gt;[] table; ... }   可以看出HashMap的基本结构：\n数组table存储一组Node元素，而Node本身又是单向链表，因此table实际上存储的是一组链表的头节点。那么table的容量是多少？存储规则又是什么呢？\n源码分析 put逻辑 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70  final V putVal(int hash, K key, V value, boolean onlyIfAbsent,boolean evict) { Node\u0026lt;K,V\u0026gt;[] tab; Node\u0026lt;K,V\u0026gt; p; int n, i; if ((tab = table) == null || (n = tab.length) == 0) n = (tab = resize()).length; //如果数组tab[i]的位置还没有节点则新建节点存入  //注意这里计算下标i的算法：(n - 1) \u0026amp; hash相当于hash%(n-1)，\u0026amp;运算效率高于取余运算  if ((p = tab[i = (n - 1) \u0026amp; hash]) == null) tab[i] = newNode(hash, key, value, null); else {//如果数组tab[i]的位置已有节点p  Node\u0026lt;K,V\u0026gt; e; K k; //要存入的节点和节点p的key相同  if (p.hash == hash \u0026amp;\u0026amp; ((k = p.key) == key || (key != null \u0026amp;\u0026amp; key.equals(k)))) e = p; //如果节点p是红黑树，则使用红黑树存储  else if (p instanceof TreeNode) e = ((TreeNode\u0026lt;K,V\u0026gt;)p).putTreeVal(this, tab, hash, key, value); else { for (int binCount = 0; ; ++binCount) { //如果节点的下个点解是null，将要存入的键值对做为新的Node存入节点之后  if ((e = p.next) == null) { p.next = newNode(hash, key, value, null); //如果某个链表长度大于7个节点尝试将节点转换成红黑树  if (binCount \u0026gt;= TREEIFY_THRESHOLD - 1) // -1 for 1st  treeifyBin(tab, hash); break; } //如果已经存在相同key的节点，后面会修改这个节点的值  if (e.hash == hash \u0026amp;\u0026amp; ((k = e.key) == key || (key != null \u0026amp;\u0026amp; key.equals(k)))) break; p = e; } } if (e != null) { // existing mapping for key  V oldValue = e.value; if (!onlyIfAbsent || oldValue == null) e.value = value; afterNodeAccess(e); return oldValue; } } ++modCount; if (++size \u0026gt; threshold) resize(); afterNodeInsertion(evict); return null; } final void treeifyBin(Node\u0026lt;K,V\u0026gt;[] tab, int hash) { int n, index; Node\u0026lt;K,V\u0026gt; e; //如果table.length个数小于MIN_TREEIFY_CAPACITY(64)，先增大容量不转换成红黑树  if (tab == null || (n = tab.length) \u0026lt; MIN_TREEIFY_CAPACITY) resize(); else if ((e = tab[index = (n - 1) \u0026amp; hash]) != null) { TreeNode\u0026lt;K,V\u0026gt; hd = null, tl = null; do { TreeNode\u0026lt;K,V\u0026gt; p = replacementTreeNode(e, null); if (tl == null) hd = p; else { p.prev = tl; tl.next = p; } tl = p; } while ((e = e.next) != null); if ((tab[index] = hd) != null) hd.treeify(tab); } }   remove逻辑 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40  final Node\u0026lt;K,V\u0026gt; removeNode(int hash, Object key, Object value, boolean matchValue, boolean movable) { Node\u0026lt;K,V\u0026gt;[] tab; Node\u0026lt;K,V\u0026gt; p; int n, index; if ((tab = table) != null \u0026amp;\u0026amp; (n = tab.length) \u0026gt; 0 \u0026amp;\u0026amp; (p = tab[index = (n - 1) \u0026amp; hash]) != null) { Node\u0026lt;K,V\u0026gt; node = null, e; K k; V v; if (p.hash == hash \u0026amp;\u0026amp; ((k = p.key) == key || (key != null \u0026amp;\u0026amp; key.equals(k)))) node = p; else if ((e = p.next) != null) { if (p instanceof TreeNode) node = ((TreeNode\u0026lt;K,V\u0026gt;)p).getTreeNode(hash, key); else { do { if (e.hash == hash \u0026amp;\u0026amp; ((k = e.key) == key || (key != null \u0026amp;\u0026amp; key.equals(k)))) { node = e; break; } p = e; } while ((e = e.next) != null); } } if (node != null \u0026amp;\u0026amp; (!matchValue || (v = node.value) == value || (value != null \u0026amp;\u0026amp; value.equals(v)))) { if (node instanceof TreeNode) ((TreeNode\u0026lt;K,V\u0026gt;)node).removeTreeNode(this, tab, movable); else if (node == p) tab[index] = node.next; else p.next = node.next; ++modCount; --size; afterNodeRemoval(node); return node; } } return null; }   get逻辑 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19  final Node\u0026lt;K,V\u0026gt; getNode(int hash, Object key) { Node\u0026lt;K,V\u0026gt;[] tab; Node\u0026lt;K,V\u0026gt; first, e; int n; K k; if ((tab = table) != null \u0026amp;\u0026amp; (n = tab.length) \u0026gt; 0 \u0026amp;\u0026amp; (first = tab[(n - 1) \u0026amp; hash]) != null) { if (first.hash == hash \u0026amp;\u0026amp; // always check first node  ((k = first.key) == key || (key != null \u0026amp;\u0026amp; key.equals(k)))) return first; if ((e = first.next) != null) { if (first instanceof TreeNode) return ((TreeNode\u0026lt;K,V\u0026gt;)first).getTreeNode(hash, key); do { if (e.hash == hash \u0026amp;\u0026amp; ((k = e.key) == key || (key != null \u0026amp;\u0026amp; key.equals(k)))) return e; } while ((e = e.next) != null); } } return null; }   hash的计算 首先看hash的计算\n1 2 3 4  static final int hash(Object key) { int h; return (key == null) ? 0 : (h = key.hashCode()) ^ (h \u0026gt;\u0026gt;\u0026gt; 16); }   为什么不是直接返回hashCode?为什么是^（异或），为什么是16？\n我们先看计算下标的逻辑：tab[i = (n - 1) \u0026amp; hash]，即下标是(n - 1) \u0026amp; hash，n是n = tab.length，tab = table，即tab实际上是那个Node数组table。\nHashMap的size是一个int值，即4字节32位。所以上面的n，即table.length的值理论上是至少小于HashMap size的一半的，即2字节16位。所以下标的计算i = (n - 1) \u0026amp; hash实际上只会用到hash的低16位。这大大加大了hash冲突，如何让高16位也参与\u0026amp;运算增加散列度呢？于是就有了(h = key.hashCode()) ^ (h \u0026gt;\u0026gt;\u0026gt; 16)的设计，让hashCode的高16位与hashCode的低16位异或运算。\n"
 },
 {
+	"uri": "https://dshcao.github.io/zh/series/java/",
+	"title": "java",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
 	"uri": "https://dshcao.github.io/zh/tags/java/",
 	"title": "java",
 	"tags": [],
@@ -1117,15 +1135,6 @@
 },
 {
 	"uri": "https://dshcao.github.io/zh/categories/java/",
-	"title": "java",
-	"tags": [],
-	"categories": [],
-	"series": [],
-	"description": "",
-	"content": ""
-},
-{
-	"uri": "https://dshcao.github.io/zh/series/java/",
 	"title": "java",
 	"tags": [],
 	"categories": [],
@@ -1260,7 +1269,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/ndk/",
+	"uri": "https://dshcao.github.io/zh/categories/ndk/",
 	"title": "ndk",
 	"tags": [],
 	"categories": [],
@@ -1269,7 +1278,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/ndk/",
+	"uri": "https://dshcao.github.io/zh/series/ndk/",
 	"title": "ndk",
 	"tags": [],
 	"categories": [],
@@ -1296,7 +1305,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/rxjava/",
+	"uri": "https://dshcao.github.io/zh/series/rxjava/",
 	"title": "rxjava",
 	"tags": [],
 	"categories": [],
@@ -1305,7 +1314,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/rxjava/",
+	"uri": "https://dshcao.github.io/zh/tags/rxjava/",
 	"title": "rxjava",
 	"tags": [],
 	"categories": [],
@@ -1449,7 +1458,7 @@
 	"content": "Java内存模型 Java内存模型主要目标：定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的变量（Variable）与Java编程中的变量略有区别，它包括实例变量/静态字段和构成数组对象的元素，不包括局部变量和方法参数（线程私有）。为获得较好的执行效能，Java内存模型并没有限制执行引擎使用处理器的特定寄存器或缓存来和主内存进行交换，也没有限制即时编译器调整代码执行顺序这类权利。\nJava内存模型规定所有变量都存储在主存（Main Memory）中（虚拟机内存的一部分）。每条线程还有自己的工作内存（Working Memory），线程的工作内存保存了被线程使用到的变量的主内存副本拷贝，线程对变量的所有操作（读取/赋值等）都必须在工作内存中进行，而不能直接读写主内存中的变量。不同线程之间也无法直接访问对方工作内存中的变量，线程间变量值的传递均需要通过主存来完成。\n这里的主内存/工作内存与Java内存区域中的Java栈/堆/方法区并不是同一个层次的内存划分。如果两者一定要勉强对应起来，那从变量/主内存/工作内存的定义来看，主内存主要对应于Java堆中对象的实例数据部分，而工作内存则对应于虚拟机栈中的部分区域。从更低的层次来说，主存就是硬件的内存，而为获取更好的运算速度，虚拟机及硬件系统可能会让工作内存优先存储于寄存器和高速缓存。\n主内存与工作内存之间具体的交互协议，即一个变量如何从主内存拷贝到工作内存、从工作内存同步回主内存之类的实现细节，Java内存模型中定义了以下8种操作来完成:lock unlock read load use assign store write\n对long和double型变量的特殊规则 允许虚拟机将没有被volatile修饰的64位数据类型（long和double）的读取操作划分为两次32位的操作来进行，即允许虚拟机实现选择可以不保证64位数据类型的load、store、read和write这4个操作的原子性，就点就是long和double的非原子协定（Nonatomic Treatment of double and long Variables）。\n如果多个线程共享一个为声明为volatile的long或double类型变量，并同时对他们进行读取和修改操作，那么有些线程可能会读取到一个即非原值，也不是其他线程修改值得代表了“半个变量”的数值。\n不过这种读取带“半个变量”的情况非常罕见（在目前商用虚拟机中不会出现），因为Java内存模型虽然允许虚拟机不把long和double变量的读写实现成原子操作，但允许虚拟机选择把这些操作实现为具有原子性的操作，而且还“强烈建议”虚拟机这样实现。\n原子性、可见性和有序性  原子性（Atomicity）：由Java内存模型来直接保证的原子性变量操作包括read、load、assign、use、store和write，我们大致可以认为基本数据类型的访问具备原子性（long和double例外）。如果应用场景需要一个更大范围的原子性保证，Java内存模型还提供了lock和unlock操作来满足需求，尽管虚拟机未把lock和unlock操作直接开放给用户，但是却提供了更高层次的字节码指令monitorenter和monitorexit来隐式地使用这两个操作，这两个字节码指令反应到Java代码中就是同步块——synchronized关键字，因此在synchronized块之间的操作也具备原子性。 可见性（Visibility）：指当一个线程修改了共享变量的值，其他线程能够立即得知这个修改。 有序性（Ordering）：Java程序中天然的有序性可以总结为一句话：如果在本线程内观察，所有的操作都是有序的；如果在一个线程中观察另外一个线程，所有的操作都是无序的。前半句是指“线程内表现为串行的语义”（Within-Thread As-if-Serial Semantics），后半句是指“指令重排序”现象和“工作内存与主内存同步延迟”现象。Java语言提供了volatile和synchronized两个关键字来保证线程之间操作的有序性，volatile关键字本身就包含了禁止指令重排序的语义，而synchronized则是由“一个变量在同一时刻只允许一条线程对其进行lock操作”这条规则获得的，这个规则决定了持有同一个锁的两个同步块只能串行地进入  多线程安全 多线程安全问题根本原因是内存copy和时间片分配导致的，要做到线程安全就是要做到“局部串行”或者原子性，比如两个线程同时访问一个临界资源（一个对象，对象中的属性，一个文件，一个数据库等）可能引发线程安全问题，这时就要做到两个线程访问临界资源这一局部顺序是串行执行\n高优先级线程并不一定比低优先级线程先抢占cpu资源，高级优先抢占资源的权重大，但有随机性\nvolatile/Semaphore/AtomicXXX 两者本质上不是同一类东西\n volatile Java关键字，volatile的关键语义：1.防止CPU指令重排序，2.被 volatile 修饰的变量对所有线程都是可见的。 volatile声明某个变量值的一致性(内存同步)，但不保证原子操作，对赋值操作可以保证原子性。如：a=10，不能保证a++操作的原子性，因为a++其实是a=a+1的语法糖，a=a+1在内存中其实是分两步的：temp=a+1 a=temp。对于复杂对象的赋值操作原子性，如：User user=user1;User user=new User;,但不能保证对user.name属性操作的原子性.即可以看作只能赋值操作原子性。volatile 声明某个变量值的一致性(内存同步)，但不保证原子操作。volatile适合一个线程写多个线程读的情况。 Semaphore 控制同时访问某个特定资源或者某个操作的操作数量 AtomicXXX Java库实现 可以保证a++操作的原子性  CountDownLatch与join 比如有三个线程 thread1,thread2,thread3\n当thread3需要thread1,thread2都执行完毕后执行，则两者皆可实现，但当thread3只需要thread1,thread2其中一个执行完毕就可执行的场景CountDownLatch很容易实现，使用join则并不容易实现\n详见参考：CountDownLatch理解一：与join的区别\nRunable Future Callable Java中可以简单认为Thread是是对线程的抽象，而Runable和Callable是对线程任务的抽象，Future线程任务结果的容器。\n Runable 1.没有返回值 2.无法抛异常 1 2 3  public interface Runnable { public abstract void run(); }    Callable 1.有返回结果，可以抛异常，但不像Runnable那样通过Thread的start方法就能启动实现类的run方法，通常利用ExecutorService的submit方法去启动call方法自执行任务，而ExecutorService的submit又返回一个Future类型的结果，因此Callable通常也与Future一起使用 1 2 3  public interface Callable\u0026lt;V\u0026gt; { V call() throws Exception; }     Thread构造方法中只能是Runnable，无法直接使用Callable，因此通常使用FutureTask，通过将Callable以参数方式传入。\n  Future 保存异步计算的结果,可以在我们执行任务时去做其他工作,Future有一下方法\n1. boolean cancel(boolean mayInterruptIfRunning);用来取消任务，成功返回true，失败则返回false\n2.boolean isCancelled();任务是否已经取消\n3.boolean isDone();任务是否已经完成\n4.V get() throws InterruptedException, ExecutionException;用来获取执行结果，这个方法会产生阻塞会一直等到任务执行完毕才返回\n5.V get(long timeout, TimeUnit unit)\nthrows InterruptedException, ExecutionException, TimeoutException;用来获取执行结果，如果在指定时间内，还没获取到结果，直接返回null\n使用Future的好处：\n1.获取任务的结果，判断任务是否完成，中断任务\n2.Future的get方法很好的替代的了Thread.join或Thread,join(long millis)\n3.Future的get方法可以判断程序代码(任务)的执行是否超时，如：\n1 2 3 4 5 6  try { future.get(60,TimeUtil.SECOND); } catch(TimeoutException timeout){ og4j.log(\u0026#34;异常，将被取消！！\u0026#34;); future.cancel(); }     FutureTask\n对Callable的封装，可以让使用Callable像Runnable一样使用且可以获取Callable的返回值。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21  public interface RunnableFuture\u0026lt;V\u0026gt; extends Runnable, Future\u0026lt;V\u0026gt; { /** * Sets this Future to the result of its computation * unless it has been cancelled. */ void run(); } public class FutureTask\u0026lt;V\u0026gt; implements RunnableFuture\u0026lt;V\u0026gt; { ... public FutureTask(Callable\u0026lt;V\u0026gt; callable) { if (callable == null) throw new NullPointerException(); this.callable = callable; this.state = NEW; // ensure visibility of callable  } public FutureTask(Runnable runnable, V result) { this.callable = Executors.callable(runnable, result); this.state = NEW; // ensure visibility of callable  } ... }     CompletableFuture 提供了函数式编程的能力，可以通过回调的方式处理计算结果，并且提供了转换和组合CompletableFuture的方法,帮助我们简化异步编程的复杂性,有点类似于rxjava的模式，当然没有提供这么丰富的功能\n    多线程间的通信  内存共享  共享volatile变量 synchronized+notify+wait lock+condition semaphere+flag   管道  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50  public class CommunicateWhitPiping { public static void main(String[] args) { PipedOutputStream pos = new PipedOutputStream(); PipedInputStream pis = new PipedInputStream(); try { //将管道输入流与输出流连接 此过程也可通过重载的构造函数来实现  pos.connect(pis); } catch (IOException e) { e.printStackTrace(); } //创建生产者线程  Producer p = new Producer(pos); //创建消费者线程  Consumer c = new Consumer(pis); //启动线程  p.start(); c.start(); } } //生产者线程(与一个管道输入流相关联) class Producer extends Thread { private PipedOutputStream pos; public Producer(PipedOutputStream pos) { this.pos = pos; } public void run() { int i = 8; try { pos.write(i); } catch (IOException e) { e.printStackTrace(); } } } //消费者线程(与一个管道输入流相关联) class Consumer extends Thread { private PipedInputStream pis; public Consumer(PipedInputStream pis) { this.pis = pis; } public void run() { try { System.out.println(pis.read()); } catch (IOException e) { e.printStackTrace(); } } }    公共接口 消息通信 如：Actor模型  BlockingDeque   BlockingDeque\nadd/remove 添加元素/移除元素 当队列满/空时抛异常\noffer/poll 添加元素/取出元素\nput/take 添加元素/取出元素 当队列满/空时会阻塞put/take\n  ArrayBlockingQueue\n基于数组的有界阻塞队列，初始化需要指定固定大小，此队列按 FIFO(先进先出)原则对元素进行排序。\n  LinkedBlockingQueue\n基于链表实现的有界阻塞队列，初始化可以指定大小，也可以不指定。此队列按 FIFO (先进先出) 排序元素，吞吐量通常要高于ArrayBlockingQueue。\nExecutors.newFixedThreadPool()和 Executors.newSingleThreadExecutor使用了这个队列\n  LinkedBlockingDeque\n由链表组成的双向阻塞队列\n  DelayQueue\n由优先级队列实现的无界阻塞队列\n  SynchronousQueue\n无容量的队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于LinkedBlockingQueue。\nExecutors.newCachedThreadPool使用了这个队列\n  PriorityBlockingQueue\n一个具有优先级的无限阻塞队列。\n  LinkedTransferQueue\n由链表结构组成的无界阻塞队列\n  ConcurrentHashMap\n  ConcurrentLinkedQueue\n  CopyOnWriteArrayList\n  ConcurrentHashMap\n  多线程的经典场景-生产者消费者模式实现  阻塞队列实现 synchronized关键字实现 lock实现  Java线程内存 Java线程内存有共享区和私有区\n 共享区\n堆 方法区(运行时常量池)[常量 静态变量 类信息] 私有区 有三部分：栈虚拟机、本地方法栈、程序计数器  虚拟机栈 虚拟机栈的每个栈帧对应一个调用方法的信息，可以使用-Xss设置虚拟机栈大小，一般是1M。由以下四部分组成  局部变量表 用于存放八大基本数据类型和对象的引用 操作数栈 存放操作数的一块临时空间 动态链接 存放编译时不能确定方法入口的方法的地址，需要在运行时来保证方法调用的正确性。如：多态方法、native方法。当线程中调用到native方法时JVM不会在为其在虚拟机栈中创建栈帧，而是存储动态链接并直接调用native方法， 方法出口 返回地址   本地方法栈 保存native方法信息，虚拟机规范中并没有强制规定本地方法栈的实现，各版本虚拟机也是自由实现，HotSpot则是将本地方法栈和虚拟机栈合二为一了。 程序计数器 记录程序执行到哪个位置，指向的是当前线程正在执行的字节码指令的地址(行号)。由于Java是多线程的，为了保证多线程切换后正确的执行所以需要程序计数器来记录执行位置。    LockSupport 参考：\n 深入理解JVM - Java内存模型与线程 - 第十二章 Java CompletableFuture 详解 CountDownLatch理解一：与join的区别  "
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/",
+	"uri": "https://dshcao.github.io/zh/categories/%E6%8F%92%E4%BB%B6%E5%8C%96/",
 	"title": "插件化",
 	"tags": [],
 	"categories": [],
@@ -1458,7 +1467,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E6%8F%92%E4%BB%B6%E5%8C%96/",
+	"uri": "https://dshcao.github.io/zh/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/",
 	"title": "插件化",
 	"tags": [],
 	"categories": [],
@@ -1476,15 +1485,6 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/",
-	"title": "数据结构",
-	"tags": [],
-	"categories": [],
-	"series": [],
-	"description": "",
-	"content": ""
-},
-{
 	"uri": "https://dshcao.github.io/zh/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/",
 	"title": "数据结构",
 	"tags": [],
@@ -1495,6 +1495,15 @@
 },
 {
 	"uri": "https://dshcao.github.io/zh/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/",
+	"title": "数据结构",
+	"tags": [],
+	"categories": [],
+	"series": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "https://dshcao.github.io/zh/series/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/",
 	"title": "数据结构",
 	"tags": [],
 	"categories": [],
@@ -1539,7 +1548,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/",
+	"uri": "https://dshcao.github.io/zh/categories/%E7%83%AD%E6%9B%B4%E6%96%B0/",
 	"title": "热更新",
 	"tags": [],
 	"categories": [],
@@ -1548,7 +1557,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E7%83%AD%E6%9B%B4%E6%96%B0/",
+	"uri": "https://dshcao.github.io/zh/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/",
 	"title": "热更新",
 	"tags": [],
 	"categories": [],
@@ -1584,7 +1593,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/%E7%AE%97%E6%B3%95/",
+	"uri": "https://dshcao.github.io/zh/categories/%E7%AE%97%E6%B3%95/",
 	"title": "算法",
 	"tags": [],
 	"categories": [],
@@ -1593,7 +1602,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E7%AE%97%E6%B3%95/",
+	"uri": "https://dshcao.github.io/zh/series/%E7%AE%97%E6%B3%95/",
 	"title": "算法",
 	"tags": [],
 	"categories": [],
@@ -1647,7 +1656,7 @@
 	"content": "占坑，敬请期待\u0026hellip;\nLRU实际上是对访问排序LinkedHashMap的封装\n"
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/",
+	"uri": "https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/",
 	"title": "编程基础",
 	"tags": [],
 	"categories": [],
@@ -1656,7 +1665,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/",
+	"uri": "https://dshcao.github.io/zh/categories/%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/",
 	"title": "编程基础",
 	"tags": [],
 	"categories": [],
@@ -1737,7 +1746,7 @@
 	"content": "前置知识 Bezier曲线是用一系列点控制曲线状态的，主要分为：\n 数据点 确定曲线的起始和结束位置 控制点 确定曲线的弯曲程度  其中数据点又叫锚点，只有起始和结束两个点，控制点有0～n个，按控制点个数可分为一阶贝塞尔曲线，二阶贝塞尔曲线，三阶贝塞尔曲线，\u0026hellip;，N阶贝塞尔曲线\n一阶贝塞尔曲线 0个控制点 即为一条直线\n给定点P0，P1，其中初始点P0，结束点P1，t为比率，在P0，P1上取一点D，D即为曲线上的点，使得：\n$$ \\frac{P_0D}{P_0P_1}=t $$\n一阶比较简单我们作为例子演算出公式，上面的表达式可改写为：\n$$ \\frac{D-P_0}{P_1-P_0}=t $$\n再进一步演算为：\n$$ D=t*({P_1-P_0})+P_0 $$\nD记为B(t)，推出公式：\n$$ B(t)=(1-t)P_0+tP_1,t{\\in}[0,1] $$\n二阶贝塞尔曲线(quadratic Bezier curve) 1个控制点\n给定点P0，P1，P2，其中初始点P0，结束点P2，控制点P1，t为比率，在P0P1上取一点D，P1P2取一点E，在DE上取一点F，F即为曲线上的点，使得：\n$$ \\frac{P_0D}{P_0P_1}=\\frac{P_1E}{P_1P_2}=\\frac{DF}{DE}=t $$\n推出公式：\n$$ B(t)=(1-t)^2P_0+2t(1-t)P_1+t^2P_2,t{\\in}[0,1] $$\n三阶贝塞尔曲线(cubic Bezier curve) 2个控制点\n给定点P0，P1，P2，P3，其中初始点P0，结束点P3，控制点P1，P2，t为比率，在P0P1上取一点D，P1P2取一点E，P2P3取一点F，在DE上取一点G，在EF上取一点H，在GH上取一点I，I即为曲线上的点，使得：\n$$ \\frac{P_0D}{P_0P_1}=\\frac{P_1E}{P_1P_2}=\\frac{P_2F}{P_2P_3}=\\frac{DG}{DE}=\\frac{EH}{EF}=\\frac{GI}{GH}=t $$\n推出公式：\n$$ B(t)=(1-t)^3P_0+3P_1t(1-t)^2+3P_2t^2(1-t)+P_3t^3,t{\\in}[0,1] $$\n多阶贝塞尔曲线 \u0026hellip;\n贝塞尔曲线的意义 确定初始点和结束点，很容易利用控制点得到一条曲线，控制简单。因此贝塞尔曲线在Android动画中有很多应用,比如Android中的PathInterpolator,PathInterpolator初始点是(0,0)，结束点是(1,1)，构造方法中传入控制点\n参考：\n cubic-bezier  "
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/",
+	"uri": "https://dshcao.github.io/zh/series/%E9%9F%B3%E8%A7%86%E9%A2%91/",
 	"title": "音视频",
 	"tags": [],
 	"categories": [],
@@ -1746,7 +1755,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/series/%E9%9F%B3%E8%A7%86%E9%A2%91/",
+	"uri": "https://dshcao.github.io/zh/tags/%E9%9F%B3%E8%A7%86%E9%A2%91/",
 	"title": "音视频",
 	"tags": [],
 	"categories": [],
@@ -1773,7 +1782,7 @@
 	"content": "  GitHub.\n  掘金.\n  微博.\n  "
 },
 {
-	"uri": "https://dshcao.github.io/zh/tags/%E9%9A%8F%E7%AC%94/",
+	"uri": "https://dshcao.github.io/zh/categories/%E9%9A%8F%E7%AC%94/",
 	"title": "随笔",
 	"tags": [],
 	"categories": [],
@@ -1782,7 +1791,7 @@
 	"content": ""
 },
 {
-	"uri": "https://dshcao.github.io/zh/categories/%E9%9A%8F%E7%AC%94/",
+	"uri": "https://dshcao.github.io/zh/tags/%E9%9A%8F%E7%AC%94/",
 	"title": "随笔",
 	"tags": [],
 	"categories": [],

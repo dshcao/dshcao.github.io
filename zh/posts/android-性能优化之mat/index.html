@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>依赖注入和控制反转(IoC) – dshcao blog</title>
+    <title>Android-性能优化之MAT – dshcao blog</title>
     
 
 
@@ -174,21 +174,21 @@
 <link rel="stylesheet" href="/css/main.min.css">
 
 
-    <meta name="description" content="依赖注入和控制反转(IoC)" />
+    <meta name="description" content="Android-性能优化之MAT" />
 <meta name="keywords" content="">
 <meta name="created" content="2019-10-11T10:33:41&#43;0900">
 <meta name="modified" content="2019-10-11T10:33:41&#43;0900">
 
 
 <meta property="og:site_name" content="dshcao blog">
-<meta property="og:title" content="依赖注入和控制反转(IoC)">
-<meta property="og:url" content="https://dshcao.github.io/zh/posts/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%ACioc/">
+<meta property="og:title" content="Android-性能优化之MAT">
+<meta property="og:url" content="https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bmat/">
 <meta property="og:type" content="article">
 
 <meta name="generator" content="Hugo 0.61.0" />
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="theme-color" content="#ffffff">
-<link rel="canonical" href="https://dshcao.github.io/zh/posts/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%ACioc/">
+<link rel="canonical" href="https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bmat/">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
@@ -200,12 +200,12 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "headline": "依赖注入和控制反转(IoC)",
+    "headline": "Android-性能优化之MAT",
     "datePublished": "2019-10-11T10:33:41+09:00",
     "dateModified": "2019-10-11T10:33:41+09:00",
-    "url" : "https://dshcao.github.io/zh/posts/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%ACioc/",
-    "description": "依赖注入和控制反转(IoC)",
-    "keywords": ["java"],
+    "url" : "https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bmat/",
+    "description": "Android-性能优化之MAT",
+    "keywords": [""],
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://dshcao.github.io/"
@@ -393,7 +393,7 @@
   
   <li  class="is-active" >    
     
-      <a href="https://dshcao.github.io/zh/posts/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%ACioc/">依赖注入和控制反转(IoC)</a>
+      <a href="https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bmat/">Android-性能优化之MAT</a>
         
   </li>
   
@@ -402,152 +402,25 @@
 </nav>
   
   <div class="single">
-    <h2 class="single__title">依赖注入和控制反转(IoC)</h2>
+    <h2 class="single__title">Android-性能优化之MAT</h2>
     <div class="single__meta">
       <div class="single__infos">
-  🕓 2019年 10月 11日 · ☕4 min read
+  🕓 2019年 10月 11日 · ☕1 min read
   
 </div>
       <div class="single__tags caption">
 
   
-    🏷️
-  
-  
-  <li>
-    <a href="/zh/tags/java" class="single__tag">
-      #java
-    </a>
-  </li>
     
 
 </div>
     </div>    
     <article class="single__contents">
-      <h2 id="ioc">控制反转(IoC)</h2>
-<p>Java设计六大原则中有一项是依赖倒置，简单说就是面向接口编程。<br />
-比如Java中每个Service都有一个接口类和实现类，接口一般不会改变，但实现类可能会不断有微小的变化，这样我们都以接口返回给调用者。但接口实例化的对象却仍是写死的。如下：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">interface</span> <span class="nc">Human</span><span class="o">{</span>
-    <span class="kt">void</span> <span class="nf">eat</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="kd">class</span> <span class="nc">Man</span> <span class="kd">implements</span> <span class="n">Human</span><span class="o">{</span>
-    <span class="kt">void</span> <span class="nf">eat</span><span class="o">(</span><span class="o">)</span><span class="o">{</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="kd">class</span> <span class="nc">Woman</span> <span class="kd">implements</span> <span class="n">Human</span><span class="o">{</span>
-    <span class="kt">void</span> <span class="nf">eat</span><span class="o">(</span><span class="o">)</span><span class="o">{</span>
-        
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="kd">class</span> <span class="nc">Persion</span> <span class="o">{</span>
-    <span class="n">Human</span> <span class="n">human</span><span class="o">;</span>
-    <span class="n">Persion</span><span class="o">(</span><span class="o">)</span><span class="o">{</span>
-        <span class="n">human</span> <span class="o">=</span> <span class="n">Man</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">eat</span><span class="o">(</span><span class="o">)</span><span class="o">{</span>
-        <span class="n">human</span><span class="o">.</span><span class="na">eat</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>Persion中的human实例话对象仍然是固定的Man，有时我们希望human实例对象由外部控制，这就需要IoC。可以说IoC解决依赖倒置或者面向接口编程最后的一点瑕疵。<br />
-实现<br />
-而依赖注入是实现Ioc的一种手段。依赖注入分三种：</p>
-<ol>
-<li>构造方法注入 即构造方法传入实例</li>
-<li>setter注入 使用set方法设置实例</li>
-<li>接口注入 使用接口方式设置<br />
-依赖注入的本质即：当前对象需要使用另一个对象时并不是当前对象内实例化这个对象而是外部实例化这个对象。</li>
-</ol>
-<h2 id="java">Java依赖注入规范</h2>
-<p>JSR-330 是 Java 的依赖注入标准。定义了如下的术语描述依赖注入:</p>
-<ol>
-<li>A 类型依赖 B类型(或者说 B 被 A 依赖)，则 A类型 称为”依赖(物)dependency”</li>
-<li>运行时查找依赖的过程，称为”解析 resolving“依赖</li>
-<li>如果找不到依赖的实例，称该依赖是”不能满足的 unsatisfied”</li>
-<li>在”依赖注入 dependency injection”机制中，提供依赖的工具称为”依 赖注入器 dependency injector，注射器”</li>
-</ol>
-<h3 id="javaxinject">javax.inject</h3>
-<p>javax.inject 指定了获取对象的一种方法，该方法与构造器、工厂以及服务定位器(例如 JNDI)这些传统方法相比可以获得更好的可重用性、可测试性以 及可维护性。此方法的处理过程就是大家熟知的依赖注入，它对于大多数应用是 非常有价值的。</p>
-<h4 id="inject">@Inject</h4>
-<p>注解 @Inject 标识了可注入的构造器、方法或字段。可以用于静态或实例成 员。一个可注入的成员可以被任何访问修饰符(private、package- private、 protected、public)修饰。注入顺序为构造器，字段，最后是方法。超类的字 段、方法将优先于子类的字段、方法被注入。对于 同一个类的字段是不区分注 入顺序的，同一个类的方法亦同</p>
-<h4 id="provider">Provider</h4>
-<p>接口 Provider 用于提供类型 T 的实列。Provider 是一般情况是由注入器实现 的。对于任何可注入的 T 而言，您也可以注入 Provider。与直接注入 T 相比， 注入 Provider 使得:</p>
+      <h2 id="heading">前言</h2>
+<p>MAT用来查看dump的内存文件xxx.hprof，可以选择排除软/弱/虚引用。还可以对比某个操作前和操作后的两个.hprof文件内存的差异，比如某个类的对象增加了多少、减少了多少</p>
 <ul>
-<li>可以返回多个实例。</li>
-<li>实例的返回可以延迟化或可选</li>
-<li>打破循环依赖</li>
-<li>可以在一个已知作用域的实例内查询一个更小作用域内的实例。
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Car</span> <span class="o">{</span>
-    <span class="nd">@Inject</span> 
-    <span class="n">Car</span><span class="o">(</span><span class="n">Provider</span><span class="o">&lt;</span><span class="n">Seat</span><span class="o">&gt;</span> <span class="n">seatProvider</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">Seat</span> <span class="n">driver</span> <span class="o">=</span> <span class="n">seatProvider</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
-        <span class="n">Seat</span> <span class="n">passenger</span> <span class="o">=</span> <span class="n">seatProvider</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="o">)</span><span class="o">;</span>
-        <span class="o">.</span><span class="o">.</span><span class="o">.</span>
-    <span class="o">}</span>
-    <span class="o">.</span><span class="o">.</span><span class="o">.</span>
-<span class="o">}</span>
-</code></pre></td></tr></table>
-</div>
-</div></li>
-<li>get() 用于提供一个完全构造的类型 T 的实例。 异常抛出: RuntimeException—— 当注入器在提供实例时遇到错误将抛出此异 常。例如，对于一个可注入的成员 T 抛出了一个异常，注入器将包装 此异常并将它抛给 get() 的调用者。调用者不应该尝试处理此类异 常，因为不同注入器实现的行为不一样，即使是同一个注入器，也会 因为配置不同而表现的行为不同。</li>
+<li><a href="https://developer.android.google.cn/studio/profile/systrace?hl=zh_cn">Systrace 概览</a></li>
 </ul>
-<h4 id="qualifier">@Qualifier</h4>
-<p>用于标识限定器注解。任何人都可以定义新的限定器注解。一个限定器注解:</p>
-<ul>
-<li>是被 @Qualifier、@Retention(RUNTIME) 标注的，通常也被 @Documented 标注</li>
-<li>可以拥有属性。</li>
-<li>可能是公共 API 的一部分，就像依赖类型一样，而不像类型实现那样 不作为公共 API 的一部分</li>
-<li>如果标注了 @Target 可能会有一些用法限制。本规范只是指定了限定 器注解可以被使用在字段和参数上，但一些注入器配置可能使用限定 器注解在其他一些地方(例如方法或类)上。</li>
-</ul>
-<h4 id="named">@Named</h4>
-<p>基于 String 的限定器</p>
-<h4 id="scope">@Scope</h4>
-<p>用于标识作用域注解。一个作用域注解是被标识在包含一个可注入构造器的类上的，用于控制该类型的实例如何被注入器重用。缺省情况下，如果没有标识作用域注解，注入器将为每一次注入都创建(通过注入类型的构造器)新实例，并不重用已有实例。如果多个线程都能够访问一个作用域内的实例，该实例实现应该是线程安全的。作用域实现由注入器完成。</p>
-<h4 id="singleton">@Singleton</h4>
-<p>标识了注入器只实例化一次的类型。该注解不能被继承</p>
-<h2 id="dagger2">Dagger2</h2>
-<p>Dagger2是一个实现依赖注入的框架。</p>
 
     </article>
     
@@ -640,23 +513,23 @@
     <ul class="related-ul">
         
         <li>
-          <a href="/zh/posts/java-%E8%8C%83%E5%9E%8B%E4%B8%8E%E5%8F%8D%E5%B0%84/" class="related__link">Java范型与反射</a>
+          <a href="/zh/posts/%E7%BC%93%E5%AD%98%E5%8F%8Alru%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="related__link">缓存及LRU源码解析</a>
         </li>
         
         <li>
-          <a href="/zh/posts/java-%E6%B3%A8%E8%A7%A3%E8%AF%A6%E8%A7%A3/" class="related__link">Java注解详解</a>
+          <a href="/zh/posts/%E5%8E%8B%E7%BC%A9%E5%8E%9F%E7%90%86%E5%8F%8Agzip7zip/" class="related__link">压缩原理及Gzip、7zip</a>
         </li>
         
         <li>
-          <a href="/zh/posts/rxjava2%E6%BA%90%E7%A0%81%E5%8F%8A%E4%BD%BF%E7%94%A8/" class="related__link">RxJava2源码及使用</a>
+          <a href="/zh/posts/linux%E5%91%BD%E4%BB%A4%E4%B8%8Eshell%E8%84%9A%E6%9C%AC%E8%AF%A6%E8%A7%A3/" class="related__link">Linux命令详解</a>
         </li>
         
         <li>
-          <a href="/zh/posts/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" class="related__link">网络基础</a>
+          <a href="/zh/posts/%E7%AE%97%E6%B3%95-%E5%A0%86%E6%8E%92%E5%BA%8F/" class="related__link">算法-堆排序</a>
         </li>
         
         <li>
-          <a href="/zh/posts/java-threadlocal%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="related__link">Java ThreadLocal源码解析</a>
+          <a href="/zh/posts/android-%E9%9F%B3%E8%A7%86%E9%A2%91%E4%B9%8Brtmp/" class="related__link">Android-音视频之RTMP</a>
         </li>
         
     </ul>
@@ -665,17 +538,17 @@
     <div class="grow"></div>
 <nav class="pagination-single">
   
-    <a href="https://dshcao.github.io/zh/posts/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/" class="pagination-single__left">
+    <a href="https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bsytrace/" class="pagination-single__left">
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M19 11H7.83l4.88-4.88c.39-.39.39-1.03 0-1.42-.39-.39-1.02-.39-1.41 0l-6.59 6.59c-.39.39-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L7.83 13H19c.55 0 1-.45 1-1s-.45-1-1-1z"/></svg>
       </div>
-      <div class="pagination-single__left-title">动态代理</div>      
+      <div class="pagination-single__left-title">Android-性能优化之Sytrace</div>      
     </a>
   
   <div class="grow"></div>
   
-    <a href="https://dshcao.github.io/zh/posts/android-sparsearray%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" class="pagination-single__right">      
-      <div class="pagination-single__right-title">SparseArray源码解析</div>
+    <a href="https://dshcao.github.io/zh/posts/android-%E5%A2%9E%E9%87%8F%E6%9B%B4%E6%96%B0%E5%AE%9E%E7%8E%B0/" class="pagination-single__right">      
+      <div class="pagination-single__right-title">Android-增量更新实现</div>
       <div class="pagination-single__icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><path fill="currentColor" d="M5 13h11.17l-4.88 4.88c-.39.39-.39 1.03 0 1.42.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41l-6.58-6.6c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L16.17 11H5c-.55 0-1 .45-1 1s.45 1 1 1z"/></svg>
       </div>
@@ -1316,7 +1189,7 @@
         
           
             
-              <a href="https://dshcao.github.io/zh/posts/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%ACioc/" data-lang="zh" class="dropdown-item is-active">中文</a>
+              <a href="https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bmat/" data-lang="zh" class="dropdown-item is-active">中文</a>
             
           
         
@@ -1377,7 +1250,7 @@
             
     
     
-  <a href="https://dshcao.github.io/zh/posts/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E5%92%8C%E6%8E%A7%E5%88%B6%E5%8F%8D%E8%BD%ACioc//index.xml" type="application/rss+xml" title="rss" aria-label="RSS Feed Link">
+  <a href="https://dshcao.github.io/zh/posts/android-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B9%8Bmat//index.xml" type="application/rss+xml" title="rss" aria-label="RSS Feed Link">
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0V0z"/><circle fill="currentColor" cx="6.18" cy="17.82" r="2.18"/><path fill="currentColor" d="M5.59 10.23c-.84-.14-1.59.55-1.59 1.4 0 .71.53 1.28 1.23 1.4 2.92.51 5.22 2.82 5.74 5.74.12.7.69 1.23 1.4 1.23.85 0 1.54-.75 1.41-1.59-.68-4.2-3.99-7.51-8.19-8.18zm-.03-5.71C4.73 4.43 4 5.1 4 5.93c0 .73.55 1.33 1.27 1.4 6.01.6 10.79 5.38 11.39 11.39.07.73.67 1.28 1.4 1.28.84 0 1.5-.73 1.42-1.56-.73-7.34-6.57-13.19-13.92-13.92z"/></svg>
   </a>
 
